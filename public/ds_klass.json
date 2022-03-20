@@ -1,0 +1,102 @@
+{
+  "id": 1,
+  "uuid": "3475e057-60ae-4f7c-9ec1-516b29082d64",
+  "ols_term_id": "CHMO:0000593",
+  "label": "1H nuclear magnetic resonance spectroscopy (1H NMR)",
+  "desc": "1H nuclear magnetic resonance spectroscopy (1H NMR)",
+  "properties_template": {
+      "eln": {
+          "version": "0.9.1",
+          "base_revision": "413824bce4a7adeb74bb3258f94ab9e3fc87dc09",
+          "current_revision": "75f3702e77b841f44fc1d1b8e2650bba35329f59\n"
+      },
+      "uuid": "3475e057-60ae-4f7c-9ec1-516b29082d64",
+      "klass": "DatasetKlass",
+      "layers": {
+          "params": {
+              "key": "params",
+              "cols": 3,
+              "label": "Parameter",
+              "fields": [
+                  {
+                      "type": "system-defined",
+                      "field": "temp",
+                      "label": "Temperature",
+                      "default": "",
+                      "position": 1,
+                      "description": "measurement temperature",
+                      "option_layers": "temperature"
+                  }
+              ],
+              "position": 100,
+              "condition": ""
+          },
+          "system": {
+              "key": "system",
+              "cols": 3,
+              "label": "Settings",
+              "fields": [
+                  {
+                      "type": "integer",
+                      "field": "scan",
+                      "label": "Number of Scans",
+                      "default": "",
+                      "position": 1
+                  }
+              ],
+              "position": 100,
+              "condition": ""
+          }
+      },
+      "select_options": {}
+  },
+  "properties_release": {
+      "eln": {
+          "version": "0.9.1",
+          "base_revision": "413824bce4a7adeb74bb3258f94ab9e3fc87dc09",
+          "current_revision": "75f3702e77b841f44fc1d1b8e2650bba35329f59\n"
+      },
+      "uuid": "3475e057-60ae-4f7c-9ec1-516b29082d64",
+      "klass": "DatasetKlass",
+      "layers": {
+          "params": {
+              "key": "params",
+              "cols": 3,
+              "label": "Parameter",
+              "fields": [
+                  {
+                      "type": "system-defined",
+                      "field": "temp",
+                      "label": "Temperature",
+                      "default": "",
+                      "position": 1,
+                      "description": "measurement temperature",
+                      "option_layers": "temperature"
+                  }
+              ],
+              "position": 100,
+              "condition": ""
+          },
+          "system": {
+              "key": "system",
+              "cols": 3,
+              "label": "Settings",
+              "fields": [
+                  {
+                      "type": "integer",
+                      "field": "scan",
+                      "label": "Number of Scans",
+                      "default": "",
+                      "position": 1
+                  }
+              ],
+              "position": 100,
+              "condition": ""
+          }
+      },
+      "select_options": {}
+  },
+  "is_active": true,
+  "place": 10,
+  "released_at": "02.08.2021, 19:26"
+}

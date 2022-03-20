@@ -1,38 +1,86 @@
 {
   "name": "chem-generic-ui",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0",
-    "web-vitals": "^2.1.0"
-  },
+  "version": "0.2.2",
+  "main": "./dist/bundle.js",
+  "license": "MIT",
+  "private": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "webpack-dev-server --config ./webpack.dev.js",
+    "build": "webpack --config ./webpack.config.js",
+    "rbuild": "rm -rf dist && rollup -c --environment NODE_ENV:production && postcss src/asserts/*.css --dir dist",
+    "rstart": "rm -rf dist && rollup -c rollup.config.js -w",
+    "start-rs": "react-scripts start",
+    "build-rs": "react-scripts build",
+    "compile-t": "rm -rf dist && set NODE_ENV=production && babel src --out-dir dist --copy-files --ignore spec.js,test.js --source-maps",
+    "compile": "rm -rf dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files",
+    "build:bundle": "webpack --config webpack.config.js",
+    "build-css": "node-sass src/asserts/ -o dist",
+    "sass": "sass src:src --watch --no-source-map",
+    "test": "react-scripts test --env=jsdom --testPathIgnorePatterns=src/__tests__/helper/* src/__tests__/e2e/*",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "numeral": "^1.5.3",
+    "prop-types": "^15.8.1",
+    "react-dnd": "^2.6.0",
+    "react-dnd-html5-backend": "^2.6.0",
+    "react-draggable": "^4.4.3",
+    "react-dropzone": "^3.6.0",
+    "react-flow-renderer": "^9.6.4",
+    "react-redux": "^7.2.4",
+    "react-select": "5.2.2",
+    "redux": "^4.1.0",
+    "redux-immutable": "^4.0.0",
+    "redux-thunk": "^2.0.0",
+    "uuid": "^8.3.2",
+    "@fortawesome/fontawesome-svg-core": "^6.1.0",
+    "@fortawesome/free-regular-svg-icons": "^6.1.0",
+    "@fortawesome/free-solid-svg-icons": "^6.1.0",
+    "@fortawesome/react-fontawesome": "^0.1.18"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "react-hot-loader": "^4.13.0",
+    "@babel/eslint-parser": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "postcss": "^8.4.8",
+    "postcss-cli": "^9.1.0",
+    "postcss-nested": "^5.0.6",
+    "redux-logger": "^3.0.6",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.7.1",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.3",
+    "react-bootstrap": "~0.33.1",
+    "sass": "^1.49.9",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+
 }
