@@ -5,10 +5,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Numeral from 'numeral';
 import GenericSubField from '../models/GenericSubField';
-import { AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn } from './GridBtn';
+import {
+  AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn
+} from './GridBtn';
 import { ColumnHeader, ColumnRow, NoRow } from './GridEntry';
 import UConverterRenderer from './UConverterRenderer';
-import { genUnits, unitConversion, molOptions, samOptions } from '../tools/utils';
+import {
+  genUnits, unitConversion, molOptions, samOptions
+} from '../tools/utils';
 import DropRenderer from './DropRenderer';
 import DropTextRenderer from './DropTextRenderer';
 import DropLinkRenderer from './DropLinkRenderer';
@@ -106,41 +110,38 @@ export default class TableRecord extends React.Component {
 
   getColumns() {
     const { opt } = this.props;
-    const { selectOptions } = opt;
+    const { selectOptions, onNavi } = opt;
     const sValues = (opt.f_obj.sub_values || []);
     let columnDefs = [];
-    (opt.f_obj.sub_fields || []).forEach((sF) => {
+    (opt.f_obj.sub_fields || []).forEach(sF => {
       let colDef = {
         type: sF.type, headerName: sF.col_name, field: sF.id
       };
       const colDefExt = [];
       if (sF.type === 'text') {
-        colDef = Object.assign({}, colDef, {
-          editable: true, onCellChange: this.onCellChange
-        });
+        colDef = { ...colDef, editable: true, onCellChange: this.onCellChange };
       }
       if (sF.type === 'select') {
-        let sOptions =
-          (selectOptions[sF.option_layers] && selectOptions[sF.option_layers].options) || [];
+        let sOptions = (selectOptions[sF.option_layers] && selectOptions[sF.option_layers].options) || [];
         sOptions = sOptions.map(op => ({ value: op.key, name: op.key, label: op.label }));
         const cellParams = { sField: sF, onChange: this.onSelectClick, sOptions };
-        colDef = Object.assign({}, colDef, {
-          cellRenderer: SelectRenderer, cellParams, onCellChange: this.onCellChange
-        });
+        colDef = {
+          ...colDef, cellRenderer: SelectRenderer, cellParams, onCellChange: this.onCellChange
+        };
       }
       if (sF.type === 'system-defined') {
         const cellParams = { sField: sF, onChange: this.onUnitClick };
-        colDef = Object.assign({}, colDef, {
-          cellRenderer: UConverterRenderer, cellParams, onCellChange: this.onCellChange
-        });
+        colDef = {
+          ...colDef, cellRenderer: UConverterRenderer, cellParams, onCellChange: this.onCellChange
+        };
       }
       if (sF.type === 'drag_molecule') {
         const cellParams = { sField: sF, opt, onChange: this.onDrop };
-        colDef = Object.assign({}, colDef, {
-          cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
-        });
+        colDef = {
+          ...colDef, cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
+        };
         const conf = ((sF.value || '').split(';') || []);
-        conf.forEach((c) => {
+        conf.forEach(c => {
           const attr = molOptions.find(m => m.value === c);
           if (attr) {
             const ext = {
@@ -153,19 +154,19 @@ export default class TableRecord extends React.Component {
       if (sF.type === 'drag_sample') {
         const sOpt = sValues.filter(o => o[sF.id] && o[sF.id].value && o[sF.id].value.is_new);
         const cellParams = { sField: sF, opt, onChange: this.onDrop };
-        colDef = Object.assign({}, colDef, {
-          cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
-        });
+        colDef = {
+          ...colDef, cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
+        };
         const addOption = {
           colId: 'sam_option', editable: false, type: 'text', headerName: '', cellRenderer: SampOption, cellParams: { sField: sF, onChange: this.onChk }, width: '3vw'
         };
         if (sOpt.length > 0) colDefExt.push(addOption);
         const addLink = {
-          colId: 'sam_link', editable: false, type: 'text', headerName: 'Short label', cellRenderer: DropLinkRenderer, cellParams: { sField: sF }, width: '5vw'
+          colId: 'sam_link', editable: false, type: 'text', headerName: 'Short label', cellRenderer: DropLinkRenderer, cellParams: { sField: sF, onNavi }, width: '5vw'
         };
         colDefExt.push(addLink);
         const conf = ((sF.value || '').split(';') || []);
-        conf.forEach((c) => {
+        conf.forEach(c => {
           const attr = samOptions.find(m => m.value === c);
           if (attr) {
             const ext = {
@@ -225,7 +226,7 @@ export default class TableRecord extends React.Component {
     const { opt } = this.props;
     const subFields = opt.f_obj.sub_fields || [];
     const newSub = new GenericSubField();
-    subFields.map((e) => {
+    subFields.map(e => {
       if (e.type === 'text') return Object.assign(newSub, { [e.id]: '' });
       return Object.assign(newSub, { [e.id]: { value: '', value_system: e.value_system } });
     });
@@ -236,7 +237,7 @@ export default class TableRecord extends React.Component {
 
   render() {
     const { opt } = this.props;
-    if (opt.isSearchCriteria) return (<div>(This is a table)</div>);
+    if (opt.isSearch) return (<div>(This is a table)</div>);
     if ((opt.f_obj.sub_fields || []).length < 1) return null;
     const columnDefs = this.getColumns();
     return (

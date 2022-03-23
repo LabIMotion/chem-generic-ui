@@ -1,7 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import GenericMain from "./GenericMain";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import GenericMain from './GenericMain';
 
-// export { default as ButtonTooltip } from './components/fields/ButtonTooltip';
+const AppWithDnD = DragDropContext(HTML5Backend)(GenericMain);
 
-ReactDOM.render(<GenericMain />, document.getElementById("app"));
+ReactDOM.render(<AppWithDnD />, document.getElementById('app'));

@@ -4,23 +4,14 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-// import Aviator from 'aviator';
-// import UIStore from '../stores/UIStore';
 
-// const linkSample = (type, id) => {
-//   const { currentCollection, isSync } = UIStore.getState();
-//   const collectionUrl = (!isNaN(id)) ?
-//     `${currentCollection.id}/${type}/${id}` : `${currentCollection.id}/${type}`;
-//   Aviator.navigate(isSync ? `/scollection/${collectionUrl}` : `/collection/${collectionUrl}`);
-// };
-
-const DropLinkRenderer = (props) => {
-  const { sField, node, onLink } = props;
+const DropLinkRenderer = props => {
+  const { sField, node, onNavi } = props;
   const dId = ((node.data[sField.id] || {}).value || {}).el_id || '';
   const dVal = ((node.data[sField.id] || {}).value || {}).el_short_label || ' ';
   if (dId === '') return <div />;
   return (
-    <a role="link" onClick={() => onLink('sample', dId)} style={{ cursor: 'pointer' }}>
+    <a role="link" onClick={() => onNavi('sample', dId)} style={{ cursor: 'pointer' }}>
       <span className="reaction-material-link">{dVal}</span>
     </a>
   );
@@ -29,7 +20,8 @@ const DropLinkRenderer = (props) => {
 DropLinkRenderer.propTypes = {
   sField: PropTypes.object.isRequired,
   node: PropTypes.object.isRequired,
-  onLink: PropTypes.func.isRequired
+  onNavi: PropTypes.func
 };
 
+DropLinkRenderer.defaultProps = { onNavi: () => {} };
 export default DropLinkRenderer;

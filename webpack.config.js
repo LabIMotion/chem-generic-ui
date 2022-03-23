@@ -1,39 +1,39 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  mode: "production",
+  mode: 'production',
   devtool: 'source-map',
-  entry: "./src/entry.js",
+  entry: './src/entry.js',
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
-    filename: "bundle.js",
+    path: path.resolve(__dirname, 'dist/'),
+    publicPath: '/dist/',
+    filename: 'bundle.js',
     clean: true,
     libraryTarget: 'umd',
   },
-  resolve: { extensions: [".js", ".jsx"] },
+  resolve: { extensions: ['.js', '.jsx'] },
   externals: {
-      // Don't bundle react or react-dom
-      react: {
-          commonjs: "react",
-          commonjs2: "react",
-          amd: "React",
-          root: "React"
-      },
-      "react-dom": {
-          commonjs: "react-dom",
-          commonjs2: "react-dom",
-          amd: "ReactDOM",
-          root: "ReactDOM"
-      },
-      lodash: {
-        commonjs: 'lodash',
-        commonjs2: "lodash",
-        amd: 'lodash',
-        root: '_', // indicates global variable
-      },
+    // Don't bundle react or react-dom
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React'
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'ReactDOM',
+      root: 'ReactDOM'
+    },
+    lodash: {
+      commonjs: 'lodash',
+      commonjs2: 'lodash',
+      amd: 'lodash',
+      root: '_', // indicates global variable
+    },
   },
   module: {
     rules: [
@@ -55,12 +55,12 @@ module.exports = {
         test: /\.(scss|css)$/i,
         use: [
           // Creates `style` nodes from JS strings
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           'postcss-loader',
           // Compiles Sass to CSS
-          "sass-loader",
+          'sass-loader',
         ],
       }
     ]

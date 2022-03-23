@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Panel } from 'react-bootstrap';
@@ -7,7 +5,7 @@ import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import FlowView from './FlowView';
 
-const FlowViewerModal = (props) => {
+const FlowViewerModal = props => {
   const { show, data, fnHide } = props;
   if (!show) return null;
   const { properties_release, properties, shortLabel } = data;

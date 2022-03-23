@@ -1,18 +1,22 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
-const ButtonConfirm = (props) => {
+const ButtonConfirm = props => {
   const {
     msg, size, bs, fnClick, fnParams, place, fa, disabled
   } = props;
   const popover = (
     <Popover id="popover-button-confirm">
-      {msg} <br />
+      {msg}
+      {' '}
+      <br />
       <div className="btn-toolbar">
         <Button bsSize="xsmall" bsStyle="danger" aria-hidden="true" onClick={() => fnClick(fnParams)}>
           Yes
-        </Button><span>&nbsp;&nbsp;</span>
+        </Button>
+        <span>&nbsp;&nbsp;</span>
         <Button bsSize="xsmall" bsStyle="warning">No</Button>
       </div>
     </Popover>

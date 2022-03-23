@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const DropTextRenderer = (props) => {
+const DropTextRenderer = props => {
   const { attr, sField, node } = props;
   let displayValue = ((node.data[sField.id] || {}).value || {})[`el_${attr.value}`] || '';
   displayValue = (attr.value === 'molecular_weight' && displayValue !== '') ? displayValue.toFixed(6) : displayValue;

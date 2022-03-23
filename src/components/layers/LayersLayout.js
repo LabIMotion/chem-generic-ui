@@ -5,7 +5,7 @@ import GenPropertiesLayer from './GenPropertiesLayer';
 const LayersLayout = (
   layers, options, funcChange,
   funcSubChange = () => {}, funcClick = () => {}, layout = [], id = 0, isPreview = false,
-  activeWF = false
+  activeWF = false, isSearch = false, fnNavi = () => {}
 ) => {
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
   sortedLayers.forEach((layer, idx) => {
@@ -22,7 +22,9 @@ const LayersLayout = (
           onClick={funcClick}
           layers={layers}
           isPreview={isPreview}
+          isSearch={isSearch}
           activeWF={activeWF}
+          onNavi={fnNavi}
         />
       );
       layout.push(ig);
@@ -33,8 +35,8 @@ const LayersLayout = (
         const cond = layer.cond_fields[i] || {};
         const fd = ((layers[cond.layer] || {}).fields || [])
           .find(f => f.field === cond.field) || {};
-        if (fd.type === 'checkbox' && ((['false', 'no', 'f', '0'].includes((cond.value || '').trim().toLowerCase()) && (typeof (fd && fd.value) === 'undefined' || fd.value === false)) ||
-        (['true', 'yes', 't', '1'].includes((cond.value || '').trim().toLowerCase()) && (typeof fd.value !== 'undefined' && fd.value === true)))) {
+        if (fd.type === 'checkbox' && ((['false', 'no', 'f', '0'].includes((cond.value || '').trim().toLowerCase()) && (typeof (fd && fd.value) === 'undefined' || fd.value === false))
+        || (['true', 'yes', 't', '1'].includes((cond.value || '').trim().toLowerCase()) && (typeof fd.value !== 'undefined' && fd.value === true)))) {
           showLayer = true;
           break;
         } else if (['text', 'select'].includes(fd.type) && (typeof (fd && fd.value) !== 'undefined' && (fd.value || '').trim() === (cond.value || '').trim())) {
@@ -55,7 +57,9 @@ const LayersLayout = (
             onClick={funcClick}
             layers={layers}
             isPreview={isPreview}
+            isSearch={isSearch}
             activeWF={activeWF}
+            onNavi={fnNavi}
           />
         );
         layout.push(igs);

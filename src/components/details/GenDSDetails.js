@@ -2,77 +2,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
-import { Panel, Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
-// import { DragDropContext } from 'react-dnd';
-// import HTML5Backend from 'react-dnd-html5-backend';
-import LayersLayout from '../layers/LayersLayout';
-import { genUnits, toBool, toNum, unitConversion, absOlsTermLabel } from '../tools/utils';
+import {
+  Panel, Button, ButtonToolbar, OverlayTrigger, Tooltip
+} from 'react-bootstrap';
+import GenInterface from './GenInterface';
+import {
+  genUnits, toBool, toNum, absOlsTermLabel
+} from '../tools/utils';
 
 class GenericDSDetails extends Component {
   constructor(props) {
     super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleUnitClick = this.handleUnitClick.bind(this);
     this.handleReload = this.handleReload.bind(this);
   }
 
-  handleInputChange(event, field, layer, type = 'text') {
-    const { genericDS } = this.props;
-    const { properties } = genericDS;
-    let value = '';
-    switch (type) {
-      case 'checkbox':
-        value = event.target.checked;
-        break;
-      case 'select':
-        value = event ? event.value : null;
-        break;
-      case 'formula-field':
-        if (event.target) {
-          ({ value } = event.target);
-        } else {
-          value = event;
-        }
-        break;
-      case 'integer':
-        ({ value } = event.target);
-        value = Math.trunc(value);
-        break;
-      default:
-        ({ value } = event.target);
-    }
-    properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
-    if (type === 'system-defined' && (!properties.layers[`${layer}`].fields.find(e => e.field === field).value_system || properties.layers[`${layer}`].fields.find(e => e.field === field).value_system === '')) {
-      const opt = properties.layers[`${layer}`].fields.find(e => e.field === field).option_layers;
-      properties.layers[`${layer}`].fields.find(e => e.field === field).value_system = genUnits(opt)[0].key;
-    }
-    genericDS.properties = properties;
-    genericDS.changed = true;
-    // this.props.onChange('dataset', { target: { value: genericDS } });
-    this.props.onChange(genericDS);
-  }
-
-  handleUnitClick(layer, obj) {
-    const { genericDS } = this.props;
-    const { properties } = genericDS;
-    const newVal = unitConversion(obj.option_layers, obj.value_system, obj.value);
-    properties.layers[`${layer}`].fields.find(e => e.field === obj.field).value_system = obj.value_system;
-    properties.layers[`${layer}`].fields.find(e => e.field === obj.field).value = newVal;
-    genericDS.properties = properties;
-    genericDS.changed = true;
-    // this.props.onChange('dataset', { target: { value: genericDS } });
-    this.props.onChange(genericDS);
-  }
-
   handleReload() {
-    const { klass, genericDS } = this.props;
+    const { klass, genericDS, onChange } = this.props;
     if (klass.properties_release) {
       const newProps = cloneDeep(klass.properties_release);
       newProps.klass_uuid = klass.uuid;
-      Object.keys(newProps.layers).forEach((key) => {
+      Object.keys(newProps.layers).forEach(key => {
         const newLayer = newProps.layers[key] || {};
-        const curFields =
-        (genericDS.properties.layers[key] && genericDS.properties.layers[key].fields) || [];
+        const curFields = (genericDS.properties.layers[key] && genericDS.properties.layers[key].fields) || [];
         (newLayer.fields || []).forEach((f, idx) => {
           const curIdx = findIndex(curFields, o => o.field === f.field);
           if (curIdx >= 0) {
@@ -82,17 +33,15 @@ class GenericDSDetails extends Component {
               newProps.layers[key].fields[idx].value = curType !== 'undefined' ? curVal.toString() : '';
             }
             if (newProps.layers[key].fields[idx].type === 'integer') {
-              newProps.layers[key].fields[idx].value =
               // eslint-disable-next-line no-restricted-globals
-              (curType === 'undefined' || curType === 'boolean' || isNaN(curVal)) ? 0 : parseInt(curVal, 10);
+              newProps.layers[key].fields[idx].value = (curType === 'undefined' || curType === 'boolean' || isNaN(curVal)) ? 0 : parseInt(curVal, 10);
             }
             if (newProps.layers[key].fields[idx].type === 'checkbox') {
               newProps.layers[key].fields[idx].value = curType !== 'undefined' ? toBool(curVal) : false;
             }
             if (newProps.layers[key].fields[idx].type === 'system-defined') {
               const units = genUnits(newProps.layers[key].fields[idx].option_layers);
-              const vs = units.find(u =>
-                u.key === genericDS.properties.layers[key].fields[curIdx].value_system);
+              const vs = units.find(u => u.key === genericDS.properties.layers[key].fields[curIdx].value_system);
               newProps.layers[key].fields[idx].value_system = (vs && vs.key) || units[0].key;
               newProps.layers[key].fields[idx].value = toNum(curVal);
             }
@@ -104,39 +53,45 @@ class GenericDSDetails extends Component {
       genericDS.klass_ols = klass.ols_term_id;
       genericDS.klass_label = klass.label;
       genericDS.changed = true;
-      // this.props.onChange('dataset', { target: { value: genericDS } });
-      this.props.onChange(genericDS);
+      onChange(genericDS);
     } else {
-      // this.props.onChange('dataset', { target: { value: undefined } });
-      this.props.onChange(undefined);
+      onChange(undefined);
     }
   }
 
-  elementalPropertiesItem(genericDS, klass) {
-    const layersLayout = LayersLayout(
-      genericDS.properties.layers,
-      (klass.properties_release && klass.properties_release.select_options) || {},
-      this.handleInputChange,
-      () => {},
-      this.handleUnitClick
+  elementalPropertiesItem(genericDS) {
+    const { onChange } = this.props;
+    const layersLayout = (
+      <GenInterface
+        generic={genericDS}
+        fnChange={onChange}
+        extLayers={[]}
+        genId={0}
+        isPreview={false}
+        isSearch={false}
+        isActiveWF={false}
+      />
     );
     return (<div style={{ margin: '5px' }}>{layersLayout}</div>);
   }
 
   render() {
-    const {
-      // eslint-disable-next-line no-unused-vars
-      uiCtrl, genericDS, klass, kind
-    } = this.props;
+    const { uiCtrl, genericDS, kind } = this.props;
     if (uiCtrl && Object.keys(genericDS).length !== 0 && kind && kind !== '') {
       return (
         <Panel className="panel-detail">
           <Panel.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
-            {this.elementalPropertiesItem(genericDS, klass)}
+            {this.elementalPropertiesItem(genericDS)}
             <span className="g-ds-note label">
-              <span className="g-ds-title">Note</span><br />
-              Selected analysis type: {absOlsTermLabel(kind)}<br />
-              Content is designed for: {genericDS.klass_label}
+              <span className="g-ds-title">Note</span>
+              <br />
+              Selected analysis type:
+              {' '}
+              {absOlsTermLabel(kind)}
+              <br />
+              Content is designed for:
+              {' '}
+              {genericDS.klass_label}
             </span>
             <ButtonToolbar className="pull-right">
               <OverlayTrigger placement="top" overlay={<Tooltip id="_tooltip_reload">click to reload the content template</Tooltip>}>

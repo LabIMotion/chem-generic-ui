@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -5,18 +6,22 @@
 /* eslint-disable no-restricted-globals */
 
 import React from 'react';
-import { Button, Checkbox, FormGroup, FormControl,
-  InputGroup, ListGroup, ListGroupItem, OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
+import {
+  Button, Checkbox, FormGroup, FormControl,
+  InputGroup, ListGroup, ListGroupItem, OverlayTrigger, Radio, Tooltip
+} from 'react-bootstrap';
 import Select from 'react-select';
 import Dropzone from 'react-dropzone';
 import { v4 as uuid } from 'uuid';
 import { filter } from 'lodash';
 import FieldLabel from './FieldLabel';
-import { downloadFile, genUnit, genUnitSup, unitConvToBase } from '../tools/utils';
+import {
+  downloadFile, genUnit, genUnitSup, unitConvToBase
+} from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
-const GenPropertiesCalculate = (opt) => {
+const GenPropertiesCalculate = opt => {
   const fields = (opt.layer && opt.layer.fields) || [];
   let showVal = 0;
   let showTxt = null;
@@ -27,7 +32,7 @@ const GenPropertiesCalculate = (opt) => {
   // eslint-disable-next-line max-len
   const varFields = (opt.formula && opt.formula.match(regF)) ? opt.formula.match(regF).sort((a, b) => b.length - a.length) : [];
 
-  varFields.forEach((fi) => {
+  varFields.forEach(fi => {
     if (!isNaN(fi)) return;
 
     const tmpField = calFields.find(e => e.field === fi);
@@ -100,7 +105,7 @@ const GenPropertiesCheckbox = opt => (
   </FormGroup>
 );
 
-const GenPropertiesDrop = (opt) => {
+const GenPropertiesDrop = opt => {
   const className = opt.isRequired ? 'drop_generic_properties field_required' : 'drop_generic_properties';
 
   let createOpt = null;
@@ -132,7 +137,7 @@ const GenPropertiesDrop = (opt) => {
           {createOpt}
           <div>
             <OverlayTrigger placement="top" overlay={<Tooltip id={uuid()}>remove</Tooltip>}>
-              <Button className="btn_del" bsStyle="danger" bsSize="xsmall" onClick={() => opt.onChange({})} ><i className="fa fa-trash-o" aria-hidden="true" /></Button>
+              <Button className="btn_del" bsStyle="danger" bsSize="xsmall" onClick={() => opt.onChange({})}><i className="fa fa-trash-o" aria-hidden="true" /></Button>
             </OverlayTrigger>
           </div>
         </div>
@@ -147,7 +152,7 @@ const GenDummy = () => (
   </FormGroup>
 );
 
-const GenPropertiesInputGroup = (opt) => {
+const GenPropertiesInputGroup = opt => {
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const fLab = e => <div key={uuid()} className="form-control g_input_group_label">{e.value}</div>;
   const fTxt = e => <FormControl className="g_input_group" key={e.id} type={e.type} name={e.id} value={e.value} onChange={o => opt.onSubChange(o, e.id, opt.f_obj)} />;
@@ -161,7 +166,7 @@ const GenPropertiesInputGroup = (opt) => {
       </InputGroup.Button>
     </span>
   );
-  const subs = opt.f_obj && opt.f_obj.sub_fields && opt.f_obj.sub_fields.map((e) => {
+  const subs = opt.f_obj && opt.f_obj.sub_fields && opt.f_obj.sub_fields.map(e => {
     if (e.type === 'label') { return fLab(e); } if (e.type === 'system-defined') { return fUnit(e); } return fTxt(e);
   });
   return (
@@ -174,7 +179,7 @@ const GenPropertiesInputGroup = (opt) => {
   );
 };
 
-const GenPropertiesNumber = (opt) => {
+const GenPropertiesNumber = opt => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
@@ -195,7 +200,7 @@ const GenPropertiesNumber = (opt) => {
   );
 };
 
-const GenPropertiesSelect = (opt) => {
+const GenPropertiesSelect = opt => {
   const options = opt.options.map(op => ({ value: op.key, name: op.key, label: op.label }));
   let className = opt.isEditable ? 'select_generic_properties_editable' : 'select_generic_properties_readonly';
   className = opt.isRequired && opt.isEditable ? 'select_generic_properties_required' : className;
@@ -220,7 +225,7 @@ const GenPropertiesSelect = (opt) => {
   );
 };
 
-const GenPropertiesSystemDefined = (opt) => {
+const GenPropertiesSystemDefined = opt => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
@@ -248,7 +253,7 @@ const GenPropertiesSystemDefined = (opt) => {
   );
 };
 
-const GenPropertiesTable = (opt) => {
+const GenPropertiesTable = opt => {
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   return (
     <FormGroup>
@@ -258,7 +263,7 @@ const GenPropertiesTable = (opt) => {
   );
 };
 
-const GenPropertiesText = (opt) => {
+const GenPropertiesText = opt => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
@@ -278,7 +283,7 @@ const GenPropertiesText = (opt) => {
   );
 };
 
-const GenPropertiesTextArea = (opt) => {
+const GenPropertiesTextArea = opt => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
@@ -298,18 +303,18 @@ const GenPropertiesTextArea = (opt) => {
   );
 };
 
-const GenTextFormula = (opt) => {
+const GenTextFormula = opt => {
   const { layers } = opt;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const subs = [];
-  (opt.f_obj && opt.f_obj.text_sub_fields).map((e) => {
+  (opt.f_obj && opt.f_obj.text_sub_fields).map(e => {
     const { layer, field, separator } = e;
     if (field && field !== '') {
       if (field.includes('[@@]')) {
         const fds = field.split('[@@]');
         if (fds && fds.length === 2) {
           const fdt = ((layers[layer] || {}).fields || []).find(f => f.field === fds[0] && f.type === 'table');
-          ((fdt && fdt.sub_values) || []).forEach((svv) => {
+          ((fdt && fdt.sub_values) || []).forEach(svv => {
             if (svv && svv[fds[1]] && svv[fds[1]] !== '') { subs.push(svv[fds[1]]); subs.push(separator); }
           });
         }
@@ -340,8 +345,8 @@ const renderListGroupItem = (opt, attachment) => {
       <i className="fa fa-times" aria-hidden="true" />
     </Button>
   );
-  const filename = attachment.aid ?
-    (<a onClick={() => downloadFile({ contents: `/api/v1/attachments/${attachment.aid}`, name: attachment.filename })} style={{ cursor: 'pointer' }}>{attachment.filename}</a>) : attachment.filename;
+  const filename = attachment.aid
+    ? (<a onClick={() => downloadFile({ contents: `/api/v1/attachments/${attachment.aid}`, name: attachment.filename })} style={{ cursor: 'pointer' }}>{attachment.filename}</a>) : attachment.filename;
   return (
     <div className="generic_grid">
       <div>
@@ -363,10 +368,10 @@ const renderListGroupItem = (opt, attachment) => {
   );
 };
 
-const GenPropertiesUpload = (opt) => {
+const GenPropertiesUpload = opt => {
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const attachments = (opt.value && opt.value.files) || [];
-  if (opt.isSearchCriteria) return (<div>(This is an upload)</div>);
+  if (opt.isSearch) return (<div>(This is an upload)</div>);
 
   return (
     <FormGroup className="text_generic_properties">
@@ -389,14 +394,14 @@ const GenPropertiesUpload = (opt) => {
           <ListGroupItem key={attachment.id} className="generic_files">
             {renderListGroupItem(opt, attachment)}
           </ListGroupItem>
-          ))}
+        ))}
       </ListGroup>
     </FormGroup>
   );
 };
 
-const GenWFNext = (opt) => {
-  const options = (opt.f_obj.wf_options || []).map((op) => {
+const GenWFNext = opt => {
+  const options = (opt.f_obj.wf_options || []).map(op => {
     const label = op.label.match(/(.*)\(.*\)/);
     return ({ value: op.key, name: op.key, label: label[1] === '' ? label[0] : label[1] });
   });

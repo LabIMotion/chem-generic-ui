@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+// import { DragDropContext } from 'react-dnd';
+// import HTML5Backend from 'react-dnd-html5-backend';
 import SegmentDetails from '../components/details/GenSgDetails';
 
 class SimuSG extends Component {
@@ -14,17 +14,17 @@ class SimuSG extends Component {
 
   componentDidMount() {
     fetch('sg_details.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(response => response.json()).then((json) => {
+      .then(response => response.json()).then(json => {
         console.log(json);
         fetch('sg_klass.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-          .then(response => response.json()).then((kjson) => {
+          .then(response => response.json()).then(kjson => {
             this.setState({ segment: json, klass: kjson });
           })
-          .catch((errorMessage) => {
+          .catch(errorMessage => {
             console.log(errorMessage);
           });
       })
-      .catch((errorMessage) => {
+      .catch(errorMessage => {
         console.log(errorMessage);
       });
   }
@@ -51,4 +51,5 @@ class SimuSG extends Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(SimuSG);
+// export default DragDropContext(HTML5Backend)(SimuSG);
+export default SimuSG;

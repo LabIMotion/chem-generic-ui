@@ -1,9 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable object-curly-newline */
-/* eslint-disable camelcase */
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 // import PropTypes from 'prop-types';
 // import { Button, OverlayTrigger, Tooltip, Popover, ControlLabel } from 'react-bootstrap';
@@ -28,7 +22,7 @@ const uploadFiles = (properties, event, field, layer) => {
       break;
     }
     case 'f': {
-      (event.val || []).forEach((file) => {
+      (event.val || []).forEach(file => {
         const uid = uuid();
         if (typeof value.files === 'undefined' || value.files === null) value.files = [];
         value.files.push({ uid, filename: file.name });
@@ -57,8 +51,8 @@ const showProperties = (fObj, layers) => {
       const { layer, field, value } = cond;
       if (field && field !== '') {
         const fd = ((layers[layer] || {}).fields || []).find(f => f.field === field) || {};
-        if (fd.type === 'checkbox' && ((['false', 'no', 'f', '0'].includes((value || '').trim().toLowerCase()) && (typeof (fd && fd.value) === 'undefined' || fd.value === false)) ||
-        (['true', 'yes', 't', '1'].includes((value || '').trim().toLowerCase()) && (typeof (fd && fd.value) !== 'undefined' && fd.value === true)))) {
+        if (fd.type === 'checkbox' && ((['false', 'no', 'f', '0'].includes((value || '').trim().toLowerCase()) && (typeof (fd && fd.value) === 'undefined' || fd.value === false))
+        || (['true', 'yes', 't', '1'].includes((value || '').trim().toLowerCase()) && (typeof (fd && fd.value) !== 'undefined' && fd.value === true)))) {
           showField = true;
           break;
         } else if (['text', 'select'].includes(fd && fd.type) && (typeof (fd && fd.value) !== 'undefined' && ((fd && fd.value) || '').trim() === (value || '').trim())) {
@@ -85,11 +79,11 @@ class GenericDummy {
 const inputEventVal = (event, type) => {
   if (type === 'select') {
     return event ? event.value : null;
-  } else if (type.startsWith('drag')) {
+  } if (type.startsWith('drag')) {
     return event;
-  } else if (type === 'checkbox') {
+  } if (type === 'checkbox') {
     return event.target.checked;
-  } else if (type === 'formula-field') {
+  } if (type === 'formula-field') {
     if (event.target) {
       return event.target.value;
     }
@@ -100,15 +94,15 @@ const inputEventVal = (event, type) => {
 
 const absOlsTermId = val => (val || '').split('|')[0].trim();
 const absOlsTermLabel = val => val.replace(absOlsTermId(val), '').replace('|', '').trim();
-const toNum = (val) => {
+const toNum = val => {
   const parse = Number((val || ''));
   return Number.isNaN(parse) ? 0 : parse;
 };
 
-const genUnitSup = (val) => {
+const genUnitSup = val => {
   if (typeof val === 'undefined' || val === null) return '';
   const vals = val.match(/<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g);
-  const reV = vals.map((v) => {
+  const reV = vals.map(v => {
     const supVal = v.match(/<sup[^>]*>([^<]+)<\/sup>/);
     if (supVal) return <sup key={uuid()}>{supVal[1]}</sup>;
     const subVal = v.match(/<sub[^>]*>([^<]+)<\/sub>/);
@@ -118,7 +112,7 @@ const genUnitSup = (val) => {
   return <span>{reV}</span>;
 };
 
-const toBool = (val) => {
+const toBool = val => {
   const valLower = String(val).toLowerCase();
   return !(!valLower || valLower === 'false' || valLower === '0');
 };
@@ -229,16 +223,16 @@ const unitConversion = (field, key, val) => {
 //   return true;
 // };
 
-const clsInputGroup = (el) => {
+const clsInputGroup = el => {
   if (!el) return el;
   const genericEl = el;
   const { layers } = genericEl.properties_template;
   const keys = Object.keys(layers);
-  keys.forEach((key) => {
+  keys.forEach(key => {
     const layer = layers[key];
     layer.fields.filter(e => e.type === 'input-group')
-      .forEach((e) => {
-        e.sub_fields.forEach((s) => {
+      .forEach(e => {
+        e.sub_fields.forEach(s => {
           const ff = s;
           if (ff.type === 'text') { ff.value = ''; }
         });
@@ -254,7 +248,7 @@ const findCurrentNode = (_srcKey, _layerVals) => {
   const result = [];
   const fs = _layerVals.filter(o => o.wf && o.wf_info && o.wf_info.source_layer === _srcKey);
   if (fs.length > 1) {
-    fs.forEach((o) => {
+    fs.forEach(o => {
       findCurrentNode(o, _layerVals);
     });
   } else if (fs.length === 1) {
@@ -272,7 +266,7 @@ const decorateNode = (_elements, _layers) => {
     // width: 180,
   };
   const elements = _elements;
-  elements.map((e) => {
+  elements.map(e => {
     if (['input', 'output'].includes(e.type) || e.animated) return e;
     const lk = e.data.lKey;
     const fk = findKey(_layers, o => o.wf && (o.key === lk || o.key.startsWith(`${lk}.`)));
@@ -285,12 +279,12 @@ const decorateNode = (_elements, _layers) => {
   return elements;
 };
 
-const conFlowEls = (props) => {
+const conFlowEls = props => {
   const { properties, properties_release } = props;
   const { flow, layers } = properties_release;
   const deep = cloneDeep(flow);
   const els = (deep && deep.elements) || [];
-  els.map((d) => {
+  els.map(d => {
     if (['default'].includes(d.type) && d.data) {
       const { lKey } = d.data;
       const fk = findKey((properties.layers || {}), o => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`)));
@@ -300,7 +294,11 @@ const conFlowEls = (props) => {
         <div>
           {chk}
           <div style={{ borderWidth: '0px 0px 1px 0px', borderColor: 'black', borderStyle: 'solid' }}><b>{layer.label}</b></div>
-          <div>({layer.key})</div>
+          <div>
+            (
+            {layer.key}
+            )
+          </div>
         </div>
       );
       d.data = { label: ll, lKey: layer.key };
@@ -310,10 +308,10 @@ const conFlowEls = (props) => {
   return els;
 };
 
-const storeFlow = (props) => {
+const storeFlow = props => {
   const { elements } = props;
   const els = cloneDeep(elements);
-  els.map((d) => {
+  els.map(d => {
     if (['default'].includes(d.type) && d.data) {
       delete d.data.label;
       delete d.data.layer;
@@ -387,7 +385,7 @@ const swapAryEls = (_ary, idx1, idx2) => {
 //   UIActions.rerenderGenericWorkflow(params);
 // };
 
-const downloadFile = (file) => {
+const downloadFile = file => {
   const { contents, name } = file;
   const link = document.createElement('a');
   link.download = name;

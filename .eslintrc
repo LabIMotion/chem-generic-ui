@@ -9,15 +9,17 @@
     "node": true
   },
   "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "max-len": [1, 100, 2, { "ignoreComments": true }],
     "no-console": ["off"],
     "comma-dangle": [1,"only-multiline"],
     // "react/destructuring-assignment": "off",
     // "react/no-array-index-key": "off",
-    "react/forbid-prop-types": 0,
+    // "react/forbid-prop-types": 0,
     // "jsx-a11y/no-static-element-interactions": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     // "class-methods-use-this": 0,
-    // "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "prefer-destructuring": ["error", {"object": true, "array": false}]
   }
 }

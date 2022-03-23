@@ -30,7 +30,8 @@ const setCell = (columnDef, rowValue) => {
   }
 };
 
-const ColumnHeader = (columnDefs) => {
+const ColumnHeader = _columnDefs => {
+  const columnDefs = _columnDefs;
   const ch = [];
   const h = (col, idx) => {
     const {
@@ -49,7 +50,9 @@ const ColumnHeader = (columnDefs) => {
   return (<div className="generic_grid" style={{ borderBottom: '1px solid #ccc' }}><div>{ch}</div></div>);
 };
 
-const ColumnRow = (columnDefs, rowValue) => {
+const ColumnRow = (_columnDefs, _rowValue) => {
+  const columnDefs = _columnDefs;
+  const rowValue = _rowValue;
   const ch = [];
   const h = (col, val, idx) => {
     const {
@@ -67,7 +70,8 @@ const ColumnRow = (columnDefs, rowValue) => {
   return (<div key={`column_row_${rowValue.id}`} className="generic_grid"><div>{ch}</div></div>);
 };
 
-const NoRow = (values) => {
+const NoRow = rows => {
+  const values = rows;
   if (values && values.length > 0) return null;
   return (<div className="generic_grid"><div><div className="generic_grid_row" style={{ width: '100%' }}>(No data)</div></div></div>);
 };

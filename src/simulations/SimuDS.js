@@ -12,16 +12,16 @@ class SimuDS extends Component {
 
   componentDidMount() {
     fetch('ds_details.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(response => response.json()).then((json) => {
+      .then(response => response.json()).then(json => {
         fetch('ds_klass.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-          .then(response => response.json()).then((kjson) => {
+          .then(response => response.json()).then(kjson => {
             this.setState({ genericDS: json, klass: kjson });
           })
-          .catch((errorMessage) => {
+          .catch(errorMessage => {
             console.log(errorMessage);
           });
       })
-      .catch((errorMessage) => {
+      .catch(errorMessage => {
         console.log(errorMessage);
       });
   }

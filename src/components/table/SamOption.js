@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
 
-const SamOption = (props) => {
+const SamOption = props => {
   const { sField, node, onChange } = props;
   const { data } = node;
   const fValue = (data[sField.id] && data[sField.id].value) || {};

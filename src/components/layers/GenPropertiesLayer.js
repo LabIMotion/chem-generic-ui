@@ -3,7 +3,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Col, PanelGroup, Row } from 'react-bootstrap';
+import {
+  Panel, Col, PanelGroup, Row
+} from 'react-bootstrap';
 import GenProperties from '../fields/GenProperties';
 import { genUnits, showProperties, unitConversion } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
@@ -17,10 +19,12 @@ export default class GenPropertiesLayer extends Component {
   }
 
   handleChange(e, f, k, t) {
-    this.props.onChange(e, f, k, t);
+    const { onChange } = this.props;
+    onChange(e, f, k, t);
   }
 
   handleSubChange(e, id, f, valueOnly = false) {
+    const { onSubChange } = this.props;
     const sub = f.sub_fields.find(m => m.id === id);
     if (!valueOnly) {
       if (e.type === 'system-defined') {
@@ -35,21 +39,22 @@ export default class GenPropertiesLayer extends Component {
     }
     const { layer } = this.props;
     const obj = { f, sub };
-    this.props.onSubChange(layer.key, obj, valueOnly);
+    onSubChange(layer.key, obj, valueOnly);
   }
 
   handleClick(keyLayer, obj, val) {
+    const { onClick } = this.props;
     const units = genUnits(obj.option_layers);
     let uIdx = units.findIndex(e => e.key === val);
     if (uIdx < units.length - 1) uIdx += 1; else uIdx = 0;
     const update = obj;
     update.value_system = units.length > 0 ? units[uIdx].key : '';
-    this.props.onClick(keyLayer, update);
+    onClick(keyLayer, update);
   }
 
   views() {
     const {
-      layer, selectOptions, id, layers, isPreview
+      layer, selectOptions, id, layers, isPreview, isSearch, onNavi
     } = this.props;
     const { cols, fields, key } = layer;
     const perRow = cols || 1;
@@ -91,6 +96,7 @@ export default class GenPropertiesLayer extends Component {
               onSubChange={this.handleSubChange}
               isEditable
               isPreview={isPreview}
+              isSearch={isSearch}
               readOnly={false}
               isRequired={f.required || false}
               placeholder={f.placeholder || ''}
@@ -98,6 +104,7 @@ export default class GenPropertiesLayer extends Component {
               value_system={f.value_system || unit.key}
               onClick={() => this.handleClick(key, f, (f.value_system || unit.key))}
               selectOptions={selectOptions || {}}
+              onNavi={onNavi}
             />
           </Col>
         );
@@ -127,16 +134,18 @@ export default class GenPropertiesLayer extends Component {
     let bs = color || 'default';
     const cl = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
     // panel header color is based on input bs value
-    const panelDnD = (<PanelDnD
-      type="gen_panel"
-      layer={layer}
-      field="layer"
-      rowValue={{ id: layer.key }}
-      handleMove={this.moveLayer}
-      id={id}
-      handleChange={this.handleChange}
-      bs={bs}
-    />);
+    const panelDnD = (
+      <PanelDnD
+        type="gen_panel"
+        layer={layer}
+        field="layer"
+        rowValue={{ id: layer.key }}
+        handleMove={this.moveLayer}
+        id={id}
+        handleChange={this.handleChange}
+        bs={bs}
+      />
+    );
     const panelHeader = label === '' ? (<span />) : (
       <Panel.Heading className={cl}>
         <Panel.Title toggle>{label}</Panel.Title>
@@ -166,7 +175,9 @@ GenPropertiesLayer.propTypes = {
   onClick: PropTypes.func,
   layers: PropTypes.object.isRequired,
   isPreview: PropTypes.bool,
-  activeWF: PropTypes.bool
+  isSearch: PropTypes.bool,
+  activeWF: PropTypes.bool,
+  onNavi: PropTypes.func
 };
 
 GenPropertiesLayer.defaultProps = {
@@ -174,5 +185,7 @@ GenPropertiesLayer.defaultProps = {
   selectOptions: {},
   onClick: () => {},
   isPreview: false,
-  activeWF: false
+  isSearch: false,
+  activeWF: false,
+  onNavi: () => {}
 };

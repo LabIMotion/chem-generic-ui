@@ -18,7 +18,8 @@ const DelRowBtn = ({ delRow, node }) => {
   return (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id={uuid()}>remove</Tooltip>}>
       <Button onClick={() => delRow(data)} bsSize="xsmall"><i className="fa fa-times" aria-hidden="true" /></Button>
-    </OverlayTrigger>);
+    </OverlayTrigger>
+  );
 };
 
 DelRowBtn.propTypes = { delRow: PropTypes.func.isRequired, node: PropTypes.object.isRequired };
@@ -38,4 +39,6 @@ DnDRowBtn.propTypes = {
   node: PropTypes.object.isRequired
 };
 
-export { AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn };
+export {
+  AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn
+};

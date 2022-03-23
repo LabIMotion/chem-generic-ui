@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { cloneDeep } from 'lodash';
 import GenericElTableDropTarget from './GenericElTableDropTarget';
 
-const DropRenderer = (props) => {
+const DropRenderer = props => {
   const {
     opt, sField, onChange, node
   } = props;

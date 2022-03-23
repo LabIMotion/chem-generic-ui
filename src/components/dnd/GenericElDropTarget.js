@@ -1,9 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-restricted-globals */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
@@ -26,12 +21,18 @@ import { Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 //   Aviator.navigate(isSync ? `/scollection/${collectionUrl}` : `/collection/${collectionUrl}`);
 // };
 
-const show = (opt, iconClass, onLink) => {
+const show = (opt, iconClass, onNavi) => {
   if (opt.value && opt.value.el_id) {
     const tips = opt.value.el_tip && opt.value.el_tip.split('@@');
     const tip1 = (tips && tips.length >= 1 && tips[0]) || '';
     const tip2 = (tips && tips.length >= 2 && tips[1]) || '';
-    const tit = (<div>{tip1}<br />{tip2}</div>);
+    const tit = (
+      <div>
+        {tip1}
+        <br />
+        {tip2}
+      </div>
+    );
     const pop = (
       <Popover id="popover-svg" title={tit} style={{ maxWidth: 'none', maxHeight: 'none' }}>
         <img src={opt.value.el_svg} style={{ height: '26vh', width: '26vh' }} alt="" />
@@ -42,16 +43,27 @@ const show = (opt, iconClass, onLink) => {
       <div className="s-img">
         <OverlayTrigger trigger={['hover']} placement="left" rootClose onHide={null} overlay={pop}>
           <img src={path} alt="" />
-        </OverlayTrigger>&nbsp;<span className="data">{txt}</span>
+        </OverlayTrigger>
+        <span className="data">{txt}</span>
       </div>
-    ) : (<OverlayTrigger placement="top" overlay={<Tooltip id={uuid()}>{tip1}<br />{tip2}</Tooltip>}><div className="data">{txt}</div></OverlayTrigger>));
+    ) : (
+      <OverlayTrigger
+        placement="top"
+        overlay={(
+          <Tooltip id={uuid()}>
+            {tip1}
+            <br />
+            {tip2}
+          </Tooltip>
+        )}
+      >
+        <div className="data">{txt}</div>
+      </OverlayTrigger>
+    ));
     if (opt.value.el_type === 'sample') {
       if (opt.value.is_new !== true) {
         label = (
-          // <a role="link"
-          // onClick={() => handleSampleClick(opt.value.el_type, opt.value.el_id)}
-          // style={{ cursor: 'pointer' }}>
-          <a role="link" onClick={() => onLink(opt.value.el_type, opt.value.el_id)} style={{ cursor: 'pointer' }}>
+          <a role="link" onClick={() => onNavi(opt.value.el_type, opt.value.el_id)} style={{ cursor: 'pointer' }}>
             <span className="reaction-material-link">{label}</span>
           </a>
         );
@@ -59,11 +71,9 @@ const show = (opt, iconClass, onLink) => {
     }
     if (opt.value.el_type === 'element') {
       label = (
-        // <a role="link"
-        // onClick={() => handleElementClick(opt.value.el_klass, opt.value.el_id)}
-        // style={{ cursor: 'pointer' }}>
-        <a role="link" onClick={() => onLink(opt.value.el_klass, opt.value.el_id)} style={{ cursor: 'pointer' }}>
-          <i className={opt.value.icon_name} />&nbsp;
+        <a role="link" onClick={() => onNavi(opt.value.el_klass, opt.value.el_id)} style={{ cursor: 'pointer' }}>
+          <i className={opt.value.icon_name} />
+          {' '}
           <span className="reaction-material-link">{label}</span>
         </a>
       );
@@ -142,11 +152,12 @@ const dropCollect = (connect, monitor) => ({
 class GenericElDropTarget extends Component {
   render() {
     const {
-      connectDropTarget, isOver, canDrop, opt, onLink
+      connectDropTarget, isOver, canDrop, opt
     } = this.props;
+    const { onNavi } = opt;
     const iconClass = (opt.dndItems && opt.dndItems[0] === 'molecule' ? 'sample' : opt.dndItems[0]);
     const className = `target${isOver ? ' is-over' : ''}${canDrop ? ' can-drop' : ''}`;
-    return connectDropTarget(<div className={className}>{show(opt, iconClass, onLink)}</div>);
+    return connectDropTarget(<div className={className}>{show(opt, iconClass, onNavi)}</div>);
   }
 }
 

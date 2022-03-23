@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable import/prefer-default-export */
 import { cloneDeep, sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
 
@@ -45,7 +43,7 @@ const orgLayerObject = (_layers = []) => {
 
 const reformCondFields = (_layer, _oKey) => {
   const layer = _layer;
-  layer.fields.map((_f) => {
+  layer.fields.map(_f => {
     const f = _f;
     let conds = f.cond_fields;
     // no cond_fields
@@ -57,7 +55,7 @@ const reformCondFields = (_layer, _oKey) => {
       return f;
     }
     // rename layer
-    conds = conds.map((o) => {
+    conds = conds.map(o => {
       const n = o;
       n.layer = layer.key;
       return n;
@@ -71,7 +69,7 @@ const reformCondFields = (_layer, _oKey) => {
 const addToObject = (obj, key, addAfter) => {
   const temp = {};
   const ok = Object.keys(obj);
-  Object.keys(obj).forEach((e) => {
+  Object.keys(obj).forEach(e => {
     if (Object.prototype.hasOwnProperty.call(obj, e)) {
       temp[e] = obj[e];
       if (e === key) {
@@ -96,7 +94,7 @@ const addToObject = (obj, key, addAfter) => {
 
 const traverseToRemove = (layers, rmKey) => {
   let rms = [];
-  Object.keys(layers).forEach((e) => {
+  Object.keys(layers).forEach(e => {
     if (Object.prototype.hasOwnProperty.call(layers, e)) {
       if (layers[e].key === rmKey) rms = rms.concat(rmKey);
       else if (layers[e].wf_info && (layers[e].wf_info.source_layer === rmKey)) {
@@ -112,7 +110,7 @@ const removeFromObject = (_propertiesLayers = {}, srcLayer = '', rmNode = {}) =>
   const rmLayer = rmNode.data && rmNode.data.layer ? rmNode.data.layer.key : null;
   if (!rmLayer) return [];
   let rms = [];
-  Object.keys(layers).forEach((e) => {
+  Object.keys(layers).forEach(e => {
     if (Object.prototype.hasOwnProperty.call(layers, e)) {
       const wf = layers[e].wf_info;
       if (wf && (wf.source_layer === srcLayer) && (wf.node_id === rmNode.id)) {
@@ -124,7 +122,7 @@ const removeFromObject = (_propertiesLayers = {}, srcLayer = '', rmNode = {}) =>
   return layers;
 };
 
-const buildInitWF = (template) => {
+const buildInitWF = template => {
   const orig = cloneDeep(template);
   const { layers, flow } = orig;
   const sortedLayers = sortBy(layers, l => l.position);
@@ -136,14 +134,13 @@ const buildInitWF = (template) => {
     const nNs = ls.filter(e => e.source === '1').map(e => e.target); // get target ids from Start
     const nextNodes = ns.filter(n => nNs.includes(n.id)); // target nodes
     const result = [];
-    sortedLayers.forEach((sortedLayer) => {
+    sortedLayers.forEach(sortedLayer => {
       const fLayer = sortedLayer;
       if (fLayer.wf) {
         const position = (fLayer.fields || []).length + 1;
         const passen = nextNodes.filter(n => n.data.layer.key === fLayer.key);
-        passen.forEach((pas) => {
-          const nextOptions =
-          ls.filter(e => e.source === pas.id && e.source !== e.target).map(e => e.target);
+        passen.forEach(pas => {
+          const nextOptions = ls.filter(e => e.source === pas.id && e.source !== e.target).map(e => e.target);
           const wfOpts = ns.filter(n => nextOptions.includes(n.id)).map(e => ({ key: e.id, label: `${e.data.layer.label}(${e.data.layer.key})` })); // next nodes
           fLayer.fields.push({
             type: 'wf-next', default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts

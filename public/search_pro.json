@@ -1,0 +1,650 @@
+{
+    "id": 17,
+    "uuid": "7f50e989-ca05-43ba-81e1-bb2b42213a6d",
+    "name": "proc",
+    "label": "pro",
+    "desc": "",
+    "icon_name": "fa fa-user-o",
+    "properties_release": {
+        "eln": {
+            "version": "0.9.1",
+            "base_revision": "413824bce4a7adeb74bb3258f94ab9e3fc87dc09",
+            "current_revision": "75f3702e77b841f44fc1d1b8e2650bba35329f59\n"
+        },
+        "uuid": "7f50e989-ca05-43ba-81e1-bb2b42213a6d",
+        "klass": "ElementKlass",
+        "layers": {
+            "device": {
+                "wf": false,
+                "key": "device",
+                "cols": 3,
+                "color": "none",
+                "label": "Used device",
+                "layer": "device",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "text",
+                        "field": "Manufacurer",
+                        "label": "Manufacurer",
+                        "default": "",
+                        "position": 1,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Model",
+                        "label": "Model",
+                        "default": "",
+                        "position": 2,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Serial number",
+                        "label": "Serial number",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Additional information",
+                        "label": "Additional information",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 3
+            },
+            "sample_pro": {
+                "wf": false,
+                "key": "sample_pro",
+                "cols": 2,
+                "color": "none",
+                "label": "Used material",
+                "layer": "sample_pro",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "drag_sample",
+                        "field": "Sample",
+                        "label": "Sample",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "description": "Drag sample that was used for the process",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "select",
+                        "field": "comment",
+                        "label": "Comment",
+                        "default": "",
+                        "position": 2,
+                        "required": false,
+                        "sub_fields": [],
+                        "option_layers": "select1",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered1",
+                        "label": "Material",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "b78125a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered2",
+                        "label": "Layer thickness",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "c72b0110-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted",
+                        "label": "Type of stab ",
+                        "default": "",
+                        "position": 5,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "e257f1a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted2",
+                        "label": "Glue",
+                        "default": "",
+                        "position": 6,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "3d9c81c0-d355-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 2
+            },
+            "dependencies": {
+                "wf": false,
+                "key": "dependencies",
+                "cols": 6,
+                "color": "none",
+                "label": "",
+                "layer": "dependencies",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "checkbox",
+                        "field": "environ",
+                        "label": "Environmental conditions",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 1
+            },
+            "environmental": {
+                "wf": false,
+                "key": "environmental",
+                "cols": 2,
+                "label": "Environmental conditions",
+                "layer": "environmental",
+                "fields": [],
+                "position": 100,
+                "cond_fields": [
+                    {
+                        "id": "39bca820-d358-11eb-a544-dba464e0e1a4",
+                        "field": "environ",
+                        "layer": "dependencies",
+                        "value": "true"
+                    }
+                ]
+            }
+        },
+        "select_options": {
+            "select1": {
+                "desc": "select1",
+                "options": [
+                    {
+                        "key": "used as it is",
+                        "label": "used as it is"
+                    },
+                    {
+                        "key": "diverse",
+                        "label": "diverse"
+                    }
+                ]
+            }
+        }
+    },
+    "properties_template": {
+        "eln": {
+            "version": "0.9.1",
+            "base_revision": "413824bce4a7adeb74bb3258f94ab9e3fc87dc09",
+            "current_revision": "75f3702e77b841f44fc1d1b8e2650bba35329f59\n"
+        },
+        "uuid": "7f50e989-ca05-43ba-81e1-bb2b42213a6d",
+        "klass": "ElementKlass",
+        "layers": {
+            "device": {
+                "key": "device",
+                "cols": 3,
+                "color": "none",
+                "label": "Used device",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "text",
+                        "field": "Manufacurer",
+                        "label": "Manufacurer",
+                        "default": "",
+                        "position": 1,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Model",
+                        "label": "Model",
+                        "default": "",
+                        "position": 2,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Serial number",
+                        "label": "Serial number",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Additional information",
+                        "label": "Additional information",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 3
+            },
+            "sample_pro": {
+                "key": "sample_pro",
+                "cols": 2,
+                "color": "none",
+                "label": "Used material",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "drag_sample",
+                        "field": "Sample",
+                        "label": "Sample",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "description": "Drag sample that was used for the process",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "select",
+                        "field": "comment",
+                        "label": "Comment",
+                        "default": "",
+                        "position": 2,
+                        "required": false,
+                        "sub_fields": [],
+                        "option_layers": "select1",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered1",
+                        "label": "Material",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "b78125a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered2",
+                        "label": "Layer thickness",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "c72b0110-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted",
+                        "label": "Type of stab ",
+                        "default": "",
+                        "position": 5,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "e257f1a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted2",
+                        "label": "Glue",
+                        "default": "",
+                        "position": 6,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "3d9c81c0-d355-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 2
+            },
+            "dependencies": {
+                "key": "dependencies",
+                "cols": 6,
+                "color": "none",
+                "label": "",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "checkbox",
+                        "field": "environ",
+                        "label": "Environmental conditions",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 1
+            },
+            "environmental": {
+                "key": "environmental",
+                "cols": 2,
+                "label": "Environmental conditions",
+                "fields": [],
+                "position": 100,
+                "cond_fields": [
+                    {
+                        "id": "39bca820-d358-11eb-a544-dba464e0e1a4",
+                        "field": "environ",
+                        "layer": "dependencies",
+                        "value": "true"
+                    }
+                ]
+            }
+        },
+        "select_options": {
+            "select1": {
+                "desc": "select1",
+                "options": [
+                    {
+                        "key": "used as it is",
+                        "label": "used as it is"
+                    },
+                    {
+                        "key": "diverse",
+                        "label": "diverse"
+                    }
+                ]
+            }
+        }
+    },
+    "is_active": true,
+    "klass_prefix": "pro",
+    "is_generic": true,
+    "place": 100,
+    "released_at": "02.08.2021, 19:25",
+    "properties": {
+        "eln": {
+            "version": "0.9.1",
+            "base_revision": "413824bce4a7adeb74bb3258f94ab9e3fc87dc09",
+            "current_revision": "75f3702e77b841f44fc1d1b8e2650bba35329f59\n"
+        },
+        "uuid": "7f50e989-ca05-43ba-81e1-bb2b42213a6d",
+        "klass": "ElementKlass",
+        "layers": {
+            "device": {
+                "wf": false,
+                "key": "device",
+                "cols": 3,
+                "color": "none",
+                "label": "Used device",
+                "layer": "device",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "text",
+                        "field": "Manufacurer",
+                        "label": "Manufacurer",
+                        "default": "",
+                        "position": 1,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Model",
+                        "label": "Model",
+                        "default": "",
+                        "position": 2,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Serial number",
+                        "label": "Serial number",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Additional information",
+                        "label": "Additional information",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 3
+            },
+            "sample_pro": {
+                "wf": false,
+                "key": "sample_pro",
+                "cols": 2,
+                "color": "none",
+                "label": "Used material",
+                "layer": "sample_pro",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "drag_sample",
+                        "field": "Sample",
+                        "label": "Sample",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "description": "Drag sample that was used for the process",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "select",
+                        "field": "comment",
+                        "label": "Comment",
+                        "default": "",
+                        "position": 2,
+                        "required": false,
+                        "sub_fields": [],
+                        "option_layers": "select1",
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered1",
+                        "label": "Material",
+                        "default": "",
+                        "position": 3,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "b78125a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "Sputtered2",
+                        "label": "Layer thickness",
+                        "default": "",
+                        "position": 4,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "c72b0110-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted",
+                        "label": "Type of stab ",
+                        "default": "",
+                        "position": 5,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "e257f1a0-d354-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    },
+                    {
+                        "type": "text",
+                        "field": "mounted2",
+                        "label": "Glue",
+                        "default": "",
+                        "position": 6,
+                        "sub_fields": [],
+                        "cond_fields": [
+                            {
+                                "id": "3d9c81c0-d355-11eb-a544-dba464e0e1a4",
+                                "field": "comment",
+                                "layer": "sample_pro",
+                                "value": "diverse"
+                            }
+                        ],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 2
+            },
+            "dependencies": {
+                "wf": false,
+                "key": "dependencies",
+                "cols": 6,
+                "color": "none",
+                "label": "",
+                "layer": "dependencies",
+                "style": "panel_generic_heading",
+                "fields": [
+                    {
+                        "type": "checkbox",
+                        "field": "environ",
+                        "label": "Environmental conditions",
+                        "default": "",
+                        "position": 1,
+                        "required": false,
+                        "sub_fields": [],
+                        "text_sub_fields": []
+                    }
+                ],
+                "position": 1
+            },
+            "environmental": {
+                "wf": false,
+                "key": "environmental",
+                "cols": 2,
+                "label": "Environmental conditions",
+                "layer": "environmental",
+                "fields": [],
+                "position": 100,
+                "cond_fields": [
+                    {
+                        "id": "39bca820-d358-11eb-a544-dba464e0e1a4",
+                        "field": "environ",
+                        "layer": "dependencies",
+                        "value": "true"
+                    }
+                ]
+            }
+        },
+        "select_options": {
+            "select1": {
+                "desc": "select1",
+                "options": [
+                    {
+                        "key": "used as it is",
+                        "label": "used as it is"
+                    },
+                    {
+                        "key": "diverse",
+                        "label": "diverse"
+                    }
+                ]
+            }
+        }
+    }
+}

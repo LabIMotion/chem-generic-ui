@@ -4,7 +4,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { DropTarget } from 'react-dnd';
-import { Tooltip, OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import {
+  Tooltip, OverlayTrigger, Popover, Button
+} from 'react-bootstrap';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   const noSvg = '/images/not_available.svg';
@@ -23,7 +25,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         </OverlayTrigger>
         <div className="del_btn">
           <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}>
-            <Button className="btn_del" bsSize="xsmall" onClick={() => onDrop({}, params)} ><i className="fa fa-trash-o" aria-hidden="true" /></Button>
+            <Button className="btn_del" bsSize="xsmall" onClick={() => onDrop({}, params)}><i className="fa fa-trash-o" aria-hidden="true" /></Button>
           </OverlayTrigger>
         </div>
       </div>

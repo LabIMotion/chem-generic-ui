@@ -3,25 +3,33 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 
-const ButtonTooltip = (props) => {
-  const tip = <Tooltip id={uuid()}>{props.tip}</Tooltip>;
+const ButtonTooltip = props => {
+  const { tip } = props;
+  const tooltip = <Tooltip id={uuid()}>{tip}</Tooltip>;
   const {
     size, bs, fnClick, element, place, fa, disabled, txt
   } = props;
-  const content = txt ? (<span>{txt}&nbsp;</span>) : '';
+  const content = txt ? (
+    <span>
+      {txt}
+&nbsp;
+    </span>
+  ) : '';
   if (bs === '') {
     return (
-      <OverlayTrigger delayShow={1000} placement={place} overlay={tip} >
+      <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
         <Button bsSize={size} onClick={() => fnClick(element)} disabled={disabled}>
-          {content}<i className={`fa ${fa}`} aria-hidden="true" />
+          {content}
+          <i className={`fa ${fa}`} aria-hidden="true" />
         </Button>
       </OverlayTrigger>
     );
   }
   return (
-    <OverlayTrigger delayShow={1000} placement={place} overlay={tip} >
+    <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
       <Button bsSize={size} bsStyle={bs} onClick={() => fnClick(element)} disabled={disabled}>
-        {content}<i className={`fa ${fa}`} aria-hidden="true" />
+        {content}
+        <i className={`fa ${fa}`} aria-hidden="true" />
       </Button>
     </OverlayTrigger>
   );

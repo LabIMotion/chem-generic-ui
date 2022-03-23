@@ -1,8 +1,9 @@
-/* eslint-disable max-len */
 import React from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import { compose } from 'redux';
-import { Panel, ButtonGroup, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import {
+  Panel, ButtonGroup, OverlayTrigger, Tooltip, Button
+} from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -61,16 +62,39 @@ const PanelDnD = ({
       <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-remove')}><FontAwesomeIcon icon="fas fa-minus" /></Button>
     </OverlayTrigger>
   );
-  const wfIcon = wf ? (<span>&nbsp;<FontAwesomeIcon icon="fas fa-sitemap" /></span>) : null;
+  const wfIcon = wf ? (
+    <span>
+      <FontAwesomeIcon icon="fas fa-sitemap" />
+    </span>
+  ) : null;
   const moveIcon = (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}>
       <Button onClick={() => {}} bsSize="xsmall"><FontAwesomeIcon icon="fas fa-arrows-alt" /></Button>
-    </OverlayTrigger>);
-  const btnLayer = wf ? (<ButtonGroup className="pull-right" >{btnAdd}</ButtonGroup>) : (<ButtonGroup className="pull-right" >{btnAdd}{btnRemove}{moveIcon}</ButtonGroup>);
-  const extHead = (/\./g.test(key)) ? <>({key}{wfIcon})</> : null;
+    </OverlayTrigger>
+  );
+  const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnAdd}</ButtonGroup>) : (
+    <ButtonGroup className="pull-right">
+      {btnAdd}
+      {btnRemove}
+      {moveIcon}
+    </ButtonGroup>
+  );
+  const extHead = (/\./g.test(key)) ? (
+    <>
+      (
+      {key}
+      {wfIcon}
+      )
+    </>
+  ) : null;
   const panelHeader = (
     <Panel.Heading className={klz}>
-      <Panel.Title toggle style={{ float: 'left', lineHeight: 'normal' }}>{label}&nbsp;{extHead}</Panel.Title>{btnLayer}
+      <Panel.Title toggle style={{ float: 'left', lineHeight: 'normal' }}>
+        {label}
+&nbsp;
+        {extHead}
+      </Panel.Title>
+      {btnLayer}
       <div className="clearfix" />
     </Panel.Heading>
   );

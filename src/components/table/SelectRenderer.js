@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
-const SelectRenderer = (props) => {
+const SelectRenderer = props => {
   const {
     sField, onChange, sOptions, node
   } = props;
