@@ -40,7 +40,7 @@ class SimuInterface extends Component {
     );
     return (
       <div>
-        <h2>Interface - SegmentDetails</h2>
+        <h2>Interface (SegmentDetails)</h2>
         <div>
           {layersLayout}
         </div>

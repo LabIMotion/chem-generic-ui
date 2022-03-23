@@ -4,10 +4,11 @@ import GenPropertiesLayer from './GenPropertiesLayer';
 
 const LayersLayout = (
   layers, options, funcChange,
-  funcSubChange = () => {}, funcClick = () => {}, layout = [], id = 0, isPreview = false,
+  funcSubChange = () => {}, funcClick = () => {}, extLys = [], id = 0, isPreview = false,
   activeWF = false, isSearch = false, fnNavi = () => {}
 ) => {
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
+  const layout = [].concat(extLys);
   sortedLayers.forEach((layer, idx) => {
     const uk = `${layer.key}_${idx}`;
     if (typeof layer.cond_fields === 'undefined' || layer.cond_fields == null || layer.cond_fields.length === 0) {

@@ -11,6 +11,8 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.dev.js",
     "build": "webpack --config ./webpack.config.js",
+    "cc5": "webpack --config ./webpack.config.js && cp -f ./dist/* /mnt/d/kit/github/dev5/node_modules/chem-generic-ui/dist/.",
+    "cc": "webpack --config ./webpack.config.js && cp -f ./dist/* /mnt/d/workspace/github/dev5/node_modules/chem-generic-ui/dist/.",
     "pc": "webpack --config ./webpack.config.js && cp -f ./dist/* ../dev5/node_modules/chem-generic-ui/dist/.",
     "rbuild": "rm -rf dist && rollup -c --environment NODE_ENV:production && postcss src/asserts/*.css --dir dist",
     "rstart": "rm -rf dist && rollup -c rollup.config.js -w",
