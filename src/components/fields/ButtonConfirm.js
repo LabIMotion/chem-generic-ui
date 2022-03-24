@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
-const ButtonConfirm = props => {
+const ButtonConfirm = (props) => {
   const {
     msg, size, bs, fnClick, fnParams, place, fa, disabled
   } = props;
@@ -13,7 +13,12 @@ const ButtonConfirm = props => {
       {' '}
       <br />
       <div className="btn-toolbar">
-        <Button bsSize="xsmall" bsStyle="danger" aria-hidden="true" onClick={() => fnClick(fnParams)}>
+        <Button
+          bsSize="xsmall"
+          bsStyle="danger"
+          aria-hidden="true"
+          onClick={() => fnClick(fnParams)}
+        >
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const GenDSMisType = props => {
+const GenDSMisType = (props) => {
   const { uiCtrl } = props;
   if (uiCtrl) {
     return (

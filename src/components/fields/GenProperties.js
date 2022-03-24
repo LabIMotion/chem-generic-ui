@@ -15,10 +15,9 @@ import {
   GenPropertiesText
 } from './GenPropertiesFields';
 
-const GenProperties = opt => {
+const GenProperties = (opt) => {
   const fieldProps = { ...opt, dndItems: [] };
   const type = fieldProps.type.split('_');
-  console.log(opt.isSearch);
   if (opt.isSearch && type[0] === 'drag') type[0] = 'text';
   // if (opt.isPreview && (type[0] === 'drag' || type[0] === 'upload')) type[0] = 'text';
   switch (type[0]) {

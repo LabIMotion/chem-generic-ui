@@ -9,7 +9,7 @@
     "node": true
   },
   "rules": {
-    "arrow-parens": ["error", "as-needed"],
+    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
     "max-len": [1, 100, 2, { "ignoreComments": true }],
     "no-console": ["off"],
     "comma-dangle": [1,"only-multiline"],

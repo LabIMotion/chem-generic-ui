@@ -17,7 +17,7 @@ const initialState = { showViewLayer: false, selectedLayerKey: '' };
 
 const reducer = (state, action) => ({ ...state, ...action });
 
-const GenInterface = props => {
+const GenInterface = (props) => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
     generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi
@@ -210,15 +210,19 @@ const GenInterface = props => {
     if (layer === '' && field === 'search_short_label') generic.search_short_label = value;
 
     if (propsChange) {
-      properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
-      if (type === 'system-defined' && (!properties.layers[`${layer}`].fields.find(e => e.field === field).value_system || properties.layers[`${layer}`].fields.find(e => e.field === field).value_system === '')) {
-        const opt = properties.layers[`${layer}`].fields
-          .find(e => e.field === field).option_layers;
-        properties.layers[`${layer}`].fields
-          .find(e => e.field === field).value_system = genUnits(opt)[0].key;
+      if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
+        console.log(field);
+      } else {
+        properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
+        if (type === 'system-defined' && (!properties.layers[`${layer}`].fields.find(e => e.field === field).value_system || properties.layers[`${layer}`].fields.find(e => e.field === field).value_system === '')) {
+          const opt = properties.layers[`${layer}`].fields
+            .find(e => e.field === field).option_layers;
+          properties.layers[`${layer}`].fields
+            .find(e => e.field === field).value_system = genUnits(opt)[0].key;
+        }
+        generic.properties = properties;
+        if (isSearch) generic.search_properties = properties;
       }
-      generic.properties = properties;
-      if (isSearch) generic.search_properties = properties;
       generic.changed = true;
       fnChange(generic);
     }

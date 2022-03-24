@@ -21,7 +21,7 @@ import {
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
-const GenPropertiesCalculate = opt => {
+const GenPropertiesCalculate = (opt) => {
   const fields = (opt.layer && opt.layer.fields) || [];
   let showVal = 0;
   let showTxt = null;
@@ -32,7 +32,7 @@ const GenPropertiesCalculate = opt => {
   // eslint-disable-next-line max-len
   const varFields = (opt.formula && opt.formula.match(regF)) ? opt.formula.match(regF).sort((a, b) => b.length - a.length) : [];
 
-  varFields.forEach(fi => {
+  varFields.forEach((fi) => {
     if (!isNaN(fi)) return;
 
     const tmpField = calFields.find(e => e.field === fi);
@@ -264,6 +264,8 @@ const GenPropertiesTable = opt => {
 };
 
 const GenPropertiesText = opt => {
+  console.log('GenPropertiesText');
+  console.log(opt);
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;

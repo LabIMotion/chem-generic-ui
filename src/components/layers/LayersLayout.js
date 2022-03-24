@@ -1,14 +1,29 @@
 import React from 'react';
 import { sortBy } from 'lodash';
 import GenPropertiesLayer from './GenPropertiesLayer';
+import GenProperties from '../fields/GenProperties';
 
 const LayersLayout = (
   layers, options, funcChange,
   funcSubChange = () => {}, funcClick = () => {}, extLys = [], id = 0, isPreview = false,
   activeWF = false, isSearch = false, fnNavi = () => {}
 ) => {
+  const buildExtLys = extLys.map(e => (
+    <GenProperties
+      key={`${e.generic.id}_elementalPropertiesExt`}
+      field={e.field}
+      label=""
+      description={e.generic.description || ''}
+      value={e.generic.name || ''}
+      type={e.type}
+      isEditable={e.isEditable || true}
+      readOnly={e.readOnly || false}
+      isRequired={e.isRequired || false}
+      onChange={event => funcChange(event, e.field, '', e.type)}
+    />
+  ));
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
-  const layout = [].concat(extLys);
+  const layout = [].concat(buildExtLys);
   sortedLayers.forEach((layer, idx) => {
     const uk = `${layer.key}_${idx}`;
     if (typeof layer.cond_fields === 'undefined' || layer.cond_fields == null || layer.cond_fields.length === 0) {

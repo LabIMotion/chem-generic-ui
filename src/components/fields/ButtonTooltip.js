@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 
-const ButtonTooltip = props => {
+const ButtonTooltip = (props) => {
   const { tip } = props;
   const tooltip = <Tooltip id={uuid()}>{tip}</Tooltip>;
   const {
@@ -12,7 +12,7 @@ const ButtonTooltip = props => {
   const content = txt ? (
     <span>
       {txt}
-&nbsp;
+      {' '}
     </span>
   ) : '';
   if (bs === '') {
@@ -48,7 +48,13 @@ ButtonTooltip.propTypes = {
 };
 
 ButtonTooltip.defaultProps = {
-  bs: '', size: 'xs', place: 'right', fa: 'fa-pencil-square-o', disabled: false, txt: null, element: {}
+  bs: '',
+  size: 'xs',
+  place: 'top',
+  fa: 'fa-pencil-square-o',
+  disabled: false,
+  txt: null,
+  element: {}
 };
 
 export default ButtonTooltip;
