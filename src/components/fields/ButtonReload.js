@@ -8,20 +8,21 @@ const BTN_RELOAD_TIP = <Tooltip>click to reload the template</Tooltip>;
 
 const ButtonReload = (props) => {
   const { klass, generic, fnReload } = props;
-console.log(klass);
-console.log(generic);
-  if (!generic) return null;
-
   if (generic && (typeof generic.klass_uuid === 'undefined'
   || generic.klass_uuid === klass.uuid || generic.is_new)) {
     return null;
   }
 
   const handleReload = () => {
+    let outGeneric = generic;
     const output = reinventGeneric(generic, klass);
-    generic.properties = output[1];
-    generic.changed = true;
-    fnReload(generic);
+    if (output[1]) {
+      outGeneric.properties = output[1];
+      outGeneric.changed = true;
+    } else {
+      outGeneric = output[1];
+    }
+    fnReload(outGeneric);
   };
 
   return (
