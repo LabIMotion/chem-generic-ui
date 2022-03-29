@@ -106,7 +106,6 @@ class GenInterface1 extends Component {
   handleAddLayer = (event, _layer) => {
     const { generic, fnChange } = this.props;
     const { selectedLayerKey } = this.state;
-    console.log('handleAddLayer');
     const layer = _layer;
     const { layers } = generic.properties;
     const sortedLayers = sortBy(layers, ['position', 'wf_position']);

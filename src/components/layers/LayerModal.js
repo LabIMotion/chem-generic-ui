@@ -6,6 +6,7 @@ import {
 } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const block = (layer, fnAdd) => (
   <div className="generic_layer_column">
@@ -18,7 +19,9 @@ const block = (layer, fnAdd) => (
         )
       </div>
       <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_layers">click to add layer</Tooltip>}>
-        <Button bsStyle="primary" onClick={event => fnAdd(event, layer)}><FontAwesomeIcon icon="fas fa-plus" /></Button>
+        <Button bsStyle="primary" onClick={event => fnAdd(event, layer)}>
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
       </OverlayTrigger>
     </div>
   </div>

@@ -69,6 +69,11 @@ module.exports = {
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production'), }),
     new UglifyJSPlugin({ sourceMap: true, }),
   ],
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  }
   // plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
   // plugins: [new webpack.HotModuleReplacementPlugin()] // no need, https://stackoverflow.com/questions/69102254/webpack-options-has-an-unknown-property-hotonly-invalid-options-object-dev-s
 };

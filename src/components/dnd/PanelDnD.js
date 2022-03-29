@@ -6,6 +6,9 @@ import {
 } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faArrowsAlt, faPlus, faMinus, faSitemap
+} from '@fortawesome/free-solid-svg-icons';
 
 const orderSource = {
   canDrag(props) {
@@ -54,22 +57,26 @@ const PanelDnD = ({
   const klz = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
   const btnAdd = (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_add_layer">add layer</Tooltip>}>
-      <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-modal')}><FontAwesomeIcon icon="fas fa-plus" /></Button>
+      <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-modal')}>
+        <FontAwesomeIcon icon={faPlus} />
+      </Button>
     </OverlayTrigger>
   );
   const btnRemove = (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_remove_layer">remove layer</Tooltip>}>
-      <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-remove')}><FontAwesomeIcon icon="fas fa-minus" /></Button>
+      <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-remove')}>
+        <FontAwesomeIcon icon={faMinus} />
+      </Button>
     </OverlayTrigger>
   );
   const wfIcon = wf ? (
     <span>
-      <FontAwesomeIcon icon="fas fa-sitemap" />
+      <FontAwesomeIcon icon={faSitemap} />
     </span>
   ) : null;
   const moveIcon = (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}>
-      <Button onClick={() => {}} bsSize="xsmall"><FontAwesomeIcon icon="fas fa-arrows-alt" /></Button>
+      <Button onClick={() => {}} bsSize="xsmall"><FontAwesomeIcon icon={faArrowsAlt} /></Button>
     </OverlayTrigger>
   );
   const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnAdd}</ButtonGroup>) : (

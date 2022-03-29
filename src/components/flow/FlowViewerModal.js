@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Panel } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import FlowView from './FlowView';
 
 const FlowViewerModal = props => {
@@ -28,7 +29,7 @@ const FlowViewerModal = props => {
         <Panel bsStyle="primary">
           <Panel.Heading className="layer_header">
             {`${shortLabel} workflow`}
-            <Button bsStyle="danger" bsSize="xsmall" className="gu_button_right" onClick={fnHide}><FontAwesomeIcon icon="fas fa-times" /></Button>
+            <Button bsStyle="danger" bsSize="xsmall" className="gu_button_right" onClick={fnHide}><FontAwesomeIcon icon={faTimes} /></Button>
           </Panel.Heading>
           <Panel.Body>
             <div className="body_bg">

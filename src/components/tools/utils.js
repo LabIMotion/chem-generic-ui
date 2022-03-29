@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import { findIndex, findKey, cloneDeep } from 'lodash';
 // import NotificationActions from '../../components/actions/NotificationActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import SystemUnits from '../../data/SystemUnits';
 import Attachment from '../models/Attachment';
 
@@ -288,7 +289,7 @@ const conFlowEls = props => {
     if (['default'].includes(d.type) && d.data) {
       const { lKey } = d.data;
       const fk = findKey((properties.layers || {}), o => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`)));
-      const chk = fk ? (<div style={{ position: 'absolute', top: '0px', right: '2px', color: 'green', zIndex: '100' }}><FontAwesomeIcon icon="far fa-check-circle" /></div>) : null;
+      const chk = fk ? (<div style={{ position: 'absolute', top: '0px', right: '2px', color: 'green', zIndex: '100' }}><FontAwesomeIcon icon={faCheckCircle} /></div>) : null;
       const layer = layers[lKey] || {};
       const ll = (
         <div>

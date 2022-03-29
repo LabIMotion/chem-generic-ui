@@ -10,11 +10,11 @@ const LayersLayout = (
 ) => {
   const buildExtLys = extLys.map(e => (
     <GenProperties
-      key={`${e.generic.id}_elementalPropertiesExt`}
+      key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
       field={e.field}
-      label=""
+      label={e.label || ''}
       description={e.generic.description || ''}
-      value={e.generic.name || ''}
+      value={e.generic[e.field] || ''}
       type={e.type}
       isEditable={e.isEditable || true}
       readOnly={e.readOnly || false}

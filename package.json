@@ -1,6 +1,6 @@
 {
   "name": "chem-generic-ui",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "main": "./dist/bundle.js",
   "license": "MIT",
   "private": false,
@@ -9,6 +9,7 @@
     "README.md"
   ],
   "scripts": {
+    "analyze": "yarn build && yarn source-map-explorer dist/bundle.js --only-mapped --html tree.html",
     "start": "webpack-dev-server --config ./webpack.dev.js",
     "build": "webpack --config ./webpack.config.js",
     "cc5": "webpack --config ./webpack.config.js && cp -f ./dist/* /mnt/d/kit/github/dev5/node_modules/chem-generic-ui/dist/.",
@@ -79,6 +80,7 @@
     "redux-logger": "^3.0.6",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
+    "source-map-explorer": "^2.5.2",
     "style-loader": "^3.3.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.70.0",

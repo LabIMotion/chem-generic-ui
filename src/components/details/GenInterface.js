@@ -106,8 +106,6 @@ const GenInterface = (props) => {
   };
 
   const handleAddLayer = (event, _layer) => {
-    console.log('handleAddLayer');
-    console.log(state);
     const layer = _layer;
     const { layers } = generic.properties;
     const sortedLayers = sortBy(layers, ['position', 'wf_position']);
@@ -205,10 +203,13 @@ const GenInterface = (props) => {
       default:
         ({ value } = event.target);
     }
-    if (layer === '' && field === 'name') generic.name = value;
-    if (layer === '' && field === 'search_name') generic.search_name = value;
-    if (layer === '' && field === 'search_short_label') generic.search_short_label = value;
-
+    if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
+      ({ value } = event.target);
+      generic[field] = value;
+    }
+    if (isSearch && type.startsWith('drag_')) {
+      ({ value } = event.target);
+    }
     if (propsChange) {
       if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
         console.log(field);

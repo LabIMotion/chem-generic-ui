@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 const GenDSMisType = (props) => {
   const { uiCtrl } = props;
@@ -19,7 +20,7 @@ const GenDSMisType = (props) => {
 )}
       >
         <span style={{ color: 'red' }}>
-          <FontAwesomeIcon icon="fas fa-exclamation-circle" />
+          <FontAwesomeIcon icon={faExclamationCircle} />
 &nbsp;
         </span>
       </OverlayTrigger>

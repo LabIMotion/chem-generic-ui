@@ -1,9 +1,4 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
 import './asserts/main.css';
-
-library.add(fas, far);
 
 export { default as ElementManager } from './components/admin/ElementManager';
 export { default as GenButtonTooltip } from './components/fields/ButtonTooltip';
