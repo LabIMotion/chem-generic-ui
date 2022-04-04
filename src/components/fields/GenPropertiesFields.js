@@ -21,6 +21,12 @@ import {
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
+const fieldHeader = (opt) => {
+  const { label, description } = opt;
+  if (label === '') return null;
+  return (<FieldLabel label={label} desc={description} />);
+};
+
 const GenPropertiesCalculate = (opt) => {
   const fields = (opt.layer && opt.layer.fields) || [];
   let showVal = 0;
@@ -54,10 +60,9 @@ const GenPropertiesCalculate = (opt) => {
     }
   }
 
-  const fieldHeader = opt.label === '' ? null : (<FieldLabel label={opt.label} desc={opt.description} />);
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <InputGroup>
         <FormControl
           type="text"
@@ -124,13 +129,12 @@ const GenPropertiesDrop = (opt) => {
       </div>
     );
   }
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const defaultIcon = opt.type === 'drag_element' ? <span className="fa fa-link icon_generic_nav indicator" /> : <span className="icon-sample indicator" />;
   const dragTarget = opt.isPreview === true ? <div className="target">{defaultIcon}</div> : <GenericElDropTarget opt={opt} onDrop={opt.onChange} />;
 
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl.Static style={{ paddingBottom: '0px' }}>
         <div className={className}>
           {dragTarget}
@@ -153,7 +157,6 @@ const GenDummy = () => (
 );
 
 const GenPropertiesInputGroup = (opt) => {
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const fLab = e => <div key={uuid()} className="form-control g_input_group_label">{e.value}</div>;
   const fTxt = e => <FormControl className="g_input_group" key={e.id} type={e.type} name={e.id} value={e.value} onChange={o => opt.onSubChange(o, e.id, opt.f_obj)} />;
   const fUnit = e => (
@@ -171,7 +174,7 @@ const GenPropertiesInputGroup = (opt) => {
   });
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <InputGroup style={{ display: 'flex' }}>
         {subs}
       </InputGroup>
@@ -182,10 +185,9 @@ const GenPropertiesInputGroup = (opt) => {
 const GenPropertiesNumber = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl
         type="number"
         value={opt.value}
@@ -204,22 +206,25 @@ const GenPropertiesSelect = (opt) => {
   const options = opt.options.map(op => ({ value: op.key, name: op.key, label: op.label }));
   let className = opt.isEditable ? 'select_generic_properties_editable' : 'select_generic_properties_readonly';
   className = opt.isRequired && opt.isEditable ? 'select_generic_properties_required' : className;
-  className = `${className} status-select`;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const val = options.find(o => o.value === opt.value) || null;
+  const selectStyles = {
+    menuPortal: base => ({ ...base, zIndex: 9999 }),
+    menu: base => ({ ...base, zIndex: 9999 })
+  };
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <Select
         isClearable
-        menuContainerStyle={{ position: 'absolute' }}
         name={opt.field}
         multi={false}
         options={options}
         value={val}
         onChange={opt.onChange}
         className={className}
-        disabled={opt.readOnly}
+        isDisabled={opt.readOnly}
+        menuPortalTarget={document.body}
+        styles={selectStyles}
       />
     </FormGroup>
   );
@@ -228,10 +233,9 @@ const GenPropertiesSelect = (opt) => {
 const GenPropertiesSystemDefined = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <InputGroup>
         <FormControl
           type="number"
@@ -253,23 +257,19 @@ const GenPropertiesSystemDefined = (opt) => {
   );
 };
 
-const GenPropertiesTable = (opt) => {
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
-  return (
-    <FormGroup>
-      {fieldHeader}
-      <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
-    </FormGroup>
-  );
-};
+const GenPropertiesTable = opt => (
+  <FormGroup>
+    {fieldHeader(opt)}
+    <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
+  </FormGroup>
+);
 
 const GenPropertiesText = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   return (
     <FormGroup className="text_generic_properties">
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl
         type="text"
         value={opt.value}
@@ -286,10 +286,9 @@ const GenPropertiesText = (opt) => {
 const GenPropertiesTextArea = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   return (
     <FormGroup className="text_generic_properties">
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl
         componentClass="textarea"
         value={opt.value}
@@ -305,7 +304,6 @@ const GenPropertiesTextArea = (opt) => {
 
 const GenTextFormula = (opt) => {
   const { layers } = opt;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const subs = [];
   (opt.f_obj && opt.f_obj.text_sub_fields).map((e) => {
     const { layer, field, separator } = e;
@@ -327,7 +325,7 @@ const GenTextFormula = (opt) => {
   });
   return (
     <FormGroup className="text_generic_properties">
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl
         type="text"
         value={subs.join('')}
@@ -369,13 +367,12 @@ const renderListGroupItem = (opt, attachment) => {
 };
 
 const GenPropertiesUpload = (opt) => {
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return (<div>(This is an upload)</div>);
 
   return (
     <FormGroup className="text_generic_properties">
-      {fieldHeader}
+      {fieldHeader(opt)}
       <FormControl.Static style={{ paddingBottom: '0px' }}>
         <Dropzone
           id="dropzone"
@@ -408,11 +405,10 @@ const GenWFNext = (opt) => {
   let className = opt.isEditable ? 'select_generic_properties_editable' : 'select_generic_properties_readonly';
   className = opt.isRequired && opt.isEditable ? 'select_generic_properties_required' : className;
   className = `${className} status-select`;
-  const fieldHeader = opt.label === '' ? null : <FieldLabel label={opt.label} desc={opt.description} />;
   const val = options.find(o => o.value === opt.value) || null;
   return (
     <FormGroup>
-      {fieldHeader}
+      {fieldHeader(opt)}
       <Select
         menuContainerStyle={{ position: 'absolute' }}
         name={opt.field}

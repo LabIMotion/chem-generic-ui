@@ -10,7 +10,7 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import SystemUnits from '../../data/SystemUnits';
 import Attachment from '../models/Attachment';
 
-// move from GenericElCommon.js
+// move from GenericElCommon.js > UploadInputChange
 const uploadFiles = (properties, event, field, layer) => {
   const files = [];
   const fieldObj = properties.layers[`${layer}`].fields.find(e => e.field === field) || {};
@@ -23,7 +23,7 @@ const uploadFiles = (properties, event, field, layer) => {
       break;
     }
     case 'f': {
-      (event.val || []).forEach(file => {
+      (event.val || []).forEach((file) => {
         const uid = uuid();
         if (typeof value.files === 'undefined' || value.files === null) value.files = [];
         value.files.push({ uid, filename: file.name });
