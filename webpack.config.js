@@ -13,6 +13,32 @@ module.exports = {
     clean: true,
     libraryTarget: 'umd',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          filename: '[name].bundle.js',
+          maxSize: 30000,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          filename: 'bundle.js',
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   resolve: { extensions: ['.js', '.jsx'] },
   externals: {
     // Don't bundle react or react-dom
@@ -33,6 +59,66 @@ module.exports = {
       commonjs2: 'lodash',
       amd: 'lodash',
       root: '_', // indicates global variable
+    },
+    'react-flow-renderer': {
+      commonjs: 'react-flow-renderer',
+      commonjs2: 'react-flow-renderer',
+      amd: 'react-flow-renderer',
+      root: 'react-flow-renderer', // indicates global variable
+    },
+    'react-select': {
+      commonjs: 'react-select',
+      commonjs2: 'react-select',
+      amd: 'Select',
+      root: 'Select', // indicates global variable
+    },
+    'react-bootstrap': {
+      commonjs: 'react-bootstrap',
+      commonjs2: 'react-bootstrap',
+      amd: 'react-bootstrap',
+      root: 'react-bootstrap', // indicates global variable
+    },
+    'react-dnd': {
+      commonjs: 'react-dnd',
+      commonjs2: 'react-dnd',
+      amd: 'react-dnd',
+      root: 'react-dnd',
+    },
+    'react-dropzone': {
+      commonjs: 'react-dropzone',
+      commonjs2: 'react-dropzone',
+      amd: 'Dropzone',
+      root: 'Dropzone',
+    },
+    'react-draggable': {
+      commonjs: 'react-draggable',
+      commonjs2: 'react-draggable',
+      amd: 'Draggable',
+      root: 'Draggable',
+    },
+    '@fortawesome/fontawesome-svg-core': {
+      commonjs: '@fortawesome/fontawesome-svg-core',
+      commonjs2: '@fortawesome/fontawesome-svg-core',
+      amd: '@fortawesome/fontawesome-svg-core',
+      root: '@fortawesome/fontawesome-svg-core',
+    },
+    '@fortawesome/free-regular-svg-icons': {
+      commonjs: '@fortawesome/free-regular-svg-icons',
+      commonjs2: '@fortawesome/free-regular-svg-icons',
+      amd: '@fortawesome/free-regular-svg-icons',
+      root: '@fortawesome/free-regular-svg-icons',
+    },
+    '@fortawesome/free-solid-svg-icons': {
+      commonjs: '@fortawesome/free-solid-svg-icons',
+      commonjs2: '@fortawesome/free-solid-svg-icons',
+      amd: '@fortawesome/free-solid-svg-icons',
+      root: '@fortawesome/free-solid-svg-icons',
+    },
+    '@fortawesome/react-fontawesome': {
+      commonjs: '@fortawesome/react-fontawesome',
+      commonjs2: '@fortawesome/react-fontawesome',
+      amd: '@fortawesome/react-fontawesome',
+      root: '@fortawesome/react-fontawesome',
     },
   },
   module: {
@@ -67,10 +153,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production'), }),
-    new UglifyJSPlugin({ sourceMap: true, }),
+    new UglifyJSPlugin({ sourceMap: true }),
   ],
   performance: {
-    hints: false,
+    hints: 'warning',
     maxEntrypointSize: 512000,
     maxAssetSize: 512000
   }
