@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import reinventGeneric from '../tools/reinventGeneric';
 
-const BTN_RELOAD_TIP = <Tooltip>click to reload the template</Tooltip>;
+const BTN_RELOAD_TIP = <Tooltip id="_cgu_tooltip_reload">click to reload the template</Tooltip>;
 
 const ButtonReload = (props) => {
   const { klass, generic, fnReload } = props;

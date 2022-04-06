@@ -1,6 +1,7 @@
 import './asserts/main.css';
 
 export { default as ElementManager } from './components/admin/ElementManager';
+export { default as SelectOptionLayer } from './components/admin/SelectOptionLayer';
 export { default as GenButtonTooltip } from './components/fields/ButtonTooltip';
 export { default as GenButtonConfirm } from './components/fields/ButtonConfirm';
 export { default as GenButtonReload } from './components/fields/ButtonReload';

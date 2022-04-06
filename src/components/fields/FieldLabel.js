@@ -6,7 +6,11 @@ import { v4 as uuid } from 'uuid';
 const FieldLabel = (props) => {
   const { label, desc } = props;
   return (desc && desc !== '') ? (
-    <OverlayTrigger placement="top" delayShow={1000} overlay={<Tooltip id={uuid()}>{desc}</Tooltip>}>
+    <OverlayTrigger
+      placement="top"
+      delayShow={1000}
+      overlay={<Tooltip id={uuid()}>{desc}</Tooltip>}
+    >
       <span>{label}</span>
     </OverlayTrigger>
   ) : <span>{label}</span>;

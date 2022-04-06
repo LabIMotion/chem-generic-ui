@@ -7,7 +7,7 @@ const ButtonTooltip = (props) => {
   const { tip } = props;
   const tooltip = <Tooltip id={uuid()}>{tip}</Tooltip>;
   const {
-    size, bs, fnClick, element, place, fa, disabled, txt
+    size, bs, fnClick, element, place, fa, disabled, txt, btnCls
   } = props;
   const content = txt ? (
     <span>
@@ -18,7 +18,12 @@ const ButtonTooltip = (props) => {
   if (bs === '') {
     return (
       <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
-        <Button bsSize={size} onClick={() => fnClick(element)} disabled={disabled}>
+        <Button
+          className={btnCls}
+          bsSize={size}
+          onClick={() => fnClick(element)}
+          disabled={disabled}
+        >
           {content}
           <i className={`fa ${fa}`} aria-hidden="true" />
         </Button>
@@ -27,7 +32,13 @@ const ButtonTooltip = (props) => {
   }
   return (
     <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
-      <Button bsSize={size} bsStyle={bs} onClick={() => fnClick(element)} disabled={disabled}>
+      <Button
+        className={btnCls}
+        bsSize={size}
+        bsStyle={bs}
+        onClick={() => fnClick(element)}
+        disabled={disabled}
+      >
         {content}
         <i className={`fa ${fa}`} aria-hidden="true" />
       </Button>
@@ -45,6 +56,7 @@ ButtonTooltip.propTypes = {
   fa: PropTypes.string,
   disabled: PropTypes.bool,
   txt: PropTypes.string,
+  btnCls: PropTypes.string,
 };
 
 ButtonTooltip.defaultProps = {
@@ -54,7 +66,8 @@ ButtonTooltip.defaultProps = {
   fa: 'fa-pencil-square-o',
   disabled: false,
   txt: null,
-  element: {}
+  element: {},
+  btnCls: ''
 };
 
 export default ButtonTooltip;
