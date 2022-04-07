@@ -20,7 +20,7 @@ const reducer = (state, action) => ({ ...state, ...action });
 const GenInterface = (props) => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
-    generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi
+    generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi, isSpCall
   } = props;
 
   if (Object.keys(generic).length === 0) return null;
@@ -256,19 +256,22 @@ const GenInterface = (props) => {
     fnChange(generic);
   };
 
-  const layersLayout = LayersLayout(
-    generic.properties.layers,
-    generic.properties_release.select_options || {},
-    handleInputChange,
-    handleSubChange,
-    handleUnitClick,
-    extLayers,
-    genId,
-    isPreview,
-    isActiveWF,
+  const paramsLayersLayout = {
+    layers: generic.properties.layers,
+    options: generic.properties_release.select_options || {},
+    funcChange: handleInputChange,
+    funcSubChange: handleSubChange,
+    funcClick: handleUnitClick,
+    extLys: extLayers || [],
+    id: genId,
+    isPreview: isPreview || false,
+    activeWF: isActiveWF || false,
     isSearch,
-    fnNavi
-  );
+    fnNavi,
+    isSpCall
+  };
+
+  const layersLayout = LayersLayout(paramsLayersLayout);
 
   const addLayerModal = (
     <LayerModal
@@ -295,14 +298,16 @@ GenInterface.propTypes = {
   isPreview: PropTypes.bool.isRequired,
   isActiveWF: PropTypes.bool.isRequired,
   isSearch: PropTypes.bool,
-  fnNavi: PropTypes.func
+  fnNavi: PropTypes.func,
+  isSpCall: PropTypes.bool,
 };
 
 GenInterface.defaultProps = {
   extLayers: [],
   isSearch: false,
   genId: 0,
-  fnNavi: () => {}
+  fnNavi: () => {},
+  isSpCall: false
 };
 
 export default GenInterface;

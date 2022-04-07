@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { v4 as uuid } from 'uuid';
 import reinventGeneric from '../tools/reinventGeneric';
 
 const BTN_RELOAD_TIP = <Tooltip id="_cgu_tooltip_reload">click to reload the template</Tooltip>;
@@ -22,6 +23,7 @@ const ButtonReload = (props) => {
     } else {
       outGeneric = output[1];
     }
+    outGeneric.properties_release = klass.properties_release;
     fnReload(outGeneric);
   };
 

@@ -4,19 +4,18 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 
 const FieldLabel = (props) => {
-  const { label, desc } = props;
-  return (desc && desc !== '') ? (
-    <OverlayTrigger
-      placement="top"
-      delayShow={1000}
-      overlay={<Tooltip id={uuid()}>{desc}</Tooltip>}
-    >
+  const { label, desc, isSpCall } = props;
+  const klz = isSpCall ? 'gu_sp_label' : 'gu_sp_label_none';
+  return ((desc && desc !== '') && !isSpCall) ? (
+    <OverlayTrigger placement="top" delayShow={1000} overlay={<Tooltip id={uuid()}>{desc}</Tooltip>}>
       <span>{label}</span>
     </OverlayTrigger>
-  ) : <span>{label}</span>;
+  ) : <span className={klz}>{label}</span>;
 };
 
-FieldLabel.propTypes = { label: PropTypes.string.isRequired, desc: PropTypes.string };
-FieldLabel.defaultProps = { desc: '' };
+FieldLabel.propTypes = {
+  label: PropTypes.string.isRequired, desc: PropTypes.string, isSpCall: PropTypes.string
+};
+FieldLabel.defaultProps = { desc: '', isSpCall: false };
 
 export default FieldLabel;

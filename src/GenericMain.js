@@ -1,8 +1,4 @@
-import React from 'react';
 import { hot } from 'react-hot-loader';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
 import Select from 'react-select';
 import './GenericMain.css';
 import ButtonTooltip from './components/fields/ButtonTooltip';
@@ -13,8 +9,6 @@ import SimuSG from './simulations/SimuSG';
 import SimuWF from './simulations/SimuWF';
 import SimuInterface from './simulations/SimuInterface';
 import SimuSearch from './simulations/SimuSearch';
-
-library.add(fas, far);
 
 const colourOptions = [
   { value: 'ocean', label: 'Ocean', color: '#00B8D9', isFixed: true },

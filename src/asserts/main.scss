@@ -10,6 +10,24 @@ $colo-selected-border: #0dcaf0;
 $color-default: #777;
 $color-bs-info: #5bc0de;
 
+.gu_sp_form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  .gu_sp_label {
+    width: 100%;
+    margin: 0px 5px;
+    text-align: left;
+    font-weight: bold;
+  }
+  .gu_sp_column {
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+}
+
 .gu_button_right {
   float: right;
   right: 0px;

@@ -3,12 +3,14 @@ import { sortBy } from 'lodash';
 import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
 
-const LayersLayout = (
-  layers, options, funcChange,
-  funcSubChange = () => {}, funcClick = () => {}, extLys = [], id = 0, isPreview = false,
-  activeWF = false, isSearch = false, fnNavi = () => {}
-) => {
-  const buildExtLys = extLys.map(e => (
+const LayersLayout = (props) => {
+  const {
+    layers, options, funcChange, funcSubChange, funcClick,
+    extLys, id, isPreview, activeWF, isSearch, fnNavi, isSpCall
+  } = props;
+
+  // if call from SP, extra layer is impossible
+  const buildExtLys = isSpCall ? [] : extLys.map(e => (
     <GenProperties
       key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
       field={e.field}
@@ -25,6 +27,8 @@ const LayersLayout = (
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
   const layout = [].concat(buildExtLys);
   sortedLayers.forEach((layer, idx) => {
+    // if call from SP and layer is not sp, skip
+    if (isSpCall && !layer.sp) return;
     const uk = `${layer.key}_${idx}`;
     if (typeof layer.cond_fields === 'undefined' || layer.cond_fields == null || layer.cond_fields.length === 0) {
       const ig = (
@@ -41,6 +45,7 @@ const LayersLayout = (
           isSearch={isSearch}
           activeWF={activeWF}
           onNavi={fnNavi}
+          isSpCall={isSpCall}
         />
       );
       layout.push(ig);
@@ -76,6 +81,7 @@ const LayersLayout = (
             isSearch={isSearch}
             activeWF={activeWF}
             onNavi={fnNavi}
+            isSpCall={isSpCall}
           />
         );
         layout.push(igs);

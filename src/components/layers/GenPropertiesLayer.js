@@ -54,9 +54,11 @@ export default class GenPropertiesLayer extends Component {
 
   views() {
     const {
-      layer, selectOptions, id, layers, isPreview, isSearch, onNavi
+      layer, selectOptions, id, layers, isPreview, isSearch, onNavi, isSpCall
     } = this.props;
-    const { cols, fields, key } = layer;
+    const { fields, key, sp } = layer;
+    let { cols } = layer;
+    if (isSpCall && !!sp) cols = 1;
     const perRow = cols || 1;
     const col = Math.floor(12 / perRow);
     const klaz = (12 % perRow) > 0 ? 'g_col_w' : '';
@@ -105,6 +107,7 @@ export default class GenPropertiesLayer extends Component {
               onClick={() => this.handleClick(key, f, (f.value_system || unit.key))}
               selectOptions={selectOptions || {}}
               onNavi={onNavi}
+              isSpCall={isSpCall}
             />
           </Col>
         );
@@ -177,6 +180,7 @@ GenPropertiesLayer.propTypes = {
   isPreview: PropTypes.bool,
   isSearch: PropTypes.bool,
   activeWF: PropTypes.bool,
+  isSpCall: PropTypes.bool,
   onNavi: PropTypes.func
 };
 
@@ -187,5 +191,6 @@ GenPropertiesLayer.defaultProps = {
   isPreview: false,
   isSearch: false,
   activeWF: false,
+  isSpCall: false,
   onNavi: () => {}
 };

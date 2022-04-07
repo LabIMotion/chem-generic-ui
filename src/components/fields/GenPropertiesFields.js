@@ -21,10 +21,16 @@ import {
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
+const fieldCls = (isSpCall = false) => {
+  const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none';
+  const clsCol = isSpCall ? 'gu_sp_column' : 'gu_sp_column_none';
+  return [clsFrm, clsCol];
+};
+
 const fieldHeader = (opt) => {
   const { label, description } = opt;
   if (label === '') return null;
-  return (<FieldLabel label={label} desc={description} />);
+  return (<FieldLabel label={label} desc={description} isSpCall={opt.isSpCall} />);
 };
 
 const GenPropertiesCalculate = (opt) => {
@@ -59,11 +65,11 @@ const GenPropertiesCalculate = (opt) => {
       }
     }
   }
-
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup>
+    <FormGroup className={klz[0]}>
       {fieldHeader(opt)}
-      <InputGroup>
+      <InputGroup className={klz[1]}>
         <FormControl
           type="text"
           value={showTxt}
@@ -97,18 +103,34 @@ const GenPropertiesCalculate = (opt) => {
   );
 };
 
-const GenPropertiesCheckbox = opt => (
-  <FormGroup>
-    <Checkbox
-      name={opt.field}
-      checked={opt.value}
-      onChange={opt.onChange}
-      disabled={opt.readOnly}
-    >
-      <FormControl.Static>{opt.label}</FormControl.Static>
-    </Checkbox>
-  </FormGroup>
-);
+const GenPropertiesCheckbox = (opt) => {
+  if (opt.isSpCall) {
+    return (
+      <FormGroup className="text_generic_properties gu_sp_form">
+        {fieldHeader(opt)}
+        <Checkbox
+          name={opt.field}
+          checked={opt.value}
+          onChange={opt.onChange}
+          disabled={opt.readOnly}
+          className="gu_sp_column"
+        />
+      </FormGroup>
+    );
+  }
+  return (
+    <FormGroup>
+      <Checkbox
+        name={opt.field}
+        checked={opt.value}
+        onChange={opt.onChange}
+        disabled={opt.readOnly}
+      >
+        <FormControl.Static>{opt.label}</FormControl.Static>
+      </Checkbox>
+    </FormGroup>
+  );
+};
 
 const GenPropertiesDrop = (opt) => {
   const className = opt.isRequired ? 'drop_generic_properties field_required' : 'drop_generic_properties';
@@ -172,8 +194,9 @@ const GenPropertiesInputGroup = (opt) => {
   const subs = opt.f_obj && opt.f_obj.sub_fields && opt.f_obj.sub_fields.map((e) => {
     if (e.type === 'label') { return fLab(e); } if (e.type === 'system-defined') { return fUnit(e); } return fTxt(e);
   });
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup>
+    <FormGroup className={klz[0]}>
       {fieldHeader(opt)}
       <InputGroup style={{ display: 'flex' }}>
         {subs}
@@ -185,8 +208,9 @@ const GenPropertiesInputGroup = (opt) => {
 const GenPropertiesNumber = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup>
+    <FormGroup className={klz[0]}>
       {fieldHeader(opt)}
       <FormControl
         type="number"
@@ -206,26 +230,30 @@ const GenPropertiesSelect = (opt) => {
   const options = opt.options.map(op => ({ value: op.key, name: op.key, label: op.label }));
   let className = opt.isEditable ? 'select_generic_properties_editable' : 'select_generic_properties_readonly';
   className = opt.isRequired && opt.isEditable ? 'select_generic_properties_required' : className;
+  className = `${className} status-select`;
   const val = options.find(o => o.value === opt.value) || null;
+  const klz = fieldCls(opt.isSpCall);
   const selectStyles = {
     menuPortal: base => ({ ...base, zIndex: 9999 }),
     menu: base => ({ ...base, zIndex: 9999 })
   };
   return (
-    <FormGroup>
+    <FormGroup className={klz[0]}>
       {fieldHeader(opt)}
-      <Select
-        isClearable
-        name={opt.field}
-        multi={false}
-        options={options}
-        value={val}
-        onChange={opt.onChange}
-        className={className}
-        isDisabled={opt.readOnly}
-        menuPortalTarget={document.body}
-        styles={selectStyles}
-      />
+      <span className={klz[1]}>
+        <Select
+          isClearable
+          name={opt.field}
+          multi={false}
+          options={options}
+          value={val}
+          onChange={opt.onChange}
+          className={className}
+          isDisabled={opt.readOnly}
+          menuPortalTarget={document.body}
+          styles={selectStyles}
+        />
+      </span>
     </FormGroup>
   );
 };
@@ -233,15 +261,16 @@ const GenPropertiesSelect = (opt) => {
 const GenPropertiesSystemDefined = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup>
+    <FormGroup className={klz[0]}>
       {fieldHeader(opt)}
-      <InputGroup>
+      <InputGroup className={klz[1]}>
         <FormControl
           type="number"
           value={opt.value}
           onChange={opt.onChange}
-          className={className}
+          className={`${className} ${klz[1]}`}
           readOnly={opt.readOnly}
           required={opt.isRequired}
           placeholder={opt.placeholder}
@@ -267,14 +296,15 @@ const GenPropertiesTable = opt => (
 const GenPropertiesText = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className="text_generic_properties">
+    <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {fieldHeader(opt)}
       <FormControl
         type="text"
         value={opt.value}
         onChange={opt.onChange}
-        className={className}
+        className={`${className} ${klz[1]}`}
         readOnly={opt.readOnly}
         required={opt.isRequired}
         placeholder={opt.placeholder}
@@ -286,8 +316,9 @@ const GenPropertiesText = (opt) => {
 const GenPropertiesTextArea = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className="text_generic_properties">
+    <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {fieldHeader(opt)}
       <FormControl
         componentClass="textarea"
@@ -323,13 +354,14 @@ const GenTextFormula = (opt) => {
     }
     return true;
   });
+  const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className="text_generic_properties">
+    <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {fieldHeader(opt)}
       <FormControl
         type="text"
         value={subs.join('')}
-        className="readonly"
+        className={`readonly ${klz[1]}`}
         readOnly
         required={false}
       />

@@ -10,3 +10,4 @@ export { default as GenericDSDetails } from './components/details/GenDSDetails';
 export { default as SegmentDetails } from './components/details/GenSgDetails';
 export { default as FlowViewerModal } from './components/flow/FlowViewerModal';
 export { default as reinventGeneric } from './components/tools/reinventGeneric';
+export { default as GenInterfaceSP } from './components/details/GenInterfaceSP';
