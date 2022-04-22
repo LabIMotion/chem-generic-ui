@@ -132,8 +132,11 @@ export default class GenPropertiesLayer extends Component {
   }
 
   render() {
-    const { id, layer, activeWF } = this.props;
+    const {
+      id, layer, activeWF, hasAi, aiComp
+    } = this.props;
     const { color, style, label } = layer;
+    // const ai = layer.ai || [];
     let bs = color || 'default';
     const cl = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
     // panel header color is based on input bs value
@@ -147,6 +150,7 @@ export default class GenPropertiesLayer extends Component {
         id={id}
         handleChange={this.handleChange}
         bs={bs}
+        hasAi={hasAi}
       />
     );
     const panelHeader = label === '' ? (<span />) : (
@@ -161,7 +165,10 @@ export default class GenPropertiesLayer extends Component {
         <Panel bsStyle={bs} className={`panel_generic_properties ${noneKlass}`} eventKey="1">
           {activeWF ? panelDnD : panelHeader}
           <Panel.Collapse>
-            <Panel.Body className="panel_generic_properties_body">{this.views()}</Panel.Body>
+            <Panel.Body className="panel_generic_properties_body">
+              {this.views()}
+              {aiComp[layer.key]}
+            </Panel.Body>
           </Panel.Collapse>
         </Panel>
       </PanelGroup>
@@ -181,7 +188,9 @@ GenPropertiesLayer.propTypes = {
   isSearch: PropTypes.bool,
   activeWF: PropTypes.bool,
   isSpCall: PropTypes.bool,
-  onNavi: PropTypes.func
+  onNavi: PropTypes.func,
+  hasAi: PropTypes.bool,
+  aiComp: PropTypes.any
 };
 
 GenPropertiesLayer.defaultProps = {
@@ -192,5 +201,7 @@ GenPropertiesLayer.defaultProps = {
   isSearch: false,
   activeWF: false,
   isSpCall: false,
-  onNavi: () => {}
+  onNavi: () => {},
+  hasAi: false,
+  aiComp: null
 };

@@ -253,6 +253,10 @@
   align-self: center;
 }
 
+.generic_grid_row_left {
+  text-align: left;
+}
+
 .generic_version {
   background-color: #777;
   display: inline-block;

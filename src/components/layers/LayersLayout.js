@@ -6,7 +6,7 @@ import GenProperties from '../fields/GenProperties';
 const LayersLayout = (props) => {
   const {
     layers, options, funcChange, funcSubChange, funcClick,
-    extLys, id, isPreview, activeWF, isSearch, fnNavi, isSpCall
+    extLys, id, isPreview, activeWF, isSearch, fnNavi, isSpCall, hasAi, aiComp
   } = props;
 
   // if call from SP, extra layer is impossible
@@ -46,6 +46,8 @@ const LayersLayout = (props) => {
           activeWF={activeWF}
           onNavi={fnNavi}
           isSpCall={isSpCall}
+          hasAi={hasAi}
+          aiComp={aiComp}
         />
       );
       layout.push(ig);
@@ -82,6 +84,8 @@ const LayersLayout = (props) => {
             activeWF={activeWF}
             onNavi={fnNavi}
             isSpCall={isSpCall}
+            hasAi={hasAi}
+            aiComp={aiComp}
           />
         );
         layout.push(igs);

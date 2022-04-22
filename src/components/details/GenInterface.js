@@ -1,10 +1,13 @@
+/* eslint-disable react/no-unused-prop-types */
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { cloneDeep, findIndex, sortBy } from 'lodash';
+import GenAnaModal from './GenAnaModal';
 import LayersLayout from '../layers/LayersLayout';
 import LayerModal from '../layers/LayerModal';
+import Constants from '../tools/Constants';
 import {
   getWFNode, getFlowLayer, addToObject, removeFromObject, orgLayerObject, reformCondFields
 } from '../tools/orten';
@@ -13,17 +16,19 @@ import {
 } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
 
-const initialState = { showViewLayer: false, selectedLayerKey: '' };
+const initialState = { showViewLayer: false, selectedLayerKey: '', showAnaModal: false };
 
 const reducer = (state, action) => ({ ...state, ...action });
 
 const GenInterface = (props) => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
-    generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi, isSpCall
+    generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi, isSpCall, aiComp
   } = props;
 
   if (Object.keys(generic).length === 0) return null;
+
+  const { container } = generic;
 
   const layerDrop = (_source, _target) => {
     const { layers } = generic.properties;
@@ -105,6 +110,32 @@ const GenInterface = (props) => {
     }
   };
 
+  const handleLinkAi = (pAiId, pLayer, pAct) => {
+    let propsChange = false;
+    const { layers } = generic.properties;
+    const selectedLayer = layers[pLayer];
+    let layerAi = selectedLayer.ai || [];
+    switch (pAct) {
+      case Constants.BTN_AI_UNLINK:
+        layerAi = layerAi.filter(x => x !== pAiId);
+        propsChange = true;
+        break;
+      case Constants.BTN_AI_LINK:
+        layerAi.push(pAiId);
+        propsChange = true;
+        break;
+      default:
+        break;
+    }
+    if (propsChange) {
+      selectedLayer.ai = layerAi;
+      generic.properties.layers[pLayer] = selectedLayer;
+      dispatch({ showAnaModal: false, selectedLayerKey: pLayer }, () => {
+        fnChange(generic);
+      });
+    }
+  };
+
   const handleAddLayer = (event, _layer) => {
     const layer = _layer;
     const { layers } = generic.properties;
@@ -157,6 +188,11 @@ const GenInterface = (props) => {
         event.stopPropagation();
         propsChange = false;
         dispatch({ showViewLayer: true, selectedLayerKey: layer.key });
+        break;
+      case 'ana-modal':
+        event.stopPropagation();
+        propsChange = false;
+        dispatch({ showAnaModal: true, selectedLayerKey: layer.key });
         break;
       case 'wf-next':
         propsChange = false;
@@ -256,6 +292,9 @@ const GenInterface = (props) => {
     fnChange(generic);
   };
 
+  let ai = (container && container.children && container.children[0].children) || [];
+  ai = ai.filter(x => !x.is_new); // get ai is not new
+
   const paramsLayersLayout = {
     layers: generic.properties.layers,
     options: generic.properties_release.select_options || {},
@@ -268,7 +307,9 @@ const GenInterface = (props) => {
     activeWF: isActiveWF || false,
     isSearch,
     fnNavi,
-    isSpCall
+    isSpCall,
+    hasAi: (ai.length > 0),
+    aiComp
   };
 
   const layersLayout = LayersLayout(paramsLayersLayout);
@@ -282,10 +323,21 @@ const GenInterface = (props) => {
     />
   );
 
+  const anaModal = (
+    <GenAnaModal
+      show={state.showAnaModal}
+      generic={generic}
+      layer={state.selectedLayerKey}
+      fnHide={() => dispatch({ showAnaModal: !state.showAnaModal })}
+      fnLink={handleLinkAi}
+    />
+  );
+
   return (
     <>
       {layersLayout}
       {addLayerModal}
+      {anaModal}
     </>
   );
 };
@@ -300,6 +352,7 @@ GenInterface.propTypes = {
   isSearch: PropTypes.bool,
   fnNavi: PropTypes.func,
   isSpCall: PropTypes.bool,
+  aiComp: PropTypes.any
 };
 
 GenInterface.defaultProps = {
@@ -307,7 +360,8 @@ GenInterface.defaultProps = {
   isSearch: false,
   genId: 0,
   fnNavi: () => {},
-  isSpCall: false
+  isSpCall: false,
+  aiComp: null
 };
 
 export default GenInterface;

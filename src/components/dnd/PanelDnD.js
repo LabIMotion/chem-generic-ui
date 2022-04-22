@@ -48,13 +48,20 @@ const orderDropCollect = (connect, monitor) => ({
 
 const PanelDnD = ({
   connectDragSource, connectDropTarget, isDragging, isOver, canDrop,
-  layer, id, handleChange, bs
+  layer, id, handleChange, bs, hasAi
 }) => {
   const className = `generic_grid_dnd${isOver ? ' is-over' : ''}${canDrop ? ' can-drop' : ''}${isDragging ? ' is-dragging' : ''}`;
   const {
     style, label, wf, key
   } = layer;
   const klz = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
+  const btnLinkAna = hasAi ? (
+    <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_link_ana">link analysis</Tooltip>}>
+      <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'ana-modal')}>
+        <i className="fa fa-paperclip" aria-hidden="true" />
+      </Button>
+    </OverlayTrigger>
+  ) : null;
   const btnAdd = (
     <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_add_layer">add layer</Tooltip>}>
       <Button bsSize="xsmall" onClick={event => handleChange(event, id, layer, 'layer-modal')}>
@@ -79,8 +86,9 @@ const PanelDnD = ({
       <Button onClick={() => {}} bsSize="xsmall"><FontAwesomeIcon icon={faArrowsAlt} /></Button>
     </OverlayTrigger>
   );
-  const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnAdd}</ButtonGroup>) : (
+  const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnLinkAna}{btnAdd}</ButtonGroup>) : (
     <ButtonGroup className="pull-right">
+      {btnLinkAna}
       {btnAdd}
       {btnRemove}
       {moveIcon}
@@ -98,7 +106,7 @@ const PanelDnD = ({
     <Panel.Heading className={klz}>
       <Panel.Title toggle style={{ float: 'left', lineHeight: 'normal' }}>
         {label}
-&nbsp;
+        {' '}
         {extHead}
       </Panel.Title>
       {btnLayer}

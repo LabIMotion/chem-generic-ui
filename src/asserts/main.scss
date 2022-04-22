@@ -279,6 +279,10 @@ $color-bs-info: #5bc0de;
   @include generic_grid_cell;
 }
 
+.generic_grid_row_left {
+  text-align: left;
+}
+
 @mixin generic_version_badge {
   background-color: #777;
   display: inline-block;

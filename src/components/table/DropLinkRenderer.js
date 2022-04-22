@@ -5,7 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DropLinkRenderer = props => {
+const DropLinkRenderer = (props) => {
   const { sField, node, onNavi } = props;
   const dId = ((node.data[sField.id] || {}).value || {}).el_id || '';
   const dVal = ((node.data[sField.id] || {}).value || {}).el_short_label || ' ';
