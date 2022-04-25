@@ -20,7 +20,6 @@ const GenAnaModal = (props) => {
   const {
     show, generic, layer, fnHide, fnLink
   } = props;
-  console.log(props);
   if (!show) return null;
   const { name, container, properties } = generic;
   const specLayer = (properties && properties.layers && properties.layers[layer]); // pick up the layer

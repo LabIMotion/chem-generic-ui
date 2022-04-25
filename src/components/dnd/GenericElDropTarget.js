@@ -3,26 +3,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { DropTarget } from 'react-dnd';
-// import Aviator from 'aviator';
 import { Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
-// import UIStore from '../stores/UIStore';
-
-// const handleSampleClick = (type, id) => {
-//   const { currentCollection, isSync } = UIStore.getState();
-//   if (!isNaN(id)) type += `/${id}`;
-//   const collectionUrl = `${currentCollection.id}/${type}`;
-//   Aviator.navigate(isSync ? `/scollection/${collectionUrl}` : `/collection/${collectionUrl}`);
-// };
-
-// const handleElementClick = (type, id) => {
-//   const { currentCollection, isSync } = UIStore.getState();
-//   if (!isNaN(id)) type += `/${id}`;
-//   const collectionUrl = `${currentCollection.id}/${type}`;
-//   Aviator.navigate(isSync ? `/scollection/${collectionUrl}` : `/collection/${collectionUrl}`);
-// };
+import Constants from '../tools/Constants';
 
 const show = (opt, iconClass, onNavi) => {
   if (opt.value && opt.value.el_id) {
+    let elSvg = opt.value.el_svg;
+    if (opt.value.el_type === 'sample') {
+      if (elSvg && !elSvg.endsWith('.svg') && opt.value.el_decoupled) {
+        elSvg = Constants.IMG_UNDEFINED_STRUCTURE_SVG;
+        console.log(elSvg);
+      }
+    }
+    if (elSvg && !elSvg.endsWith('.svg')) elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
     const tips = opt.value.el_tip && opt.value.el_tip.split('@@');
     const tip1 = (tips && tips.length >= 1 && tips[0]) || '';
     const tip2 = (tips && tips.length >= 2 && tips[1]) || '';
@@ -35,7 +28,7 @@ const show = (opt, iconClass, onNavi) => {
     );
     const pop = (
       <Popover id="popover-svg" title={tit} style={{ maxWidth: 'none', maxHeight: 'none' }}>
-        <img src={opt.value.el_svg} style={{ height: '26vh', width: '26vh' }} alt="" />
+        <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
     let label = opt.value.el_label;
@@ -78,7 +71,7 @@ const show = (opt, iconClass, onNavi) => {
         </a>
       );
     }
-    return simg(opt.value.el_svg, opt.value.el_tip, label);
+    return simg(elSvg, opt.value.el_tip, label);
   }
   if (iconClass === 'element') {
     return (<span className="fa fa-link icon_generic_nav indicator" />);
@@ -111,7 +104,8 @@ const source = (type, props, id) => {
         isAssoc,
         el_type: 'sample',
         el_label: props.short_label,
-        el_tip: props.short_label
+        el_tip: props.short_label,
+        el_decoupled: props.decoupled || false
       };
     case 'element':
       return {

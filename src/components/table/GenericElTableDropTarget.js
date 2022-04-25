@@ -7,15 +7,21 @@ import { DropTarget } from 'react-dnd';
 import {
   Tooltip, OverlayTrigger, Popover, Button
 } from 'react-bootstrap';
+import Constants from '../tools/Constants';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
-  const noSvg = '/images/not_available.svg';
   if (opt.value && opt.value.el_id) {
     const label = opt.value.el_label;
-    const svg = (opt.value.el_svg && opt.value.el_svg.endsWith('.svg')) ? opt.value.el_svg : noSvg;
+    let elSvg = opt.value.el_svg;
+    if (opt.value.el_type === 'sample') {
+      if (elSvg && !elSvg.endsWith('.svg') && opt.value.el_decoupled) {
+        elSvg = Constants.IMG_UNDEFINED_STRUCTURE_SVG;
+      }
+    }
+    if (elSvg && !elSvg.endsWith('.svg')) elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
     const pop = (
       <Popover id="popover-svg" title={label} style={{ maxWidth: 'none', maxHeight: 'none' }}>
-        <img src={svg} style={{ height: '26vh', width: '26vh' }} alt="" />
+        <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
     const simg = (path, txt) => ((path && path !== '') ? (
@@ -30,7 +36,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         </div>
       </div>
     ) : (<div className="data" style={{ width: '4vw' }}>{txt}</div>));
-    return simg(svg, label);
+    return simg(elSvg, label);
   }
   return (<span className={`icon-${iconClass} indicator`} style={{ width: '4vw' }} />);
 };
@@ -79,6 +85,7 @@ const source = (type, props, id) => {
         el_external_label: props.external_label,
         el_molecular_weight: props.molecule_molecular_weight,
         el_svg: props.sample_svg_file ? `/images/samples/${props.sample_svg_file}` : `/images/molecules/${props.molecule.molecule_svg_file}`,
+        el_decoupled: props.decoupled || false,
       };
     default:
       return {
