@@ -122,7 +122,7 @@ const removeFromObject = (_propertiesLayers = {}, srcLayer = '', rmNode = {}) =>
   return layers;
 };
 
-const buildInitWF = template => {
+const buildInitWF = (template) => {
   const orig = cloneDeep(template);
   const { layers, flow } = orig;
   const sortedLayers = sortBy(layers, l => l.position);
@@ -134,17 +134,19 @@ const buildInitWF = template => {
     const nNs = ls.filter(e => e.source === '1').map(e => e.target); // get target ids from Start
     const nextNodes = ns.filter(n => nNs.includes(n.id)); // target nodes
     const result = [];
-    sortedLayers.forEach(sortedLayer => {
+    sortedLayers.forEach((sortedLayer) => {
       const fLayer = sortedLayer;
       if (fLayer.wf) {
         const position = (fLayer.fields || []).length + 1;
         const passen = nextNodes.filter(n => n.data.layer.key === fLayer.key);
-        passen.forEach(pas => {
+        passen.forEach((pas) => {
           const nextOptions = ls.filter(e => e.source === pas.id && e.source !== e.target).map(e => e.target);
           const wfOpts = ns.filter(n => nextOptions.includes(n.id)).map(e => ({ key: e.id, label: `${e.data.layer.label}(${e.data.layer.key})` })); // next nodes
-          fLayer.fields.push({
-            type: 'wf-next', default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
-          });
+          if (wfOpts.length > 0) {
+            fLayer.fields.push({
+              type: 'wf-next', default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
+            });
+          }
           fLayer.wf_info = { node_id: pas.id };
           fLayer.wf_position = 1;
           fLayer.wf_uuid = uuid();
