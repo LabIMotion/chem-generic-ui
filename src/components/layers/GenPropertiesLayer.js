@@ -167,7 +167,7 @@ export default class GenPropertiesLayer extends Component {
           <Panel.Collapse>
             <Panel.Body className="panel_generic_properties_body">
               {this.views()}
-              {aiComp[layer.key]}
+              {aiComp && aiComp[layer.key]}
             </Panel.Body>
           </Panel.Collapse>
         </Panel>
