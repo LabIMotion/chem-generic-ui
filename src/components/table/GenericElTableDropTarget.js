@@ -8,6 +8,7 @@ import {
   Tooltip, OverlayTrigger, Popover, Button
 } from 'react-bootstrap';
 import Constants from '../tools/Constants';
+import { KlzIcon } from '../tools/utils';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   if (opt.value && opt.value.el_id) {
@@ -24,21 +25,38 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
-    const simg = (path, txt) => ((path && path !== '') ? (
-      <div className="s-img">
-        <OverlayTrigger delayShow={1000} trigger={['hover']} placement="top" rootClose onHide={null} overlay={pop}>
+    const asShown = path => ((path === Constants.IMG_UNDEFINED_STRUCTURE_SVG)
+      ? KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' }) : (
+        <OverlayTrigger
+          delayShow={1000}
+          trigger={['hover']}
+          placement="top"
+          rootClose
+          onHide={null}
+          overlay={pop}
+        >
           <img className="generic_grid_img" src={path} alt="" />
         </OverlayTrigger>
+      ));
+    const simg = (path, txt) => ((path && path !== '') ? (
+      <div className="s-img">
+        {asShown(path)}
         <div className="del_btn">
-          <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}>
-            <Button className="btn_del" bsSize="xsmall" onClick={() => onDrop({}, params)}><i className="fa fa-trash-o" aria-hidden="true" /></Button>
+          <OverlayTrigger
+            delayShow={1000}
+            placement="top"
+            overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
+          >
+            <Button className="btn_del" bsSize="xsmall" onClick={() => onDrop({}, params)}>
+              <i className="fa fa-trash-o" aria-hidden="true" />
+            </Button>
           </OverlayTrigger>
         </div>
       </div>
     ) : (<div className="data" style={{ width: '4vw' }}>{txt}</div>));
     return simg(elSvg, label);
   }
-  return (<span className={`icon-${iconClass} indicator`} style={{ width: '4vw' }} />);
+  return (KlzIcon(`icon-${iconClass} indicator`, { width: '4vw', fontSize: 'x-large' }));
 };
 
 const show = (opt, iconClass, onDrop) => {

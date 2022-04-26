@@ -10,6 +10,8 @@ import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import SystemUnits from '../../data/SystemUnits';
 import Attachment from '../models/Attachment';
 
+const KlzIcon = (klz, klzSty) => (<span className={klz} style={klzSty} />);
+
 // move from GenericElCommon.js > UploadInputChange
 const uploadFiles = (properties, event, field, layer) => {
   const files = [];
@@ -409,5 +411,5 @@ export {
   clsInputGroup, inputEventVal, molOptions, samOptions, conFlowEls, storeFlow, flowDefault,
   // validateLayerUpdation,
   // validateLayerDeletion,
-  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles
+  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon
 };

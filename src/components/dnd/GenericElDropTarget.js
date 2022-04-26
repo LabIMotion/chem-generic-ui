@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 import { DropTarget } from 'react-dnd';
 import { Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import Constants from '../tools/Constants';
+import { KlzIcon } from '../tools/utils';
 
 const show = (opt, iconClass, onNavi) => {
   if (opt.value && opt.value.el_id) {
@@ -12,7 +13,6 @@ const show = (opt, iconClass, onNavi) => {
     if (opt.value.el_type === 'sample') {
       if (elSvg && !elSvg.endsWith('.svg') && opt.value.el_decoupled) {
         elSvg = Constants.IMG_UNDEFINED_STRUCTURE_SVG;
-        console.log(elSvg);
       }
     }
     if (elSvg && !elSvg.endsWith('.svg')) elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
@@ -32,11 +32,22 @@ const show = (opt, iconClass, onNavi) => {
       </Popover>
     );
     let label = opt.value.el_label;
+    const asShown = path => ((path === Constants.IMG_UNDEFINED_STRUCTURE_SVG)
+      ? null : (
+        <OverlayTrigger
+          delayShow={1000}
+          trigger={['hover']}
+          placement="top"
+          rootClose
+          onHide={null}
+          overlay={pop}
+        >
+          <img className="generic_grid_img" src={path} alt="" />
+        </OverlayTrigger>
+      ));
     const simg = (path, tip, txt) => ((path && path !== '') ? (
       <div className="s-img">
-        <OverlayTrigger trigger={['hover']} placement="left" rootClose onHide={null} overlay={pop}>
-          <img src={path} alt="" />
-        </OverlayTrigger>
+        {asShown(path)}
         <span className="data">{txt}</span>
       </div>
     ) : (
@@ -76,7 +87,7 @@ const show = (opt, iconClass, onNavi) => {
   if (iconClass === 'element') {
     return (<span className="fa fa-link icon_generic_nav indicator" />);
   }
-  return (<span className={`icon-${iconClass} indicator`} />);
+  return (KlzIcon(`icon-${iconClass} indicator`, { width: '4vw' }));
 };
 
 const source = (type, props, id) => {
