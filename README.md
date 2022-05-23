@@ -1,4 +1,4 @@
-# chem-generic-ui
+# chem-generic-ui [![npm version](https://img.shields.io/npm/v/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui) [![Downloads](https://img.shields.io/npm/dm/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui)
 
 A React component for dynamically building user interfaces.
 
