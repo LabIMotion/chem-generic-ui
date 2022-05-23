@@ -10,6 +10,12 @@ $colo-selected-border: #0dcaf0;
 $color-default: #777;
 $color-bs-info: #5bc0de;
 
+.gu_flow_dnd_sidebar {
+  border-width: 0px 0px 1px 0px;
+  border-color: black;
+  border-style: solid;
+}
+
 .gu_sp_form {
   display: flex;
   align-items: center;
@@ -454,9 +460,9 @@ $color-bs-info: #5bc0de;
     color: $colo-bs-primary;
     font-size: 20px;
   }
-  > .panel-body {
-    background-color: #d9edf7;
-  }
+  // > .panel-body {
+    // background-color: #d9edf7;
+  // }
 }
 
 .generic_layer_column {
@@ -502,7 +508,6 @@ $color-bs-info: #5bc0de;
     > .body_bg {
       max-height: 100%;
       overflow: auto;
-      background-color: #d9edf7;
       > .body_canvas {
         resize: both;
         overflow: auto;

@@ -4,7 +4,7 @@ import ReactFlow, { ReactFlowProvider, Controls, ConnectionMode } from 'react-fl
 import LayerNode from './LayerNode';
 import { conFlowEls, flowDefault } from '../tools/utils';
 
-const FlowView = props => {
+const FlowView = (props) => {
   const { properties, properties_release } = props;
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [elements, setElements] = useState([]);

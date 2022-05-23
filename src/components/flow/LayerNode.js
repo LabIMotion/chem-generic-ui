@@ -9,7 +9,7 @@ const LayerNode = ({ data }) => (
   <>
     <Handle type="target" position={Position.Top} style={targetHandleStyle} onConnect={onConnect} />
     <div>
-      <div style={{ borderWidth: '0px 0px 1px 0px', borderColor: 'black', borderStyle: 'solid' }}><b>{data.layer.label}</b></div>
+      <div className="gu_flow_dnd_sidebar"><b>{data.layer.label}</b></div>
       <div>
         (
         {data.layer.key}

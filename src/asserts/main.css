@@ -1,3 +1,9 @@
+.gu_flow_dnd_sidebar {
+  border-width: 0px 0px 1px 0px;
+  border-color: black;
+  border-style: solid;
+}
+
 .gu_sp_form {
   display: flex;
   align-items: center;
@@ -420,9 +426,6 @@
   color: #337ab7;
   font-size: 20px;
 }
-.generic_layer_modal > .panel-body {
-  background-color: #d9edf7;
-}
 
 .generic_layer_column {
   width: 100%;
@@ -473,7 +476,6 @@
 .flow_view_draggable .panel-body > .body_bg {
   max-height: 100%;
   overflow: auto;
-  background-color: #d9edf7;
 }
 .flow_view_draggable .panel-body > .body_bg > .body_canvas {
   resize: both;
