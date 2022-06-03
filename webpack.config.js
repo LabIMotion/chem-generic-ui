@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -14,6 +14,8 @@ module.exports = {
     libraryTarget: 'umd',
   },
   optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
     splitChunks: {
       chunks: 'async',
       minSize: 20000,
@@ -152,8 +154,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
-    new UglifyJSPlugin({ sourceMap: true }),
+    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') })
   ],
   performance: {
     hints: 'warning',
