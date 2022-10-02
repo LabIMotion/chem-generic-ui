@@ -68,10 +68,11 @@ export default class GenPropertiesLayer extends Component {
     let rowId = 1;
     (fields || []).forEach((f, i) => {
       if (showProperties(f, layers)) {
+        const hasOwnRow = f.hasOwnRow || false; // f.ownLine: field has its own row
         const unit = genUnits(f.option_layers)[0] || {};
-        const tabCol = (f.cols || 1) * 1;
-        const rCol = (f.type === 'table') ? (12 / (tabCol || 1)) : col;
-        newRow = (f.type === 'table') ? newRow += (perRow / (tabCol || 1)) : newRow += 1;
+        const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
+        const rCol = (f.type === 'table' || hasOwnRow) ? (12 / (tabCol || 1)) : col; // rCol: columns per row
+        newRow = (f.type === 'table' || hasOwnRow) ? newRow += (perRow / (tabCol || 1)) : newRow += 1;
 
         if (newRow > perRow) {
           vs.push(<Row key={rowId}>{op}</Row>);
