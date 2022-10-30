@@ -40,7 +40,7 @@ const GenPropertiesCalculate = (opt) => {
   let newFormula = opt.formula;
 
   const calFields = filter(fields, o => (o.type === 'integer' || o.type === 'system-defined'));
-  const regF = /[a-zA-Z0-9]+/gm;
+  const regF = /[a-zA-Z0-9_]+/gm;
   // eslint-disable-next-line max-len
   const varFields = (opt.formula && opt.formula.match(regF)) ? opt.formula.match(regF).sort((a, b) => b.length - a.length) : [];
 
