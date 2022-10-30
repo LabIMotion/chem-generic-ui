@@ -10,6 +10,10 @@ const SelectRenderer = props => {
   if (sField.type !== 'select' || sOptions.length < 1) return null;
   const { data } = node;
   const val = sOptions.find(o => o.value === data[sField.id].value) || null;
+  const selectStyles = {
+    menuPortal: base => ({ ...base, zIndex: 9999 }),
+    menu: base => ({ ...base, zIndex: 9999 })
+  };
   return (
     <Select
       isClearable
@@ -19,7 +23,7 @@ const SelectRenderer = props => {
       value={val}
       onChange={e => onChange(e, sField, node)}
       className="status-select"
-      style={{ textAlign: 'left' }}
+      styles={selectStyles}
     />
   );
 };
