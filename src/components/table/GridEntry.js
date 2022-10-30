@@ -30,7 +30,7 @@ const setCell = (columnDef, rowValue) => {
   }
 };
 
-const ColumnHeader = _columnDefs => {
+const ColumnHeader = (_columnDefs) => {
   const columnDefs = _columnDefs;
   const ch = [];
   const h = (col, idx) => {
@@ -56,12 +56,14 @@ const ColumnRow = (_columnDefs, _rowValue) => {
   const ch = [];
   const h = (col, val, idx) => {
     const {
-      field, width, cellParams, cellRenderer
+      field, width, cellParams, cellRenderer, type
     } = col;
     const colCss = {};
     if (width) { Object.assign(colCss, { width, minWidth: width }); }
+    const rowKlz = type === 'select'
+      ? 'generic_grid_row generic_grid_row_left' : 'generic_grid_row';
     return (
-      <div key={`column_row_${val.id}_${col.colId || col.field}_${idx}`} className="generic_grid_row" style={colCss}>
+      <div key={`column_row_${val.id}_${col.colId || col.field}_${idx}`} className={rowKlz} style={colCss}>
         {field ? (setCell(col, val) || '') : (cellRenderer({ ...cellParams, node: { data: val } }) || '')}
       </div>
     );
@@ -70,7 +72,7 @@ const ColumnRow = (_columnDefs, _rowValue) => {
   return (<div key={`column_row_${rowValue.id}`} className="generic_grid"><div>{ch}</div></div>);
 };
 
-const NoRow = rows => {
+const NoRow = (rows) => {
   const values = rows;
   if (values && values.length > 0) return null;
   return (<div className="generic_grid"><div><div className="generic_grid_row" style={{ width: '100%' }}>(No data)</div></div></div>);
