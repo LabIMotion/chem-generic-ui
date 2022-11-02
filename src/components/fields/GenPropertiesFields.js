@@ -120,13 +120,14 @@ const GenPropertiesCheckbox = (opt) => {
   }
   return (
     <FormGroup>
+      {fieldHeader(opt)}
       <Checkbox
         name={opt.field}
         checked={opt.value}
         onChange={opt.onChange}
         disabled={opt.readOnly}
       >
-        <FormControl.Static>{opt.label}</FormControl.Static>
+        {/* <FormControl.Static>{opt.label}</FormControl.Static> */}
       </Checkbox>
     </FormGroup>
   );
@@ -235,7 +236,12 @@ const GenPropertiesSelect = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   const selectStyles = {
     menuPortal: base => ({ ...base, zIndex: 9999 }),
-    menu: base => ({ ...base, zIndex: 9999 })
+    menu: base => ({ ...base, zIndex: 9999 }),
+    control: base => ({
+      ...base,
+      height: 35,
+      minHeight: 35
+    })
   };
   return (
     <FormGroup className={klz[0]}>

@@ -86,6 +86,13 @@ const PanelDnD = ({
       <Button onClick={() => {}} bsSize="xsmall"><FontAwesomeIcon icon={faArrowsAlt} /></Button>
     </OverlayTrigger>
   );
+  const splitKey = key.split('.');
+  const extHead = (splitKey.length > 1) ? (
+    <span style={{ float: 'right' }}>
+      {`Repetition.${splitKey[1]} `}
+      {wfIcon}
+    </span>
+  ) : null;
   const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnLinkAna}{btnAdd}</ButtonGroup>) : (
     <ButtonGroup className="pull-right">
       {btnLinkAna}
@@ -94,22 +101,14 @@ const PanelDnD = ({
       {moveIcon}
     </ButtonGroup>
   );
-  const extHead = (/\./g.test(key)) ? (
-    <>
-      (
-      {key}
-      {wfIcon}
-      )
-    </>
-  ) : null;
   const panelHeader = (
     <Panel.Heading className={klz}>
       <Panel.Title toggle style={{ float: 'left', lineHeight: 'normal' }}>
         {label}
         {' '}
-        {extHead}
       </Panel.Title>
       {btnLayer}
+      {extHead}
       <div className="clearfix" />
     </Panel.Heading>
   );
