@@ -29,7 +29,7 @@ const fieldCls = (isSpCall = false) => {
 
 const fieldHeader = (opt) => {
   const { label, description } = opt;
-  if (label === '') return null;
+  if (label === '') return (<FieldLabel label={<>&nbsp;</>} />);
   return (<FieldLabel label={label} desc={description} isSpCall={opt.isSpCall} />);
 };
 
@@ -411,15 +411,15 @@ const GenPropertiesUpload = (opt) => {
   return (
     <FormGroup className="text_generic_properties">
       {fieldHeader(opt)}
-      <FormControl.Static style={{ paddingBottom: '0px' }}>
+      <FormControl.Static style={{ paddingBottom: '0px', paddingTop: '0px' }}>
         <Dropzone
           id="dropzone"
           onDrop={e => opt.onChange({
             ...opt.value, action: 'f', val: e
           })}
-          style={{ height: 30, width: '100%', border: '3px dashed lightgray' }}
+          style={{ height: 34, width: '100%', border: '3px dashed lightgray' }}
         >
-          <div style={{ textAlign: 'center', paddingTop: 6, color: 'gray' }}>
+          <div style={{ textAlign: 'center', color: 'gray', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
             Drop File, or Click to Select.
           </div>
         </Dropzone>
