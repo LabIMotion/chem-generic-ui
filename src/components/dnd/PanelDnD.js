@@ -89,7 +89,8 @@ const PanelDnD = ({
   const splitKey = key.split('.');
   const extHead = (splitKey.length > 1) ? (
     <span style={{ float: 'right' }}>
-      {`Repetition.${splitKey[1]} `}
+      {`Repetition ${splitKey[1]}`}
+      &nbsp;
       {wfIcon}
     </span>
   ) : null;

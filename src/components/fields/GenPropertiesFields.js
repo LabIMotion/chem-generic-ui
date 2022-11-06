@@ -120,14 +120,15 @@ const GenPropertiesCheckbox = (opt) => {
   }
   return (
     <FormGroup>
-      {fieldHeader(opt)}
+      {fieldHeader({ label: '', description: '' })}
       <Checkbox
         name={opt.field}
         checked={opt.value}
         onChange={opt.onChange}
         disabled={opt.readOnly}
+        style={{ marginTop: '5px' }}
       >
-        {/* <FormControl.Static>{opt.label}</FormControl.Static> */}
+        <div style={{ marginTop: '-2px' }}>{opt.label}</div>
       </Checkbox>
     </FormGroup>
   );
