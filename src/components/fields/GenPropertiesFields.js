@@ -275,13 +275,12 @@ const GenPropertiesSystemDefined = (opt) => {
       <InputGroup className={klz[1]}>
         <FormControl
           type="number"
-          value={opt.value}
+          value={opt.f_obj.value}
           onChange={opt.onChange}
           className={`${className} ${klz[1]}`}
           readOnly={opt.readOnly}
           required={opt.isRequired}
           placeholder={opt.placeholder}
-          min={1}
         />
         <InputGroup.Button>
           <Button disabled={opt.readOnly} active onClick={opt.onClick} bsStyle="success">

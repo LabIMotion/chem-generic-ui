@@ -351,9 +351,9 @@ export default {
         position: 170,
         placeholder: 'surface',
         units: [
-          { key: 'a_2', label: 'A<sup>2</sup>' },
-          { key: 'mm_2', label: 'mm<sup>2</sup>' },
-          { key: 'cm_2', label: 'cm<sup>2</sup>' }
+          { key: 'a_2', label: 'A<sup>2</sup>', nm: 100000000 },
+          { key: 'mm_2', label: 'mm<sup>2</sup>', nm: 100 },
+          { key: 'cm_2', label: 'cm<sup>2</sup>', nm: 1 }
         ]
       },
       {

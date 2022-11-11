@@ -15,6 +15,7 @@ module.exports = {
   resolve: { extensions: ['.js', '.jsx'] },
   module: {
     rules: [
+      { test: /\.json$/, type: 'json' },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
