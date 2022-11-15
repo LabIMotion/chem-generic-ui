@@ -98,6 +98,12 @@ module.exports = {
       amd: 'Draggable',
       root: 'Draggable',
     },
+    moment: {
+      commonjs: 'moment',
+      commonjs2: 'moment',
+      amd: 'moment',
+      root: 'moment',
+    },
     '@fortawesome/fontawesome-svg-core': {
       commonjs: '@fortawesome/fontawesome-svg-core',
       commonjs2: '@fortawesome/fontawesome-svg-core',

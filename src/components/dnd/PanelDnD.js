@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsAlt, faPlus, faMinus, faSitemap
 } from '@fortawesome/free-solid-svg-icons';
+import { GenPropertiesDate } from '../fields/GenPropertiesFields';
 
 const orderSource = {
   canDrag(props) {
@@ -48,11 +49,11 @@ const orderDropCollect = (connect, monitor) => ({
 
 const PanelDnD = ({
   connectDragSource, connectDropTarget, isDragging, isOver, canDrop,
-  layer, id, handleChange, bs, hasAi
+  layer, id, handleChange, bs, hasAi, onAttrChange
 }) => {
   const className = `generic_grid_dnd${isOver ? ' is-over' : ''}${canDrop ? ' can-drop' : ''}${isDragging ? ' is-dragging' : ''}`;
   const {
-    style, label, wf, key
+    style, label, wf, key, timeRecord
   } = layer;
   const klz = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
   const btnLinkAna = hasAi ? (
@@ -95,16 +96,21 @@ const PanelDnD = ({
     </span>
   ) : null;
   const btnLayer = wf ? (<ButtonGroup className="pull-right">{btnLinkAna}{btnAdd}</ButtonGroup>) : (
-    <ButtonGroup className="pull-right">
-      {btnLinkAna}
-      {btnAdd}
-      {btnRemove}
-      {moveIcon}
+    <ButtonGroup className="pull-right gu_btn_broup_layer">
+      <div className="pull-right btn-group">
+        {GenPropertiesDate({
+          isSpCall: false, isAtLayer: true, label: '', value: timeRecord || '', onChange: onAttrChange
+        })}
+        {btnLinkAna}
+        {btnAdd}
+        {btnRemove}
+        {moveIcon}
+      </div>
     </ButtonGroup>
   );
   const panelHeader = (
-    <Panel.Heading className={klz}>
-      <Panel.Title toggle style={{ float: 'left', lineHeight: 'normal' }}>
+    <Panel.Heading className={klz} style={{ display: 'table-cell', verticalAlign: 'middle' }}>
+      <Panel.Title toggle style={{ float: 'left' }}>
         {label}
         {' '}
       </Panel.Title>

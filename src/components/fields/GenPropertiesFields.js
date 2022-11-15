@@ -10,16 +10,24 @@ import {
   Button, Checkbox, FormGroup, FormControl,
   InputGroup, ListGroup, ListGroupItem, OverlayTrigger, Radio, Tooltip
 } from 'react-bootstrap';
-import Select from 'react-select';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import ptBR from 'date-fns/locale/pt-BR';
 import Dropzone from 'react-dropzone';
-import { v4 as uuid } from 'uuid';
+import Select from 'react-select';
 import { filter } from 'lodash';
+import { v4 as uuid } from 'uuid';
+import moment from 'moment';
+import DateTimeRange from './DateTimeRange';
 import FieldLabel from './FieldLabel';
 import {
   downloadFile, genUnit, genUnitSup, unitConvToBase
 } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
+
+registerLocale('ptBR', ptBR);
+
+// import 'react-datepicker/dist/react-datepicker.css';
 
 const fieldCls = (isSpCall = false) => {
   const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none';
@@ -130,6 +138,42 @@ const GenPropertiesCheckbox = (opt) => {
       >
         <div style={{ marginTop: '-2px' }}>{opt.label}</div>
       </Checkbox>
+    </FormGroup>
+  );
+};
+
+const GenPropertiesDate = (opt) => {
+  const klz = fieldCls(opt.isSpCall);
+  const klzLayer = (opt.isAtLayer || false)
+    ? 'gu_date_picker gu_date_picker_layer' : 'gu_date_picker';
+  const newVal = opt.value && new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
+  return (
+    <FormGroup className={klz[0]}>
+      {fieldHeader(opt)}
+      <div className={klzLayer}>
+        <DatePicker
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          timeCaption="Time"
+          dateFormat="dd/MM/yyyy HH:mm"
+          // locale="ptBR"
+          selected={newVal}
+          onSelect={opt.onChange} // when day is clicked
+          onChange={opt.onChange} // only when value has changed
+          placeholderText="DD/MM/YYYY hh:mm"
+        />
+      </div>
+    </FormGroup>
+  );
+};
+
+const GenPropertiesDateTimeRange = (opt) => {
+  const klz = fieldCls(opt.isSpCall);
+  return (
+    <FormGroup className={`${klz[0]}`}>
+      {fieldHeader(opt)}
+      <DateTimeRange key={`grid_${opt.f_obj.field}`} opt={opt} />
     </FormGroup>
   );
 };
@@ -464,6 +508,8 @@ const GenWFNext = (opt) => {
 export {
   GenPropertiesCalculate,
   GenPropertiesCheckbox,
+  GenPropertiesDate,
+  GenPropertiesDateTimeRange,
   GenPropertiesDrop,
   GenDummy,
   GenTextFormula,

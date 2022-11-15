@@ -1,6 +1,8 @@
 import {
   GenPropertiesCheckbox,
   GenPropertiesCalculate,
+  GenPropertiesDate,
+  GenPropertiesDateTimeRange,
   GenPropertiesSelect,
   GenPropertiesDrop,
   GenPropertiesNumber,
@@ -14,6 +16,7 @@ import {
   GenWFNext,
   GenPropertiesText
 } from './GenPropertiesFields';
+import FieldTypes from './FieldTypes';
 
 const GenProperties = (opt) => {
   const fieldProps = { ...opt, dndItems: [] };
@@ -23,6 +26,10 @@ const GenProperties = (opt) => {
   switch (type[0]) {
     case 'checkbox':
       return GenPropertiesCheckbox(fieldProps);
+    case FieldTypes.F_DATETIME:
+      return GenPropertiesDate(fieldProps);
+    // case 'datetime-range':
+    //   return GenPropertiesDateTimeRange(fieldProps);
     case 'formula-field':
       return GenPropertiesCalculate(fieldProps);
     case 'select':

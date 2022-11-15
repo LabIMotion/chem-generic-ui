@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { cloneDeep, findIndex, sortBy } from 'lodash';
 import GenAnaModal from './GenAnaModal';
+import FieldTypes from '../fields/FieldTypes';
 import LayersLayout from '../layers/LayersLayout';
 import LayerModal from '../layers/LayerModal';
 import Constants from '../tools/Constants';
@@ -59,6 +60,14 @@ const GenInterface = (props) => {
     });
     const ll = orgLayerObject(sortedLayers);
     generic.properties.layers = ll;
+    generic.changed = true;
+    fnChange(generic);
+  };
+
+  const layerDataChange = (event, field, layer) => {
+    const value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
+    const { properties } = generic;
+    properties.layers[layer.key][field] = value;
     generic.changed = true;
     fnChange(generic);
   };
@@ -179,6 +188,10 @@ const GenInterface = (props) => {
         layerDrop(field, layer);
         propsChange = false;
         break;
+      case 'layer-data-change':
+        layerDataChange(event, field, layer);
+        propsChange = false;
+        break;
       case 'layer-remove':
         event.stopPropagation();
         layerRemove(field, layer);
@@ -224,13 +237,13 @@ const GenInterface = (props) => {
         value = event ? event.value : null;
         break;
       case 'drag_molecule':
-        value = event;
-        break;
       case 'drag_sample':
+      case 'drag_element':
+      case FieldTypes.F_DATETIME_RANGE:
         value = event;
         break;
-      case 'drag_element':
-        value = event;
+      case FieldTypes.F_DATETIME:
+        value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
         break;
       case 'integer':
         ({ value } = event.target);
@@ -247,7 +260,10 @@ const GenInterface = (props) => {
       ({ value } = event.target);
     }
     if (propsChange) {
-      if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
+      if (type === FieldTypes.F_DATETIME_RANGE) {
+        properties.layers[layer].fields.find(e => e.field === field).sub_fields = value;
+        generic.properties = properties;
+      } else if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
         console.log(field);
       } else {
         properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;

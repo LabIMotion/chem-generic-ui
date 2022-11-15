@@ -9,12 +9,15 @@ import {
 import GenProperties from '../fields/GenProperties';
 import { genUnits, showProperties, unitConversion } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
+import DateTimeRange from '../fields/DateTimeRange';
+import FieldTypes from '../fields/FieldTypes';
 
 export default class GenPropertiesLayer extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubChange = this.handleSubChange.bind(this);
+    this.handleDTRChange = this.handleDTRChange.bind(this);
     this.moveLayer = this.moveLayer.bind(this);
   }
 
@@ -40,6 +43,14 @@ export default class GenPropertiesLayer extends Component {
     const { layer } = this.props;
     const obj = { f, sub };
     onSubChange(layer.key, obj, valueOnly);
+  }
+
+  handleDTRChange(params) {
+    const {
+      field, layer, subFields, type
+    } = params;
+    // event, field, layer, type = 'text'
+    this.handleChange(subFields, field, layer, type);
   }
 
   handleClick(keyLayer, obj, val) {
@@ -68,6 +79,14 @@ export default class GenPropertiesLayer extends Component {
     let rowId = 1;
     (fields || []).forEach((f, i) => {
       if (showProperties(f, layers)) {
+        if (f.type === FieldTypes.F_DATETIME_RANGE) {
+          vs.push(<Row key={rowId}>{op}</Row>);
+          rowId += 1;
+          op = [];
+          vs.push(<DateTimeRange key={`grid_${f.field}`} layer={layer} opt={{ f_obj: f }} onInputChange={this.handleDTRChange} />);
+          return;
+        }
+
         const hasOwnRow = f.hasOwnRow || false; // f.ownLine: field has its own row
         const unit = genUnits(f.option_layers)[0] || {};
         const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
@@ -150,6 +169,7 @@ export default class GenPropertiesLayer extends Component {
         handleMove={this.moveLayer}
         id={id}
         handleChange={this.handleChange}
+        onAttrChange={event => this.handleChange(event, 'timeRecord', layer, 'layer-data-change')}
         bs={bs}
         hasAi={hasAi}
       />
