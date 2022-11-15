@@ -10,8 +10,10 @@ import {
   Button, Checkbox, FormGroup, FormControl,
   InputGroup, ListGroup, ListGroupItem, OverlayTrigger, Radio, Tooltip
 } from 'react-bootstrap';
-import DatePicker, { registerLocale } from 'react-datepicker';
-import ptBR from 'date-fns/locale/pt-BR';
+// import DatePicker, { registerLocale } from 'react-datepicker';
+import DatePicker from 'react-datepicker';
+// import ptBR from 'date-fns/locale/pt-BR';
+import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import { filter } from 'lodash';
@@ -25,7 +27,7 @@ import {
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
-registerLocale('ptBR', ptBR);
+// registerLocale('ptBR', ptBR);
 
 // import 'react-datepicker/dist/react-datepicker.css';
 
@@ -147,6 +149,7 @@ const GenPropertiesDate = (opt) => {
   const klzLayer = (opt.isAtLayer || false)
     ? 'gu_date_picker gu_date_picker_layer' : 'gu_date_picker';
   const newVal = opt.value && new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
+  // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
   return (
     <FormGroup className={klz[0]}>
       {fieldHeader(opt)}

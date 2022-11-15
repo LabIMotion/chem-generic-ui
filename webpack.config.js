@@ -86,6 +86,12 @@ module.exports = {
       amd: 'react-dnd',
       root: 'react-dnd',
     },
+    'react-datepicker': {
+      commonjs: 'react-datepicker',
+      commonjs2: 'react-datepicker',
+      amd: 'react-datepicker',
+      root: 'react-datepicker',
+    },
     'react-dropzone': {
       commonjs: 'react-dropzone',
       commonjs2: 'react-dropzone',

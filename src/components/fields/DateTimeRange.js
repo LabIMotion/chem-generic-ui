@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   Button, Col, ControlLabel, FormControl, FormGroup, InputGroup, OverlayTrigger, Row, Tooltip
 } from 'react-bootstrap';
-import 'react-datepicker/dist/react-datepicker.css';
 import { round } from 'lodash';
 import moment from 'moment';
 import 'moment-precise-range-plugin';
