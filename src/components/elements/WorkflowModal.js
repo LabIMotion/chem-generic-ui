@@ -10,7 +10,7 @@ const WorkflowModal = (props) => {
   } = props;
   if (!show) return null;
   return (
-    <Modal show={show} bsSize="small" onHide={fnClose} dialogClassName="importChemDrawModal">
+    <Modal show={show} bsSize="small" onHide={() => fnClose()} dialogClassName="importChemDrawModal">
       <Modal.Header closeButton><Modal.Title>Design Workflow</Modal.Title></Modal.Header>
       <Modal.Body>
         <div className="generic_wf_modal">

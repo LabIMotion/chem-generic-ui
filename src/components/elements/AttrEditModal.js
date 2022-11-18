@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Modal, Button, OverlayTrigger } from 'react-bootstrap';
@@ -15,7 +16,8 @@ export default class AttrEditModal extends Component {
       case 'Segment': {
         const updates = {
           label: this.formRef.current.k_label.value.trim(),
-          desc: this.formRef.current.k_desc.value.trim()
+          desc: this.formRef.current.k_desc.value.trim(),
+          identifier: this.formRef.current.k_identifier.value.trim()
         };
         fnUpdate(element, updates);
         break;
@@ -37,7 +39,7 @@ export default class AttrEditModal extends Component {
 
   render() {
     const {
-      content, element, showModal, fnClose, fnDelete, fnActivate
+      content, element, klasses, showModal, fnClose, fnDelete, fnActivate
     } = this.props;
     return (
       <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
@@ -46,7 +48,7 @@ export default class AttrEditModal extends Component {
         </Modal.Header>
         <Modal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
-            <Content ref={this.formRef} content={content} element={element} editable={false} />
+            <Content ref={this.formRef} content={content} element={element} klasses={klasses} editable={false} />
             <Form horizontal>
               <FormGroup>
                 <OverlayTrigger placement="bottom" overlay={TipDelete(content)} >
@@ -79,8 +81,11 @@ AttrEditModal.propTypes = {
   content: PropTypes.string.isRequired,
   showModal: PropTypes.bool.isRequired,
   element: PropTypes.object.isRequired,
+  klasses: PropTypes.array,
   fnClose: PropTypes.func.isRequired,
   fnDelete: PropTypes.func.isRequired,
   fnActivate: PropTypes.func.isRequired,
   fnUpdate: PropTypes.func.isRequired,
 };
+
+AttrEditModal.defaultProps = { klasses: [] };

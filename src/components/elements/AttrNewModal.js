@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Modal, Button } from 'react-bootstrap';
@@ -16,7 +17,8 @@ export default class AttrNewModal extends Component {
         const element = {
           label: this.formRef.current.k_label.value.trim(),
           desc: this.formRef.current.k_desc.value.trim(),
-          element_klass: this.formRef.current.k_klass.value
+          element_klass: this.formRef.current.k_klass.value,
+          identifier: this.formRef.current.k_identifier.value.trim()
         };
         fnCreate(element);
         break;
@@ -38,13 +40,13 @@ export default class AttrNewModal extends Component {
   }
 
   render() {
-    const { content, showModal, fnClose } = this.props;
+    const { content, klasses, showModal, fnClose } = this.props;
     return (
       <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
         <Modal.Header closeButton><Modal.Title>{`New ${content}`}</Modal.Title></Modal.Header>
         <Modal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
-            <Content ref={this.formRef} content={content} element={{}} editable />
+            <Content ref={this.formRef} content={content} klasses={klasses} element={{}} editable />
             <Form horizontal>
               <FormGroup>
                 <Button bsStyle="primary" onClick={() => this.handleCreate()}>Create&nbsp;<i className="fa fa-save" aria-hidden="true" /></Button>
@@ -61,7 +63,10 @@ export default class AttrNewModal extends Component {
 
 AttrNewModal.propTypes = {
   content: PropTypes.string.isRequired,
+  klasses: PropTypes.array,
   showModal: PropTypes.bool.isRequired,
   fnClose: PropTypes.func.isRequired,
   fnCreate: PropTypes.func.isRequired,
 };
+
+AttrNewModal.defaultProps = { klasses: [] };

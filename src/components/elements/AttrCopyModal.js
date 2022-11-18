@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, Modal, Button } from 'react-bootstrap';
@@ -41,7 +42,7 @@ export default class AttrCopyModal extends Component {
 
   render() {
     const {
-      content, element, showModal, fnClose
+      content, element, klasses, showModal, fnClose,
     } = this.props;
 
     const copy = {
@@ -59,7 +60,7 @@ export default class AttrCopyModal extends Component {
         </Modal.Header>
         <Modal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
-            <Content ref={this.formRef} content={content} element={copy} editable />
+            <Content ref={this.formRef} content={content} element={copy} klasses={klasses} editable />
             <Form horizontal>
               <FormGroup>
                 &nbsp;
@@ -79,6 +80,9 @@ AttrCopyModal.propTypes = {
   content: PropTypes.string.isRequired,
   showModal: PropTypes.bool.isRequired,
   element: PropTypes.object.isRequired,
+  klasses: PropTypes.array,
   fnClose: PropTypes.func.isRequired,
   fnCopy: PropTypes.func.isRequired,
 };
+
+AttrCopyModal.defaultProps = { klasses: [] };

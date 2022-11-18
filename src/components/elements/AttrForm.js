@@ -10,7 +10,7 @@ const TipDelete = type => <Tooltip id="delete_button">Delete this {type}, after 
 const Content = React.forwardRef((props, ref) => {
   switch (props.content) {
     case 'Segment':
-      return <SegmentAttrForm ref={ref} element={props.element} klassOptions={props.klassOptions} editable={props.editable} />;
+      return <SegmentAttrForm ref={ref} element={props.element} klasses={props.klasses} editable={props.editable} />;
     case 'Element':
       return <KlassAttrForm ref={ref} element={props.element} editable={props.editable} />;
     default:

@@ -1,6 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-// import { Button, OverlayTrigger, Tooltip, Popover, ControlLabel } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import uuid from 'uuid';
 import { v4 as uuid } from 'uuid';
 import { findIndex, findKey, cloneDeep } from 'lodash';
@@ -11,6 +11,18 @@ import SystemUnits from '../../data/SystemUnits';
 import Attachment from '../models/Attachment';
 
 const KlzIcon = (klz, klzSty) => (<span className={klz} style={klzSty} />);
+
+const wfLayerMark = (props) => {
+  if (props && props.flow) {
+    return (
+      <OverlayTrigger placement="top" overlay={<Tooltip id="tooltip">A workflow is defined.</Tooltip>}>
+        <i className="fa fa-sitemap" aria-hidden="true" />
+      </OverlayTrigger>
+    );
+  }
+  return null;
+};
+
 
 // move from GenericElCommon.js > UploadInputChange
 const uploadFiles = (properties, event, field, layer) => {
@@ -319,5 +331,5 @@ export {
   GenericDummy, genUnitsSystem, genUnits, genUnit, isLayerInWF, findCurrentNode,
   unitConvToBase, unitConversion, toBool, toNum, genUnitSup, absOlsTermId, absOlsTermLabel, reUnit,
   clsInputGroup, inputEventVal, molOptions, samOptions, conFlowEls, storeFlow, flowDefault,
-  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon
+  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon, wfLayerMark
 };

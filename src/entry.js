@@ -27,7 +27,7 @@ export { default as AttrNewModal } from './components/elements/AttrNewModal';
 export { default as AttrCopyModal } from './components/elements/AttrCopyModal';
 export { default as GenericElCriteriaModal } from './components/elements/GenericElCriteriaModal';
 export { default as SegmentCriteria } from './components/elements/SegmentCriteria';
-export { GenericDummy, absOlsTermId, absOlsTermLabel, reUnit, isLayerInWF, clsInputGroup } from './components/tools/utils';
+export { GenericDummy, absOlsTermId, absOlsTermLabel, reUnit, isLayerInWF, clsInputGroup, wfLayerMark } from './components/tools/utils';
 export { GenFormGroup, GenFormGroupCb, GenFormGroupSel } from './components/elements/GenericPropertiesFields';
 
 // export { default as AttrChk } from './components/elements/AttrChk';
