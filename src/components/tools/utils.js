@@ -97,12 +97,12 @@ const inputEventVal = (event, type) => {
 
 const absOlsTermId = val => (val || '').split('|')[0].trim();
 const absOlsTermLabel = val => val.replace(absOlsTermId(val), '').replace('|', '').trim();
-const toNum = val => {
+const toNum = (val) => {
   const parse = Number((val || ''));
   return Number.isNaN(parse) ? 0 : parse;
 };
 
-const genUnitSup = val => {
+const genUnitSup = (val) => {
   if (typeof val === 'undefined' || val === null) return '';
   const vals = val.match(/<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g);
   const reV = vals.map(v => {
@@ -181,61 +181,16 @@ const unitConversion = (field, key, val) => {
   return parseFloat((parseFloat(val) * (curr / pre)).toFixed(5));
 };
 
-// const notification = props =>
-//   (
-//     NotificationActions.add({
-//       title: props.title,
-//       message: props.msg,
-//       level: props.lvl,
-//       position: 'tc',
-//       dismissible: 'button',
-//       autoDismiss: props.autoDismiss || 5,
-//       uid: props.uid || uuid.v4()
-//     })
-//   );
-
-// const validateLayerInput = (layer, act = 'new') => {
-//   if (layer.key === '') {
-//     notification({ title: `Layer [${layer.key}]`, lvl: 'error', msg: 'Please input Name.' });
-//     return false;
-//   }
-//   if (act === 'new' && !(/^[a-z][a-z_]+[a-z]$/g.test(layer.key))) {
-//     notification({ title: `Layer [${layer.key}]`, lvl: 'error', msg: 'This Name is invalid, please try a different one.' });
-//     return false;
-//   }
-//   if (parseInt((layer.cols || 1), 10) < 1) {
-//     notification({ title: `Layer [${layer.key}]`, lvl: 'error', msg: 'The minimun of Column per Row is 1, please input a different one.' });
-//     return false;
-//   }
-//   return true;
-// };
-
-// const validateSelectList = (selectName, element) => {
-//   if (selectName === '') {
-//     notification({ title: `Select List [${selectName}]`, lvl: 'error', msg: 'Please input Name.' });
-//     return false;
-//   }
-//   if (!(/^[a-z][a-z_]+[a-z]$/g.test(selectName))) {
-//     notification({ title: `Select List [${selectName}]`, lvl: 'error', msg: 'This Name is invalid, please try a different one.' });
-//     return false;
-//   }
-//   if (element.properties_template.select_options[`${selectName}`]) {
-//     notification({ title: `Select List [${selectName}]`, lvl: 'error', msg: 'This name of Select List is already taken. Please choose another one.' });
-//     return false;
-//   }
-//   return true;
-// };
-
-const clsInputGroup = el => {
+const clsInputGroup = (el) => {
   if (!el) return el;
   const genericEl = el;
   const { layers } = genericEl.properties_template;
   const keys = Object.keys(layers);
-  keys.forEach(key => {
+  keys.forEach((key) => {
     const layer = layers[key];
     layer.fields.filter(e => e.type === 'input-group')
-      .forEach(e => {
-        e.sub_fields.forEach(s => {
+      .forEach((e) => {
+        e.sub_fields.forEach((s) => {
           const ff = s;
           if (ff.type === 'text') { ff.value = ''; }
         });
@@ -251,7 +206,7 @@ const findCurrentNode = (_srcKey, _layerVals) => {
   const result = [];
   const fs = _layerVals.filter(o => o.wf && o.wf_info && o.wf_info.source_layer === _srcKey);
   if (fs.length > 1) {
-    fs.forEach(o => {
+    fs.forEach((o) => {
       findCurrentNode(o, _layerVals);
     });
   } else if (fs.length === 1) {
@@ -282,12 +237,12 @@ const decorateNode = (_elements, _layers) => {
   return elements;
 };
 
-const conFlowEls = props => {
+const conFlowEls = (props) => {
   const { properties, properties_release } = props;
   const { flow, layers } = properties_release;
   const deep = cloneDeep(flow);
   const els = (deep && deep.elements) || [];
-  els.map(d => {
+  els.map((d) => {
     if (['default'].includes(d.type) && d.data) {
       const { lKey } = d.data;
       const fk = findKey((properties.layers || {}), o => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`)));
@@ -311,10 +266,10 @@ const conFlowEls = props => {
   return els;
 };
 
-const storeFlow = props => {
+const storeFlow = (props) => {
   const { elements } = props;
   const els = cloneDeep(elements);
-  els.map(d => {
+  els.map((d) => {
     if (['default'].includes(d.type) && d.data) {
       delete d.data.label;
       delete d.data.layer;
@@ -339,30 +294,6 @@ const isLayerInWF = (_element, _layerKey) => {
   return (finds.length > 0);
 };
 
-// const validateLayerDeletion = (_element, _delKey) => {
-//   if (isLayerInWF(_element, _delKey)) {
-//     notification({ title: `Layer [${_delKey}]`, lvl: 'warning', msg: `This layer [${_delKey}] can not be removed because it is currently used in workflow.` });
-//     return false;
-//   }
-//   return true;
-// };
-
-// const validateLayerUpdation = (_element, _updates) => {
-//   const { key, wf } = _updates;
-//   if (isLayerInWF(_element, key)) {
-//     if (!wf) {
-//       notification({ title: `Layer [${key}]`, lvl: 'warning', msg: `Can not change the attribute 'used in Workflow?' because this layer [${key}] is currently used in workflow.` });
-//       return false;
-//     }
-//   }
-//   const { layers } = _element.properties_template;
-//   if (wf && layers[key] && (layers[key].cond_fields || []).length > 0) {
-//     notification({ title: `Layer [${key}]`, lvl: 'warning', msg: 'Can not use in Workflow because the Layer Restriction has been set.' });
-//     return false;
-//   }
-//   return true;
-// };
-
 const swapAryEls = (_ary, idx1, idx2) => {
   const ary = _ary;
   const temp = ary[idx1];
@@ -371,24 +302,7 @@ const swapAryEls = (_ary, idx1, idx2) => {
   return ary;
 };
 
-// re-fetch workflow and set to state of store, should be out-of this project
-// const renderFlowModal = (generic, isToggle) => {
-//   const segmentKlasses = (UserStore.getState() && UserStore.getState().segmentKlasses) || [];
-//   let shortLabel = generic.short_label;
-//   if (!shortLabel) {
-//     shortLabel = segmentKlasses.filter(s => s.id === generic.segment_klass_id);
-//     shortLabel = shortLabel.length > 0 ? shortLabel[0].label : '';
-//   }
-//   const params = {
-//     properties_release: cloneDeep(generic.properties_release) || {},
-//     properties: cloneDeep(generic.properties) || {},
-//     shortLabel,
-//     toggle: isToggle
-//   };
-//   UIActions.rerenderGenericWorkflow(params);
-// };
-
-const downloadFile = file => {
+const downloadFile = (file) => {
   const { contents, name } = file;
   const link = document.createElement('a');
   link.download = name;
@@ -402,14 +316,8 @@ const downloadFile = file => {
 };
 
 export {
-  GenericDummy,
-  // validateLayerInput,
-  // validateSelectList,
-  // notification,
-  genUnitsSystem, genUnits, genUnit,
+  GenericDummy, genUnitsSystem, genUnits, genUnit, isLayerInWF, findCurrentNode,
   unitConvToBase, unitConversion, toBool, toNum, genUnitSup, absOlsTermId, absOlsTermLabel, reUnit,
   clsInputGroup, inputEventVal, molOptions, samOptions, conFlowEls, storeFlow, flowDefault,
-  // validateLayerUpdation,
-  // validateLayerDeletion,
   swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon
 };

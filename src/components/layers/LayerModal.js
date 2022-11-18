@@ -29,11 +29,11 @@ const block = (layer, fnAdd) => (
 
 const drawLayout = (layers, fnAdd) => {
   const layout = [];
-  layers.forEach(layer => { layout.push(<div key={layer.key}>{block(layer, fnAdd)}</div>); });
+  layers.forEach((layer) => { layout.push(<div key={layer.key}>{block(layer, fnAdd)}</div>); });
   return layout;
 };
 
-const LayerModal = props => {
+const LayerModal = (props) => {
   const {
     show, layers, fnClose, fnAdd
   } = props;

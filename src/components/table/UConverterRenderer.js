@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { genUnit, genUnitSup } from '../tools/utils';
 
-const UConverterRenderer = props => {
+const UConverterRenderer = (props) => {
   const { sField, onChange, node } = props;
   if (sField.type !== 'system-defined') return null;
   const { data } = node;

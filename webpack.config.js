@@ -68,6 +68,12 @@ module.exports = {
       amd: 'react-flow-renderer',
       root: 'react-flow-renderer', // indicates global variable
     },
+    'ag-grid-react': {
+      commonjs: 'ag-grid-react',
+      commonjs2: 'ag-grid-react',
+      amd: 'ag-grid-react',
+      root: 'ag-grid-react', // indicates global variable
+    },
     'react-select': {
       commonjs: 'react-select',
       commonjs2: 'react-select',
