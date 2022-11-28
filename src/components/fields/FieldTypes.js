@@ -7,4 +7,8 @@ export default Object.freeze({
   F_DATE: 'date',
   F_DATETIME: 'datetime',
   F_DATETIME_RANGE: 'datetime-range',
+  F_FORMULA: 'formula-field',
+  F_INTEGER: 'integer',
+  F_SELECT: 'select',
+  F_SYSTEM_DEFINED: 'system-defined'
 });

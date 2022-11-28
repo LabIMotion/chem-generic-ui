@@ -5,10 +5,11 @@ import { Button, Popover, Col, Checkbox, Panel, Form, ButtonGroup, OverlayTrigge
 import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import ButtonTooltip from '../fields/ButtonTooltip';
-import { genUnitSup } from '../tools/utils';
+import { genUnitSup, toBool, toNullOrInt } from '../tools/utils';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
+import FieldTypes from '../fields/FieldTypes';
 
 const BaseFieldTypes = [
   { value: 'integer', name: 'integer', label: 'Integer' },
@@ -56,8 +57,11 @@ class ElementField extends Component {
   }
 
   handleChange(e, orig, fe, lk, fc, tp) {
-    if ((tp === 'select' || tp === 'system-defined') && e === null) { return; }
-    this.props.onChange(e, orig, fe, lk, fc, tp);
+    if ((tp === FieldTypes.F_SELECT || tp === FieldTypes.F_SYSTEM_DEFINED)
+      && e === null) { return; }
+    const env = e;
+    if (fc === 'decimal') { env.target.value = toNullOrInt(e.target.value) || 5; }
+    this.props.onChange(env, orig, fe, lk, fc, tp);
   }
 
   handleMove(element) {
@@ -183,7 +187,8 @@ class ElementField extends Component {
             </span>
           </div>
         </Col>
-      </FormGroup>)
+      </FormGroup>
+    )
       : (<div />);
     const selectOptions = (f.type === 'select' || f.type === 'system-defined') ? (
       <FormGroup controlId="formControlFieldType">
@@ -203,7 +208,8 @@ class ElementField extends Component {
             {f.type === 'select' ? null : this.availableUnits(f.option_layers)}
           </div>
         </Col>
-      </FormGroup>)
+      </FormGroup>
+    )
       : (<div />);
     const skipRequired = ['Segment', 'Dataset'].includes(genericType) || !['integer', 'text'].includes(f.type) ? { display: 'none' } : {};
     const groupOptions = ['input-group'].includes(f.type) ? (
@@ -272,10 +278,11 @@ class ElementField extends Component {
                           onChange={event => this.handleChange(event, f.hasOwnRow, f.field, layerKey, 'hasOwnRow', 'checkbox')}
                         />
                       </Col>
-                    </FormGroup>)
+                    </FormGroup>
+                  )
                 }
                 {
-                  ['dummy'].includes(f.type) ? null : (
+                  ['dummy', FieldTypes.F_FORMULA].includes(f.type) ? null : (
                     <FormGroup controlId={`frmCtrlFid_${layerKey}_${f.field}_type`}>
                       <Col componentClass={ControlLabel} sm={3}>Type</Col>
                       <Col sm={9}>
@@ -292,7 +299,49 @@ class ElementField extends Component {
                           </span>
                         </div>
                       </Col>
-                    </FormGroup>)
+                    </FormGroup>
+                  )
+                }
+                {
+                  [FieldTypes.F_FORMULA].includes(f.type) ? (
+                    <FormGroup controlId={`frmCtrlFid_${layerKey}_${f.field}_type`}>
+                      <Col componentClass={ControlLabel} sm={3}>Type</Col>
+                      <Col sm={3}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ width: '100%' }}>
+                            <Select
+                              className="drop-up"
+                              name={f.field}
+                              multi={false}
+                              options={typeOpts}
+                              value={typeOpts?.find(o => o.value === f.type)}
+                              onChange={event => this.handleChange(event, f.type, f.field, layerKey, 'type', 'select')}
+                            />
+                          </span>
+                        </div>
+                      </Col>
+                      <Col componentClass={ControlLabel} sm={1}>Decimal</Col>
+                      <Col sm={2}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ width: '100%' }}>
+                            <FormControl
+                              type="number"
+                              value={f.decimal}
+                              onChange={event => this.handleChange(event, f.label, f.field, this.props.layerKey, 'decimal', 'text')}
+                              min={1}
+                            />
+                          </span>
+                        </div>
+                      </Col>
+                      <Col componentClass={ControlLabel} sm={2}>Can adjust?</Col>
+                      <Col sm={1}>
+                        <Checkbox
+                          checked={toBool(f.canAdjust)}
+                          onChange={event => this.handleChange(event, toBool(f.canAdjust), f.field, layerKey, 'canAdjust', 'checkbox')}
+                        />
+                      </Col>
+                    </FormGroup>
+                  ) : null
                 }
                 {
                   ['datetime-range'].includes(f.type) ? (

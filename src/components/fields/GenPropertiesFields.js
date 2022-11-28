@@ -20,43 +20,27 @@ import { filter } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import DateTimeRange from './DateTimeRange';
-import FieldLabel from './FieldLabel';
+import FieldHeader from './FieldHeader';
 import {
-  downloadFile, genUnit, genUnitSup, unitConvToBase
+  downloadFile, fieldCls, genUnit, genUnitSup, unitConvToBase
 } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
 // registerLocale('ptBR', ptBR);
-
 // import 'react-datepicker/dist/react-datepicker.css';
-
-const fieldCls = (isSpCall = false) => {
-  const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none';
-  const clsCol = isSpCall ? 'gu_sp_column' : 'gu_sp_column_none';
-  return [clsFrm, clsCol];
-};
-
-const fieldHeader = (opt) => {
-  const { label, description } = opt;
-  if (label === '') return (<FieldLabel label={<>&nbsp;</>} />);
-  return (<FieldLabel label={label} desc={description} isSpCall={opt.isSpCall} />);
-};
 
 const GenPropertiesCalculate = (opt) => {
   const fields = (opt.layer && opt.layer.fields) || [];
   let showVal = 0;
   let showTxt = null;
   let newFormula = opt.formula;
-
   const calFields = filter(fields, o => (o.type === 'integer' || o.type === 'system-defined'));
   const regF = /[a-zA-Z0-9_]+/gm;
   // eslint-disable-next-line max-len
   const varFields = (opt.formula && opt.formula.match(regF)) ? opt.formula.match(regF).sort((a, b) => b.length - a.length) : [];
-
   varFields.forEach((fi) => {
     if (!isNaN(fi)) return;
-
     const tmpField = calFields.find(e => e.field === fi);
     if (typeof tmpField === 'undefined' || tmpField == null) {
       newFormula = newFormula.replace(fi, 0);
@@ -78,7 +62,7 @@ const GenPropertiesCalculate = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <InputGroup className={klz[1]}>
         <FormControl
           type="text"
@@ -117,7 +101,7 @@ const GenPropertiesCheckbox = (opt) => {
   if (opt.isSpCall) {
     return (
       <FormGroup className="text_generic_properties gu_sp_form">
-        {fieldHeader(opt)}
+        {FieldHeader(opt)}
         <Checkbox
           name={opt.field}
           checked={opt.value}
@@ -130,7 +114,7 @@ const GenPropertiesCheckbox = (opt) => {
   }
   return (
     <FormGroup>
-      {fieldHeader({ label: '', description: '' })}
+      {FieldHeader({ label: '', description: '' })}
       <Checkbox
         name={opt.field}
         checked={opt.value}
@@ -152,7 +136,7 @@ const GenPropertiesDate = (opt) => {
   // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <div className={klzLayer}>
         <DatePicker
           showTimeSelect
@@ -175,7 +159,7 @@ const GenPropertiesDateTimeRange = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={`${klz[0]}`}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <DateTimeRange key={`grid_${opt.f_obj.field}`} opt={opt} />
     </FormGroup>
   );
@@ -205,7 +189,7 @@ const GenPropertiesDrop = (opt) => {
 
   return (
     <FormGroup>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl.Static style={{ paddingBottom: '0px' }}>
         <div className={className}>
           {dragTarget}
@@ -246,7 +230,7 @@ const GenPropertiesInputGroup = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <InputGroup style={{ display: 'flex' }}>
         {subs}
       </InputGroup>
@@ -260,7 +244,7 @@ const GenPropertiesNumber = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl
         type="number"
         value={opt.value}
@@ -293,7 +277,7 @@ const GenPropertiesSelect = (opt) => {
   };
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <span className={klz[1]}>
         <Select
           isClearable
@@ -318,7 +302,7 @@ const GenPropertiesSystemDefined = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={klz[0]}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <InputGroup className={klz[1]}>
         <FormControl
           type="number"
@@ -341,7 +325,7 @@ const GenPropertiesSystemDefined = (opt) => {
 
 const GenPropertiesTable = opt => (
   <FormGroup>
-    {fieldHeader(opt)}
+    {FieldHeader(opt)}
     <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
   </FormGroup>
 );
@@ -352,7 +336,7 @@ const GenPropertiesText = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl
         type="text"
         value={opt.value}
@@ -372,7 +356,7 @@ const GenPropertiesTextArea = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl
         componentClass="textarea"
         value={opt.value}
@@ -410,7 +394,7 @@ const GenTextFormula = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl
         type="text"
         value={subs.join('')}
@@ -457,7 +441,7 @@ const GenPropertiesUpload = (opt) => {
 
   return (
     <FormGroup className="text_generic_properties">
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <FormControl.Static style={{ paddingBottom: '0px', paddingTop: '0px' }}>
         <Dropzone
           id="dropzone"
@@ -493,7 +477,7 @@ const GenWFNext = (opt) => {
   const val = options.find(o => o.value === opt.value) || null;
   return (
     <FormGroup>
-      {fieldHeader(opt)}
+      {FieldHeader(opt)}
       <Select
         menuContainerStyle={{ position: 'absolute' }}
         name={opt.field}

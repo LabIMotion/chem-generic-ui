@@ -17,6 +17,7 @@ import {
   GenPropertiesText
 } from './GenPropertiesFields';
 import FieldTypes from './FieldTypes';
+import PropCalculate from './PropCalculate';
 
 const GenProperties = (opt) => {
   const fieldProps = { ...opt, dndItems: [] };
@@ -30,8 +31,8 @@ const GenProperties = (opt) => {
       return GenPropertiesDate(fieldProps);
     // case 'datetime-range':
     //   return GenPropertiesDateTimeRange(fieldProps);
-    case 'formula-field':
-      return GenPropertiesCalculate(fieldProps);
+    case FieldTypes.F_FORMULA:
+      return PropCalculate(fieldProps);
     case 'select':
       return GenPropertiesSelect(fieldProps);
     case 'drag':

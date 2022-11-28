@@ -114,6 +114,14 @@ const toNum = (val) => {
   return Number.isNaN(parse) ? 0 : parse;
 };
 
+const toNullOrInt = (val) => {
+  if (val) {
+    const parse = Number(val);
+    return Number.isNaN(parse) ? null : parseInt(val, 10);
+  }
+  return null;
+};
+
 const genUnitSup = (val) => {
   if (typeof val === 'undefined' || val === null) return '';
   const vals = val.match(/<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g);
@@ -327,9 +335,16 @@ const downloadFile = (file) => {
   link.dispatchEvent(event);
 };
 
+const fieldCls = (isSpCall = false) => {
+  const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none';
+  const clsCol = isSpCall ? 'gu_sp_column' : 'gu_sp_column_none';
+  return [clsFrm, clsCol];
+};
+
 export {
   GenericDummy, genUnitsSystem, genUnits, genUnit, isLayerInWF, findCurrentNode,
   unitConvToBase, unitConversion, toBool, toNum, genUnitSup, absOlsTermId, absOlsTermLabel, reUnit,
   clsInputGroup, inputEventVal, molOptions, samOptions, conFlowEls, storeFlow, flowDefault,
-  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon, wfLayerMark
+  swapAryEls, decorateNode, showProperties, downloadFile, uploadFiles, KlzIcon, wfLayerMark,
+  fieldCls, toNullOrInt
 };
