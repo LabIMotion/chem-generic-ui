@@ -22,6 +22,7 @@ export default class TableDef extends React.Component {
     this.chkAttr = this.chkAttr.bind(this);
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
+    this.onFirstDataRendered = this.onFirstDataRendered.bind(this);
     this.tblType = props.genericType === 'Element' ? ['drag_molecule', 'drag_sample', 'select', 'system-defined', 'text'] : ['drag_molecule', 'select', 'system-defined', 'text'];
     this.columnDefs = [
       {
@@ -94,7 +95,7 @@ export default class TableDef extends React.Component {
 
   onGridReady(e) {
     this.gridApi = e.api;
-    this.autoSizeAll();
+    // this.autoSizeAll();
   }
 
   onCellValueChanged(params) {
@@ -102,6 +103,10 @@ export default class TableDef extends React.Component {
     if (oldValue === newValue) return;
     this.refresh();
   }
+
+  onFirstDataRendered = (params) => {
+    params.api.sizeColumnsToFit();
+  };
 
   autoSizeAll() {
     if (!this.gridApi) return;
@@ -202,6 +207,7 @@ export default class TableDef extends React.Component {
             columnDefs={this.columnDefs}
             rowSelection="single"
             onGridReady={this.onGridReady}
+            onFirstDataRendered={this.onFirstDataRendered}
             rowData={sub}
             singleClickEdit
             stopEditingWhenCellsLoseFocus
