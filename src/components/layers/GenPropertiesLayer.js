@@ -97,10 +97,10 @@ export default class GenPropertiesLayer extends Component {
           vs.push(<Row key={rowId}>{op}</Row>);
           rowId += 1;
           op = [];
-          newRow = (f.type === 'table') ? newRow = (perRow / (tabCol || 1)) : newRow = 1;
+          newRow = (f.type === 'table' || hasOwnRow) ? newRow = (perRow / (tabCol || 1)) : newRow = 1;
         }
         const eachCol = (
-          <Col key={`prop_${key}_${f.priority}_${f.field}`} md={rCol} lg={rCol} className={f.type === 'table' ? '' : klaz}>
+          <Col key={`prop_${key}_${f.priority}_${f.field}`} md={rCol} lg={rCol} className={(f.type === 'table' || hasOwnRow) ? '' : klaz}>
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
               layers={layers}
