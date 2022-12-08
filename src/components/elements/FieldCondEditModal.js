@@ -57,7 +57,7 @@ export default class FieldCondEditModal extends Component {
         editable: false,
         minWidth: 120,
         width: 120,
-        cellRendererFramework: LayerSelect,
+        cellRenderer: LayerSelect,
         cellRendererParams: { allLayers: this.props.allLayers, selLayer: this.selLayer },
       },
       {
@@ -66,7 +66,7 @@ export default class FieldCondEditModal extends Component {
         editable: false,
         minWidth: 120,
         width: 120,
-        cellRendererFramework: FieldSelect,
+        cellRenderer: FieldSelect,
         cellRendererParams: { allLayers: this.props.allLayers, selField: this.selField, types: ['text', 'select', 'checkbox'] },
       },
       {
@@ -80,9 +80,9 @@ export default class FieldCondEditModal extends Component {
       {
         headerName: '',
         colId: 'actions',
-        headerComponentFramework: AddRowBtn,
+        headerComponent: AddRowBtn,
         headerComponentParams: { addRow: this.addRow },
-        cellRendererFramework: DelRowBtn,
+        cellRenderer: DelRowBtn,
         cellRendererParams: { delRow: this.delRow },
         editable: false,
         filter: false,
@@ -199,7 +199,7 @@ export default class FieldCondEditModal extends Component {
                   onGridReady={this.onGridReady}
                   rowData={sub}
                   singleClickEdit
-                  stopEditingWhenGridLosesFocus
+                  stopEditingWhenCellsLoseFocus
                   rowDragManaged
                   onRowDragEnd={this.refresh}
                 />
@@ -224,3 +224,5 @@ FieldCondEditModal.propTypes = {
   element: PropTypes.object.isRequired,
   fnClose: PropTypes.func.isRequired,
 };
+// AG Grid: since v25.2.2, the grid property `stopEditingWhenGridLosesFocus` has been replaced by `stopEditingWhenCellsLoseFocus`.
+// https://www.ag-grid.com/changelog/?fixVersion=27.0.0

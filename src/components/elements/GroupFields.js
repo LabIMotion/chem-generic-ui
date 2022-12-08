@@ -63,7 +63,7 @@ export default class GroupFields extends React.Component {
         editable: false,
         minWidth: 150,
         width: 150,
-        cellRendererFramework: TypeSelect,
+        cellRenderer: TypeSelect,
         cellRendererParams: { selType: this.selType },
       },
       {
@@ -71,7 +71,7 @@ export default class GroupFields extends React.Component {
         field: 'value',
         editable: (e) => { if (e.data.type === 'system-defined') return false; return true; },
         minWidth: 250,
-        cellRenderer: 'systemDefinedRenderer',
+        cellRenderer: DefinedRenderer,
         cellRendererParams: { unitConfig: this.state.unitConfig, selDefined: this.selDefined },
         onCellValueChanged: this.onCellValueChanged
       },
@@ -90,9 +90,9 @@ export default class GroupFields extends React.Component {
       {
         headerName: '',
         colId: 'actions',
-        headerComponentFramework: AddRowBtn,
+        headerComponent: AddRowBtn,
         headerComponentParams: { addRow: this.addRow },
-        cellRendererFramework: DelRowBtn,
+        cellRenderer: DelRowBtn,
         cellRendererParams: { delRow: this.delRow },
         editable: false,
         filter: false,
@@ -102,9 +102,6 @@ export default class GroupFields extends React.Component {
         pinned: 'left'
       },
     ];
-    this.frameworkComponents = {
-      systemDefinedRenderer: DefinedRenderer
-    };
   }
 
   componentDidUpdate() {
@@ -198,8 +195,7 @@ export default class GroupFields extends React.Component {
             onGridReady={this.onGridReady}
             rowData={sub}
             singleClickEdit
-            stopEditingWhenGridLosesFocus
-            frameworkComponents={this.frameworkComponents}
+            stopEditingWhenCellsLoseFocus
             domLayout="autoHeight"
           />
         </div>
@@ -214,3 +210,6 @@ GroupFields.propTypes = {
   updSub: PropTypes.func.isRequired,
   unitsFields: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+// AG Grid: As of v27, registering components via grid property frameworkComponents is deprecated. Instead register both JavaScript AND Framework Components via the components property.
+// https://blog.ag-grid.com/whats-new-in-ag-grid-27/

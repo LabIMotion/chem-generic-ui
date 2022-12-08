@@ -12,7 +12,6 @@ export default class TableDef extends React.Component {
     super(props);
     this.state = {
       unitConfig: props.unitsFields.map(e => ({ value: e.field, name: e.label, label: e.label })),
-      // selectOptions: props.selectOptions
     };
     this.autoSizeAll = this.autoSizeAll.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
@@ -46,7 +45,7 @@ export default class TableDef extends React.Component {
         editable: false,
         minWidth: 150,
         width: 150,
-        cellRendererFramework: TypeSelect,
+        cellRenderer: TypeSelect,
         cellRendererParams: { all: this.tblType.map(e => ({ key: e, val: e, lab: e })), selType: this.selType },
       },
       {
@@ -54,7 +53,7 @@ export default class TableDef extends React.Component {
         field: 'value',
         editable: (e) => { if (['drag_molecule', 'drag_sample', 'select', 'system-defined'].includes(e.data.type)) return false; return true; },
         minWidth: 350,
-        cellRenderer: 'definedRenderer',
+        cellRenderer: DefinedRenderer,
         cellRendererParams: {
           unitConfig: this.state.unitConfig, selDefined: this.selDefined, chkAttr: this.chkAttr, selectOptions: this.props.selectOptions
         },
@@ -75,9 +74,9 @@ export default class TableDef extends React.Component {
       {
         headerName: '',
         colId: 'actions',
-        headerComponentFramework: AddRowBtn,
+        headerComponent: AddRowBtn,
         headerComponentParams: { addRow: this.addRow },
-        cellRendererFramework: DelRowBtn,
+        cellRenderer: DelRowBtn,
         cellRendererParams: { delRow: this.delRow },
         editable: false,
         filter: false,
@@ -87,9 +86,6 @@ export default class TableDef extends React.Component {
         pinned: 'left'
       },
     ];
-    this.frameworkComponents = {
-      definedRenderer: DefinedRenderer
-    };
   }
 
   componentDidUpdate() {
@@ -208,8 +204,7 @@ export default class TableDef extends React.Component {
             onGridReady={this.onGridReady}
             rowData={sub}
             singleClickEdit
-            stopEditingWhenGridLosesFocus
-            frameworkComponents={this.frameworkComponents}
+            stopEditingWhenCellsLoseFocus
             domLayout="autoHeight"
           />
         </div>

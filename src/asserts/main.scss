@@ -10,6 +10,14 @@ $colo-selected-border: #0dcaf0;
 $color-default: #777;
 $color-bs-info: #5bc0de;
 
+.gu_btn_text_success {
+  color: green;
+}
+
+.gu_btn_text_danger {
+  color: red;
+}
+
 .gu_flow_dnd_sidebar {
   border-width: 0px 0px 1px 0px;
   border-color: black;
@@ -591,4 +599,3 @@ $color-bs-info: #5bc0de;
   margin: 0.5rem !important;
 }
 // ===================================================================
-

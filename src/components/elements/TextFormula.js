@@ -67,7 +67,7 @@ export default class TextFormula extends React.Component {
         editable: false,
         minWidth: 150,
         width: 150,
-        cellRendererFramework: LayerSelect,
+        cellRenderer: LayerSelect,
         cellRendererParams: { allLayers: this.props.allLayers, selLayer: this.selLayer },
       },
       {
@@ -75,7 +75,7 @@ export default class TextFormula extends React.Component {
         field: 'field',
         editable: false,
         minWidth: 250,
-        cellRendererFramework: FieldSelect,
+        cellRenderer: FieldSelect,
         cellRendererParams: { allLayers: this.props.allLayers, selField: this.selField, types: ['text'], tableText: true },
       },
       {
@@ -89,9 +89,9 @@ export default class TextFormula extends React.Component {
       {
         headerName: '',
         colId: 'actions',
-        headerComponentFramework: AddRowBtn,
+        headerComponent: AddRowBtn,
         headerComponentParams: { addRow: this.addRow },
-        cellRendererFramework: DelRowBtn,
+        cellRenderer: DelRowBtn,
         cellRendererParams: { delRow: this.delRow },
         editable: false,
         filter: false,
@@ -182,7 +182,7 @@ export default class TextFormula extends React.Component {
             onGridReady={this.onGridReady}
             rowData={sub}
             singleClickEdit
-            stopEditingWhenGridLosesFocus
+            stopEditingWhenCellsLoseFocus
             rowDragManaged
             onRowDragEnd={this.refresh}
             domLayout="autoHeight"
