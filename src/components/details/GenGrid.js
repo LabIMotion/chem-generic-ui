@@ -52,7 +52,7 @@ class GenGrid extends Component {
     const { pageSize, theme } = this.props;
     const { columnDefs } = this.state;
     return (
-      <div>
+      <div style={{ height: '33vh', width: '100%' }}>
         <div
           style={{ height: '100%', width: '100%' }}
           className={theme}
@@ -63,11 +63,10 @@ class GenGrid extends Component {
             suppressRowClickSelection // https://www.ag-grid.com/react-data-grid/row-selection/
             suppressCellFocus // https://www.ag-grid.com/react-data-grid/grid-options/#reference-selection
             rowSelection="single"
-            pagination
+            pagination={false} // disabled pagination & do not set domLayout="autoHeight"
             paginationPageSize={pageSize}
             onGridReady={this.onGridReady}
             rowData={null}
-            domLayout="autoHeight"
           />
         </div>
       </div>

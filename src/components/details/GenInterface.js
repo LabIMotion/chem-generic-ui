@@ -65,9 +65,13 @@ const GenInterface = (props) => {
   };
 
   const layerDataChange = (event, field, layer) => {
-    const value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
     const { properties } = generic;
-    properties.layers[layer.key][field] = value;
+    if (event) {
+      const value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
+      properties.layers[layer.key][field] = value;
+    } else {
+      delete properties.layers[layer.key][field]; // remove the attribute of layer if event/value is null
+    }
     generic.changed = true;
     fnChange(generic);
   };
@@ -260,9 +264,18 @@ const GenInterface = (props) => {
       ({ value } = event.target);
     }
     if (propsChange) {
-      if (type === FieldTypes.F_DATETIME_RANGE) {
+      if (type === FieldTypes.F_DATETIME) {
+        if (event) {
+          properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
+          generic.properties = properties;
+          if (isSearch) generic.search_properties = properties;
+        } else {
+          delete properties.layers[`${layer}`].fields.find(e => e.field === field).value;
+        }
+      } else if (type === FieldTypes.F_DATETIME_RANGE) {
         properties.layers[layer].fields.find(e => e.field === field).sub_fields = value;
         generic.properties = properties;
+        if (isSearch) generic.search_properties = properties;
       } else if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
         console.log(field);
       } else {

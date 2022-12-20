@@ -2,6 +2,7 @@
 import { findIndex, cloneDeep } from 'lodash';
 import { genUnits, toBool, toNum } from './utils';
 import organizeSubValues from './collate';
+import FieldTypes from '../fields/FieldTypes';
 
 // current generic value, new klass value
 const reinventGeneric = (generic, klass) => {
@@ -13,6 +14,10 @@ const reinventGeneric = (generic, klass) => {
   newProps.klass_uuid = klass.uuid;
   Object.keys(newProps.layers).forEach((key) => {
     const newLayer = newProps.layers[key] || {};
+    newLayer.ai = generic.properties.layers[key]?.ai || []; // copy linked analyses or []
+    if (generic.properties.layers[key]?.timeRecord) {
+      newLayer.timeRecord = generic.properties.layers[key]?.timeRecord; // copy datetime of the layer or ''
+    }
     const curFields = (generic.properties.layers[key] && generic.properties.layers[key].fields)
       || [];
     (newLayer.fields || []).forEach((f, idx) => {
@@ -20,28 +25,40 @@ const reinventGeneric = (generic, klass) => {
       if (curIdx >= 0) {
         const curVal = generic.properties.layers[key].fields[curIdx].value;
         const curType = typeof curVal;
-        if (['select', 'text', 'textarea', 'formula-field'].includes(newProps.layers[key].fields[idx].type)) {
+        const newFieldType = newProps.layers[key].fields[idx].type;
+        if (newFieldType === FieldTypes.F_DATETIME_RANGE) {
+          if (generic.properties.layers[key].fields[curIdx].type
+            !== newFieldType) {
+            newProps.layers[key].fields[idx].sub_fields = [];
+          } else {
+            const cSubs = generic.properties.layers[key].fields[curIdx].sub_fields || [];
+            newProps.layers[key].fields[idx].sub_fields = cSubs;
+          }
+        }
+        if (['select', 'text', 'textarea', 'formula-field'].includes(newFieldType)) {
           newProps.layers[key].fields[idx].value = curType !== 'undefined' ? curVal.toString() : '';
         }
-        if (newProps.layers[key].fields[idx].type === 'integer') {
-          newProps.layers[key].fields[idx].value = (curType === 'undefined' || curType === 'boolean' || isNaN(curVal)) ? 0 : parseInt(curVal, 10);
+        if (newFieldType === FieldTypes.F_INTEGER) {
+          const notInteger = (curType === 'undefined' || curType === 'boolean' || isNaN(curVal));
+          newProps.layers[key].fields[idx].value = notInteger ? 0 : parseInt(curVal, 10);
         }
-        if (newProps.layers[key].fields[idx].type === 'checkbox') {
+        if (newFieldType === FieldTypes.F_CHECKBOX) {
           newProps.layers[key].fields[idx].value = curType !== 'undefined' ? toBool(curVal) : false;
         }
-        if ((newProps.layers[key].fields[idx].type === 'drag_sample' && generic.properties.layers[key].fields[curIdx].type === 'drag_sample')
-        || (newProps.layers[key].fields[idx].type === 'drag_molecule' && generic.properties.layers[key].fields[curIdx].type === 'drag_molecule')) {
+        if ((newFieldType === 'drag_sample' && generic.properties.layers[key].fields[curIdx].type === 'drag_sample')
+        || (newFieldType === 'drag_molecule' && generic.properties.layers[key].fields[curIdx].type === 'drag_molecule')
+        || (newFieldType === FieldTypes.F_DATETIME)) {
           if (typeof curVal !== 'undefined') newProps.layers[key].fields[idx].value = curVal;
         }
-        if (newProps.layers[key].fields[idx].type === 'system-defined') {
+        if (newFieldType === FieldTypes.F_SYSTEM_DEFINED) {
           const units = genUnits(newProps.layers[key].fields[idx].option_layers);
           const vs = units.find(u => u.key === generic.properties.layers[key].fields[curIdx].value_system);
           newProps.layers[key].fields[idx].value_system = (vs && vs.key) || units[0].key;
           newProps.layers[key].fields[idx].value = toNum(curVal);
         }
-        if (newProps.layers[key].fields[idx].type === 'input-group') {
+        if (newFieldType === FieldTypes.F_INPUT_GROUP) {
           if (generic.properties.layers[key].fields[curIdx].type
-            !== newProps.layers[key].fields[idx].type) {
+            !== newFieldType) {
             newProps.layers[key].fields[idx].value = undefined;
           } else {
             const nSubs = newProps.layers[key].fields[idx].sub_fields || [];
@@ -52,9 +69,9 @@ const reinventGeneric = (generic, klass) => {
             } else {
               nSubs.forEach((nSub) => {
                 const hitSub = cSubs.find(c => c.id === nSub.id) || {};
-                if (nSub.type === 'label') { exSubs.push(nSub); }
-                if (nSub.type === 'text') {
-                  if (hitSub.type === 'label') {
+                if (nSub.type === FieldTypes.F_LABEL) { exSubs.push(nSub); }
+                if (nSub.type === FieldTypes.F_TEXT) {
+                  if (hitSub.type === FieldTypes.F_LABEL) {
                     exSubs.push(nSub);
                   } else { exSubs.push({ ...nSub, value: (hitSub.value || '').toString() }); }
                 }
@@ -71,17 +88,17 @@ const reinventGeneric = (generic, klass) => {
             newProps.layers[key].fields[idx].sub_fields = exSubs;
           }
         }
-        if (newProps.layers[key].fields[idx].type === 'upload') {
+        if (newFieldType === FieldTypes.F_UPLOAD) {
           if (generic.properties.layers[key].fields[curIdx].type
-            === newProps.layers[key].fields[idx].type) {
+            === newFieldType) {
             newProps.layers[key].fields[idx].value = generic.properties.layers[key].fields[curIdx].value;
           } else {
             newProps.layers[key].fields[idx].value = {};
           }
         }
-        if (newProps.layers[key].fields[idx].type === 'table') {
+        if (newFieldType === FieldTypes.F_TABLE) {
           if (generic.properties.layers[key].fields[curIdx].type
-            !== newProps.layers[key].fields[idx].type) {
+            !== newFieldType) {
             newProps.layers[key].fields[idx].sub_values = [];
           } else {
             newProps.layers[key].fields[idx].sub_values = organizeSubValues(
