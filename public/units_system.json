@@ -225,11 +225,12 @@
       "position": 110,
       "placeholder": "length",
       "units": [
-        { "key": "pm", "label": "pm", "nm": 100000 },
-        { "key": "nm", "label": "nm", "nm": 10000 },
         { "key": "mm", "label": "mm", "nm": 1000 },
         { "key": "cm", "label": "cm", "nm": 100 },
-        { "key": "m", "label": "m", "nm": 1  }
+        { "key": "m", "label": "m", "nm": 1 },
+        { "key": "pm", "label": "pm", "nm": 1000000000000 },
+        { "key": "nm", "label": "nm", "nm": 1000000000 },
+        { "key": "um", "label": "µm", "nm": 1000000 }
       ]
     },
     {
@@ -338,6 +339,20 @@
         { "key": "mm_s", "label": "mm/s", "nm": 10 },
         { "key": "cm_h", "label": "cm/h", "nm": 3600 },
         { "key": "mm_h", "label": "mm/h", "nm": 36000 }
+      ]
+    },
+    {
+      "type": "numeric",
+      "field": "subatomic_length",
+      "label": "Subatomic length",
+      "default": "",
+      "position": 168,
+      "placeholder": "Subatomic length",
+      "units": [
+        { "key": "m", "label": "m", "nm": 1  },
+        { "key": "pm", "label": "pm", "nm": 1000000000000 },
+        { "key": "nm", "label": "nm", "nm": 1000000000 },
+        { "key": "um", "label": "µm", "nm": 1000000 }
       ]
     },
     {
