@@ -1,3 +1,6 @@
+import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
+import 'ag-grid-community/styles/ag-theme-balham.css'; // Optional theme CSS
 import './asserts/main.css';
 
 export { default as ElementManager } from './components/admin/ElementManager';
