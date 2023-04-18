@@ -306,7 +306,10 @@ class ElementField extends Component {
             <div style={{ display: 'flex' }}>
               <span style={{ width: '100%' }}>
                 <Select
-                  className="drop-up"
+                  styles={{
+                    menuPortal: base => ({ ...base, zIndex: 9999 }),
+                    menu: base => ({ ...base, zIndex: 9999 }),
+                  }}
                   name={f.field}
                   multi={false}
                   options={selectOptionsOpts}
@@ -493,7 +496,10 @@ class ElementField extends Component {
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <Select
-                            className="drop-up"
+                            styles={{
+                              menuPortal: base => ({ ...base, zIndex: 9999 }),
+                              menu: base => ({ ...base, zIndex: 9999 }),
+                            }}
                             name={f.field}
                             multi={false}
                             options={typeOpts}
@@ -525,7 +531,10 @@ class ElementField extends Component {
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <Select
-                            className="drop-up"
+                            styles={{
+                              menuPortal: base => ({ ...base, zIndex: 9999 }),
+                              menu: base => ({ ...base, zIndex: 9999 }),
+                            }}
                             name={f.field}
                             multi={false}
                             options={typeOpts}
