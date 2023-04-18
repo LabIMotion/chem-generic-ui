@@ -230,10 +230,7 @@ export default {
         units: [
           { key: 'mm', label: 'mm', nm: 1000 },
           { key: 'cm', label: 'cm', nm: 100 },
-          { key: 'm', label: 'm', nm: 1 },
-          { key: 'pm', label: 'pm', nm: 1000000000000 },
-          { key: 'nm', label: 'nm', nm: 1000000000 },
-          { key: 'um', label: 'µm', nm: 1000000 }
+          { key: 'm', label: 'm', nm: 1 }
         ]
       },
       {
@@ -352,10 +349,9 @@ export default {
         position: 168,
         placeholder: 'Subatomic length',
         units: [
-          { key: 'm', label: 'm', nm: 1 },
-          { key: 'pm', label: 'pm', nm: 1000000000000 },
-          { key: 'nm', label: 'nm', nm: 1000000000 },
-          { key: 'um', label: 'µm', nm: 1000000 }
+          { key: 'um', label: 'µm', nm: 1 },
+          { key: 'nm', label: 'nm', nm: 1000 },
+          { key: 'pm', label: 'pm', nm: 1000000 }
         ]
       },
       {

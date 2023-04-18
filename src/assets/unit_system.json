@@ -7,9 +7,7 @@
       "default": "",
       "position": 10,
       "placeholder": "acceleration",
-      "units": [
-        { "key": "mm_s2", "label": "mm/s<sup>2</sup>" }
-      ]
+      "units": [{ "key": "mm_s2", "label": "mm/s<sup>2</sup>" }]
     },
     {
       "type": "numeric",
@@ -18,9 +16,7 @@
       "default": "",
       "position": 20,
       "placeholder": "agitation",
-      "units": [
-        { "key": "rpm", "label": "rpm" }
-      ]
+      "units": [{ "key": "rpm", "label": "rpm" }]
     },
     {
       "type": "numeric",
@@ -30,7 +26,7 @@
       "position": 30,
       "placeholder": "amount enzyme as nmol/min",
       "units": [
-        { "key": "u", "label": "U", "nm": 1  },
+        { "key": "u", "label": "U", "nm": 1 },
         { "key": "mu", "label": "mU", "nm": 1000 }
       ]
     },
@@ -55,9 +51,7 @@
       "default": "",
       "position": 50,
       "placeholder": "Chem. distances",
-      "units": [
-        { "key": "angstrom", "label": "Å" }
-      ]
+      "units": [{ "key": "angstrom", "label": "Å" }]
     },
     {
       "type": "numeric",
@@ -79,10 +73,9 @@
       "default": "",
       "position": 66,
       "placeholder": "conductivity",
-      "units": [
-        { "key": "s_m", "label": "S/m", "nm": 1 }
-      ]
-    },{
+      "units": [{ "key": "s_m", "label": "S/m", "nm": 1 }]
+    },
+    {
       "type": "numeric",
       "field": "current",
       "label": "Current",
@@ -92,7 +85,7 @@
       "units": [
         { "key": "A", "label": "A", "nm": 1 },
         { "key": "mA", "label": "mA", "nm": 1000 },
-        { "key": "uA", "label": "µA", "nm": 1000000},
+        { "key": "uA", "label": "µA", "nm": 1000000 },
         { "key": "nA", "label": "nA", "nm": 1000000000 }
       ]
     },
@@ -103,9 +96,7 @@
       "default": "",
       "position": 70,
       "placeholder": "degree",
-      "units": [
-        { "key": "degree", "label": "°" }
-      ]
+      "units": [{ "key": "degree", "label": "°" }]
     },
     {
       "type": "numeric",
@@ -153,9 +144,7 @@
       "default": "",
       "position": 86,
       "placeholder": "Electric field",
-      "units": [
-        { "key": "v_m", "label": "V/m", "nm": 1 }
-      ]
+      "units": [{ "key": "v_m", "label": "V/m", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -213,9 +202,7 @@
       "default": "",
       "position": 106,
       "placeholder": "heating rate",
-      "units": [
-        { "key": "k_min", "label": "K/min", "nm": 1 }
-      ]
+      "units": [{ "key": "k_min", "label": "K/min", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -237,9 +224,7 @@
       "default": "",
       "position": 120,
       "placeholder": "",
-      "units": [
-        { "key": "T", "label": "T", "nm": 1 }
-      ]
+      "units": [{ "key": "T", "label": "T", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -273,9 +258,7 @@
       "default": "",
       "position": 130,
       "placeholder": "Molecular weight",
-      "units": [
-        { "key": "g_mol", "label": "g/mol" }
-      ]
+      "units": [{ "key": "g_mol", "label": "g/mol" }]
     },
     {
       "type": "numeric",
@@ -284,9 +267,7 @@
       "default": "",
       "position": 136,
       "placeholder": "percentage",
-      "units": [
-        { "key": "p", "label": "%", "nm": 1 }
-      ]
+      "units": [{ "key": "p", "label": "%", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -320,9 +301,7 @@
       "default": "",
       "position": 160,
       "placeholder": "Specific Volume",
-      "units": [
-        { "key": "cm3_g", "label": "cm<sup>3</sup>/g", "nm": 1 }
-      ]
+      "units": [{ "key": "cm3_g", "label": "cm<sup>3</sup>/g", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -384,9 +363,7 @@
       "default": "",
       "position": 190,
       "placeholder": "Turnover number",
-      "units": [
-        { "key": "1_s", "label": "1/s" }
-      ]
+      "units": [{ "key": "1_s", "label": "1/s" }]
     },
     {
       "type": "numeric",
@@ -407,9 +384,7 @@
       "default": "",
       "position": 205,
       "placeholder": "Kinematic Viscosity",
-      "units": [
-        { "key": "m2_s", "label": "m<sup>2</sup>/s", "nm": 1 }
-      ]
+      "units": [{ "key": "m2_s", "label": "m<sup>2</sup>/s", "nm": 1 }]
     },
     {
       "type": "numeric",
@@ -433,7 +408,7 @@
       "units": [
         { "key": "l", "label": "l", "nm": 1 },
         { "key": "ml", "label": "ml", "nm": 1000 },
-        { "key": "ul", "label": "µl", "nm": 1000000},
+        { "key": "ul", "label": "µl", "nm": 1000000 },
         { "key": "nl", "label": "nl", "nm": 1000000000 }
       ]
     }
