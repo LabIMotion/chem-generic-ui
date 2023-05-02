@@ -377,7 +377,7 @@ export default {
         units: [
           { key: 'C', label: '°C' },
           { key: 'F', label: '°F' },
-          { key: 'K', label: '°K' }
+          { key: 'K', label: 'K' }
         ]
       },
       {
