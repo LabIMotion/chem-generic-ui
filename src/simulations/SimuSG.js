@@ -1,32 +1,18 @@
 import React, { Component } from 'react';
 // import { DragDropContext } from 'react-dnd';
-// import HTML5Backend from 'react-dnd-html5-backend';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
+import sg from './_sg_details.json';
+import sgKlass from './_sg_klass.json';
 import SegmentDetails from '../components/details/GenSgDetails';
 
 class SimuSG extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      segment: {}, klass: {}
+      segment: sg,
+      klass: sgKlass,
     };
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  componentDidMount() {
-    fetch('sg_details.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(response => response.json()).then(json => {
-        console.log(json);
-        fetch('sg_klass.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-          .then(response => response.json()).then(kjson => {
-            this.setState({ segment: json, klass: kjson });
-          })
-          .catch(errorMessage => {
-            console.log(errorMessage);
-          });
-      })
-      .catch(errorMessage => {
-        console.log(errorMessage);
-      });
   }
 
   handleChange(newObj) {

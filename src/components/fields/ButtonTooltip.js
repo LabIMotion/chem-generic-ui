@@ -3,18 +3,12 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 
-const ButtonTooltip = (props) => {
+const ButtonTooltip = props => {
   const { tip } = props;
   const tooltip = <Tooltip id={uuid()}>{tip}</Tooltip>;
-  const {
-    size, bs, fnClick, element, place, fa, disabled, txt, btnCls
-  } = props;
-  const content = txt ? (
-    <span>
-      {txt}
-      {' '}
-    </span>
-  ) : '';
+  const { size, bs, fnClick, element, place, fa, disabled, txt, btnCls } =
+    props;
+  const content = txt ? <span>{txt} </span> : '';
   if (bs === '') {
     return (
       <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
@@ -67,7 +61,7 @@ ButtonTooltip.defaultProps = {
   disabled: false,
   txt: null,
   element: {},
-  btnCls: ''
+  btnCls: '',
 };
 
 export default ButtonTooltip;

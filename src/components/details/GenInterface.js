@@ -10,21 +10,42 @@ import LayersLayout from '../layers/LayersLayout';
 import LayerModal from '../layers/LayerModal';
 import Constants from '../tools/Constants';
 import {
-  getWFNode, getFlowLayer, addToObject, removeFromObject, orgLayerObject, reformCondFields
+  getWFNode,
+  getFlowLayer,
+  addToObject,
+  removeFromObject,
+  orgLayerObject,
+  reformCondFields,
 } from '../tools/orten';
 import {
-  genUnits, swapAryEls, unitConversion, uploadFiles
+  genUnits,
+  swapAryEls,
+  unitConversion,
+  uploadFiles,
 } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
 
-const initialState = { showViewLayer: false, selectedLayerKey: '', showAnaModal: false };
+const initialState = {
+  showViewLayer: false,
+  selectedLayerKey: '',
+  showAnaModal: false,
+};
 
 const reducer = (state, action) => ({ ...state, ...action });
 
-const GenInterface = (props) => {
+const GenInterface = props => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
-    generic, fnChange, extLayers, genId, isPreview, isActiveWF, isSearch, fnNavi, isSpCall, aiComp
+    generic,
+    fnChange,
+    extLayers,
+    genId,
+    isPreview,
+    isActiveWF,
+    isSearch,
+    fnNavi,
+    isSpCall,
+    aiComp,
   } = props;
 
   if (Object.keys(generic).length === 0) return null;
@@ -53,11 +74,13 @@ const GenInterface = (props) => {
       sortedLayers.splice(tarIdx + 1, 0, tmpSrc);
     }
     // re-count wf_position
-    sortedLayers.filter(e => e.position === tmpSrc.position).map((e, idx) => {
-      const el = e;
-      el.wf_position = idx;
-      return el;
-    });
+    sortedLayers
+      .filter(e => e.position === tmpSrc.position)
+      .map((e, idx) => {
+        const el = e;
+        el.wf_position = idx;
+        return el;
+      });
     const ll = orgLayerObject(sortedLayers);
     generic.properties.layers = ll;
     generic.changed = true;
@@ -67,7 +90,10 @@ const GenInterface = (props) => {
   const layerDataChange = (event, field, layer) => {
     const { properties } = generic;
     if (event) {
-      const value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
+      const value = new Date(event)
+        .toLocaleString('en-GB')
+        .split(', ')
+        .join(' ');
       properties.layers[layer.key][field] = value;
     } else {
       delete properties.layers[layer.key][field]; // remove the attribute of layer if event/value is null
@@ -82,11 +108,13 @@ const GenInterface = (props) => {
     const selectedIdx = sortedLayers.findIndex(e => e.key === layer.key);
     const selected = sortedLayers[selectedIdx];
     sortedLayers.splice(selectedIdx, 1);
-    sortedLayers.filter(e => e.position === selected.position).map((e, idx) => {
-      const el = e;
-      el.wf_position = idx;
-      return el;
-    });
+    sortedLayers
+      .filter(e => e.position === selected.position)
+      .map((e, idx) => {
+        const el = e;
+        el.wf_position = idx;
+        return el;
+      });
     generic.properties.layers = orgLayerObject(sortedLayers);
     generic.changed = true;
     fnChange(generic);
@@ -98,7 +126,9 @@ const GenInterface = (props) => {
       const { properties, properties_release } = generic;
       // next step value if exists
       let rmNeeded = false;
-      const preValue = properties.layers[`${layer}`].fields.find(e => e.field === '_wf_next').value;
+      const preValue = properties.layers[`${layer}`].fields.find(
+        e => e.field === '_wf_next'
+      ).value;
       if (value !== preValue) {
         if (preValue && preValue !== '' && preValue !== value) {
           rmNeeded = true;
@@ -111,10 +141,16 @@ const GenInterface = (props) => {
           properties.layers = addToObject(properties.layers, layer, nxLayer);
         }
         if (rmNeeded) {
-          properties.layers = removeFromObject(properties.layers, layer, getWFNode(flow, preValue));
+          properties.layers = removeFromObject(
+            properties.layers,
+            layer,
+            getWFNode(flow, preValue)
+          );
         }
         // update next step value
-        properties.layers[`${layer}`].fields.find(e => e.field === '_wf_next').value = value;
+        properties.layers[`${layer}`].fields.find(
+          e => e.field === '_wf_next'
+        ).value = value;
         generic.properties = properties;
         generic.changed = true;
         // this.props.onChange(segment, () => renderFlowModal(segment, false));
@@ -161,8 +197,9 @@ const GenInterface = (props) => {
     layer.wf = false;
     layer.wf_uuid = null;
     // layer is standard layer (from released)
-    const cnt = sortedLayers
-      .filter(e => e.key === layer.key || e.key.startsWith(`${layer.key}.`)).length;
+    const cnt = sortedLayers.filter(
+      e => e.key === layer.key || e.key.startsWith(`${layer.key}.`)
+    ).length;
     if (cnt > 0) {
       const origKey = layer.key;
       layer.key = `${layer.key}.${cnt}`;
@@ -171,11 +208,13 @@ const GenInterface = (props) => {
     // insert new layer
     sortedLayers.splice(idx + 1, 0, layer);
     // re-count wf_position
-    sortedLayers.filter(e => e.position === selectedLayer.position).map((e, ix) => {
-      const el = e;
-      el.wf_position = ix;
-      return el;
-    });
+    sortedLayers
+      .filter(e => e.position === selectedLayer.position)
+      .map((e, ix) => {
+        const el = e;
+        el.wf_position = ix;
+        return el;
+      });
     const ll = orgLayerObject(sortedLayers);
     generic.properties.layers = ll;
     dispatch({ showViewLayer: false, selectedLayerKey: layer.key }, () => {
@@ -228,9 +267,13 @@ const GenInterface = (props) => {
       case 'upload': {
         const vals = uploadFiles(properties, event, field, layer);
         value = vals[0];
-        if (vals[1].length > 0) generic.files = (generic.files || []).concat(vals[1]);
+        if (vals[1].length > 0)
+          generic.files = (generic.files || []).concat(vals[1]);
         if (vals.length > 2) {
-          const fileIdx = findIndex((generic.files || []), o => o.uid === event.uid);
+          const fileIdx = findIndex(
+            generic.files || [],
+            o => o.uid === event.uid
+          );
           if (fileIdx >= 0 && generic.files && generic.files.length > 0) {
             generic.files.splice(fileIdx, 1);
           }
@@ -256,7 +299,10 @@ const GenInterface = (props) => {
       default:
         ({ value } = event.target);
     }
-    if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
+    if (
+      layer === '' &&
+      ['name', 'search_name', 'search_short_label'].includes(field)
+    ) {
       ({ value } = event.target);
       generic[field] = value;
     }
@@ -266,25 +312,44 @@ const GenInterface = (props) => {
     if (propsChange) {
       if (type === FieldTypes.F_DATETIME) {
         if (event) {
-          properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
+          properties.layers[`${layer}`].fields.find(
+            e => e.field === field
+          ).value = value;
           generic.properties = properties;
           if (isSearch) generic.search_properties = properties;
         } else {
-          delete properties.layers[`${layer}`].fields.find(e => e.field === field).value;
+          delete properties.layers[`${layer}`].fields.find(
+            e => e.field === field
+          ).value;
         }
       } else if (type === FieldTypes.F_DATETIME_RANGE) {
-        properties.layers[layer].fields.find(e => e.field === field).sub_fields = value;
+        properties.layers[layer].fields.find(
+          e => e.field === field
+        ).sub_fields = value;
         generic.properties = properties;
         if (isSearch) generic.search_properties = properties;
-      } else if (layer === '' && ['name', 'search_name', 'search_short_label'].includes(field)) {
+      } else if (
+        layer === '' &&
+        ['name', 'search_name', 'search_short_label'].includes(field)
+      ) {
         console.log(field);
       } else {
-        properties.layers[`${layer}`].fields.find(e => e.field === field).value = value;
-        if (type === 'system-defined' && (!properties.layers[`${layer}`].fields.find(e => e.field === field).value_system || properties.layers[`${layer}`].fields.find(e => e.field === field).value_system === '')) {
-          const opt = properties.layers[`${layer}`].fields
-            .find(e => e.field === field).option_layers;
-          properties.layers[`${layer}`].fields
-            .find(e => e.field === field).value_system = genUnits(opt)[0].key;
+        properties.layers[`${layer}`].fields.find(
+          e => e.field === field
+        ).value = value;
+        if (
+          type === 'system-defined' &&
+          (!properties.layers[`${layer}`].fields.find(e => e.field === field)
+            .value_system ||
+            properties.layers[`${layer}`].fields.find(e => e.field === field)
+              .value_system === '')
+        ) {
+          const opt = properties.layers[`${layer}`].fields.find(
+            e => e.field === field
+          ).option_layers;
+          properties.layers[`${layer}`].fields.find(
+            e => e.field === field
+          ).value_system = genUnits(opt)[0].key;
         }
         generic.properties = properties;
         if (isSearch) generic.search_properties = properties;
@@ -297,15 +362,18 @@ const GenInterface = (props) => {
   const handleSubChange = (layer, obj, valueOnly = false) => {
     const { properties } = generic;
     if (!valueOnly) {
-      const subFields = properties.layers[`${layer}`].fields
-        .find(m => m.field === obj.f.field).sub_fields || [];
+      const subFields =
+        properties.layers[`${layer}`].fields.find(m => m.field === obj.f.field)
+          .sub_fields || [];
       const idxSub = subFields.findIndex(m => m.id === obj.sub.id);
       subFields.splice(idxSub, 1, obj.sub);
-      properties.layers[`${layer}`].fields
-        .find(e => e.field === obj.f.field).sub_fields = subFields;
+      properties.layers[`${layer}`].fields.find(
+        e => e.field === obj.f.field
+      ).sub_fields = subFields;
     }
-    properties.layers[`${layer}`].fields
-      .find(e => e.field === obj.f.field).sub_values = obj.f.sub_values || [];
+    properties.layers[`${layer}`].fields.find(
+      e => e.field === obj.f.field
+    ).sub_values = obj.f.sub_values || [];
     generic.properties = properties;
     generic.changed = true;
     fnChange(generic);
@@ -313,15 +381,24 @@ const GenInterface = (props) => {
 
   const handleUnitClick = (layer, obj) => {
     const { properties } = generic;
-    const newVal = unitConversion(obj.option_layers, obj.value_system, obj.value);
-    properties.layers[`${layer}`].fields.find(e => e.field === obj.field).value_system = obj.value_system;
-    properties.layers[`${layer}`].fields.find(e => e.field === obj.field).value = newVal;
+    const newVal = unitConversion(
+      obj.option_layers,
+      obj.value_system,
+      obj.value
+    );
+    properties.layers[`${layer}`].fields.find(
+      e => e.field === obj.field
+    ).value_system = obj.value_system;
+    properties.layers[`${layer}`].fields.find(
+      e => e.field === obj.field
+    ).value = newVal;
     generic.properties = properties;
     generic.changed = true;
     fnChange(generic);
   };
 
-  let ai = (container && container.children && container.children[0].children) || [];
+  let ai =
+    (container && container.children && container.children[0].children) || [];
   ai = ai.filter(x => !x.is_new); // get ai is not new
 
   const paramsLayersLayout = {
@@ -337,8 +414,8 @@ const GenInterface = (props) => {
     isSearch,
     fnNavi,
     isSpCall,
-    hasAi: (ai.length > 0),
-    aiComp
+    hasAi: ai.length > 0,
+    aiComp,
   };
 
   const layersLayout = LayersLayout(paramsLayersLayout);
@@ -381,7 +458,7 @@ GenInterface.propTypes = {
   isSearch: PropTypes.bool,
   fnNavi: PropTypes.func,
   isSpCall: PropTypes.bool,
-  aiComp: PropTypes.any
+  aiComp: PropTypes.any,
 };
 
 GenInterface.defaultProps = {
@@ -390,7 +467,7 @@ GenInterface.defaultProps = {
   genId: 0,
   fnNavi: () => {},
   isSpCall: false,
-  aiComp: null
+  aiComp: null,
 };
 
 export default GenInterface;

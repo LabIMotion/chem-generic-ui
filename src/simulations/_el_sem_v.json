@@ -1,0 +1,3324 @@
+{
+  "shortLabel": "short label",
+  "properties": {
+    "eln": {
+      "version": "1.0.0-alpha",
+      "base_revision": "2f089270de87751f5783b955227e7e5f118a2ae3",
+      "current_revision": "b69582da084ac07ffa084420614aa9fca6bff917\n"
+    },
+    "flow": {
+      "zoom": 0.8362463999140631,
+      "elements": [
+        {
+          "id": "1",
+          "data": {
+            "label": "Start"
+          },
+          "type": "input",
+          "position": {
+            "x": 144,
+            "y": -307
+          }
+        },
+        {
+          "id": "2",
+          "data": {
+            "label": "End"
+          },
+          "type": "output",
+          "position": {
+            "x": 338,
+            "y": 727
+          }
+        },
+        {
+          "id": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "data": {
+            "lKey": "sample_description",
+            "layer": {
+              "wf": true,
+              "key": "sample_description",
+              "cols": 2,
+              "color": "none",
+              "label": "Sample description",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "name",
+                  "label": "name",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "description": "",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "drag_sample",
+                  "field": "sample",
+                  "label": "sample",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "carrier",
+                  "label": "carrier",
+                  "default": "",
+                  "position": 3,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "coating",
+                  "label": "coating",
+                  "default": "",
+                  "position": 4,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "upload",
+                  "field": "upl",
+                  "label": "Upload Test",
+                  "default": "",
+                  "position": 5,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 10,
+              "condition": "",
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -36.6015625,
+            "y": -234.6796875
+          }
+        },
+        {
+          "id": "ce11c518-388d-480c-a53b-553917611ca5",
+          "data": {
+            "lKey": "cutting",
+            "layer": {
+              "wf": true,
+              "key": "cutting",
+              "cols": 2,
+              "color": "none",
+              "label": "cutting",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "instrument",
+                  "label": "instrument",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "cutter",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "system-defined",
+                  "field": "temperature",
+                  "label": "temperature",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "temperature",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "parameters",
+                  "label": "parameters",
+                  "default": "",
+                  "position": 3,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 20,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -207.6015625,
+            "y": -158.1796875
+          }
+        },
+        {
+          "id": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "data": {
+            "lKey": "embedding",
+            "layer": {
+              "wf": true,
+              "key": "embedding",
+              "cols": 1,
+              "color": "none",
+              "label": "embedding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "bed",
+                  "label": "bed",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 30,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -32.89381769289611,
+            "y": -79.60613306759811
+          }
+        },
+        {
+          "id": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "data": {
+            "lKey": "grinding",
+            "layer": {
+              "wf": true,
+              "key": "grinding",
+              "cols": 1,
+              "color": "none",
+              "label": "grinding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "grinder",
+                  "label": "grinder",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 40,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -306.0284989507844,
+            "y": -0.5119731543489934
+          }
+        },
+        {
+          "id": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "data": {
+            "lKey": "polishing",
+            "layer": {
+              "wf": true,
+              "key": "polishing",
+              "cols": 1,
+              "color": "none",
+              "label": "polishing",
+              "style": "panel_generic_heading",
+              "fields": [],
+              "position": 50,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -401.11904051454883,
+            "y": 80.65083772590361
+          }
+        },
+        {
+          "id": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "data": {
+            "lKey": "fib",
+            "layer": {
+              "wf": true,
+              "key": "fib",
+              "cols": 1,
+              "color": "none",
+              "label": "FIB/SEM",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "further_preparation",
+                  "label": "further_preparation",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 90,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -281.09837872342644,
+            "y": 155.5970356479918
+          }
+        },
+        {
+          "id": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "data": {
+            "lKey": "lam",
+            "layer": {
+              "wf": true,
+              "key": "lam",
+              "cols": 2,
+              "color": "none",
+              "label": "Lamella",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "material",
+                  "label": "material",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "material",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "dimensions",
+                  "label": "dimensions",
+                  "default": "",
+                  "position": 2,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 100,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -155.9046349425234,
+            "y": 240.00371909116052
+          }
+        },
+        {
+          "id": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "data": {
+            "lKey": "tem",
+            "layer": {
+              "wf": true,
+              "key": "tem",
+              "cols": 1,
+              "color": "none",
+              "label": "TEM Analysis",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "test",
+                  "label": "test",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 110,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -17.591921312557616,
+            "y": 317.5270989255687
+          }
+        },
+        {
+          "id": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "data": {
+            "lKey": "glueing",
+            "layer": {
+              "wf": true,
+              "key": "glueing",
+              "cols": 1,
+              "color": "none",
+              "label": "glueing",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "glue",
+                  "label": "glue",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 60,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 81.38698896370278,
+            "y": 396.6924438689314
+          }
+        },
+        {
+          "id": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "data": {
+            "lKey": "sputtering",
+            "layer": {
+              "wf": true,
+              "key": "sputtering",
+              "cols": 1,
+              "color": "none",
+              "label": "sputtering",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "number",
+                  "label": "number",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 70,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 182.32102511931498,
+            "y": 476.7444301129997
+          }
+        },
+        {
+          "id": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "data": {
+            "lKey": "ana",
+            "layer": {
+              "wf": true,
+              "key": "ana",
+              "cols": 1,
+              "label": "Analysis",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "result",
+                  "label": "result",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 120,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 332.2461044402706,
+            "y": 557.6684111445783
+          }
+        },
+        {
+          "id": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "data": {
+            "lKey": "tom",
+            "layer": {
+              "wf": true,
+              "key": "tom",
+              "cols": 1,
+              "label": "Tomograpy",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 130,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 177.0147791390658,
+            "y": 639.3720256024096
+          }
+        },
+        {
+          "id": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "data": {
+            "lKey": "edx",
+            "layer": {
+              "wf": true,
+              "key": "edx",
+              "cols": 1,
+              "label": "EDX",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 140,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 480.4533333559332,
+            "y": 640.4852786144578
+          }
+        },
+        {
+          "id": "reactflow__edge-1null-6d0fb717-3668-4445-95e7-bdb4bdec2778null",
+          "type": "default",
+          "label": "next",
+          "source": "1",
+          "target": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6d0fb717-3668-4445-95e7-bdb4bdec2778null-ce11c518-388d-480c-a53b-553917611ca5null",
+          "type": "default",
+          "label": "next",
+          "source": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "target": "ce11c518-388d-480c-a53b-553917611ca5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ce11c518-388d-480c-a53b-553917611ca5null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "ce11c518-388d-480c-a53b-553917611ca5",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull",
+          "type": "default",
+          "label": "next",
+          "source": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "target": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull-1dbe6342-bb12-45d6-ae7a-83447b54fca7null",
+          "type": "default",
+          "label": "next",
+          "source": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "target": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-1dbe6342-bb12-45d6-ae7a-83447b54fca7null-be288824-d101-4e75-97d6-bc3d591550b6null",
+          "type": "default",
+          "label": "next",
+          "source": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "target": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-2a5cdd29-4286-464c-9294-78cde4335bd4null",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-2a5cdd29-4286-464c-9294-78cde4335bd4null-a5bb45da-bd19-4586-90bd-07c0b0047be6null",
+          "type": "default",
+          "label": "next",
+          "source": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "target": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-a5bb45da-bd19-4586-90bd-07c0b0047be6null-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null",
+          "type": "default",
+          "label": "next",
+          "source": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "target": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null-2null",
+          "type": "default",
+          "label": "next",
+          "source": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull-2null",
+          "type": "default",
+          "label": "next",
+          "source": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        }
+      ],
+      "position": [655.9675473297244, 257.01753039207046]
+    },
+    "uuid": "a807b8db-5461-4df2-8944-16a6df0caa63",
+    "klass": "ElementKlass",
+    "layers": {
+      "ana": {
+        "wf": true,
+        "key": "ana",
+        "cols": 1,
+        "label": "Analysis",
+        "fields": [
+          {
+            "type": "text",
+            "field": "result",
+            "label": "result",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 120,
+        "wf_position": 0
+      },
+      "edx": {
+        "wf": true,
+        "key": "edx",
+        "cols": 1,
+        "label": "EDX",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 140,
+        "wf_position": 0
+      },
+      "fib": {
+        "wf": true,
+        "key": "fib",
+        "cols": 1,
+        "color": "none",
+        "label": "FIB/SEM",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "further_preparation",
+            "label": "further_preparation",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 90,
+        "wf_position": 0
+      },
+      "lam": {
+        "wf": true,
+        "key": "lam",
+        "cols": 2,
+        "color": "none",
+        "label": "Lamella",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "material",
+            "label": "material",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "material",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "dimensions",
+            "label": "dimensions",
+            "default": "",
+            "position": 2,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 100,
+        "wf_position": 0
+      },
+      "sem": {
+        "wf": true,
+        "key": "sem",
+        "cols": 1,
+        "color": "none",
+        "label": "SEM analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "time",
+            "label": "time",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 80,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "tem": {
+        "wf": true,
+        "key": "tem",
+        "cols": 1,
+        "color": "none",
+        "label": "TEM Analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "test",
+            "label": "test",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 110,
+        "wf_position": 0
+      },
+      "tom": {
+        "wf": true,
+        "key": "tom",
+        "cols": 1,
+        "label": "Tomograpy",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 130,
+        "wf_position": 0
+      },
+      "cutting": {
+        "wf": true,
+        "key": "cutting",
+        "cols": 2,
+        "color": "none",
+        "label": "cutting",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "instrument",
+            "label": "instrument",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "cutter",
+            "text_sub_fields": []
+          },
+          {
+            "type": "system-defined",
+            "field": "temperature",
+            "label": "temperature",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "temperature",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "parameters",
+            "label": "parameters",
+            "default": "",
+            "position": 3,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 20,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "glueing": {
+        "wf": true,
+        "key": "glueing",
+        "cols": 1,
+        "color": "none",
+        "label": "glueing",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "glue",
+            "label": "glue",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 60,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "grinding": {
+        "wf": true,
+        "key": "grinding",
+        "cols": 1,
+        "color": "none",
+        "label": "grinding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "grinder",
+            "label": "grinder",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 40,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "embedding": {
+        "wf": true,
+        "key": "embedding",
+        "cols": 1,
+        "color": "none",
+        "label": "embedding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "bed",
+            "label": "bed",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 30,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "polishing": {
+        "wf": true,
+        "key": "polishing",
+        "cols": 1,
+        "color": "none",
+        "label": "polishing",
+        "style": "panel_generic_heading",
+        "fields": [],
+        "position": 50,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sputtering": {
+        "wf": true,
+        "key": "sputtering",
+        "cols": 1,
+        "color": "none",
+        "label": "sputtering",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "number",
+            "label": "number",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 70,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sample_description": {
+        "wf": true,
+        "key": "sample_description",
+        "cols": 2,
+        "color": "none",
+        "label": "Sample description",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "name",
+            "label": "name",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "description": "",
+            "text_sub_fields": []
+          },
+          {
+            "type": "drag_sample",
+            "field": "sample",
+            "label": "sample",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "carrier",
+            "label": "carrier",
+            "default": "",
+            "position": 3,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "coating",
+            "label": "coating",
+            "default": "",
+            "position": 4,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "upload",
+            "field": "upl",
+            "label": "Upload Test",
+            "default": "",
+            "position": 5,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 10,
+        "condition": "",
+        "wf_position": 0
+      }
+    },
+    "select_options": {
+      "cutter": {
+        "desc": "cutter",
+        "options": [
+          {
+            "key": "cutter 1",
+            "label": "cutter 1"
+          },
+          {
+            "key": "cutter 2",
+            "label": "cutter 2"
+          },
+          {
+            "key": "cutter 3",
+            "label": "cutter 3"
+          }
+        ]
+      },
+      "material": {
+        "desc": "material",
+        "options": [
+          {
+            "key": "choice1",
+            "label": "choice1"
+          },
+          {
+            "key": "choice2",
+            "label": "choice2"
+          },
+          {
+            "key": "choice3",
+            "label": "choice3"
+          },
+          {
+            "key": "choice4",
+            "label": "choice4"
+          }
+        ]
+      }
+    }
+  },
+  "properties_release": {
+    "eln": {
+      "version": "1.0.0-alpha",
+      "base_revision": "2f089270de87751f5783b955227e7e5f118a2ae3",
+      "current_revision": "b69582da084ac07ffa084420614aa9fca6bff917\n"
+    },
+    "flow": {
+      "zoom": 0.8362463999140631,
+      "elements": [
+        {
+          "id": "1",
+          "data": {
+            "label": "Start"
+          },
+          "type": "input",
+          "position": {
+            "x": 144,
+            "y": -307
+          }
+        },
+        {
+          "id": "2",
+          "data": {
+            "label": "End"
+          },
+          "type": "output",
+          "position": {
+            "x": 338,
+            "y": 727
+          }
+        },
+        {
+          "id": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "data": {
+            "lKey": "sample_description",
+            "layer": {
+              "wf": true,
+              "key": "sample_description",
+              "cols": 2,
+              "color": "none",
+              "label": "Sample description",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "name",
+                  "label": "name",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "description": "",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "drag_sample",
+                  "field": "sample",
+                  "label": "sample",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "carrier",
+                  "label": "carrier",
+                  "default": "",
+                  "position": 3,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "coating",
+                  "label": "coating",
+                  "default": "",
+                  "position": 4,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "upload",
+                  "field": "upl",
+                  "label": "Upload Test",
+                  "default": "",
+                  "position": 5,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 10,
+              "condition": "",
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -36.6015625,
+            "y": -234.6796875
+          }
+        },
+        {
+          "id": "ce11c518-388d-480c-a53b-553917611ca5",
+          "data": {
+            "lKey": "cutting",
+            "layer": {
+              "wf": true,
+              "key": "cutting",
+              "cols": 2,
+              "color": "none",
+              "label": "cutting",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "instrument",
+                  "label": "instrument",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "cutter",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "system-defined",
+                  "field": "temperature",
+                  "label": "temperature",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "temperature",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "parameters",
+                  "label": "parameters",
+                  "default": "",
+                  "position": 3,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 20,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -207.6015625,
+            "y": -158.1796875
+          }
+        },
+        {
+          "id": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "data": {
+            "lKey": "embedding",
+            "layer": {
+              "wf": true,
+              "key": "embedding",
+              "cols": 1,
+              "color": "none",
+              "label": "embedding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "bed",
+                  "label": "bed",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 30,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -32.89381769289611,
+            "y": -79.60613306759811
+          }
+        },
+        {
+          "id": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "data": {
+            "lKey": "grinding",
+            "layer": {
+              "wf": true,
+              "key": "grinding",
+              "cols": 1,
+              "color": "none",
+              "label": "grinding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "grinder",
+                  "label": "grinder",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 40,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -306.0284989507844,
+            "y": -0.5119731543489934
+          }
+        },
+        {
+          "id": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "data": {
+            "lKey": "polishing",
+            "layer": {
+              "wf": true,
+              "key": "polishing",
+              "cols": 1,
+              "color": "none",
+              "label": "polishing",
+              "style": "panel_generic_heading",
+              "fields": [],
+              "position": 50,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -401.11904051454883,
+            "y": 80.65083772590361
+          }
+        },
+        {
+          "id": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "data": {
+            "lKey": "fib",
+            "layer": {
+              "wf": true,
+              "key": "fib",
+              "cols": 1,
+              "color": "none",
+              "label": "FIB/SEM",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "further_preparation",
+                  "label": "further_preparation",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 90,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -281.09837872342644,
+            "y": 155.5970356479918
+          }
+        },
+        {
+          "id": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "data": {
+            "lKey": "lam",
+            "layer": {
+              "wf": true,
+              "key": "lam",
+              "cols": 2,
+              "color": "none",
+              "label": "Lamella",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "material",
+                  "label": "material",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "material",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "dimensions",
+                  "label": "dimensions",
+                  "default": "",
+                  "position": 2,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 100,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -155.9046349425234,
+            "y": 240.00371909116052
+          }
+        },
+        {
+          "id": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "data": {
+            "lKey": "tem",
+            "layer": {
+              "wf": true,
+              "key": "tem",
+              "cols": 1,
+              "color": "none",
+              "label": "TEM Analysis",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "test",
+                  "label": "test",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 110,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -17.591921312557616,
+            "y": 317.5270989255687
+          }
+        },
+        {
+          "id": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "data": {
+            "lKey": "glueing",
+            "layer": {
+              "wf": true,
+              "key": "glueing",
+              "cols": 1,
+              "color": "none",
+              "label": "glueing",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "glue",
+                  "label": "glue",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 60,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 81.38698896370278,
+            "y": 396.6924438689314
+          }
+        },
+        {
+          "id": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "data": {
+            "lKey": "sputtering",
+            "layer": {
+              "wf": true,
+              "key": "sputtering",
+              "cols": 1,
+              "color": "none",
+              "label": "sputtering",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "number",
+                  "label": "number",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 70,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 182.32102511931498,
+            "y": 476.7444301129997
+          }
+        },
+        {
+          "id": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "data": {
+            "lKey": "ana",
+            "layer": {
+              "wf": true,
+              "key": "ana",
+              "cols": 1,
+              "label": "Analysis",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "result",
+                  "label": "result",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 120,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 332.2461044402706,
+            "y": 557.6684111445783
+          }
+        },
+        {
+          "id": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "data": {
+            "lKey": "tom",
+            "layer": {
+              "wf": true,
+              "key": "tom",
+              "cols": 1,
+              "label": "Tomograpy",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 130,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 177.0147791390658,
+            "y": 639.3720256024096
+          }
+        },
+        {
+          "id": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "data": {
+            "lKey": "edx",
+            "layer": {
+              "wf": true,
+              "key": "edx",
+              "cols": 1,
+              "label": "EDX",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 140,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 480.4533333559332,
+            "y": 640.4852786144578
+          }
+        },
+        {
+          "id": "reactflow__edge-1null-6d0fb717-3668-4445-95e7-bdb4bdec2778null",
+          "type": "default",
+          "label": "next",
+          "source": "1",
+          "target": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6d0fb717-3668-4445-95e7-bdb4bdec2778null-ce11c518-388d-480c-a53b-553917611ca5null",
+          "type": "default",
+          "label": "next",
+          "source": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "target": "ce11c518-388d-480c-a53b-553917611ca5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ce11c518-388d-480c-a53b-553917611ca5null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "ce11c518-388d-480c-a53b-553917611ca5",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull",
+          "type": "default",
+          "label": "next",
+          "source": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "target": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull-1dbe6342-bb12-45d6-ae7a-83447b54fca7null",
+          "type": "default",
+          "label": "next",
+          "source": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "target": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-1dbe6342-bb12-45d6-ae7a-83447b54fca7null-be288824-d101-4e75-97d6-bc3d591550b6null",
+          "type": "default",
+          "label": "next",
+          "source": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "target": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-2a5cdd29-4286-464c-9294-78cde4335bd4null",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-2a5cdd29-4286-464c-9294-78cde4335bd4null-a5bb45da-bd19-4586-90bd-07c0b0047be6null",
+          "type": "default",
+          "label": "next",
+          "source": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "target": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-a5bb45da-bd19-4586-90bd-07c0b0047be6null-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null",
+          "type": "default",
+          "label": "next",
+          "source": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "target": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null-2null",
+          "type": "default",
+          "label": "next",
+          "source": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull-2null",
+          "type": "default",
+          "label": "next",
+          "source": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        }
+      ],
+      "position": [655.9675473297244, 257.01753039207046]
+    },
+    "uuid": "a807b8db-5461-4df2-8944-16a6df0caa63",
+    "klass": "ElementKlass",
+    "layers": {
+      "ana": {
+        "wf": true,
+        "key": "ana",
+        "cols": 1,
+        "label": "Analysis",
+        "fields": [
+          {
+            "type": "text",
+            "field": "result",
+            "label": "result",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 120,
+        "wf_position": 0
+      },
+      "edx": {
+        "wf": true,
+        "key": "edx",
+        "cols": 1,
+        "label": "EDX",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 140,
+        "wf_position": 0
+      },
+      "fib": {
+        "wf": true,
+        "key": "fib",
+        "cols": 1,
+        "color": "none",
+        "label": "FIB/SEM",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "further_preparation",
+            "label": "further_preparation",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 90,
+        "wf_position": 0
+      },
+      "lam": {
+        "wf": true,
+        "key": "lam",
+        "cols": 2,
+        "color": "none",
+        "label": "Lamella",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "material",
+            "label": "material",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "material",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "dimensions",
+            "label": "dimensions",
+            "default": "",
+            "position": 2,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 100,
+        "wf_position": 0
+      },
+      "sem": {
+        "wf": true,
+        "key": "sem",
+        "cols": 1,
+        "color": "none",
+        "label": "SEM analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "time",
+            "label": "time",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 80,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "tem": {
+        "wf": true,
+        "key": "tem",
+        "cols": 1,
+        "color": "none",
+        "label": "TEM Analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "test",
+            "label": "test",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 110,
+        "wf_position": 0
+      },
+      "tom": {
+        "wf": true,
+        "key": "tom",
+        "cols": 1,
+        "label": "Tomograpy",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 130,
+        "wf_position": 0
+      },
+      "cutting": {
+        "wf": true,
+        "key": "cutting",
+        "cols": 2,
+        "color": "none",
+        "label": "cutting",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "instrument",
+            "label": "instrument",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "cutter",
+            "text_sub_fields": []
+          },
+          {
+            "type": "system-defined",
+            "field": "temperature",
+            "label": "temperature",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "temperature",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "parameters",
+            "label": "parameters",
+            "default": "",
+            "position": 3,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 20,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "glueing": {
+        "wf": true,
+        "key": "glueing",
+        "cols": 1,
+        "color": "none",
+        "label": "glueing",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "glue",
+            "label": "glue",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 60,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "grinding": {
+        "wf": true,
+        "key": "grinding",
+        "cols": 1,
+        "color": "none",
+        "label": "grinding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "grinder",
+            "label": "grinder",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 40,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "embedding": {
+        "wf": true,
+        "key": "embedding",
+        "cols": 1,
+        "color": "none",
+        "label": "embedding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "bed",
+            "label": "bed",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 30,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "polishing": {
+        "wf": true,
+        "key": "polishing",
+        "cols": 1,
+        "color": "none",
+        "label": "polishing",
+        "style": "panel_generic_heading",
+        "fields": [],
+        "position": 50,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sputtering": {
+        "wf": true,
+        "key": "sputtering",
+        "cols": 1,
+        "color": "none",
+        "label": "sputtering",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "number",
+            "label": "number",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 70,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sample_description": {
+        "wf": true,
+        "key": "sample_description",
+        "cols": 2,
+        "color": "none",
+        "label": "Sample description",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "name",
+            "label": "name",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "description": "",
+            "text_sub_fields": []
+          },
+          {
+            "type": "drag_sample",
+            "field": "sample",
+            "label": "sample",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "carrier",
+            "label": "carrier",
+            "default": "",
+            "position": 3,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "coating",
+            "label": "coating",
+            "default": "",
+            "position": 4,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "upload",
+            "field": "upl",
+            "label": "Upload Test",
+            "default": "",
+            "position": 5,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 10,
+        "condition": "",
+        "wf_position": 0
+      }
+    },
+    "select_options": {
+      "cutter": {
+        "desc": "cutter",
+        "options": [
+          {
+            "key": "cutter 1",
+            "label": "cutter 1"
+          },
+          {
+            "key": "cutter 2",
+            "label": "cutter 2"
+          },
+          {
+            "key": "cutter 3",
+            "label": "cutter 3"
+          }
+        ]
+      },
+      "material": {
+        "desc": "material",
+        "options": [
+          {
+            "key": "choice1",
+            "label": "choice1"
+          },
+          {
+            "key": "choice2",
+            "label": "choice2"
+          },
+          {
+            "key": "choice3",
+            "label": "choice3"
+          },
+          {
+            "key": "choice4",
+            "label": "choice4"
+          }
+        ]
+      }
+    }
+  },
+  "properties_template": {
+    "eln": {
+      "version": "1.0.0-alpha",
+      "base_revision": "2f089270de87751f5783b955227e7e5f118a2ae3",
+      "current_revision": "b69582da084ac07ffa084420614aa9fca6bff917\n"
+    },
+    "flow": {
+      "zoom": 0.8362463999140631,
+      "elements": [
+        {
+          "id": "1",
+          "data": {
+            "label": "Start"
+          },
+          "type": "input",
+          "position": {
+            "x": 144,
+            "y": -307
+          }
+        },
+        {
+          "id": "2",
+          "data": {
+            "label": "End"
+          },
+          "type": "output",
+          "position": {
+            "x": 338,
+            "y": 727
+          }
+        },
+        {
+          "id": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "data": {
+            "lKey": "sample_description",
+            "layer": {
+              "wf": true,
+              "key": "sample_description",
+              "cols": 2,
+              "color": "none",
+              "label": "Sample description",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "name",
+                  "label": "name",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "description": "",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "drag_sample",
+                  "field": "sample",
+                  "label": "sample",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "carrier",
+                  "label": "carrier",
+                  "default": "",
+                  "position": 3,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "checkbox",
+                  "field": "coating",
+                  "label": "coating",
+                  "default": "",
+                  "position": 4,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "upload",
+                  "field": "upl",
+                  "label": "Upload Test",
+                  "default": "",
+                  "position": 5,
+                  "required": false,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 10,
+              "condition": "",
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -36.6015625,
+            "y": -234.6796875
+          }
+        },
+        {
+          "id": "ce11c518-388d-480c-a53b-553917611ca5",
+          "data": {
+            "lKey": "cutting",
+            "layer": {
+              "wf": true,
+              "key": "cutting",
+              "cols": 2,
+              "color": "none",
+              "label": "cutting",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "instrument",
+                  "label": "instrument",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "cutter",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "system-defined",
+                  "field": "temperature",
+                  "label": "temperature",
+                  "default": "",
+                  "position": 2,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "temperature",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "parameters",
+                  "label": "parameters",
+                  "default": "",
+                  "position": 3,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 20,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -207.6015625,
+            "y": -158.1796875
+          }
+        },
+        {
+          "id": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "data": {
+            "lKey": "embedding",
+            "layer": {
+              "wf": true,
+              "key": "embedding",
+              "cols": 1,
+              "color": "none",
+              "label": "embedding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "bed",
+                  "label": "bed",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 30,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -32.89381769289611,
+            "y": -79.60613306759811
+          }
+        },
+        {
+          "id": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "data": {
+            "lKey": "grinding",
+            "layer": {
+              "wf": true,
+              "key": "grinding",
+              "cols": 1,
+              "color": "none",
+              "label": "grinding",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "grinder",
+                  "label": "grinder",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 40,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -306.0284989507844,
+            "y": -0.5119731543489934
+          }
+        },
+        {
+          "id": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "data": {
+            "lKey": "polishing",
+            "layer": {
+              "wf": true,
+              "key": "polishing",
+              "cols": 1,
+              "color": "none",
+              "label": "polishing",
+              "style": "panel_generic_heading",
+              "fields": [],
+              "position": 50,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -401.11904051454883,
+            "y": 80.65083772590361
+          }
+        },
+        {
+          "id": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "data": {
+            "lKey": "fib",
+            "layer": {
+              "wf": true,
+              "key": "fib",
+              "cols": 1,
+              "color": "none",
+              "label": "FIB/SEM",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "further_preparation",
+                  "label": "further_preparation",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 90,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -281.09837872342644,
+            "y": 155.5970356479918
+          }
+        },
+        {
+          "id": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "data": {
+            "lKey": "lam",
+            "layer": {
+              "wf": true,
+              "key": "lam",
+              "cols": 2,
+              "color": "none",
+              "label": "Lamella",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "select",
+                  "field": "material",
+                  "label": "material",
+                  "default": "",
+                  "position": 1,
+                  "required": false,
+                  "sub_fields": [],
+                  "option_layers": "material",
+                  "text_sub_fields": []
+                },
+                {
+                  "type": "text",
+                  "field": "dimensions",
+                  "label": "dimensions",
+                  "default": "",
+                  "position": 2,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 100,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -155.9046349425234,
+            "y": 240.00371909116052
+          }
+        },
+        {
+          "id": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "data": {
+            "lKey": "tem",
+            "layer": {
+              "wf": true,
+              "key": "tem",
+              "cols": 1,
+              "color": "none",
+              "label": "TEM Analysis",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "test",
+                  "label": "test",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 110,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": -17.591921312557616,
+            "y": 317.5270989255687
+          }
+        },
+        {
+          "id": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "data": {
+            "lKey": "glueing",
+            "layer": {
+              "wf": true,
+              "key": "glueing",
+              "cols": 1,
+              "color": "none",
+              "label": "glueing",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "glue",
+                  "label": "glue",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 60,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 81.38698896370278,
+            "y": 396.6924438689314
+          }
+        },
+        {
+          "id": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "data": {
+            "lKey": "sputtering",
+            "layer": {
+              "wf": true,
+              "key": "sputtering",
+              "cols": 1,
+              "color": "none",
+              "label": "sputtering",
+              "style": "panel_generic_heading",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "number",
+                  "label": "number",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 70,
+              "cond_fields": [],
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 182.32102511931498,
+            "y": 476.7444301129997
+          }
+        },
+        {
+          "id": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "data": {
+            "lKey": "ana",
+            "layer": {
+              "wf": true,
+              "key": "ana",
+              "cols": 1,
+              "label": "Analysis",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "result",
+                  "label": "result",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 120,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 332.2461044402706,
+            "y": 557.6684111445783
+          }
+        },
+        {
+          "id": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "data": {
+            "lKey": "tom",
+            "layer": {
+              "wf": true,
+              "key": "tom",
+              "cols": 1,
+              "label": "Tomograpy",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 130,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 177.0147791390658,
+            "y": 639.3720256024096
+          }
+        },
+        {
+          "id": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "data": {
+            "lKey": "edx",
+            "layer": {
+              "wf": true,
+              "key": "edx",
+              "cols": 1,
+              "label": "EDX",
+              "fields": [
+                {
+                  "type": "text",
+                  "field": "record",
+                  "label": "record",
+                  "default": "",
+                  "position": 1,
+                  "sub_fields": [],
+                  "text_sub_fields": []
+                }
+              ],
+              "position": 140,
+              "wf_position": 0
+            }
+          },
+          "type": "default",
+          "position": {
+            "x": 480.4533333559332,
+            "y": 640.4852786144578
+          }
+        },
+        {
+          "id": "reactflow__edge-1null-6d0fb717-3668-4445-95e7-bdb4bdec2778null",
+          "type": "default",
+          "label": "next",
+          "source": "1",
+          "target": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6d0fb717-3668-4445-95e7-bdb4bdec2778null-ce11c518-388d-480c-a53b-553917611ca5null",
+          "type": "default",
+          "label": "next",
+          "source": "6d0fb717-3668-4445-95e7-bdb4bdec2778",
+          "target": "ce11c518-388d-480c-a53b-553917611ca5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ce11c518-388d-480c-a53b-553917611ca5null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "ce11c518-388d-480c-a53b-553917611ca5",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-8891c5ab-22b7-4cde-b0cb-c45c3e0b800dnull-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull",
+          "type": "default",
+          "label": "next",
+          "source": "8891c5ab-22b7-4cde-b0cb-c45c3e0b800d",
+          "target": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-891342d7-ce31-4f9f-8d3a-88ec8863ffeenull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "891342d7-ce31-4f9f-8d3a-88ec8863ffee",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull-1dbe6342-bb12-45d6-ae7a-83447b54fca7null",
+          "type": "default",
+          "label": "next",
+          "source": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "target": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-04d397d6-25a7-4de0-b95d-d1e0c431001enull-cfa415f0-3504-4bf5-ae8f-7758a4da92acnull",
+          "type": "default",
+          "label": "next",
+          "source": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "target": "cfa415f0-3504-4bf5-ae8f-7758a4da92ac",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-1dbe6342-bb12-45d6-ae7a-83447b54fca7null-be288824-d101-4e75-97d6-bc3d591550b6null",
+          "type": "default",
+          "label": "next",
+          "source": "1dbe6342-bb12-45d6-ae7a-83447b54fca7",
+          "target": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-2a5cdd29-4286-464c-9294-78cde4335bd4null",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-2a5cdd29-4286-464c-9294-78cde4335bd4null-a5bb45da-bd19-4586-90bd-07c0b0047be6null",
+          "type": "default",
+          "label": "next",
+          "source": "2a5cdd29-4286-464c-9294-78cde4335bd4",
+          "target": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-be288824-d101-4e75-97d6-bc3d591550b6null-04d397d6-25a7-4de0-b95d-d1e0c431001enull",
+          "type": "default",
+          "label": "next",
+          "source": "be288824-d101-4e75-97d6-bc3d591550b6",
+          "target": "04d397d6-25a7-4de0-b95d-d1e0c431001e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-a5bb45da-bd19-4586-90bd-07c0b0047be6null-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null",
+          "type": "default",
+          "label": "next",
+          "source": "a5bb45da-bd19-4586-90bd-07c0b0047be6",
+          "target": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-ea5fc4f8-3488-4a90-9ed8-7b86454bd249null-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null",
+          "type": "default",
+          "label": "next",
+          "source": "ea5fc4f8-3488-4a90-9ed8-7b86454bd249",
+          "target": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-5cd074ad-d538-4ccf-ab46-dead9cf16bb5null-2null",
+          "type": "default",
+          "label": "next",
+          "source": "5cd074ad-d538-4ccf-ab46-dead9cf16bb5",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        },
+        {
+          "id": "reactflow__edge-6eb35a58-566c-47f7-bfe7-c9ab4b70819enull-2null",
+          "type": "default",
+          "label": "next",
+          "source": "6eb35a58-566c-47f7-bfe7-c9ab4b70819e",
+          "target": "2",
+          "animated": true,
+          "sourceHandle": null,
+          "targetHandle": null,
+          "arrowHeadType": "arrowclosed"
+        }
+      ],
+      "position": [655.9675473297244, 257.01753039207046]
+    },
+    "uuid": "a807b8db-5461-4df2-8944-16a6df0caa63",
+    "klass": "ElementKlass",
+    "layers": {
+      "ana": {
+        "wf": true,
+        "key": "ana",
+        "cols": 1,
+        "label": "Analysis",
+        "fields": [
+          {
+            "type": "text",
+            "field": "result",
+            "label": "result",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 120,
+        "wf_position": 0
+      },
+      "edx": {
+        "wf": true,
+        "key": "edx",
+        "cols": 1,
+        "label": "EDX",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 140,
+        "wf_position": 0
+      },
+      "fib": {
+        "wf": true,
+        "key": "fib",
+        "cols": 1,
+        "color": "none",
+        "label": "FIB/SEM",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "further_preparation",
+            "label": "further_preparation",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 90,
+        "wf_position": 0
+      },
+      "lam": {
+        "wf": true,
+        "key": "lam",
+        "cols": 2,
+        "color": "none",
+        "label": "Lamella",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "material",
+            "label": "material",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "material",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "dimensions",
+            "label": "dimensions",
+            "default": "",
+            "position": 2,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 100,
+        "wf_position": 0
+      },
+      "sem": {
+        "wf": true,
+        "key": "sem",
+        "cols": 1,
+        "color": "none",
+        "label": "SEM analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "time",
+            "label": "time",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 80,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "tem": {
+        "wf": true,
+        "key": "tem",
+        "cols": 1,
+        "color": "none",
+        "label": "TEM Analysis",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "test",
+            "label": "test",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 110,
+        "wf_position": 0
+      },
+      "tom": {
+        "wf": true,
+        "key": "tom",
+        "cols": 1,
+        "label": "Tomograpy",
+        "fields": [
+          {
+            "type": "text",
+            "field": "record",
+            "label": "record",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 130,
+        "wf_position": 0
+      },
+      "cutting": {
+        "wf": true,
+        "key": "cutting",
+        "cols": 2,
+        "color": "none",
+        "label": "cutting",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "select",
+            "field": "instrument",
+            "label": "instrument",
+            "default": "",
+            "position": 1,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "cutter",
+            "text_sub_fields": []
+          },
+          {
+            "type": "system-defined",
+            "field": "temperature",
+            "label": "temperature",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "option_layers": "temperature",
+            "text_sub_fields": []
+          },
+          {
+            "type": "text",
+            "field": "parameters",
+            "label": "parameters",
+            "default": "",
+            "position": 3,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 20,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "glueing": {
+        "wf": true,
+        "key": "glueing",
+        "cols": 1,
+        "color": "none",
+        "label": "glueing",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "glue",
+            "label": "glue",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 60,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "grinding": {
+        "wf": true,
+        "key": "grinding",
+        "cols": 1,
+        "color": "none",
+        "label": "grinding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "grinder",
+            "label": "grinder",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 40,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "embedding": {
+        "wf": true,
+        "key": "embedding",
+        "cols": 1,
+        "color": "none",
+        "label": "embedding",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "bed",
+            "label": "bed",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 30,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "polishing": {
+        "wf": true,
+        "key": "polishing",
+        "cols": 1,
+        "color": "none",
+        "label": "polishing",
+        "style": "panel_generic_heading",
+        "fields": [],
+        "position": 50,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sputtering": {
+        "wf": true,
+        "key": "sputtering",
+        "cols": 1,
+        "color": "none",
+        "label": "sputtering",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "number",
+            "label": "number",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 70,
+        "cond_fields": [],
+        "wf_position": 0
+      },
+      "sample_description": {
+        "wf": true,
+        "key": "sample_description",
+        "cols": 2,
+        "color": "none",
+        "label": "Sample description",
+        "style": "panel_generic_heading",
+        "fields": [
+          {
+            "type": "text",
+            "field": "name",
+            "label": "name",
+            "default": "",
+            "position": 1,
+            "sub_fields": [],
+            "description": "",
+            "text_sub_fields": []
+          },
+          {
+            "type": "drag_sample",
+            "field": "sample",
+            "label": "sample",
+            "default": "",
+            "position": 2,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "carrier",
+            "label": "carrier",
+            "default": "",
+            "position": 3,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "checkbox",
+            "field": "coating",
+            "label": "coating",
+            "default": "",
+            "position": 4,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          },
+          {
+            "type": "upload",
+            "field": "upl",
+            "label": "Upload Test",
+            "default": "",
+            "position": 5,
+            "required": false,
+            "sub_fields": [],
+            "text_sub_fields": []
+          }
+        ],
+        "position": 10,
+        "condition": "",
+        "wf_position": 0
+      }
+    },
+    "select_options": {
+      "cutter": {
+        "desc": "cutter",
+        "options": [
+          {
+            "key": "cutter 1",
+            "label": "cutter 1"
+          },
+          {
+            "key": "cutter 2",
+            "label": "cutter 2"
+          },
+          {
+            "key": "cutter 3",
+            "label": "cutter 3"
+          }
+        ]
+      },
+      "material": {
+        "desc": "material",
+        "options": [
+          {
+            "key": "choice1",
+            "label": "choice1"
+          },
+          {
+            "key": "choice2",
+            "label": "choice2"
+          },
+          {
+            "key": "choice3",
+            "label": "choice3"
+          },
+          {
+            "key": "choice4",
+            "label": "choice4"
+          }
+        ]
+      }
+    }
+  }
+}

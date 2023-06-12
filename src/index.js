@@ -1,9 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import GenericMain from './GenericMain';
 
-const AppWithDnD = DragDropContext(HTML5Backend)(GenericMain);
+const AppWithDnD = () => (
+  <DndProvider backend={HTML5Backend}>
+    <GenericMain />
+  </DndProvider>
+);
 
-ReactDOM.render(<AppWithDnD />, document.getElementById('app'));
+const rootElement = document.getElementById('app');
+
+const render = () => {
+  ReactDOM.render(<AppWithDnD />, rootElement);
+};
+
+// Enable React Refresh
+if (module.hot) {
+  module.hot.accept('./GenericMain', render);
+}
+
+render();

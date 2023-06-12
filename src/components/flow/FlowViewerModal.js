@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Panel } from 'react-bootstrap';
@@ -9,10 +10,16 @@ import FlowView from './FlowView';
 const FlowViewerModal = props => {
   const { show, data, fnHide } = props;
   if (!show) return null;
-  const { properties_release, properties, shortLabel } = data;
-  if (Object.keys(properties_release).length < 1) return null;
-  if ((Object.keys(properties_release.flow || {}).length < 1)
-  || ((properties_release.flow.elements || []).length < 3)) {
+  const {
+    properties_release: propertiesRelease,
+    properties,
+    shortLabel,
+  } = data;
+  if (Object.keys(propertiesRelease).length < 1) return null;
+  if (
+    Object.keys(propertiesRelease.flow || {}).length < 1 ||
+    (propertiesRelease.flow.elements || []).length < 3
+  ) {
     return (
       <Modal show={show} bsSize="small" onHide={fnHide}>
         <Modal.Header closeButton>
@@ -29,11 +36,23 @@ const FlowViewerModal = props => {
         <Panel bsStyle="primary">
           <Panel.Heading className="layer_header">
             {`${shortLabel} workflow`}
-            <Button bsStyle="danger" bsSize="xsmall" className="gu_button_right" onClick={fnHide}><FontAwesomeIcon icon={faTimes} /></Button>
+            <Button
+              bsStyle="danger"
+              bsSize="xsmall"
+              className="gu_button_right"
+              onClick={fnHide}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+            </Button>
           </Panel.Heading>
           <Panel.Body>
             <div className="body_bg">
-              <div className="body_canvas"><FlowView properties={properties} properties_release={properties_release} /></div>
+              <div className="body_canvas">
+                <FlowView
+                  properties={properties}
+                  propertiesRelease={propertiesRelease}
+                />
+              </div>
             </div>
           </Panel.Body>
         </Panel>
@@ -45,9 +64,11 @@ const FlowViewerModal = props => {
 FlowViewerModal.propTypes = {
   show: PropTypes.bool.isRequired,
   data: PropTypes.shape({
-    properties_release: PropTypes.object, properties: PropTypes.object, shortLabel: PropTypes.string
+    properties_release: PropTypes.object,
+    properties: PropTypes.object,
+    shortLabel: PropTypes.string,
   }).isRequired,
-  fnHide: PropTypes.func.isRequired
+  fnHide: PropTypes.func.isRequired,
 };
 
 export default FlowViewerModal;

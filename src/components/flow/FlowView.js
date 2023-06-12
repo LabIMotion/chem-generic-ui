@@ -1,49 +1,53 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/forbid-prop-types */
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import ReactFlow, { ReactFlowProvider, Controls, ConnectionMode } from 'react-flow-renderer';
+import ReactFlow, {
+  Controls,
+  // ConnectionMode,
+  ReactFlowProvider,
+  useNodesState,
+  useEdgesState,
+} from 'reactflow';
+// import ExampleFlow from './ExampleFlow';
 import LayerNode from './LayerNode';
-import { conFlowEls, flowDefault } from '../tools/utils';
+import { buildFlowElements } from '../../utils/flow/build-flow-elements';
 
-const FlowView = (props) => {
-  const { properties, properties_release } = props;
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [elements, setElements] = useState([]);
-  const onLoad = _reactFlowInstance => {
-    setReactFlowInstance(_reactFlowInstance);
-  };
+const nodeTypes = {
+  selectorNode: LayerNode,
+};
 
-  useEffect(() => {
-    let flowEls = conFlowEls(props);
-    flowEls = flowEls.length > 0 ? flowEls : flowDefault;
-    // flowEls = decorateNode(flowEls, properties.layers || {});
-    setElements(flowEls);
-  }, [properties, properties_release]);
+const FlowView = props => {
+  const { properties, propertiesRelease } = props;
+  const reactFlowWrapper = useRef(null);
+  const [, setReactFlowInstance] = useState(null);
+  const [elements, setElements] = useState(() => buildFlowElements(props));
+  const [nodes, , onNodesChange] = useNodesState(elements.nodes);
+  const [edges, , onEdgesChange] = useEdgesState(elements.edges || []);
 
   useEffect(() => {
-    let flowEls = conFlowEls(props);
-    flowEls = flowEls.length > 0 ? flowEls : flowDefault;
-    // flowEls = decorateNode(flowEls, properties.layers || {});
-    setElements(flowEls);
-  }, []);
-
-  useEffect(() => {
-    if (reactFlowInstance && elements.length) {
-      reactFlowInstance.fitView();
-    }
-  }, [reactFlowInstance, elements.length]);
+    setElements(buildFlowElements(props));
+  }, [properties, propertiesRelease]);
 
   return (
-    <ReactFlowProvider>
-      <ReactFlow
-        elements={elements}
-        onLoad={onLoad}
-        connectionMode={ConnectionMode.Loose}
-        nodeTypes={{ selectorNode: LayerNode }}
-        deleteKeyCode={46}
-      >
-        <Controls />
-      </ReactFlow>
-    </ReactFlowProvider>
+    // <ExampleFlow flow={elements} propertiesTemplate={propertiesRelease} />
+    <div className="dndflow">
+      <ReactFlowProvider>
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            // connectionMode={ConnectionMode.Loose}
+            edges={edges || []}
+            fitView
+            // nodeTypes={nodeTypes}
+            nodes={nodes}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onInit={setReactFlowInstance}
+          >
+            <Controls />
+          </ReactFlow>
+        </div>
+      </ReactFlowProvider>
+    </div>
   );
 };
 

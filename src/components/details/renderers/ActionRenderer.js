@@ -1,26 +1,32 @@
 import React from 'react';
-import ButtonTooltip from '../../fields/ButtonTooltip';
+import AttrEditBtn from '../../designer/AttrEditBtn';
+import AttrCopyBtn from '../../designer/AttrCopyBtn';
 
-const ActionRenderer = (params) => {
-  const {
-    data, fnCopy, fnEdit, node
-  } = params;
+const ActionRenderer = params => {
+  const { data, fnCopy, fnDelete, fnEdit, klasses, node } = params;
 
-  const onCopy = (e) => {
+  const onSelect = () => {
     node.setSelected(true, true);
-    fnCopy(e);
-  };
-
-  const onEdit = (e) => {
-    node.setSelected(true, true);
-    fnEdit(e);
   };
 
   return (
     <span>
-      <ButtonTooltip tip="copy to ..." fa="fa fa-clone" element={data} fnClick={onCopy} />
+      <AttrCopyBtn
+        data={data}
+        fnSelect={onSelect}
+        fnCopy={fnCopy}
+        genericType="Element"
+        klasses={klasses || []}
+      />
       &nbsp;
-      <ButtonTooltip tip="edit attributes" element={data} fnClick={onEdit} />
+      <AttrEditBtn
+        data={data}
+        fnSelect={onSelect}
+        fnDelete={fnDelete}
+        fnEdit={fnEdit}
+        genericType="Element"
+        klasses={klasses || []}
+      />
     </span>
   );
 };

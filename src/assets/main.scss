@@ -1,14 +1,7 @@
-$color-editable: #fff;
-$color-readonly: #ddd;
-$color-required: lightyellow;
-$color-invalid: lightcoral;
-$color-can-drop: lightgray;
-$color-is-over: #31708f;
-$colo-bs-primary: #337ab7;
-$color-bs-warning: #f0ad4e;
-$colo-selected-border: #0dcaf0;
-$color-default: #777;
-$color-bs-info: #5bc0de;
+@use "color" as *;
+@use 'flow-default';
+@use 'flow';
+@use 'modal';
 
 .gu_btn_text_success {
   color: green;
@@ -45,12 +38,12 @@ $color-bs-info: #5bc0de;
 .gu_button_right {
   float: right;
   right: 0px;
-  z-index: 1;
+  z-index: 0;
   margin-left: 2px;
 }
 
 .bg-bs-primary {
-  background-color: $colo-bs-primary !important;
+  background-color: $color-bs-primary !important;
 }
 
 .bg-bs-warning {
@@ -335,7 +328,7 @@ $color-bs-info: #5bc0de;
 }
 
 .generic_block_select {
-  // border-color: $colo-selected-border;
+  // border-color: $color-selected-border;
   border-width: medium;
   border-style: groove;
 }
@@ -386,7 +379,7 @@ $color-bs-info: #5bc0de;
       }
     }
     .s-img:hover {
-      border: 1px solid $colo-selected-border;
+      border: 1px solid $color-selected-border;
     }
     .data {
       font-size: unset;
@@ -473,7 +466,7 @@ $color-bs-info: #5bc0de;
 .generic_layer_modal {
   > .layer_header {
     background-color: white;
-    color: $colo-bs-primary;
+    color: $color-bs-primary;
     font-size: 20px;
   }
   // > .panel-body {
@@ -483,11 +476,11 @@ $color-bs-info: #5bc0de;
 
 .generic_layer_column {
   @include generic_grid_cell;
-  border: 1px solid $colo-bs-primary;
+  border: 1px solid $color-bs-primary;
   background-color: white;
   margin: 5px;
   padding: 10px;
-  color: $colo-bs-primary;
+  color: $color-bs-primary;
   border-radius: 4px;
 }
 
@@ -510,13 +503,14 @@ $color-bs-info: #5bc0de;
 }
 
 .generic_wf_modal > div:first-child {
-  height: 85vh;
+  height: 100vh;
   width: 100%;
 }
 
 .flow_view_draggable {
   z-index: 100;
-  position: absolute;
+  position: relative;
+  width: 50vw;
   top: 12%;
   left: 10%;
   .panel-body {
@@ -530,7 +524,7 @@ $color-bs-info: #5bc0de;
         height: 70vh;
         width: 40vw;
         min-height: 250px;
-        min-width: 300px;
+        min-width: 900px;
         max-width: 1600px;
         max-height: 840px;
       }

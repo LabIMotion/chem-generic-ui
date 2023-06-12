@@ -1,129 +1,177 @@
-/* eslint-disable no-alert */
-/* eslint-disable no-param-reassign */
 /* eslint-disable react/forbid-prop-types */
-import React, {
-  useState, useRef, useCallback, useEffect
-} from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
-  removeElements,
+  useNodesState,
+  useEdgesState,
   Controls,
   ConnectionMode,
-} from 'react-flow-renderer';
+  MarkerType,
+} from 'reactflow';
 import { Button } from 'react-bootstrap';
-import { v4 as uuid } from 'uuid';
+import { useDrop } from 'react-dnd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+
 import DnDSidebar from './DnDSidebar';
 import LayerNode from './LayerNode';
-import { conFlowEls, storeFlow, flowDefault } from '../tools/utils';
+import {
+  buildDefaultNode,
+  buildFlowElements,
+} from '../../utils/flow/build-flow-elements';
 
-const DnDFlow = (props) => {
+const nodeTypes = { selectorNode: LayerNode };
+
+const DnDFlow = props => {
   const { element, fnSave } = props;
+  const propertiesTemplate = element.properties_template;
   const reactFlowWrapper = useRef(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState();
-  const [elements, setElements] = useState([]);
-  const onConnect = params => setElements(els => addEdge({
-    ...params, animated: true, arrowHeadType: 'arrowclosed', label: 'next'
-  }, els));
-  const onElementsRemove = (elementsToRemove) => {
-    const rms = elementsToRemove.filter(e => ['input', 'output'].includes(e.type));
-    if (rms.length > 0) {
-      alert(`[${rms[0].data.label}] can not be removed.`);
-    } else {
-      setElements(els => removeElements(elementsToRemove, els));
-    }
-  };
+  const [elements, setElements] = useState(() =>
+    buildFlowElements({
+      properties: propertiesTemplate,
+      propertiesRelease: propertiesTemplate,
+    })
+  );
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(elements.nodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(elements.edges);
 
-  const onLoad = (_reactFlowInstance) => {
-    setReactFlowInstance(_reactFlowInstance);
-  };
-
-  const onDragOver = (ev) => {
-    ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'move';
-  };
-
-  const onDrop = (ev) => {
-    ev.preventDefault();
-    if (reactFlowInstance) {
-      const node = ev.dataTransfer.getData('application/generic');
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const position = reactFlowInstance.project({
-        x: ev.clientX - reactFlowBounds.left,
-        y: ev.clientY - reactFlowBounds.top,
-      });
-      const layer = element.properties_template.layers[node];
-      const ll = (
-        <div>
-          <div className="gu_flow_dnd_sidebar"><b>{layer.label}</b></div>
-          <div>
-            (
-            {layer.key}
-            )
-          </div>
-        </div>
-      );
-      const newNode = {
-        id: uuid(), type: 'default', position, data: { label: ll, lKey: layer.key }
-      };
-      setElements(es => es.concat(newNode));
-    }
-  };
+  const onConnect = useCallback(
+    params =>
+      setEdges(eds =>
+        addEdge(
+          {
+            ...params,
+            animated: true,
+            markerEnd: { type: MarkerType.ArrowClosed },
+            label: 'next',
+          },
+          eds
+        )
+      ),
+    []
+  );
 
   const onSave = useCallback(() => {
+    console.log('onSave');
     if (reactFlowInstance) {
       const flowObject = reactFlowInstance.toObject();
-      flowObject.elements = storeFlow(flowObject);
+      console.log(flowObject);
+      // flowObject.elements = storeFlow(flowObject);
       fnSave({ flowObject });
     }
   }, [reactFlowInstance]);
 
-  useEffect(() => {
-    let flowEls = conFlowEls({ properties: {}, properties_release: element.properties_template });
-    flowEls = flowEls.length > 0 ? flowEls : flowDefault;
-    setElements(flowEls);
-  }, [element.id]);
+  const addNode = (node, monitor) => {
+    if (reactFlowInstance) {
+      const clientOffset = monitor.getClientOffset();
+      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+      let position = {
+        x: clientOffset.x - reactFlowBounds.left,
+        y: clientOffset.y - reactFlowBounds.top,
+      };
+      position = reactFlowInstance.project(position);
+      const newNode = buildDefaultNode({
+        layer: node,
+        position,
+        // position: {
+        //   // x: clientOffset.x - reactFlowBounds.left + 30,
+        //   // y: clientOffset.y - reactFlowBounds.top - 230,
+        // },
+      });
+      setNodes(nds => nds.concat(newNode));
+    }
+  };
+
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'lim-dnd-type',
+    drop: (item, monitor) => {
+      addNode(item, monitor);
+      // if (reactFlowInstance) {
+      //   const clientOffset = monitor.getClientOffset();
+      //   const reactFlowBounds =
+      //     reactFlowWrapper.current.getBoundingClientRect();
+      //   const sidebarBounds = reactSidebar.current.getBoundingClientRect();
+      //   console.log('reactFlowBounds', reactFlowBounds);
+      //   console.log('reactSidebarBounds', sidebarBounds);
+      //   console.log('clientOffset', clientOffset);
+
+      //   let position = {
+      //     x: clientOffset.x - reactFlowBounds.left, // - sidebarBounds.left,
+      //     y: clientOffset.y - reactFlowBounds.top, // - sidebarBounds.top,
+      //   };
+      //   console.log('position 1', position);
+
+      //   position = reactFlowInstance.project(position);
+
+      //   console.log('position 2', position);
+
+      //   const newNode = buildDefaultNode({
+      //     layer: item,
+      //     position,
+      //     // position: {
+      //     //   x: -32, // 0, // clientOffset.x, // - reactFlowBounds.left - sidebarBounds.left,
+      //     //   y: -79, // 0, // clientOffset.y, // - reactFlowBounds.top - sidebarBounds.top,
+      //     //   // x: clientOffset.x - reactFlowBounds.left + 30,
+      //     //   // y: clientOffset.y - reactFlowBounds.top - 230,
+      //     // },
+      //   });
+      //   setNodes(nds => nds.concat(newNode));
+      // }
+    },
+    collect: monitor => {
+      return { isOver: monitor.isOver(), canDrop: monitor.canDrop() };
+    },
+  });
 
   useEffect(() => {
-    if (reactFlowInstance && elements.length) {
-      reactFlowInstance.fitView();
-    }
-  }, [reactFlowInstance, element.id]);
+    setElements(
+      buildFlowElements({
+        properties: propertiesTemplate,
+        propertiesRelease: propertiesTemplate,
+      })
+    );
+  }, [propertiesTemplate]);
 
   return (
-    <div className="dndflow">
-      <ReactFlowProvider>
-        <div className="reactflow-wrapper" ref={reactFlowWrapper} style={{ width: '100%' }}>
-          <ReactFlow
-            elements={elements}
-            onConnect={onConnect}
-            onElementsRemove={onElementsRemove}
-            onLoad={onLoad}
-            connectionMode={ConnectionMode.Loose}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            nodeTypes={{ selectorNode: LayerNode }}
-            deleteKeyCode={46}
-          >
-            <div className="save__controls">
-              <Button bsSize="xs" onClick={onSave}>
-                Save to draft&nbsp;
-                <i className="fa fa-floppy-o" aria-hidden="true" />
-              </Button>
-            </div>
-            <Controls />
-          </ReactFlow>
-        </div>
-        <DnDSidebar element={element} />
-      </ReactFlowProvider>
-    </div>
+    <>
+      <div ref={drop} className="dndflow">
+        <ReactFlowProvider>
+          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onConnect={onConnect}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onInit={setReactFlowInstance}
+              connectionMode={ConnectionMode.Loose}
+              nodeTypes={nodeTypes}
+              deleteKeyCode={['Delete', 'Backspace']}
+              fitView
+            >
+              <div className="save__controls">
+                <Button bsSize="xs" onClick={onSave}>
+                  Save to draft&nbsp;
+                  <FontAwesomeIcon icon={faFloppyDisk} />
+                </Button>
+              </div>
+              <Controls />
+            </ReactFlow>
+          </div>
+          <DnDSidebar element={element} />
+        </ReactFlowProvider>
+      </div>
+      {/* <DnDSidebar element={element} /> */}
+    </>
   );
 };
 
 DnDFlow.propTypes = {
   element: PropTypes.object.isRequired,
-  fnSave: PropTypes.func.isRequired
+  fnSave: PropTypes.func.isRequired,
 };
 
 export default DnDFlow;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // use for dnd function, cannot exist with others at the same time
 // import { DragDropContext } from 'react-dnd';
-// import HTML5Backend from 'react-dnd-html5-backend';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
 import GenInterface from '../components/details/GenInterface';
 
 class SimuSearch extends Component {
@@ -12,8 +12,14 @@ class SimuSearch extends Component {
   }
 
   componentDidMount() {
-    fetch('search_pro.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(response => response.json()).then(json => {
+    fetch('search_pro.json', {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(json => {
         console.log(json);
         this.setState({ generic: json });
       })
@@ -42,9 +48,7 @@ class SimuSearch extends Component {
     return (
       <div>
         <h2>Interface - SegmentDetails</h2>
-        <div>
-          {layersLayout}
-        </div>
+        <div>{layersLayout}</div>
       </div>
     );
   }

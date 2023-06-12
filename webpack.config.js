@@ -52,7 +52,12 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    fallback: { util: false, fs: false }
+    fallback: {
+      util: false,
+      fs: false,
+      'react/jsx-runtime': 'react/jsx-runtime.js',
+      'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
+    },
   },
   externals: {
     // Don't bundle react or react-dom
@@ -60,13 +65,13 @@ module.exports = {
       commonjs: 'react',
       commonjs2: 'react',
       amd: 'React',
-      root: 'React'
+      root: 'React',
     },
     'react-dom': {
       commonjs: 'react-dom',
       commonjs2: 'react-dom',
       amd: 'ReactDOM',
-      root: 'ReactDOM'
+      root: 'ReactDOM',
     },
     lodash: {
       commonjs: 'lodash',
@@ -74,11 +79,17 @@ module.exports = {
       amd: 'lodash',
       root: '_', // indicates global variable
     },
-    'react-flow-renderer': {
-      commonjs: 'react-flow-renderer',
-      commonjs2: 'react-flow-renderer',
-      amd: 'react-flow-renderer',
-      root: 'react-flow-renderer', // indicates global variable
+    reactflow: {
+      commonjs: 'reactflow',
+      commonjs2: 'reactflow',
+      amd: 'reactflow',
+      root: 'reactflow', // indicates global variable
+    },
+    'ag-grid-community': {
+      commonjs: 'ag-grid-community',
+      commonjs2: 'ag-grid-community',
+      amd: 'ag-grid-community',
+      root: 'ag-grid-community', // indicates global variable
     },
     'ag-grid-react': {
       commonjs: 'ag-grid-react',
@@ -98,12 +109,12 @@ module.exports = {
       amd: 'react-bootstrap',
       root: 'react-bootstrap', // indicates global variable
     },
-    'react-dnd': {
-      commonjs: 'react-dnd',
-      commonjs2: 'react-dnd',
-      amd: 'react-dnd',
-      root: 'react-dnd',
-    },
+    // 'react-dnd': {
+    //   commonjs: 'react-dnd',
+    //   commonjs2: 'react-dnd',
+    //   amd: 'react-dnd',
+    //   root: 'react-dnd',
+    // },
     'react-datepicker': {
       commonjs: 'react-datepicker',
       commonjs2: 'react-datepicker',
@@ -166,9 +177,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+            presets: ['@babel/preset-env', '@babel/preset-react'],
+          },
+        },
       },
       {
         test: /\.(scss|css)$/i,
@@ -181,17 +192,19 @@ module.exports = {
           // Compiles Sass to CSS
           'sass-loader',
         ],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') })
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
   ],
   performance: {
     hints: 'warning',
     maxEntrypointSize: 512000,
-    maxAssetSize: 512000
-  }
+    maxAssetSize: 512000,
+  },
   // plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
   // plugins: [new webpack.HotModuleReplacementPlugin()] // no need, https://stackoverflow.com/questions/69102254/webpack-options-has-an-unknown-property-hotonly-invalid-options-object-dev-s
 };

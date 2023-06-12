@@ -671,7 +671,6 @@ ElementField.propTypes = {
     type: PropTypes.string,
     label: PropTypes.string,
   }).isRequired,
-  onDrop: PropTypes.func.isRequired,
   onMove: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,

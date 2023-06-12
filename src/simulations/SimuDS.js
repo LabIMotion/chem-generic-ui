@@ -1,29 +1,16 @@
 import React, { Component } from 'react';
 import GenericDSDetails from '../components/details/GenDSDetails';
+import ds from './_ds_details.json';
+import dsKlass from './_ds_klass.json';
 
 class SimuDS extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      genericDS: {}, klass: {}
+      genericDS: ds,
+      klass: dsKlass,
     };
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  componentDidMount() {
-    fetch('ds_details.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(response => response.json()).then(json => {
-        fetch('ds_klass.json', { headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-          .then(response => response.json()).then(kjson => {
-            this.setState({ genericDS: json, klass: kjson });
-          })
-          .catch(errorMessage => {
-            console.log(errorMessage);
-          });
-      })
-      .catch(errorMessage => {
-        console.log(errorMessage);
-      });
   }
 
   handleChange(newObj) {

@@ -17,22 +17,29 @@ class GenGrid extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columnDefs: props.columnDefs
+      columnDefs: props.columnDefs,
     };
   }
 
   componentDidUpdate(prevProps) {
     const { gridData, pageSize, theme } = this.props;
-    const updated = theme !== prevProps.theme || pageSize !== prevProps.pageSize;
+    const updated =
+      theme !== prevProps.theme ||
+      pageSize !== prevProps.pageSize ||
+      gridData.length !== prevProps.gridData.length;
     if (gridData !== prevProps.gridData || updated) {
       if (this.gridApi) {
         const selectedRows = this.gridApi.getSelectedRows();
         const selected = selectedRows[0];
-        const changes = differenceWith(toPairs(gridData), toPairs(prevProps.gridData), isEqual);
+        const changes = differenceWith(
+          toPairs(gridData),
+          toPairs(prevProps.gridData),
+          isEqual
+        );
         if (changes.length > 0 || updated) {
           this.gridApi.setRowData(gridData);
           if (selected) {
-            this.gridApi.forEachNode((node) => {
+            this.gridApi.forEachNode(node => {
               node.setSelected(node.data.id === selected.id);
             });
           }
@@ -41,7 +48,7 @@ class GenGrid extends Component {
     }
   }
 
-  onGridReady = (params) => {
+  onGridReady = params => {
     const { gridData } = this.props;
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -53,10 +60,7 @@ class GenGrid extends Component {
     const { columnDefs } = this.state;
     return (
       <div style={{ height: '33vh', width: '100%' }}>
-        <div
-          style={{ height: '100%', width: '100%' }}
-          className={theme}
-        >
+        <div style={{ height: '100%', width: '100%' }} className={theme}>
           <AgGridReact
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}

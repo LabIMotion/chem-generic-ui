@@ -12,6 +12,15 @@ import Attachment from '../models/Attachment';
 
 const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
 
+// key: always uppercase, value: depends on the fn
+const createEnum = (arr, fn = 'toString') =>
+  Object.freeze(
+    arr.reduce((acc, cur) => {
+      acc[cur.toUpperCase()] = cur[fn]();
+      return acc;
+    }, {})
+  );
+
 const wfLayerMark = props => {
   if (props && props.flow) {
     return (
@@ -172,6 +181,8 @@ const toBool = val => {
   return !(!valLower || valLower === 'false' || valLower === '0');
 };
 
+const UnitSystem = (si || {}).fields || [];
+
 const genUnitsSystem = () => (si || {}).fields || [];
 
 const genUnits = field =>
@@ -284,79 +295,6 @@ const findCurrentNode = (_srcKey, _layerVals) => {
   return [_srcKey];
 };
 
-const decorateNode = (_elements, _layers) => {
-  if (!_elements || _elements.length < 1) return _elements;
-  const m = {
-    background: '#D6D5E6',
-    color: '#333',
-    // border: '1px solid #222138',
-    // width: 180,
-  };
-  const elements = _elements;
-  elements.map(e => {
-    if (['input', 'output'].includes(e.type) || e.animated) return e;
-    const lk = e.data.lKey;
-    const fk = findKey(
-      _layers,
-      o => o.wf && (o.key === lk || o.key.startsWith(`${lk}.`))
-    );
-    if (fk) {
-      e.style = m;
-      return e;
-    }
-    return e;
-  });
-  return elements;
-};
-
-const conFlowEls = props => {
-  const { properties, properties_release } = props;
-  const { flow, layers } = properties_release;
-  const deep = cloneDeep(flow);
-  const els = (deep && deep.elements) || [];
-  els.map(d => {
-    if (['default'].includes(d.type) && d.data) {
-      const { lKey } = d.data;
-      const fk = findKey(
-        properties.layers || {},
-        o => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`))
-      );
-      const chk = fk ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: '0px',
-            right: '2px',
-            color: 'green',
-            zIndex: '100',
-          }}
-        >
-          <FontAwesomeIcon icon={faCheckCircle} />
-        </div>
-      ) : null;
-      const layer = layers[lKey] || {};
-      const ll = (
-        <div>
-          {chk}
-          <div
-            style={{
-              borderWidth: '0px 0px 1px 0px',
-              borderColor: 'black',
-              borderStyle: 'solid',
-            }}
-          >
-            <b>{layer.label}</b>
-          </div>
-          <div>({layer.key})</div>
-        </div>
-      );
-      d.data = { label: ll, lKey: layer.key };
-    }
-    return d;
-  });
-  return els;
-};
-
 const storeFlow = props => {
   const { elements } = props;
   const els = cloneDeep(elements);
@@ -369,21 +307,6 @@ const storeFlow = props => {
   });
   return els;
 };
-
-const flowDefault = [
-  {
-    id: '1',
-    type: 'input',
-    data: { label: 'Start' },
-    position: { x: 250, y: 15 },
-  },
-  {
-    id: '2',
-    type: 'output',
-    data: { label: 'End' },
-    position: { x: 250, y: 255 },
-  },
-];
 
 const isLayerInWF = (_element, _layerKey) => {
   const { flow } = _element.properties_template;
@@ -421,6 +344,7 @@ const fieldCls = (isSpCall = false) => {
 };
 
 export {
+  createEnum,
   GenericDummy,
   genUnitsSystem,
   genUnits,
@@ -439,11 +363,8 @@ export {
   inputEventVal,
   molOptions,
   samOptions,
-  conFlowEls,
   storeFlow,
-  flowDefault,
   swapAryEls,
-  decorateNode,
   showProperties,
   downloadFile,
   uploadFiles,
@@ -451,4 +372,5 @@ export {
   wfLayerMark,
   fieldCls,
   toNullOrInt,
+  UnitSystem,
 };

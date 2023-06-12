@@ -17,7 +17,8 @@
       "as-needed",
       { "requireReturnForObjectLiteral": true }
     ],
-    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
+    // "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
+    "arrow-parens": ["error", "as-needed"],
     "max-len": [1, 100, 2, { "ignoreComments": true }],
     "no-console": ["off"],
     "comma-dangle": [1, "only-multiline"],

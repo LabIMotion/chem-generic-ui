@@ -3,9 +3,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Panel, Col, PanelGroup, Row
-} from 'react-bootstrap';
+import { Panel, Col, PanelGroup, Row } from 'react-bootstrap';
 import GenProperties from '../fields/GenProperties';
 import { genUnits, showProperties, unitConversion } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
@@ -33,7 +31,8 @@ export default class GenPropertiesLayer extends Component {
       if (e.type === 'system-defined') {
         const units = genUnits(e.option_layers);
         let uIdx = units.findIndex(u => u.key === e.value_system);
-        if (uIdx < units.length - 1) uIdx += 1; else uIdx = 0;
+        if (uIdx < units.length - 1) uIdx += 1;
+        else uIdx = 0;
         sub.value_system = units.length > 0 ? units[uIdx].key : '';
         sub.value = unitConversion(e.option_layers, sub.value_system, e.value);
       } else {
@@ -46,9 +45,7 @@ export default class GenPropertiesLayer extends Component {
   }
 
   handleDTRChange(params) {
-    const {
-      field, layer, subFields, type
-    } = params;
+    const { field, layer, subFields, type } = params;
     // event, field, layer, type = 'text'
     this.handleChange(subFields, field, layer, type);
   }
@@ -57,7 +54,8 @@ export default class GenPropertiesLayer extends Component {
     const { onClick } = this.props;
     const units = genUnits(obj.option_layers);
     let uIdx = units.findIndex(e => e.key === val);
-    if (uIdx < units.length - 1) uIdx += 1; else uIdx = 0;
+    if (uIdx < units.length - 1) uIdx += 1;
+    else uIdx = 0;
     const update = obj;
     update.value_system = units.length > 0 ? units[uIdx].key : '';
     onClick(keyLayer, update);
@@ -65,14 +63,21 @@ export default class GenPropertiesLayer extends Component {
 
   views() {
     const {
-      layer, selectOptions, id, layers, isPreview, isSearch, onNavi, isSpCall
+      layer,
+      selectOptions,
+      id,
+      layers,
+      isPreview,
+      isSearch,
+      onNavi,
+      isSpCall,
     } = this.props;
     const { fields, key, sp } = layer;
     let { cols } = layer;
     if (isSpCall && !!sp) cols = 1;
     const perRow = cols || 1;
     const col = Math.floor(12 / perRow);
-    const klaz = (12 % perRow) > 0 ? 'g_col_w' : '';
+    const klaz = 12 % perRow > 0 ? 'g_col_w' : '';
     const vs = [];
     let op = [];
     let newRow = 0;
@@ -83,24 +88,42 @@ export default class GenPropertiesLayer extends Component {
           vs.push(<Row key={rowId}>{op}</Row>);
           rowId += 1;
           op = [];
-          vs.push(<DateTimeRange key={`grid_${f.field}`} layer={layer} opt={{ f_obj: f }} onInputChange={this.handleDTRChange} />);
+          vs.push(
+            <DateTimeRange
+              key={`grid_${f.field}`}
+              layer={layer}
+              opt={{ f_obj: f }}
+              onInputChange={this.handleDTRChange}
+            />
+          );
           return;
         }
 
         const hasOwnRow = f.hasOwnRow || false; // f.ownLine: field has its own row
         const unit = genUnits(f.option_layers)[0] || {};
         const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
-        const rCol = (f.type === 'table' || hasOwnRow) ? (12 / (tabCol || 1)) : col; // rCol: columns per row
-        newRow = (f.type === 'table' || hasOwnRow) ? newRow += (perRow / (tabCol || 1)) : newRow += 1;
+        const rCol = f.type === 'table' || hasOwnRow ? 12 / (tabCol || 1) : col; // rCol: columns per row
+        newRow =
+          f.type === 'table' || hasOwnRow
+            ? (newRow += perRow / (tabCol || 1))
+            : (newRow += 1);
 
         if (newRow > perRow) {
           vs.push(<Row key={rowId}>{op}</Row>);
           rowId += 1;
           op = [];
-          newRow = (f.type === 'table' || hasOwnRow) ? newRow = (perRow / (tabCol || 1)) : newRow = 1;
+          newRow =
+            f.type === 'table' || hasOwnRow
+              ? (newRow = perRow / (tabCol || 1))
+              : (newRow = 1);
         }
         const eachCol = (
-          <Col key={`prop_${key}_${f.priority}_${f.field}`} md={rCol} lg={rCol} className={(f.type === 'table' || hasOwnRow) ? '' : klaz}>
+          <Col
+            key={`prop_${key}_${f.priority}_${f.field}`}
+            md={rCol}
+            lg={rCol}
+            className={f.type === 'table' || hasOwnRow ? '' : klaz}
+          >
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
               layers={layers}
@@ -113,7 +136,12 @@ export default class GenPropertiesLayer extends Component {
               type={f.type || 'text'}
               field={f.field || 'field'}
               formula={f.formula || ''}
-              options={(selectOptions && selectOptions[f.option_layers] && selectOptions[f.option_layers].options) || []}
+              options={
+                (selectOptions &&
+                  selectOptions[f.option_layers] &&
+                  selectOptions[f.option_layers].options) ||
+                []
+              }
               onChange={event => this.handleChange(event, f.field, key, f.type)}
               onSubChange={this.handleSubChange}
               isEditable
@@ -124,7 +152,9 @@ export default class GenPropertiesLayer extends Component {
               placeholder={f.placeholder || ''}
               option_layers={f.option_layers}
               value_system={f.value_system || unit.key}
-              onClick={() => this.handleClick(key, f, (f.value_system || unit.key))}
+              onClick={() =>
+                this.handleClick(key, f, f.value_system || unit.key)
+              }
               selectOptions={selectOptions || {}}
               onNavi={onNavi}
               isSpCall={isSpCall}
@@ -133,12 +163,12 @@ export default class GenPropertiesLayer extends Component {
         );
         op.push(eachCol);
         if (newRow % perRow === 0) newRow = 0;
-        if ((newRow === 0) || (fields.length === (i + 1))) {
+        if (newRow === 0 || fields.length === i + 1) {
           vs.push(<Row key={rowId}>{op}</Row>);
           rowId += 1;
           op = [];
         }
-      } else if (fields.length === (i + 1)) {
+      } else if (fields.length === i + 1) {
         vs.push(<Row key={rowId}>{op}</Row>);
         rowId += 1;
         op = [];
@@ -152,13 +182,14 @@ export default class GenPropertiesLayer extends Component {
   }
 
   render() {
-    const {
-      id, layer, activeWF, hasAi, aiComp
-    } = this.props;
+    const { id, layer, activeWF, hasAi, aiComp } = this.props;
     const { color, style, label } = layer;
     // const ai = layer.ai || [];
     let bs = color || 'default';
-    const cl = (style || 'panel_generic_heading').replace('panel_generic_heading', 'panel_generic_heading_slim');
+    const cl = (style || 'panel_generic_heading').replace(
+      'panel_generic_heading',
+      'panel_generic_heading_slim'
+    );
     // panel header color is based on input bs value
     const panelDnD = (
       <PanelDnD
@@ -169,21 +200,35 @@ export default class GenPropertiesLayer extends Component {
         handleMove={this.moveLayer}
         id={id}
         handleChange={this.handleChange}
-        onAttrChange={event => this.handleChange(event, 'timeRecord', layer, 'layer-data-change')}
+        onAttrChange={event =>
+          this.handleChange(event, 'timeRecord', layer, 'layer-data-change')
+        }
         bs={bs}
         hasAi={hasAi}
       />
     );
-    const panelHeader = label === '' ? (<span />) : (
-      <Panel.Heading className={cl}>
-        <Panel.Title toggle>{label}</Panel.Title>
-      </Panel.Heading>
-    );
+    const panelHeader =
+      label === '' ? (
+        <span />
+      ) : (
+        <Panel.Heading className={cl}>
+          <Panel.Title toggle>{label}</Panel.Title>
+        </Panel.Heading>
+      );
     const noneKlass = bs === 'none' ? 'generic_panel_none' : '';
     if (bs === 'none') bs = 'default';
     return (
-      <PanelGroup accordion id="accordion_generic_layer" defaultActiveKey="1" style={{ marginBottom: '0px' }}>
-        <Panel bsStyle={bs} className={`panel_generic_properties ${noneKlass}`} eventKey="1">
+      <PanelGroup
+        accordion
+        id="accordion_generic_layer"
+        defaultActiveKey="1"
+        style={{ marginBottom: '0px' }}
+      >
+        <Panel
+          bsStyle={bs}
+          className={`panel_generic_properties ${noneKlass}`}
+          eventKey="1"
+        >
           {activeWF ? panelDnD : panelHeader}
           <Panel.Collapse>
             <Panel.Body className="panel_generic_properties_body">
@@ -211,7 +256,7 @@ GenPropertiesLayer.propTypes = {
   isSpCall: PropTypes.bool,
   onNavi: PropTypes.func,
   hasAi: PropTypes.bool,
-  aiComp: PropTypes.any
+  aiComp: PropTypes.any,
 };
 
 GenPropertiesLayer.defaultProps = {
@@ -224,5 +269,5 @@ GenPropertiesLayer.defaultProps = {
   isSpCall: false,
   onNavi: () => {},
   hasAi: false,
-  aiComp: null
+  aiComp: null,
 };

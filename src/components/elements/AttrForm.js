@@ -2,17 +2,43 @@ import React from 'react';
 import { Tooltip } from 'react-bootstrap';
 import KlassAttrForm from './KlassAttrForm';
 import SegmentAttrForm from './SegmentAttrForm';
+import Constants from '../tools/Constants';
 
-const TipActive = type => <Tooltip id="active_button">This {type} is deactivated, press button to [activate]</Tooltip>;
-const TipInActive = type => <Tooltip id="disable_button">This {type} is activated, press button to [deactivate]</Tooltip>;
-const TipDelete = type => <Tooltip id="delete_button">Delete this {type}, after deletion, all elements are unaccessible</Tooltip>;
+const TipActive = type => (
+  <Tooltip id="active_button">
+    This {type} is deactivated, press button to [activate]
+  </Tooltip>
+);
+const TipInActive = type => (
+  <Tooltip id="disable_button">
+    This {type} is activated, press button to [deactivate]
+  </Tooltip>
+);
+const TipDelete = type => (
+  <Tooltip id="delete_button">
+    Delete this {type}, after deletion, all elements are unaccessible
+  </Tooltip>
+);
 
 const Content = React.forwardRef((props, ref) => {
   switch (props.content) {
-    case 'Segment':
-      return <SegmentAttrForm ref={ref} element={props.element} klasses={props.klasses} editable={props.editable} />;
-    case 'Element':
-      return <KlassAttrForm ref={ref} element={props.element} editable={props.editable} />;
+    case Constants.GENERIC_TYPES.SEGMENT:
+      return (
+        <SegmentAttrForm
+          ref={ref}
+          element={props.element}
+          klasses={props.klasses}
+          editable={props.editable}
+        />
+      );
+    case Constants.GENERIC_TYPES.ELEMENT:
+      return (
+        <KlassAttrForm
+          ref={ref}
+          element={props.element}
+          editable={props.editable}
+        />
+      );
     default:
       return <div>No content</div>;
   }

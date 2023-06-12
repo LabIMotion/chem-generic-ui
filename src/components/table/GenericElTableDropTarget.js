@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import { DropTarget } from 'react-dnd';
-import {
-  Tooltip, OverlayTrigger, Popover, Button
-} from 'react-bootstrap';
+import { useDrop } from 'react-dnd';
+import { Tooltip, OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { KlzIcon } from '../tools/utils';
+import buildTableSource from '../../utils/table/build-table-source';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   if (opt.value && opt.value.el_id) {
@@ -19,14 +18,21 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         elSvg = Constants.IMG_UNDEFINED_STRUCTURE_SVG;
       }
     }
-    if (elSvg && !elSvg.endsWith('.svg')) elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
+    if (elSvg && !elSvg.endsWith('.svg'))
+      elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
     const pop = (
-      <Popover id="popover-svg" title={label} style={{ maxWidth: 'none', maxHeight: 'none' }}>
+      <Popover
+        id="popover-svg"
+        title={label}
+        style={{ maxWidth: 'none', maxHeight: 'none' }}
+      >
         <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
-    const asShown = path => ((path === Constants.IMG_UNDEFINED_STRUCTURE_SVG)
-      ? KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' }) : (
+    const asShown = path =>
+      path === Constants.IMG_UNDEFINED_STRUCTURE_SVG ? (
+        KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' })
+      ) : (
         <OverlayTrigger
           delayShow={1000}
           trigger={['hover']}
@@ -37,26 +43,38 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         >
           <img className="generic_grid_img" src={path} alt="" />
         </OverlayTrigger>
-      ));
-    const simg = (path, txt) => ((path && path !== '') ? (
-      <div className="s-img">
-        {asShown(path)}
-        <div className="del_btn">
-          <OverlayTrigger
-            delayShow={1000}
-            placement="top"
-            overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
-          >
-            <Button className="btn_del" bsSize="xsmall" onClick={() => onDrop({}, params)}>
-              <i className="fa fa-trash-o" aria-hidden="true" />
-            </Button>
-          </OverlayTrigger>
+      );
+    const simg = (path, txt) =>
+      path && path !== '' ? (
+        <div className="s-img">
+          {asShown(path)}
+          <div className="del_btn">
+            <OverlayTrigger
+              delayShow={1000}
+              placement="top"
+              overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
+            >
+              <Button
+                className="btn_del"
+                bsSize="xsmall"
+                onClick={() => onDrop({}, params)}
+              >
+                <i className="fa fa-trash-o" aria-hidden="true" />
+              </Button>
+            </OverlayTrigger>
+          </div>
         </div>
-      </div>
-    ) : (<div className="data" style={{ width: '4vw' }}>{txt}</div>));
+      ) : (
+        <div className="data" style={{ width: '4vw' }}>
+          {txt}
+        </div>
+      );
     return simg(elSvg, label);
   }
-  return (KlzIcon(`icon-${iconClass} indicator`, { width: '4vw', fontSize: 'x-large' }));
+  return KlzIcon(`icon-${iconClass} indicator`, {
+    width: '4vw',
+    fontSize: 'x-large',
+  });
 };
 
 const show = (opt, iconClass, onDrop) => {
@@ -69,90 +87,47 @@ const show = (opt, iconClass, onDrop) => {
   return base(opt, iconClass);
 };
 
-const source = (type, props, id) => {
-  let isAssoc = false;
-  const taggable = (props && props.tag && props.tag.taggable_data) || {};
-  if (taggable.element && taggable.element.id === id) {
-    isAssoc = false;
-  } else {
-    isAssoc = !!(taggable.reaction_id || taggable.wellplate_id || taggable.element);
-  }
-
-  switch (type) {
-    case 'molecule':
+const GenericElTableDropTarget = props => {
+  const { connectDropTarget, isOver, canDrop, opt, onDrop } = props;
+  const [{ isOver: isDragOver }, drop] = useDrop({
+    accept: props.opt.dndItems,
+    drop: (targetProps, monitor) => {
+      // Handle the drop event here...
+      console.log('drop', targetProps, monitor);
+      const sourceProps = monitor.getItem().element;
+      const type = targetProps.opt.sField.type.split('_')[1];
+      const sourceTag = buildTableSource(type, sourceProps, targetProps.opt.id);
+      targetProps.onDrop(sourceTag, targetProps.opt);
+    },
+    collect: monitor => {
       return {
-        el_id: props.molecule.id,
-        el_type: 'molecule',
-        el_label: props.molecule.cano_smiles || props.molecule_formula || props.molecule_name_label,
-        el_inchikey: props.molecule.inchikey,
-        el_smiles: props.molecule.cano_smiles,
-        el_iupac: props.molecule.iupac_name,
-        el_molecular_weight: props.molecule.molecular_weight,
-        el_svg: `/images/molecules/${props.molecule.molecule_svg_file}`,
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop(),
       };
-    case 'sample':
-      return {
-        el_id: props.id,
-        is_new: true,
-        cr_opt: 1,
-        isAssoc,
-        el_type: 'sample',
-        el_label: props.short_label,
-        el_short_label: props.short_label,
-        el_name: props.name,
-        el_external_label: props.external_label,
-        el_molecular_weight: props.molecule_molecular_weight,
-        el_svg: props.sample_svg_file ? `/images/samples/${props.sample_svg_file}` : `/images/molecules/${props.molecule.molecule_svg_file}`,
-        el_decoupled: props.decoupled || false,
-      };
-    default:
-      return {
-        el_id: props.id,
-        is_new: true,
-        cr_opt: 0,
-        el_type: props.type,
-        el_label: props.short_label,
-      };
-  }
+    },
+  });
+  const className = `target${isOver ? ' is-over' : ''}${
+    canDrop ? ' can-drop' : ''
+  }`;
+  return connectDropTarget(
+    <div
+      className={className}
+      ref={drop}
+      style={{ display: 'inline-flex', justifyContent: 'center' }}
+    >
+      {show(opt, 'sample', onDrop)}
+    </div>
+  );
 };
-
-const dropTarget = {
-  drop(targetProps, monitor) {
-    const sourceProps = monitor.getItem().element;
-    const type = targetProps.opt.sField.type.split('_')[1];
-    const sourceTag = source(type, sourceProps, targetProps.opt.id);
-    targetProps.onDrop(sourceTag, targetProps.opt);
-  },
-  canDrop(targetProps, monitor) {
-    return true;
-  },
-};
-
-const dropCollect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-});
-
-class GenericElTableDropTarget extends Component {
-  render() {
-    const {
-      connectDropTarget, isOver, canDrop, opt, onDrop
-    } = this.props;
-    const className = `target${isOver ? ' is-over' : ''}${canDrop ? ' can-drop' : ''}`;
-    return connectDropTarget(<div className={className} style={{ display: 'inline-flex', justifyContent: 'center' }}>{show(opt, 'sample', onDrop)}</div>);
-  }
-}
-
-export default
-DropTarget(props => props.opt.dndItems, dropTarget, dropCollect)(GenericElTableDropTarget);
 
 GenericElTableDropTarget.propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
   isOver: PropTypes.bool.isRequired,
   canDrop: PropTypes.bool.isRequired,
   opt: PropTypes.object.isRequired,
-  onDrop: PropTypes.func
+  onDrop: PropTypes.func,
 };
 
 GenericElTableDropTarget.defaultProps = { onDrop: () => {} };
+
+export default GenericElTableDropTarget;

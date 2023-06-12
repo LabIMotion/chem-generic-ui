@@ -6,22 +6,30 @@ import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
 
-const IconRenderer = (params) => {
+const IconRenderer = params => {
   const { value, iconStyle } = params;
-  return <i className={value} aria-hidden="true" style={iconStyle || { color: 'black' }} />;
+  return (
+    <i
+      className={value}
+      aria-hidden="true"
+      style={iconStyle || { color: 'black' }}
+    />
+  );
 };
 
-const GenGridEl = (props) => {
+const GenGridEl = props => {
   const {
     gridData,
     pageSize,
     theme,
     fnCopyKlass,
+    fnDeleteKlass,
     fnEditKlass,
     fnDeActivateKlass,
     fnShowProp,
-    fnShowPropJson
+    fnShowPropJson,
   } = props;
+
   const columnDefs = [
     {
       hide: true,
@@ -32,7 +40,11 @@ const GenGridEl = (props) => {
     {
       headerName: 'Action',
       cellRenderer: ActionRenderer,
-      cellRendererParams: { fnCopy: fnCopyKlass, fnEdit: fnEditKlass },
+      cellRendererParams: {
+        fnCopy: fnCopyKlass,
+        fnDelete: fnDeleteKlass,
+        fnEdit: fnEditKlass,
+      },
       sortable: false,
       filter: false,
     },
@@ -82,6 +94,7 @@ GenGridEl.propTypes = {
   gridData: PropTypes.array.isRequired,
   fnCopyKlass: PropTypes.func.isRequired,
   fnDeActivateKlass: PropTypes.func.isRequired,
+  fnDeleteKlass: PropTypes.func.isRequired,
   fnEditKlass: PropTypes.func.isRequired,
   fnShowProp: PropTypes.func.isRequired,
   fnShowPropJson: PropTypes.func.isRequired,

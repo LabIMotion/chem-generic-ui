@@ -14,9 +14,8 @@ export default class SelectOption extends Component {
 
     // prepare generic with new options of root
     const deep = cloneDeep(generic);
-    const selectObj = (deep && deep.properties_template
-      && deep.properties_template.select_options[root]
-      && deep.properties_template.select_options[root].options) || [];
+    const selectObj =
+      deep?.properties_template?.select_options[root]?.options || [];
     selectObj.push(newOption);
 
     fnAddOption(root, input, selectObj); // return [root, new option, new options]
@@ -25,7 +24,10 @@ export default class SelectOption extends Component {
   render() {
     const { generic, root, fnChange } = this.props;
     return (
-      <FormGroup bsSize="sm" style={{ marginBottom: 'unset', display: 'inline-table' }}>
+      <FormGroup
+        bsSize="sm"
+        style={{ marginBottom: 'unset', display: 'inline-table' }}
+      >
         <InputGroup>
           <InputGroup.Button>
             {renderDeleteButton(generic, 'Select', root, '', fnChange)}
@@ -33,7 +35,9 @@ export default class SelectOption extends Component {
           <FormControl
             type="text"
             name="input_newOption"
-            inputRef={(ref) => { this.inputNewOption = ref; }}
+            inputRef={ref => {
+              this.inputNewOption = ref;
+            }}
             placeholder="Input new option"
             bsSize="sm"
           />
@@ -55,5 +59,5 @@ SelectOption.propTypes = {
   generic: PropTypes.object.isRequired,
   root: PropTypes.string.isRequired,
   fnChange: PropTypes.func.isRequired,
-  fnAddOption: PropTypes.func.isRequired
+  fnAddOption: PropTypes.func.isRequired,
 };

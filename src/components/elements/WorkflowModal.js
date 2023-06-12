@@ -2,30 +2,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-import Workflow from '../flow/Workflow';
+import DnDFlow from '../flow/DnDFlow';
 
-const WorkflowModal = (props) => {
-  const {
-    show, element, fnClose, fnSaveFlow
-  } = props;
+const WorkflowModal = props => {
+  const { element, fnSaveFlow, showProps } = props;
+  const { show, setShow } = showProps;
+  console.log('WorkflowModal: element=', element);
   if (!show) return null;
+
+  const handleSaveFlow = _flowObject => {
+    fnSaveFlow(element, _flowObject);
+  };
+
   return (
-    <Modal show={show} bsSize="small" onHide={() => fnClose()} dialogClassName="importChemDrawModal">
-      <Modal.Header closeButton><Modal.Title>Design Workflow</Modal.Title></Modal.Header>
+    <Modal
+      show={show}
+      onHide={() => setShow(false)}
+      dialogClassName="gu-full-modal"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Design Workflow</Modal.Title>
+      </Modal.Header>
       <Modal.Body>
-        <div className="generic_wf_modal">
-          <Workflow element={element} fnSaveFlow={fnSaveFlow} />
-        </div>
+        <DnDFlow element={element} fnSave={handleSaveFlow} />
       </Modal.Body>
     </Modal>
   );
 };
 
 WorkflowModal.propTypes = {
-  show: PropTypes.bool.isRequired,
   element: PropTypes.object.isRequired,
-  fnClose: PropTypes.func.isRequired,
-  fnSaveFlow: PropTypes.func.isRequired
+  fnSaveFlow: PropTypes.func.isRequired,
+  showProps: PropTypes.shape({
+    show: PropTypes.bool.isRequired,
+    setShow: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default WorkflowModal;
