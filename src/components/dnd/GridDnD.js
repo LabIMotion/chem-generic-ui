@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
-import { compose } from 'redux';
 
 const GridDnD = ({
   field,
@@ -40,9 +39,11 @@ const GridDnD = ({
     canDrop ? ' can-drop' : ''
   }${isDragging ? ' is-dragging' : ''}`;
   return (
-    <div ref={compose(drag, drop)} className={className}>
-      <div className="dnd-btn">
-        <span className="text-info fa fa-arrows" />
+    <div ref={drop}>
+      <div ref={drag} className={className}>
+        <div className="dnd-btn">
+          <span className="text-info fa fa-arrows" />
+        </div>
       </div>
     </div>
   );

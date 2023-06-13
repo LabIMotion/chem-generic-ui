@@ -23,6 +23,10 @@
     "cc:cp:spec": "cp -f ./dist/* /home/ubuntu/workspace/github/react-spectra-editor/node_modules/chem-generic-ui/dist/.",
     "cc:cpp:spec": "cp -f package.json /home/ubuntu/workspace/github/react-spectra-editor/node_modules/chem-generic-ui/package.json",
     "cc:ubuntu": "yarn build && yarn cc:clean:dev5 && yarn cc:cp:dev5 && yarn cc:cpp:dev5 && yarn cc:cp:spec",
+    "cc:clean:dev6": "rm -rf /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/dist/*",
+    "cc:cp:dev6": "cp -f ./dist/* /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/dist/.",
+    "cc:cpp:dev6": "cp -f package.json /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/package.json",
+    "cc:ubuntu6": "yarn build && yarn cc:clean:dev6 && yarn cc:cp:dev6 && yarn cc:cpp:dev6",
     "sass": "sass src:src --no-source-map",
     "test": "react-scripts test --env=jsdom --testPathIgnorePatterns=src/__tests__/helper/* src/__tests__/e2e/*",
     "eject": "react-scripts eject"
@@ -45,12 +49,8 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-draggable": "^4.4.5",
     "react-dropzone": "^3.6.0",
-    "react-redux": "^7.2.4",
     "react-select": "5.4.0",
     "reactflow": "^11.7.2",
-    "redux": "^4.2.0",
-    "redux-immutable": "^4.0.0",
-    "redux-thunk": "^2.0.0",
     "uuid": "^8.3.2"
   },
   "peerDependencies": {
@@ -88,7 +88,6 @@
     "react-bootstrap": "~0.33.1",
     "react-dom": "^17.0.2",
     "react-refresh": "^0.14.0",
-    "redux-logger": "^3.0.6",
     "sass": "^1.49.10",
     "sass-loader": "^12.6.0",
     "source-map-explorer": "^2.5.2",

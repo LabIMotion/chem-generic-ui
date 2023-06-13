@@ -109,12 +109,12 @@ module.exports = {
       amd: 'react-bootstrap',
       root: 'react-bootstrap', // indicates global variable
     },
-    // 'react-dnd': {
-    //   commonjs: 'react-dnd',
-    //   commonjs2: 'react-dnd',
-    //   amd: 'react-dnd',
-    //   root: 'react-dnd',
-    // },
+    'react-dnd': {
+      commonjs: 'react-dnd',
+      commonjs2: 'react-dnd',
+      amd: 'react-dnd',
+      root: 'react-dnd',
+    },
     'react-datepicker': {
       commonjs: 'react-datepicker',
       commonjs2: 'react-datepicker',
