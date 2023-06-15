@@ -12,7 +12,7 @@ const attrs = {
     tip: 'click to activate this template (currently inactive)',
     fa: 'fa-ban',
     bs: 'danger',
-    cls: '',
+    cls: 'gu_btn_text_danger',
   },
 };
 
