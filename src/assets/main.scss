@@ -1,14 +1,14 @@
-@use "color" as *;
+@use 'color' as *;
 @use 'flow-default';
 @use 'flow';
 @use 'modal';
 
 .gu_btn_text_success {
-  color: green;
+  color: $color-btn-success;
 }
 
 .gu_btn_text_danger {
-  color: red;
+  color: $color-btn-warning;
 }
 
 .gu_flow_dnd_sidebar {
@@ -74,11 +74,11 @@
   margin-bottom: unset !important;
   .panel-title {
     font-weight: bold;
-    }
+  }
   .default_style {
     font-size: 14px;
     line-height: normal;
-    }
+  }
 }
 
 .panel_generic_properties_body {
@@ -242,7 +242,11 @@
   float: left !important;
   text-align: left !important;
   font-weight: lighter !important;
-  .g-ds-title { text-decoration: underline; font-weight: 700; line-height: 1.5; }
+  .g-ds-title {
+    text-decoration: underline;
+    font-weight: 700;
+    line-height: 1.5;
+  }
 }
 
 .g_input_group {
@@ -470,7 +474,7 @@
     font-size: 20px;
   }
   // > .panel-body {
-    // background-color: #d9edf7;
+  // background-color: #d9edf7;
   // }
 }
 
@@ -589,7 +593,8 @@
   top: 2px !important;
 }
 
-.react-datepicker__day-name, .react-datepicker__day {
+.react-datepicker__day-name,
+.react-datepicker__day {
   margin: 0.5rem !important;
 }
 // ===================================================================

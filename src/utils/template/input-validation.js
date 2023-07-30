@@ -8,7 +8,7 @@ import { isLayerInWF } from '../../components/tools/utils';
 export const isValidKlass = klass => /\b[a-z]{3,5}\b/.test(klass);
 export const isValidField = field => /^[a-zA-Z0-9_]*$/.test(field);
 
-export const validateInput = element => {
+export const validateElementKlassInput = element => {
   if (element.name === '') {
     return notifyError('Please input Element.', `Element [${element.name}]`);
   }
@@ -23,6 +23,22 @@ export const validateInput = element => {
   }
   if (element.icon_name === '') {
     return notifyError('Please input Icon.', `Element [${element.name}]`);
+  }
+  return notifySuccess();
+};
+
+export const validateSegmentKlassInput = element => {
+  if (element.label === '') {
+    return notifyError(
+      'Please input Segment Label.',
+      `Segment [${element.label}]`
+    );
+  }
+  if (element.klass_element === '') {
+    return notifyError(
+      'Please assign to an Element.',
+      `Segment [${element.label}]`
+    );
   }
   return notifySuccess();
 };

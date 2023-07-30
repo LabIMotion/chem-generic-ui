@@ -4,6 +4,11 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup, Modal, Button, ButtonGroup } from 'react-bootstrap';
 import { Content } from './AttrForm';
 import Constants from '../tools/Constants';
+import Response from '../../utils/response';
+import {
+  validateElementKlassInput,
+  validateSegmentKlassInput,
+} from '../../utils/template/input-validation';
 
 const AttrModal = props => {
   const { actions, data, editable, genericType, klasses, showProps } = props;
@@ -13,30 +18,65 @@ const AttrModal = props => {
   const handleCreate = _fnAction => {
     switch (genericType) {
       case Constants.GENERIC_TYPES.SEGMENT: {
-        const element = {
+        const inputs = {
           label: formRef.current.k_label.value.trim(),
           desc: formRef.current.k_desc.value.trim(),
           element_klass: formRef.current.k_klass.value,
           identifier: formRef.current.k_identifier.value.trim(),
         };
-        _fnAction(element);
+        const verify = validateSegmentKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
         break;
       }
       case Constants.GENERIC_TYPES.ELEMENT: {
-        const element = {
+        const inputs = {
           name: formRef.current.k_name.value.trim(),
           label: formRef.current.k_label.value.trim(),
           klass_prefix: formRef.current.k_prefix.value.trim(),
           icon_name: formRef.current.k_iconname.value.trim(),
           desc: formRef.current.k_desc.value.trim(),
         };
-        _fnAction(element);
+        const verify = validateElementKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
         break;
       }
       default:
         console.log(`Warning: ${genericType} is not supported.`);
     }
-    setShow(false);
+  };
+
+  const handleCopy = _fnAction => {
+    switch (genericType) {
+      case Constants.GENERIC_TYPES.SEGMENT: {
+        const updates = {
+          label: formRef.current.k_label.value.trim(),
+          desc: formRef.current.k_desc.value.trim(),
+          identifier: formRef.current.k_identifier.value.trim(),
+        };
+        const inputs = { ...data, ...updates };
+        const verify = validateSegmentKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
+        break;
+      }
+      case Constants.GENERIC_TYPES.ELEMENT: {
+        const updates = {
+          label: formRef.current.k_label.value.trim(),
+          klass_prefix: formRef.current.k_prefix.value.trim(),
+          icon_name: formRef.current.k_iconname.value.trim(),
+          desc: formRef.current.k_desc.value.trim(),
+        };
+        const inputs = { ...data, ...updates };
+        const verify = validateElementKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
+        break;
+      }
+      default:
+        console.log(`Warning: ${genericType} is not supported.`);
+    }
   };
 
   const handleDelete = _fnAction => {
@@ -52,7 +92,10 @@ const AttrModal = props => {
           desc: formRef.current.k_desc.value.trim(),
           identifier: formRef.current.k_identifier.value.trim(),
         };
-        _fnAction(data, updates);
+        const inputs = { ...data, ...updates };
+        const verify = validateSegmentKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
         break;
       }
       case Constants.GENERIC_TYPES.ELEMENT: {
@@ -62,13 +105,15 @@ const AttrModal = props => {
           icon_name: formRef.current.k_iconname.value.trim(),
           desc: formRef.current.k_desc.value.trim(),
         };
-        _fnAction(data, updates);
+        const inputs = { ...data, ...updates };
+        const verify = validateElementKlassInput(inputs);
+        _fnAction(new Response(verify, inputs));
+        if (verify.isSuccess) setShow(false);
         break;
       }
       default:
         console.log(`Warning: ${genericType} is not supported.`);
     }
-    setShow(false);
   };
 
   const actionBtn = (_action, _fnAction) => {
@@ -88,7 +133,7 @@ const AttrModal = props => {
         button = (
           <Button
             bsStyle="primary"
-            onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
+            onClick={_fnAction ? () => handleCopy(_fnAction) : () => {}}
           >
             Copy&nbsp; <i className="fa fa-save" aria-hidden="true" />
           </Button>
@@ -173,7 +218,7 @@ AttrModal.propTypes = {
     action: PropTypes.oneOf(['c', 'cc', 'u', 'd']),
     fnAction: PropTypes.func,
   }).isRequired,
-  data: PropTypes.object, // required for update action
+  data: PropTypes.object, // required for update action, the selected record
   editable: PropTypes.bool,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,

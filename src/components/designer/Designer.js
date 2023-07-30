@@ -5,12 +5,13 @@ import GridToolbar from './GridToolbar';
 import Constants from '../tools/Constants';
 import GenGridEl from '../details/GenGridEl';
 import getPageSizeForTheme from '../../utils/grid';
-import TemplateProps from './template/TemplateProps';
+import GenTemplate from './template/GenTemplate';
 
 const Designer = _props => {
   const {
     fnCopy,
     fnCreate,
+    fnDeActivateKlass,
     fnDelete,
     fnDerive, // return the new generic object
     // fnSaveFlow, // should be combined to fnSubmit
@@ -48,7 +49,7 @@ const Designer = _props => {
       </ButtonToolbar>
       <GenGridEl
         fnCopyKlass={fnCopy}
-        fnDeActivateKlass={() => {}}
+        fnDeActivateKlass={fnDeActivateKlass}
         fnDeleteKlass={fnDelete}
         fnEditKlass={fnUpdate}
         fnShowProp={onDataSelected}
@@ -58,7 +59,7 @@ const Designer = _props => {
         theme={theme}
       />
       {data ? (
-        <TemplateProps
+        <GenTemplate
           data={data}
           fnDelete={fnDelete}
           fnDerive={fnDerive}
