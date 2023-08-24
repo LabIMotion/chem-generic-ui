@@ -1,6 +1,16 @@
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ButtonTooltip from '../../fields/ButtonTooltip';
-import { wfLayerMark } from '../../tools/utils';
+
+const renderWFLayerMark = props =>
+  props && (props.flow || props.flowObject) ? (
+    <OverlayTrigger
+      placement="top"
+      overlay={<Tooltip id="tooltip">A workflow is defined.</Tooltip>}
+    >
+      <i className="fa fa-sitemap" aria-hidden="true" />
+    </OverlayTrigger>
+  ) : null;
 
 const TemplateRenderer = params => {
   const { data, fnShow, fnShowJson, node } = params;
@@ -11,10 +21,10 @@ const TemplateRenderer = params => {
     fnShow(e);
   };
 
-  const onShowJson = e => {
-    node.setSelected(true, true);
-    fnShowJson(e);
-  };
+  // const onShowJson = e => {
+  //   node.setSelected(true, true);
+  //   fnShowJson(e);
+  // };
 
   return (
     <span>
@@ -24,15 +34,15 @@ const TemplateRenderer = params => {
         element={data}
         fnClick={onShow}
       />
-      &nbsp;
+      {/* &nbsp;
       <ButtonTooltip
         tip="edit template in YAML"
         fa={fa[1]}
         element={data}
         fnClick={onShowJson}
-      />
+      /> */}
       &nbsp;
-      {wfLayerMark(data.properties_template)}
+      {renderWFLayerMark(data.properties_template)}
     </span>
   );
 };

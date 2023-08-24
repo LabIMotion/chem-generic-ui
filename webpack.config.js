@@ -20,6 +20,7 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'bundle.js',
     clean: true,
+    library: 'chem-generic-ui',
     libraryTarget: 'umd',
   },
   optimization: {

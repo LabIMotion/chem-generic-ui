@@ -5,15 +5,8 @@ import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
 
-const GenGridDs = (props) => {
-  const {
-    gridData,
-    pageSize,
-    theme,
-    fnDeActivateKlass,
-    fnShowProp,
-    fnShowPropJson
-  } = props;
+const GenGridDs = props => {
+  const { gridData, pageSize, theme, fnDeActivateKlass, fnShowProp } = props;
   const columnDefs = [
     {
       hide: true,
@@ -24,20 +17,29 @@ const GenGridDs = (props) => {
     {
       headerName: 'Active',
       field: 'is_active',
+      minWidth: 50,
       cellRenderer: ActiveRenderer,
       cellRendererParams: { fnDeActivate: fnDeActivateKlass },
     },
     {
-      headerName: 'Chemical Methods Ontology', field: 'label', minWidth: 350, flex: 3
+      headerName: 'Chemical Methods Ontology',
+      field: 'label',
+      minWidth: 200,
+      flex: 3,
     },
     {
       headerName: 'Template',
       cellRenderer: TemplateRenderer,
-      cellRendererParams: { fnShow: fnShowProp, fnShowJson: fnShowPropJson },
+      minWidth: 50,
+      cellRendererParams: { fnShow: fnShowProp }, // fnShowJson: fnShowPropJson
       sortable: false,
       filter: false,
     },
+    { headerName: 'Version', field: 'version' },
     { headerName: 'Released at', field: 'released_at' },
+    { headerName: 'Updated at', field: 'updated_at' },
+    { headerName: 'Id', field: 'uuid' },
+    { headerName: 'Sync Time', field: 'sync_time' },
   ];
 
   return (
@@ -54,7 +56,7 @@ GenGridDs.propTypes = {
   gridData: PropTypes.array.isRequired,
   fnDeActivateKlass: PropTypes.func.isRequired,
   fnShowProp: PropTypes.func.isRequired,
-  fnShowPropJson: PropTypes.func.isRequired,
+  // fnShowPropJson: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
   theme: PropTypes.string,
 };

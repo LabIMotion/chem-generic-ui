@@ -9,6 +9,8 @@ const AttrNewBtn = props => {
   const { fnCreate, genericType, klasses } = props;
   const [show, setShow] = useState(false);
 
+  if (genericType === Constants.GENERIC_TYPES.DATASET) return null;
+
   return (
     <>
       <OverlayTrigger
@@ -39,6 +41,7 @@ AttrNewBtn.propTypes = {
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   klasses: PropTypes.array, // required for Segment
 };

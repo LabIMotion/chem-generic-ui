@@ -9,5 +9,5 @@ export default {
   DATASET: 'dataset',
   CONTAINER: 'container',
   ELEMENT_FIELD: 'element_field',
-  GENERIC_GRID: 'generic_grid'
+  GENERIC_GRID: 'generic_grid',
 };

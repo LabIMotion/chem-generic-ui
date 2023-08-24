@@ -15,11 +15,18 @@ const FlowViewerModal = props => {
     properties,
     shortLabel,
   } = data;
-  if (Object.keys(propertiesRelease).length < 1) return null;
-  if (
-    Object.keys(propertiesRelease.flow || {}).length < 1 ||
-    (propertiesRelease.flow.elements || []).length < 3
-  ) {
+  if (Object.keys(propertiesRelease || {}).length < 1) return null;
+
+  const hasFlow =
+    (Object.keys(propertiesRelease.flow || {}).length > 0 &&
+      propertiesRelease.flow?.elements?.length > 2) ||
+    false;
+  const hasFlowObject =
+    (Object.keys(propertiesRelease.flowObject || {}).length > 0 &&
+      propertiesRelease.flowObject?.nodes?.length > 2) ||
+    false;
+
+  if (!hasFlow && !hasFlowObject) {
     return (
       <Modal show={show} bsSize="small" onHide={fnHide}>
         <Modal.Header closeButton>

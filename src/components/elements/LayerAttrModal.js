@@ -47,6 +47,7 @@ const LayerAttrModal = props => {
       case 'c':
         button = (
           <Button
+            key={`_layer_attr_modal_btn_${_action}`}
             bsStyle="primary"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
@@ -57,6 +58,7 @@ const LayerAttrModal = props => {
       case 'u':
         button = (
           <Button
+            key={`_layer_attr_modal_btn_${_action}`}
             bsStyle="primary"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
@@ -74,14 +76,16 @@ const LayerAttrModal = props => {
     const buttons = [];
     actions.forEach(e => {
       buttons.push(actionBtn(e.action, e.fnAction));
-      buttons.push(<span>&nbsp;</span>);
+      buttons.push(
+        <span key={`_layer_attr_modal_span_${e.action}`}>&nbsp;</span>
+      );
     });
     return buttons;
   };
 
   const addTitles = () => {
     const title = [];
-    const mapping = { c: 'New Layer', u: 'Edit Layer attributes' };
+    const mapping = { c: 'New Layer11', u: 'Edit Layer attributes' };
     actions.map(e => title.push(mapping[e.action]));
     return title.join('/');
   };
@@ -107,10 +111,12 @@ const LayerAttrModal = props => {
 };
 
 LayerAttrModal.propTypes = {
-  actions: PropTypes.arrayOf({
-    action: PropTypes.oneOf(['c', 'u']),
-    fnAction: PropTypes.func,
-  }).isRequired,
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      action: PropTypes.oneOf(['c', 'u']),
+      fnAction: PropTypes.func,
+    })
+  ).isRequired,
   isAttrOnWF: PropTypes.bool,
   layer: PropTypes.object,
   showProps: PropTypes.shape({

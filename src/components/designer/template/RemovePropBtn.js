@@ -2,34 +2,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { FieldTypes } from 'generic-ui-core';
 import { handleDelete } from '../../../utils/template/action-handler';
 
 // replace renderDeleteButton
 const RemovePropBtn = props => {
   const { delStr, delKey, delRoot, element, fnDelete } = props;
-
-  if (!['Select', 'Option', 'Layer', 'Field'].includes(delStr)) return <></>;
+  let allowed = Object.entries(FieldTypes)
+    .filter(([key]) => key.startsWith('DEL_'))
+    .reduce((acc, [key, value]) => {
+      return { ...acc, [key]: value };
+    }, {});
+  allowed = Object.values(allowed);
+  if (!allowed.includes(delStr)) return <></>;
 
   let msg = 'remove?';
-  if (delStr === 'Select') {
+  if (delStr === FieldTypes.DEL_SELECT) {
     msg = `remove this select option: [${delKey}] ?`;
-  } else if (delStr === 'Option') {
+  } else if (delStr === FieldTypes.DEL_OPTION) {
     msg = `remove this option: [${delKey}] from select [${delRoot}] ?`;
-  } else if (delStr === 'Layer') {
+  } else if (delStr === FieldTypes.DEL_LAYER) {
     msg = `remove this layer: [${delKey}] ?`;
-  } else if (delStr === 'Field') {
+  } else if (delStr === FieldTypes.DEL_FIELD) {
     msg = `remove this field: [${delKey}] from layer [${delRoot}] ?`;
   } else {
     msg = `remove ???: ${delStr}`;
   }
 
-  const onClick = () => {
+  const onClick = event => {
+    event.stopPropagation();
     const result = handleDelete(delStr, delKey, delRoot, element);
     fnDelete(result);
   };
 
   const popover = (
-    <Popover id="popover-positioned-scrolling-left">
+    <Popover id="popover-template-remove-props-btn">
       {msg} <br />
       <div className="btn-toolbar">
         <Button
@@ -37,11 +44,16 @@ const RemovePropBtn = props => {
           bsStyle="danger"
           aria-hidden="true"
           onClick={onClick}
+          data-testid="template-remove-yes-btn"
         >
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>
-        <Button bsSize="xsmall" bsStyle="warning">
+        <Button
+          bsSize="xsmall"
+          bsStyle="warning"
+          data-testid="template-remove-no-btn"
+        >
           No
         </Button>
       </div>
@@ -56,7 +68,7 @@ const RemovePropBtn = props => {
       trigger="focus"
       overlay={popover}
     >
-      <Button bsSize="sm">
+      <Button bsSize="sm" data-testid="template-remove-btn">
         <i className="fa fa-trash-o" aria-hidden="true" />
       </Button>
     </OverlayTrigger>

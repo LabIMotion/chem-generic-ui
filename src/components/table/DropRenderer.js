@@ -5,9 +5,7 @@ import { cloneDeep } from 'lodash';
 import GenericElTableDropTarget from './GenericElTableDropTarget';
 
 const DropRenderer = props => {
-  const {
-    opt, sField, onChange, node
-  } = props;
+  const { opt, sField, onChange, node } = props;
   if (!['drag_molecule', 'drag_sample'].includes(sField.type)) return null;
   const { data } = node;
   opt.dndItems = [sField.type.split('_')[1]];
@@ -25,7 +23,7 @@ DropRenderer.propTypes = {
   sField: PropTypes.object.isRequired,
   opt: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  node: PropTypes.object.isRequired
+  node: PropTypes.object.isRequired,
 };
 
 export default DropRenderer;

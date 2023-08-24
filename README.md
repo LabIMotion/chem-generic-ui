@@ -15,7 +15,3 @@ or Yarn:
 ```
 yarn add chem-generic-ui
 ```
-
-## Usage
-
-You can learn more in the [chem-generic-ui documentation](https://facebook.github.io/create-react-app/docs/getting-started).

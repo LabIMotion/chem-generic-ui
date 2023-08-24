@@ -26,7 +26,7 @@ class GenGrid extends Component {
     const updated =
       theme !== prevProps.theme ||
       pageSize !== prevProps.pageSize ||
-      gridData.length !== prevProps.gridData.length;
+      gridData?.length !== prevProps.gridData?.length;
     if (gridData !== prevProps.gridData || updated) {
       if (this.gridApi) {
         const selectedRows = this.gridApi.getSelectedRows();

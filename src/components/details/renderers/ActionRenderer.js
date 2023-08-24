@@ -3,7 +3,7 @@ import AttrEditBtn from '../../designer/AttrEditBtn';
 import AttrCopyBtn from '../../designer/AttrCopyBtn';
 
 const ActionRenderer = params => {
-  const { data, fnCopy, fnDelete, fnEdit, klasses, node } = params;
+  const { data, fnCopy, fnDelete, fnEdit, klasses, node, genericType } = params;
 
   const onSelect = () => {
     node.setSelected(true, true);
@@ -15,7 +15,7 @@ const ActionRenderer = params => {
         data={data}
         fnSelect={onSelect}
         fnCopy={fnCopy}
-        genericType="Element"
+        genericType={genericType}
         klasses={klasses || []}
       />
       &nbsp;
@@ -24,7 +24,7 @@ const ActionRenderer = params => {
         fnSelect={onSelect}
         fnDelete={fnDelete}
         fnEdit={fnEdit}
-        genericType="Element"
+        genericType={genericType}
         klasses={klasses || []}
       />
     </span>

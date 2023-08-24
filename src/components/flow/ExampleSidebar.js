@@ -2,7 +2,6 @@ import React from 'react';
 
 export default () => {
   const onDragStart = (event, nodeType) => {
-    console.log('dragstart on div: ', nodeType);
     event.dataTransfer.setData('application/labimotion', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };

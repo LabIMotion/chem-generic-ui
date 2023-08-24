@@ -3,12 +3,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
 import {
-  Panel, Button, ButtonToolbar, OverlayTrigger, Tooltip
+  Panel,
+  Button,
+  ButtonToolbar,
+  OverlayTrigger,
+  Tooltip,
 } from 'react-bootstrap';
+import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
-import {
-  genUnits, toBool, toNum, absOlsTermLabel
-} from '../tools/utils';
+import { toBool, toNum, absOlsTermLabel } from '../tools/utils';
 
 class GenericDSDetails extends Component {
   constructor(props) {
@@ -23,26 +26,48 @@ class GenericDSDetails extends Component {
       newProps.klass_uuid = klass.uuid;
       Object.keys(newProps.layers).forEach(key => {
         const newLayer = newProps.layers[key] || {};
-        const curFields = (genericDS.properties.layers[key] && genericDS.properties.layers[key].fields) || [];
+        const curFields =
+          (genericDS.properties.layers[key] &&
+            genericDS.properties.layers[key].fields) ||
+          [];
         (newLayer.fields || []).forEach((f, idx) => {
           const curIdx = findIndex(curFields, o => o.field === f.field);
           if (curIdx >= 0) {
-            const curVal = genericDS.properties.layers[key].fields[curIdx].value;
+            const curVal =
+              genericDS.properties.layers[key].fields[curIdx].value;
             const curType = typeof curVal;
-            if (['select', 'text', 'textarea', 'formula-field'].includes(newProps.layers[key].fields[idx].type)) {
-              newProps.layers[key].fields[idx].value = curType !== 'undefined' ? curVal.toString() : '';
+            if (
+              ['select', 'text', 'textarea', 'formula-field'].includes(
+                newProps.layers[key].fields[idx].type
+              )
+            ) {
+              newProps.layers[key].fields[idx].value =
+                curType !== 'undefined' ? curVal.toString() : '';
             }
             if (newProps.layers[key].fields[idx].type === 'integer') {
               // eslint-disable-next-line no-restricted-globals
-              newProps.layers[key].fields[idx].value = (curType === 'undefined' || curType === 'boolean' || isNaN(curVal)) ? 0 : parseInt(curVal, 10);
+              newProps.layers[key].fields[idx].value =
+                curType === 'undefined' ||
+                curType === 'boolean' ||
+                isNaN(curVal)
+                  ? 0
+                  : parseInt(curVal, 10);
             }
             if (newProps.layers[key].fields[idx].type === 'checkbox') {
-              newProps.layers[key].fields[idx].value = curType !== 'undefined' ? toBool(curVal) : false;
+              newProps.layers[key].fields[idx].value =
+                curType !== 'undefined' ? toBool(curVal) : false;
             }
             if (newProps.layers[key].fields[idx].type === 'system-defined') {
-              const units = genUnits(newProps.layers[key].fields[idx].option_layers);
-              const vs = units.find(u => u.key === genericDS.properties.layers[key].fields[curIdx].value_system);
-              newProps.layers[key].fields[idx].value_system = (vs && vs.key) || units[0].key;
+              const units = genUnits(
+                newProps.layers[key].fields[idx].option_layers
+              );
+              const vs = units.find(
+                u =>
+                  u.key ===
+                  genericDS.properties.layers[key].fields[curIdx].value_system
+              );
+              newProps.layers[key].fields[idx].value_system =
+                (vs && vs.key) || units[0].key;
               newProps.layers[key].fields[idx].value = toNum(curVal);
             }
           }
@@ -72,7 +97,7 @@ class GenericDSDetails extends Component {
         isActiveWF={false}
       />
     );
-    return (<div style={{ margin: '5px' }}>{layersLayout}</div>);
+    return <div style={{ margin: '5px' }}>{layersLayout}</div>;
   }
 
   render() {
@@ -80,22 +105,33 @@ class GenericDSDetails extends Component {
     if (uiCtrl && Object.keys(genericDS).length !== 0 && kind && kind !== '') {
       return (
         <Panel className="panel-detail">
-          <Panel.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
+          <Panel.Body
+            style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}
+          >
             {this.elementalPropertiesItem(genericDS)}
             <span className="g-ds-note label">
               <span className="g-ds-title">Note</span>
               <br />
-              Selected analysis type:
-              {' '}
-              {absOlsTermLabel(kind)}
+              Selected analysis type: {absOlsTermLabel(kind)}
               <br />
-              Content is designed for:
-              {' '}
-              {genericDS.klass_label}
+              Content is designed for: {genericDS.klass_label}
             </span>
             <ButtonToolbar className="pull-right">
-              <OverlayTrigger placement="top" overlay={<Tooltip id="_tooltip_reload">click to reload the content template</Tooltip>}>
-                <Button bsSize="xsmall" bsStyle="danger" onClick={() => this.handleReload()}>Reload</Button>
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="_tooltip_reload">
+                    click to reload the content template
+                  </Tooltip>
+                }
+              >
+                <Button
+                  bsSize="xsmall"
+                  bsStyle="danger"
+                  onClick={() => this.handleReload()}
+                >
+                  Reload
+                </Button>
               </OverlayTrigger>
             </ButtonToolbar>
           </Panel.Body>
@@ -111,7 +147,7 @@ GenericDSDetails.propTypes = {
   kind: PropTypes.string, // selected analysis type
   genericDS: PropTypes.object,
   klass: PropTypes.object, // dataset_klass
-  onChange: PropTypes.func.isRequired // change callback
+  onChange: PropTypes.func.isRequired, // change callback
 };
 GenericDSDetails.defaultProps = { kind: '', genericDS: {}, klass: {} };
 

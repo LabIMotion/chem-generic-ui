@@ -1,18 +1,22 @@
 import { cloneDeep, sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
+import splitFlowElements from '../../utils/flow/split-flow-elements';
 
-const getWFNode = (_flow, nodeId) => _flow.elements.filter(e => e.id === nodeId)[0];
+
+const getWFNode = (_flow, nodeId) => _flow.nodes?.filter(e => e.id === nodeId)[0];
 
 // full-flow, node id
 const getFlowLayer = (templateFlow, nodeId, sourceLayer, sIdx) => {
-  const flow = cloneDeep(templateFlow);
-  const nd = flow.elements.filter(e => e.id === nodeId); // fetch node
+  const { nodes, edges, viewport } = templateFlow;
+  // const flow = cloneDeep(templateFlow);
+
+  const nd = nodes?.filter(e => e.id === nodeId); // fetch node
   if (nd.length < 1) return null;
   const { layer } = nd[0].data;
-  const ls = flow.elements.filter(e => e.animated); // lines
-  const ns = flow.elements.filter(e => e.type === 'default' && e.data); // nodes - Start - End
-  const ndNs = ls.filter(e => e.source === nodeId).map(e => e.target); // next nodes' id
-  const wfOpts = ns.filter(n => ndNs.includes(n.id)).map(e => ({ key: e.id, label: `${e.data.layer.label}(${e.data.layer.key})` })); // next nodes
+  const ls = edges || []; // lines
+  const ns = nodes?.filter(e => e.type === 'default' && e.data) || []; // nodes - Start - End
+  const ndNs = ls.filter(e => e.source === nodeId).map(e => e.target) || []; // next nodes' id
+  const wfOpts = ns.filter(n => ndNs.includes(n.id))?.map(e => ({ key: e.id, label: `${e.data.layer.label}(${e.data.layer.key})` })) || []; // next nodes
   if (wfOpts.length > 0) {
     const position = (layer.fields || []).length + 1;
     layer.fields.push({
@@ -124,12 +128,17 @@ const removeFromObject = (_propertiesLayers = {}, srcLayer = '', rmNode = {}) =>
 
 const buildInitWF = (template) => {
   const orig = cloneDeep(template);
-  const { layers, flow } = orig;
+  const { layers, flow, flowObject } = orig;
+
+  const { nodes, edges, viewport } = flowObject
+  ? cloneDeep(flowObject)
+  : splitFlowElements(flow);
+
   const sortedLayers = sortBy(layers, l => l.position);
-  if (flow && flow.elements.filter(e => !['input', 'output'].includes(e.type).length > 0)) {
+  if (nodes?.filter(e => !['input', 'output'].includes(e.type).length > 0)) {
     // id = 1 Start, id = 2 End
-    const nls = flow.elements; // nodes + lines
-    const ls = nls.filter(e => e.animated); // lines
+    const nls = nodes; // nodes
+    const ls = edges;  // lines
     const ns = nls.filter(e => e.type === 'default' && e.data); // nodes - Start - End
     const nNs = ls.filter(e => e.source === '1').map(e => e.target); // get target ids from Start
     const nextNodes = ns.filter(n => nNs.includes(n.id)); // target nodes

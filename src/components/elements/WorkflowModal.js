@@ -3,15 +3,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import DnDFlow from '../flow/DnDFlow';
+import Response from '../../utils/response';
+import { notifySuccess } from '../../utils/template/designer-message';
 
 const WorkflowModal = props => {
   const { element, fnSaveFlow, showProps } = props;
   const { show, setShow } = showProps;
-  console.log('WorkflowModal: element=', element);
   if (!show) return null;
 
   const handleSaveFlow = _flowObject => {
-    fnSaveFlow(element, _flowObject);
+    console.log('WorkflowModal: handleSaveFlow: _flowObject=', _flowObject);
+    const flow = _flowObject.flowObject;
+    flow['nodes'] = flow['nodes'].map(_node => {
+      if (!_node.data) return _node;
+      if (_node.type === 'default') delete _node.data.label;
+      return _node;
+    });
+    // const flow = _flowObject.flowObject.map(_flow => {
+    //   const { edges, nodes, viewport } = _flow;
+    //   _node = nodes.map(_node => {
+    //     if (!_node.data) return _node;
+
+    //     delete _node.data.label;
+    //     return _node;
+    //   });
+    //   return { edges, node: _nodes, viewport }
+    // });
+
+    element.properties_template.flowObject = flow;
+    delete element.properties_template.flow;  ////////// TO BE CONFIRMED
+    fnSaveFlow(new Response(notifySuccess(), element));
+    setShow(false);
   };
 
   return (

@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { unitConversion } from './utils';
+import { unitConversion } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
 
 const collateValues = (currentFields, previousFields, previousValues) => {

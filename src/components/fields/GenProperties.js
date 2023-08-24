@@ -1,3 +1,4 @@
+import { FieldTypes } from 'generic-ui-core';
 import {
   GenPropertiesCheckbox,
   GenPropertiesCalculate,
@@ -14,12 +15,11 @@ import {
   GenPropertiesTable,
   GenTextFormula,
   GenWFNext,
-  GenPropertiesText
+  GenPropertiesText,
 } from './GenPropertiesFields';
-import FieldTypes from './FieldTypes';
 import PropCalculate from './PropCalculate';
 
-const GenProperties = (opt) => {
+const GenProperties = opt => {
   const fieldProps = { ...opt, dndItems: [] };
   const type = fieldProps.type.split('_');
   if (opt.isSearch && type[0] === 'drag') type[0] = 'text';
@@ -31,7 +31,7 @@ const GenProperties = (opt) => {
       return GenPropertiesDate(fieldProps);
     // case 'datetime-range':
     //   return GenPropertiesDateTimeRange(fieldProps);
-    case FieldTypes.F_FORMULA:
+    case FieldTypes.F_FORMULA_FIELD:
       return PropCalculate(fieldProps);
     case 'select':
       return GenPropertiesSelect(fieldProps);

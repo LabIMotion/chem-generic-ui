@@ -84,12 +84,12 @@ export default class LayerAttrForm extends Component {
               }}
             >
               <option value="none">none</option>
-              <option value="default">Grey</option>
-              <option value="success">Green</option>
-              <option value="warning">Yellow</option>
               <option value="primary">Blue</option>
-              <option value="info">Light Blue</option>
+              <option value="info">Blue - Light</option>
+              <option value="success">Green</option>
+              <option value="default">Grey</option>
               <option value="danger">Red</option>
+              <option value="warning">Yellow</option>
             </FormControl>
           </InputGroup>
         </FormGroup>
@@ -104,9 +104,9 @@ export default class LayerAttrForm extends Component {
               }}
             >
               <option value="panel_generic_heading">bold</option>
-              <option value="panel_generic_heading_bu">bold/underline</option>
+              <option value="panel_generic_heading_bu">bold + underline</option>
               <option value="panel_generic_heading_bui">
-                bold/underline/italic
+                bold + underline + italic
               </option>
             </FormControl>
           </InputGroup>
@@ -116,7 +116,7 @@ export default class LayerAttrForm extends Component {
             <InputGroup.Addon>used in Workflow?</InputGroup.Addon>
             <FormControl
               componentClass="select"
-              defaultValue={layer.wf}
+              defaultValue={layer?.wf}
               inputRef={ref => {
                 this.lf_wf = ref;
               }}

@@ -50,6 +50,12 @@
   background-color: $color-bs-warning !important;
 }
 
+.bg-bs-field-display {
+  background-color: unset !important;
+  color: $color-attention-emphasis !important;
+  border: $color-attention-emphasis solid 1px;
+}
+
 .icon_generic_nav {
   font-family: FontAwesome, Helvetica, Arial, sans-serif !important;
 }
@@ -322,8 +328,8 @@
   display: block;
   padding: 6px 10px;
   margin: 10px;
-  border-radius: 10px;
-  border: thin solid lightgray;
+  border-radius: 0px;
+  border: thin solid $color-default;
   font-size: 1.2em;
   > div {
     display: flex;
@@ -332,9 +338,8 @@
 }
 
 .generic_block_select {
-  // border-color: $color-selected-border;
   border-width: medium;
-  border-style: groove;
+  border-style: solid;
 }
 
 .generic_panel_none {
@@ -513,7 +518,7 @@
 
 .flow_view_draggable {
   z-index: 100;
-  position: relative;
+  // position: relative;
   width: 50vw;
   top: 12%;
   left: 10%;
@@ -598,3 +603,9 @@
   margin: 0.5rem !important;
 }
 // ===================================================================
+
+.pre_line_tooltip {
+  .tooltip-inner {
+    white-space: pre-wrap !important;
+  }
+}

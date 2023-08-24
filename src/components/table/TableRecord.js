@@ -4,15 +4,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Numeral from 'numeral';
+import { genUnits, unitConversion } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
-import {
-  AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn
-} from './GridBtn';
+import { AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn } from './GridBtn';
 import { ColumnHeader, ColumnRow, NoRow } from './GridEntry';
 import UConverterRenderer from './UConverterRenderer';
-import {
-  genUnits, unitConversion, molOptions, samOptions
-} from '../tools/utils';
+import { molOptions, samOptions } from '../tools/utils';
 import DropRenderer from './DropRenderer';
 import DropTextRenderer from './DropTextRenderer';
 import DropLinkRenderer from './DropLinkRenderer';
@@ -73,9 +70,14 @@ export default class TableRecord extends React.Component {
     const subVal = subVals.find(s => s.id === data.id);
     const units = genUnits(subField.option_layers);
     let uIdx = units.findIndex(u => u.key === subVal[subField.id].value_system);
-    if (uIdx < units.length - 1) uIdx += 1; else uIdx = 0;
+    if (uIdx < units.length - 1) uIdx += 1;
+    else uIdx = 0;
     const vs = units.length > 0 ? units[uIdx].key : '';
-    const v = unitConversion(subField.option_layers, vs, subVal[subField.id].value);
+    const v = unitConversion(
+      subField.option_layers,
+      vs,
+      subVal[subField.id].value
+    );
     subVal[subField.id] = { value: v, value_system: vs };
     const idx = subVals.findIndex(s => s.id === data.id);
     subVals.splice(idx, 1, subVal);
@@ -111,66 +113,119 @@ export default class TableRecord extends React.Component {
   getColumns() {
     const { opt } = this.props;
     const { selectOptions, onNavi } = opt;
-    const sValues = (opt.f_obj.sub_values || []);
+    const sValues = opt.f_obj.sub_values || [];
     let columnDefs = [];
     (opt.f_obj.sub_fields || []).forEach(sF => {
       let colDef = {
-        type: sF.type, headerName: sF.col_name, field: sF.id
+        type: sF.type,
+        headerName: sF.col_name,
+        field: sF.id,
       };
       const colDefExt = [];
       if (sF.type === 'text') {
         colDef = { ...colDef, editable: true, onCellChange: this.onCellChange };
       }
       if (sF.type === 'select') {
-        let sOptions = (selectOptions[sF.option_layers] && selectOptions[sF.option_layers].options) || [];
-        sOptions = sOptions.map(op => ({ value: op.key, name: op.key, label: op.label }));
-        const cellParams = { sField: sF, onChange: this.onSelectClick, sOptions };
+        let sOptions =
+          (selectOptions[sF.option_layers] &&
+            selectOptions[sF.option_layers].options) ||
+          [];
+        sOptions = sOptions.map(op => {
+          return {
+            value: op.key,
+            name: op.key,
+            label: op.label,
+          };
+        });
+        const cellParams = {
+          sField: sF,
+          onChange: this.onSelectClick,
+          sOptions,
+        };
         colDef = {
-          ...colDef, cellRenderer: SelectRenderer, cellParams, onCellChange: this.onCellChange
+          ...colDef,
+          cellRenderer: SelectRenderer,
+          cellParams,
+          onCellChange: this.onCellChange,
         };
       }
       if (sF.type === 'system-defined') {
         const cellParams = { sField: sF, onChange: this.onUnitClick };
         colDef = {
-          ...colDef, cellRenderer: UConverterRenderer, cellParams, onCellChange: this.onCellChange
+          ...colDef,
+          cellRenderer: UConverterRenderer,
+          cellParams,
+          onCellChange: this.onCellChange,
         };
       }
       if (sF.type === 'drag_molecule') {
         const cellParams = { sField: sF, opt, onChange: this.onDrop };
         colDef = {
-          ...colDef, cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
+          ...colDef,
+          cellRenderer: DropRenderer,
+          cellParams,
+          onCellChange: this.onCellChange,
+          width: '5vw',
         };
-        const conf = ((sF.value || '').split(';') || []);
+        const conf = (sF.value || '').split(';') || []; // value could be molOptions with ;, e.g. "inchikey;smiles;"
         conf.forEach(c => {
           const attr = molOptions.find(m => m.value === c);
           if (attr) {
             const ext = {
-              colId: c, editable: false, type: 'text', headerName: attr.label, cellRenderer: DropTextRenderer, cellParams: { attr, sField: sF }
+              colId: c,
+              editable: false,
+              type: 'text',
+              headerName: attr.label,
+              cellRenderer: DropTextRenderer,
+              cellParams: { attr, sField: sF },
             };
             colDefExt.push(ext);
           }
         });
       }
       if (sF.type === 'drag_sample') {
-        const sOpt = sValues.filter(o => o[sF.id] && o[sF.id].value && o[sF.id].value.is_new);
+        const sOpt = sValues.filter(
+          o => o[sF.id] && o[sF.id].value && o[sF.id].value.is_new
+        );
         const cellParams = { sField: sF, opt, onChange: this.onDrop };
         colDef = {
-          ...colDef, cellRenderer: DropRenderer, cellParams, onCellChange: this.onCellChange, width: '5vw'
+          ...colDef,
+          cellRenderer: DropRenderer,
+          cellParams,
+          onCellChange: this.onCellChange,
+          width: '5vw',
         };
         const addOption = {
-          colId: 'sam_option', editable: false, type: 'text', headerName: '', cellRenderer: SampOption, cellParams: { sField: sF, onChange: this.onChk }, width: '3vw'
+          colId: 'sam_option',
+          editable: false,
+          type: 'text',
+          headerName: '',
+          cellRenderer: SampOption,
+          cellParams: { sField: sF, onChange: this.onChk },
+          width: '3vw',
         };
         if (sOpt.length > 0) colDefExt.push(addOption);
         const addLink = {
-          colId: 'sam_link', editable: false, type: 'text', headerName: 'Short label', cellRenderer: DropLinkRenderer, cellParams: { sField: sF, onNavi }, width: '5vw'
+          colId: 'sam_link',
+          editable: false,
+          type: 'text',
+          headerName: 'Short label',
+          cellRenderer: DropLinkRenderer,
+          cellParams: { sField: sF, onNavi },
+          width: '5vw',
         };
         colDefExt.push(addLink);
-        const conf = ((sF.value || '').split(';') || []);
+        const conf = (sF.value || '').split(';') || [];
         conf.forEach(c => {
           const attr = samOptions.find(m => m.value === c);
           if (attr) {
             const ext = {
-              colId: c, editable: false, type: 'text', headerName: attr.label, cellRenderer: DropTextRenderer, cellParams: { attr, sField: sF }
+              colId: c,
+              editable: false,
+              type: 'text',
+              headerName: attr.label,
+              cellRenderer: DropTextRenderer,
+              cellParams: { attr, sField: sF },
             };
             colDefExt.push(ext);
           }
@@ -198,7 +253,11 @@ export default class TableRecord extends React.Component {
       colId: `${opt.f_obj.field}_dnd`,
       headerComponent: NullRowBtn,
       cellRenderer: DnDRowBtn,
-      cellParams: { moveRow: this.moveRow, field: opt.f_obj.field, type: dtype },
+      cellParams: {
+        moveRow: this.moveRow,
+        field: opt.f_obj.field,
+        type: dtype,
+      },
       width: 'unset',
     };
     columnDefs.splice(0, 0, move);
@@ -218,7 +277,9 @@ export default class TableRecord extends React.Component {
 
   delRow(rowData) {
     const { opt } = this.props;
-    opt.f_obj.sub_values = opt.f_obj.sub_values.filter(s => s.id !== rowData.id);
+    opt.f_obj.sub_values = opt.f_obj.sub_values.filter(
+      s => s.id !== rowData.id
+    );
     opt.onSubChange(0, 0, opt.f_obj, true);
   }
 
@@ -228,7 +289,9 @@ export default class TableRecord extends React.Component {
     const newSub = new GenericSubField();
     subFields.map(e => {
       if (e.type === 'text') return Object.assign(newSub, { [e.id]: '' });
-      return Object.assign(newSub, { [e.id]: { value: '', value_system: e.value_system } });
+      return Object.assign(newSub, {
+        [e.id]: { value: '', value_system: e.value_system },
+      });
     });
     opt.f_obj.sub_values = opt.f_obj.sub_values || [];
     opt.f_obj.sub_values.push(newSub);
@@ -237,14 +300,16 @@ export default class TableRecord extends React.Component {
 
   render() {
     const { opt } = this.props;
-    if (opt.isSearch) return (<div>(This is a table)</div>);
+    if (opt.isSearch) return <div>(This is a table)</div>;
     if ((opt.f_obj.sub_fields || []).length < 1) return null;
     const columnDefs = this.getColumns();
     return (
       <div>
         {ColumnHeader(columnDefs)}
         <div>{NoRow(opt.f_obj.sub_values)}</div>
-        <div>{(opt.f_obj.sub_values || []).map(s => ColumnRow(columnDefs, s))}</div>
+        <div>
+          {(opt.f_obj.sub_values || []).map(s => ColumnRow(columnDefs, s))}
+        </div>
       </div>
     );
   }

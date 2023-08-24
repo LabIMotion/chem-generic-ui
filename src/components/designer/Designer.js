@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { ButtonToolbar } from 'react-bootstrap';
+import { cloneDeep } from 'lodash';
 import AttrNewBtn from './AttrNewBtn';
 import GridToolbar from './GridToolbar';
 import Constants from '../tools/Constants';
 import GenGridEl from '../details/GenGridEl';
+import GenGridSg from '../details/GenGridSg';
+import GenGridDs from '../details/GenGridDs';
 import getPageSizeForTheme from '../../utils/grid';
-import GenTemplate from './template/GenTemplate';
+import Template from './template/Template';
 
 const Designer = _props => {
   const {
@@ -13,22 +16,86 @@ const Designer = _props => {
     fnCreate,
     fnDeActivateKlass,
     fnDelete,
-    fnDerive, // return the new generic object
-    // fnSaveFlow, // should be combined to fnSubmit
-    // fnSubmit, // can be save or release
+    fnSubmit,
+    fnActive,
     fnUpdate,
-    fnUpload,
     genericType,
     gridData,
     klasses,
+    preview,
   } = _props;
   const [theme, setTheme] = useState(Constants.GRID_THEME.BALHAM.VALUE);
   const [data, setData] = useState(null);
 
   const onDataSelected = _data => {
     if (_data) {
-      console.log('onDataSelected', _data);
-      setData(_data);
+      const updatedData = cloneDeep(_data);
+      setData(updatedData);
+    }
+  };
+
+  // const innerAction = _result => {
+  //   // createLayer
+  //   const { element: newElement, notify } = _result;
+  //   if (notify.isSuccess) {
+  //     const locatedIndex = gridData.findIndex(e => e.uuid === newElement.uuid);
+  //     if (locatedIndex > -1) {
+  //       const updatedData = { ...data, ...newElement }; // State Mutation
+  //       setData(updatedData);
+  //     }
+  //   }
+  //   fnDerive(_result);
+  // };
+
+  const genGrid = () => {
+    switch (genericType) {
+      case Constants.GENERIC_TYPES.ELEMENT:
+        return (
+          <GenGridEl
+            fnCopyKlass={fnCopy}
+            fnDeActivateKlass={fnActive}
+            fnDeleteKlass={fnDelete}
+            fnEditKlass={fnUpdate}
+            genericType={genericType}
+            fnShowProp={onDataSelected}
+            // fnShowPropJson={() => {}}
+            gridData={gridData}
+            pageSize={getPageSizeForTheme(theme)}
+            theme={theme}
+          />
+        );
+      case Constants.GENERIC_TYPES.SEGMENT:
+        return (
+          <GenGridSg
+            fnCopyKlass={fnCopy}
+            fnDeActivateKlass={fnActive}
+            fnDeleteKlass={fnDelete}
+            fnEditKlass={fnUpdate}
+            genericType={genericType}
+            fnShowProp={onDataSelected}
+            // fnShowPropJson={() => {}}
+            gridData={gridData}
+            klasses={klasses}
+            pageSize={getPageSizeForTheme(theme)}
+            theme={theme}
+          />
+        );
+      case Constants.GENERIC_TYPES.DATASET:
+        return (
+          <GenGridDs
+            fnCopyKlass={fnCopy}
+            fnDeActivateKlass={fnActive}
+            fnEditKlass={fnUpdate}
+            genericType={genericType}
+            fnShowProp={onDataSelected}
+            // fnShowPropJson={() => {}}
+            gridData={gridData}
+            pageSize={getPageSizeForTheme(theme)}
+            theme={theme}
+          />
+        );
+      default:
+        return <>Undefined Data.</>;
     }
   };
 
@@ -47,27 +114,18 @@ const Designer = _props => {
           fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}
         />
       </ButtonToolbar>
-      <GenGridEl
-        fnCopyKlass={fnCopy}
-        fnDeActivateKlass={fnDeActivateKlass}
-        fnDeleteKlass={fnDelete}
-        fnEditKlass={fnUpdate}
-        fnShowProp={onDataSelected}
-        fnShowPropJson={() => {}}
-        gridData={gridData}
-        pageSize={getPageSizeForTheme(theme)}
-        theme={theme}
-      />
+      {genGrid()}
       {data ? (
-        <GenTemplate
+        <Template
           data={data}
-          fnDelete={fnDelete}
-          fnDerive={fnDerive}
+          fnSubmit={fnSubmit}
+          // fnDelete={fnDelete}
+          // fnDerive={innerAction}
+          // fnDerive={fnDerive}
           // fnSaveFlow={fnSaveFlow}
-          // fnSubmit={fnSubmit}
           fnUpdate={fnUpdate}
-          fnUpload={fnUpload}
           genericType={genericType}
+          preview={preview}
         />
       ) : (
         <></>

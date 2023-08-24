@@ -49,6 +49,7 @@ AttrCopyBtn.propTypes = {
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   klasses: PropTypes.array, // required for Segment
 };

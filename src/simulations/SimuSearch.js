@@ -20,7 +20,7 @@ class SimuSearch extends Component {
     })
       .then(response => response.json())
       .then(json => {
-        console.log(json);
+        // console.log(json);
         this.setState({ generic: json });
       })
       .catch(errorMessage => {

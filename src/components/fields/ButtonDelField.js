@@ -1,36 +1,18 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { findIndex } from 'lodash';
+import { FieldTypes } from 'generic-ui-core';
 import ButtonConfirm from './ButtonConfirm';
-import FieldTypes from './FieldTypes';
+import { handleDelete } from '../../utils/template/action-handler';
 
-const confirmDelete = (props) => {
-  const {
-    generic, str, key, root, fnConfirm
-  } = props;
-  if (str === FieldTypes.DEL_SELECT) {
-    delete generic.properties_template.select_options[key];
-  } else if (str === FieldTypes.DEL_OPTION) {
-    const { options } = generic.properties_template.select_options[root];
-    if (options && options.length > 0) {
-      const idx = findIndex(options, o => o.key === key);
-      options.splice(idx, 1);
-    }
-  } else if (str === FieldTypes.DEL_LAYER) {
-    delete generic.properties_template.layers[key];
-  } else if (str === FieldTypes.DEL_FIELD) {
-    const { fields } = generic.properties_template.layers[root];
-    const idx = findIndex(fields, o => o.field === key);
-    fields.splice(idx, 1);
-  }
-  fnConfirm(generic);
+const confirmDelete = props => {
+  const { generic, str, key, root, fnConfirm } = props;
+  const result = handleDelete(str, key, root, generic);
+  fnConfirm(result);
 };
 
-const ButtonDelField = (props) => {
-  const {
-    generic, delType, delKey, delRoot, fnConfirm
-  } = props;
+const ButtonDelField = props => {
+  const { generic, delType, delKey, delRoot, fnConfirm } = props;
   let msg = 'remove?';
   if (delType === FieldTypes.DEL_SELECT) {
     msg = `remove this select option: [${delKey}] ?`;
@@ -44,7 +26,11 @@ const ButtonDelField = (props) => {
     msg = `remove ???: ${delType}`;
   }
   const fnParams = {
-    generic, str: delType, key: delKey, root: delRoot, fnConfirm
+    generic,
+    str: delType,
+    key: delKey,
+    root: delRoot,
+    fnConfirm,
   };
 
   return (
@@ -64,7 +50,7 @@ ButtonDelField.propTypes = {
   delType: PropTypes.string.isRequired,
   delKey: PropTypes.string,
   delRoot: PropTypes.string,
-  fnConfirm: PropTypes.func.isRequired
+  fnConfirm: PropTypes.func.isRequired,
 };
 
 ButtonDelField.defaultProps = { delKey: '', delRoot: '' };

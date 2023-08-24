@@ -5,7 +5,12 @@ import { v4 as uuid } from 'uuid';
 
 const ButtonTooltip = props => {
   const { tip } = props;
-  const tooltip = <Tooltip id={uuid()}>{tip}</Tooltip>;
+  const tt = typeof tip === 'string' ? [tip] : tip;
+  const tooltip = (
+    <Tooltip id={uuid()} className="pre_line_tooltip">
+      {tt.join('\r\n')}
+    </Tooltip>
+  );
   const { size, bs, fnClick, element, place, fa, disabled, txt, btnCls } =
     props;
   const content = txt ? <span>{txt} </span> : '';
@@ -41,7 +46,7 @@ const ButtonTooltip = props => {
 };
 
 ButtonTooltip.propTypes = {
-  tip: PropTypes.string.isRequired,
+  tip: PropTypes.oneOfType([PropTypes.array, PropTypes.string]).isRequired,
   element: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   fnClick: PropTypes.func.isRequired,
   bs: PropTypes.string,

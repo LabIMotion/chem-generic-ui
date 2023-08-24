@@ -1,10 +1,11 @@
 const path = require('path');
 // const webpack = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist/'),
@@ -22,7 +23,7 @@ module.exports = {
       'react/jsx-dev-runtime': 'react/jsx-dev-runtime.js',
     },
   },
-  plugins: [new ReactRefreshWebpackPlugin()],
+  plugins: [new BundleAnalyzerPlugin(), new ReactRefreshWebpackPlugin()],
   module: {
     rules: [
       { test: /\.json$/, type: 'json' },

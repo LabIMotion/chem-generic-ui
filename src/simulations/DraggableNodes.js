@@ -35,7 +35,7 @@ const DraggableNodes = props => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
-      {nodes.map(node => (
+      {(nodes?.filter(e => e.wf) || []).map(node => (
         <DraggableNode key={node.key} id={node.id} node={node} />
       ))}
     </div>

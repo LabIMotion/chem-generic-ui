@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Badge,
   Button,
   Popover,
   Col,
@@ -12,62 +13,45 @@ import {
   OverlayTrigger,
   FormGroup,
   FormControl,
-  ControlLabel,
   InputGroup,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
+import { FieldTypes } from 'generic-ui-core';
 import ButtonTooltip from '../fields/ButtonTooltip';
 import { genUnitSup, toBool, toNullOrInt } from '../tools/utils';
+import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
-import FieldTypes from '../fields/FieldTypes';
-
-const BaseFieldTypes = [
-  { value: 'integer', name: 'integer', label: 'Integer' },
-  { value: 'datetime', name: 'datetime', label: 'Date-Time Picker' },
-  { value: 'datetime-range', name: 'datetime-range', label: 'Datetime range' },
-  { value: 'text', name: 'text', label: 'Text' },
-  { value: 'textarea', name: 'textarea', label: 'Text area' },
-  { value: 'select', name: 'select', label: 'Select' },
-  { value: 'checkbox', name: 'checkbox', label: 'Checkbox' },
-  { value: 'system-defined', name: 'system-defined', label: 'System-Defined' },
-  { value: 'formula-field', name: 'formula-field', label: 'Formula-Field' },
-];
-
-const ElementFieldTypes = [
-  { value: 'drag_molecule', name: 'drag_molecule', label: 'Drag Molecule' },
-  { value: 'drag_sample', name: 'drag_sample', label: 'Drag Sample' },
-  { value: 'drag_element', name: 'drag_element', label: 'Drag Element' },
-  { value: 'input-group', name: 'input-group', label: 'Input Group' },
-  { value: 'text-formula', name: 'text-formula', label: 'Text-Formula' },
-  { value: 'table', name: 'table', label: 'Table' },
-  { value: 'upload', name: 'upload', label: 'Upload' },
-];
-
-const SegmentFieldTypes = [
-  { value: 'input-group', name: 'input-group', label: 'Input Group' },
-  { value: 'text-formula', name: 'text-formula', label: 'Text-Formula' },
-  { value: 'drag_molecule', name: 'drag_molecule', label: 'Drag Molecule' },
-  { value: 'table', name: 'table', label: 'Table' },
-  { value: 'upload', name: 'upload', label: 'Upload' },
-];
+import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import {
+  renderDatetimeRange,
+  renderDummyFieldGroup,
+  renderTextFieldGroup,
+  renderOwnRow,
+  renderRequired,
+} from './Fields';
 
 class ElementField extends Component {
   constructor(props) {
     super(props);
+    this.state = { panelIsExpanded: false };
     this.handleChange = this.handleChange.bind(this);
     this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
-    this.handleCond = this.handleCond.bind(this);
     this.updSubField = this.updSubField.bind(this);
+    this.handlePanelToggle = this.handlePanelToggle.bind(this);
   }
 
-  updSubField(layerKey, field, cb) {
-    this.props.onFieldSubFieldChange(layerKey, field, cb);
-  }
+  handlePanelToggle = () => {
+    this.setState(prevState => {
+      return {
+        panelIsExpanded: !prevState.panelIsExpanded,
+      };
+    });
+  };
 
   handleChange(e, orig, fe, lk, fc, tp) {
     const { value } = e;
@@ -84,18 +68,17 @@ class ElementField extends Component {
     this.props.onChange(env, orig, fe, lk, fc, tp);
   }
 
-  handleMove(element) {
-    const { l, f, isUp } = element;
+  handleMove(_params) {
+    const { l, f, isUp } = _params;
     this.props.onMove(l, f, isUp);
   }
 
-  handleAddDummy(element) {
-    this.props.onDummyAdd(element);
+  handleAddDummy(_params) {
+    this.props.onDummyAdd(_params);
   }
 
-  handleCond(field, lk) {
-    this.props.onShowFieldCond(field, lk);
-    //this.setState({ showFieldRestriction: true, element: element });
+  updSubField(layerKey, field, cb) {
+    this.props.onFieldSubFieldChange(layerKey, field, cb);
   }
 
   handelDelete(delStr, delKey, delRoot) {
@@ -104,7 +87,7 @@ class ElementField extends Component {
 
   availableUnits(val) {
     const { unitsSystem } = this.props;
-    const us = (unitsSystem.fields || []).find(e => e.field === val);
+    const us = unitsSystem.find(e => e.field === val);
     if (us === undefined) return null;
     const tbl = us.units.map(e => (
       <div key={uuid()}>
@@ -172,99 +155,37 @@ class ElementField extends Component {
     );
   }
 
-  renderDummyFieldGroup(f) {
-    return (
-      <FormGroup controlId={`frmCtrlFid_${this.props.layerKey}_${f.field}`}>
-        <Col componentClass={ControlLabel} sm={3}>{`(${f.type})`}</Col>
-        <Col sm={9}>
-          <FormControl
-            type="text"
-            name={`f_${f.field}`}
-            defaultValue={`${f.type},  an invisible entry (${f.field})`}
-            disabled
-          />
-        </Col>
-      </FormGroup>
-    );
-  }
-
-  renderTextFieldGroup(f, label, field) {
-    return (
-      <FormGroup
-        controlId={`frmCtrlFid_${this.props.layerKey}_${f.field}_${field}`}
-      >
-        <Col componentClass={ControlLabel} sm={3}>
-          {label}
-        </Col>
-        <Col sm={9}>
-          <FormControl
-            type="text"
-            name={`f_${field}`}
-            defaultValue={f[field]}
-            disabled={field === 'field'}
-            onChange={event =>
-              this.handleChange(
-                event,
-                f[field],
-                f.field,
-                this.props.layerKey,
-                field,
-                'text'
-              )
-            }
-          />
-        </Col>
-      </FormGroup>
-    );
-  }
-
   renderComponent() {
-    const { unitsSystem, layerKey, genericType, allLayers, select_options } =
-      this.props;
-    const unitConfig = (unitsSystem.fields || []).map(_c => ({
-      value: _c.field,
-      name: _c.label,
-      label: _c.label,
-    }));
-    let typeOpts = BaseFieldTypes;
-    switch (genericType) {
-      case 'Element':
-        typeOpts = BaseFieldTypes.concat(ElementFieldTypes);
-        break;
-      case 'Segment':
-        typeOpts = BaseFieldTypes.concat(SegmentFieldTypes);
-        break;
-      default:
-        typeOpts = BaseFieldTypes;
+    const {
+      unitsSystem,
+      field: fieldObject,
+      layer,
+      layerKey,
+      genericType,
+      allLayers,
+      select_options,
+    } = this.props;
+    const { panelIsExpanded } = this.state;
+    const unitConfig = unitsSystem.map(_c => {
+      return {
+        value: _c.field,
+        name: _c.label,
+        label: _c.label,
+      };
+    });
+    let typeOpts = FieldBase;
+    if (genericType === 'Element') {
+      typeOpts = ElementBase;
+    } else if (genericType === 'Segment') {
+      typeOpts = SegmentBase;
     }
     typeOpts.sort((a, b) => a.value.localeCompare(b.value));
-    const f = this.props.field;
-    const hasCond = (f && f.cond_fields && f.cond_fields.length > 0) || false;
-    const btnCond = hasCond ? (
-      <ButtonTooltip
-        tip="Restriction Setting"
-        fnClick={() => this.handleCond(f, layerKey)}
-        bs="warning"
-        element={{ l: layerKey, f: null }}
-        fa="fa fa-cogs"
-        place="top"
-        size="sm"
-      />
-    ) : (
-      <ButtonTooltip
-        tip="Restriction Setting"
-        fnClick={() => this.handleCond(f, layerKey)}
-        element={{ l: layerKey, f: null }}
-        fa="fa fa-cogs"
-        place="top"
-        size="sm"
-      />
-    );
+    const f = fieldObject;
     const formulaField =
-      f.type === 'formula-field' ? (
-        <FormGroup controlId="formControlFieldType">
-          <Col componentClass={ControlLabel} sm={3}>
-            Formula
+      f.type === FieldTypes.F_FORMULA_FIELD ? (
+        <FormGroup className="gu-form-group">
+          <Col sm={3}>
+            <span className="gu-form-group-label">Formula</span>
           </Col>
           <Col sm={9}>
             <div style={{ display: 'flex' }}>
@@ -278,7 +199,7 @@ class ElementField extends Component {
                       event,
                       f.label,
                       f.field,
-                      this.props.layerKey,
+                      layerKey,
                       'formula',
                       'text'
                     )
@@ -298,17 +219,23 @@ class ElementField extends Component {
     const selectOptions =
       f.type === FieldTypes.F_SELECT ||
       f.type === FieldTypes.F_SYSTEM_DEFINED ? (
-        <FormGroup controlId="formControlFieldType">
-          <Col componentClass={ControlLabel} sm={3}>
-            {f.type === FieldTypes.F_SELECT ? 'Options' : <span />}
+        <FormGroup className="gu-form-group">
+          <Col sm={3}>
+            <span className="gu-form-group-label">
+              {f.type === FieldTypes.F_SELECT ? 'Options' : ' '}
+            </span>
           </Col>
           <Col sm={9}>
             <div style={{ display: 'flex' }}>
               <span style={{ width: '100%' }}>
                 <Select
                   styles={{
-                    menuPortal: base => ({ ...base, zIndex: 9999 }),
-                    menu: base => ({ ...base, zIndex: 9999 }),
+                    menuPortal: base => {
+                      return { ...base, zIndex: 9999 };
+                    },
+                    menu: base => {
+                      return { ...base, zIndex: 9999 };
+                    },
                   }}
                   name={f.field}
                   multi={false}
@@ -335,30 +262,26 @@ class ElementField extends Component {
       ) : (
         <div />
       );
-    const skipRequired =
-      ['Segment', 'Dataset'].includes(genericType) ||
-      !['integer', 'text'].includes(f.type)
-        ? { display: 'none' }
-        : {};
-    const groupOptions = ['input-group'].includes(f.type) ? (
-      <FormGroup controlId={`frmCtrlFid_${layerKey}_${f.field}_sub_fields`}>
-        <Col componentClass={ControlLabel} sm={3}>
-          {' '}
+    const groupOptions = [FieldTypes.F_INPUT_GROUP].includes(f.type) ? (
+      <FormGroup className="gu-form-group">
+        <Col sm={3}>
+          <span className="gu-form-group-label">&nbsp;</span>
         </Col>
         <Col sm={9}>
           <GroupFields
             layerKey={layerKey}
             field={f}
             updSub={this.updSubField}
-            unitsFields={unitsSystem.fields || []}
+            unitsFields={unitsSystem}
+            panelIsExpanded={panelIsExpanded}
           />
         </Col>
       </FormGroup>
     ) : null;
-    const tableOptions = ['table'].includes(f.type) ? (
-      <FormGroup controlId={`frmCtrlFid_${layerKey}_${f.field}_sub_fields`}>
-        <Col componentClass={ControlLabel} sm={3}>
-          {' '}
+    const tableOptions = [FieldTypes.F_TABLE].includes(f.type) ? (
+      <FormGroup className="gu-form-group">
+        <Col sm={3}>
+          <span className="gu-form-group-label">&nbsp;</span>
         </Col>
         <Col sm={9}>
           <TableDef
@@ -366,12 +289,14 @@ class ElementField extends Component {
             layerKey={layerKey}
             field={f}
             updSub={this.updSubField}
-            unitsFields={unitsSystem.fields || []}
+            unitsFields={unitsSystem}
             selectOptions={select_options || []}
+            panelIsExpanded={panelIsExpanded}
           />
           <InputGroup>
             <InputGroup.Addon>Tables per row</InputGroup.Addon>
             <FormControl
+              name={`frmPerRow_${layer.key}_f_${fieldObject.field}`}
               componentClass="select"
               defaultValue={f.cols || 1}
               onChange={event =>
@@ -392,12 +317,10 @@ class ElementField extends Component {
         </Col>
       </FormGroup>
     ) : null;
-    const textFormula = ['text-formula'].includes(f.type) ? (
-      <FormGroup
-        controlId={`frmCtrlFid_${layerKey}_${f.field}_text_sub_fields`}
-      >
-        <Col componentClass={ControlLabel} sm={3}>
-          {' '}
+    const textFormula = [FieldTypes.F_TEXT_FORMULA].includes(f.type) ? (
+      <FormGroup className="gu-form-group">
+        <Col sm={3}>
+          <span className="gu-form-group-label">&nbsp;</span>
         </Col>
         <Col sm={9}>
           <TextFormula
@@ -405,6 +328,7 @@ class ElementField extends Component {
             field={f}
             updSub={this.updSubField}
             allLayers={allLayers}
+            panelIsExpanded={panelIsExpanded}
           />
         </Col>
       </FormGroup>
@@ -413,12 +337,21 @@ class ElementField extends Component {
       <div>
         <Panel>
           <Panel.Heading className="template_panel_heading">
-            <Panel.Title toggle>
+            <Panel.Title toggle onClick={this.handlePanelToggle}>
               {this.props.position}&nbsp;
-              {['dummy'].includes(f.type) ? '(dummy field)' : f.field}
+              {[FieldTypes.F_DUMMY].includes(f.type)
+                ? '(dummy field)'
+                : f.label}
+              &nbsp;
+              <Badge className="bg-bs-field-display">{f.field || ''}</Badge>
             </Panel.Title>
             <ButtonGroup bsSize="xsmall">
-              {btnCond}
+              <ConditionFieldBtn
+                field={f}
+                fnUpdateSub={this.updSubField}
+                layer={layer}
+                sortedLayers={allLayers}
+              />
               <ButtonTooltip
                 tip="Move Up"
                 fnClick={this.handleMove}
@@ -438,7 +371,7 @@ class ElementField extends Component {
               <ButtonTooltip
                 tip="Add Dummy field"
                 fnClick={this.handleAddDummy}
-                element={{ l: layerKey, f: f.field }}
+                element={{ layerKey, field: f.field }}
                 fa="fa fa-plus-circle"
                 place="top"
               />
@@ -447,58 +380,51 @@ class ElementField extends Component {
           <Panel.Collapse>
             <Panel.Body>
               <Form horizontal className="default_style">
-                {['dummy'].includes(f.type)
-                  ? this.renderDummyFieldGroup(f)
-                  : null}
-                {!['dummy'].includes(f.type)
-                  ? this.renderTextFieldGroup(f, 'Field Name', 'field')
-                  : null}
-                {!['dummy'].includes(f.type)
-                  ? this.renderTextFieldGroup(f, 'Display Name', 'label')
-                  : null}
-                {!['dummy'].includes(f.type)
-                  ? this.renderTextFieldGroup(f, 'Hover Info', 'description')
-                  : null}
-                {['dummy', 'table', 'datetime-range'].includes(
+                {renderDummyFieldGroup({ layer, fieldObject })}
+                {renderTextFieldGroup({
+                  layer,
+                  fieldObject,
+                  label: 'Field Name',
+                  field: 'field',
+                  fnChange: this.handleChange,
+                })}
+                {renderTextFieldGroup({
+                  layer,
+                  fieldObject,
+                  label: 'Display Name',
+                  field: 'label',
+                  fnChange: this.handleChange,
+                })}
+                {renderTextFieldGroup({
+                  layer,
+                  fieldObject,
+                  label: 'Hover Info',
+                  field: 'description',
+                  fnChange: this.handleChange,
+                })}
+                {renderOwnRow({
+                  layer,
+                  fieldObject,
+                  fnChange: this.handleChange,
+                })}
+                {[FieldTypes.F_DUMMY, FieldTypes.F_FORMULA_FIELD].includes(
                   f.type
                 ) ? null : (
-                  <FormGroup
-                    controlId={`frmCtrlFid_${layerKey}_${f.field}_hasOwnRow`}
-                  >
-                    <Col componentClass={ControlLabel} sm={3}>
-                      Has its own line
-                    </Col>
-                    <Col sm={9}>
-                      <Checkbox
-                        checked={f.hasOwnRow}
-                        onChange={event =>
-                          this.handleChange(
-                            event,
-                            f.hasOwnRow,
-                            f.field,
-                            layerKey,
-                            'hasOwnRow',
-                            'checkbox'
-                          )
-                        }
-                      />
-                    </Col>
-                  </FormGroup>
-                )}
-                {['dummy', FieldTypes.F_FORMULA].includes(f.type) ? null : (
-                  <FormGroup
-                    controlId={`frmCtrlFid_${layerKey}_${f.field}_type`}
-                  >
-                    <Col componentClass={ControlLabel} sm={3}>
-                      Type
+                  <FormGroup className="gu-form-group">
+                    <Col sm={3}>
+                      <span className="gu-form-group-label">Type</span>
                     </Col>
                     <Col sm={9}>
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <Select
                             styles={{
-                              menuPortal: base => ({ ...base, zIndex: 9999 }),
-                              menu: base => ({ ...base, zIndex: 9999 }),
+                              menuPortal: base => {
+                                return { ...base, zIndex: 9999 };
+                              },
+                              menu: base => {
+                                return { ...base, zIndex: 9999 };
+                              },
                             }}
                             name={f.field}
                             multi={false}
@@ -520,20 +446,22 @@ class ElementField extends Component {
                     </Col>
                   </FormGroup>
                 )}
-                {[FieldTypes.F_FORMULA].includes(f.type) ? (
-                  <FormGroup
-                    controlId={`frmCtrlFid_${layerKey}_${f.field}_type`}
-                  >
-                    <Col componentClass={ControlLabel} sm={3}>
-                      Type
+                {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
+                  <FormGroup className="gu-form-group">
+                    <Col sm={3}>
+                      <span className="gu-form-group-label">Type</span>
                     </Col>
                     <Col sm={3}>
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <Select
                             styles={{
-                              menuPortal: base => ({ ...base, zIndex: 9999 }),
-                              menu: base => ({ ...base, zIndex: 9999 }),
+                              menuPortal: base => {
+                                return { ...base, zIndex: 9999 };
+                              },
+                              menu: base => {
+                                return { ...base, zIndex: 9999 };
+                              },
                             }}
                             name={f.field}
                             multi={false}
@@ -553,13 +481,14 @@ class ElementField extends Component {
                         </span>
                       </div>
                     </Col>
-                    <Col componentClass={ControlLabel} sm={1}>
-                      Decimal
+                    <Col sm={1}>
+                      <span className="gu-form-group-label">Decimal</span>
                     </Col>
                     <Col sm={2}>
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <FormControl
+                            name={`frmDecimal_${layer.key}_f_${fieldObject.field}`}
                             type="number"
                             value={f.decimal}
                             onChange={event =>
@@ -577,11 +506,12 @@ class ElementField extends Component {
                         </span>
                       </div>
                     </Col>
-                    <Col componentClass={ControlLabel} sm={2}>
-                      Can adjust?
+                    <Col sm={2}>
+                      <span className="gu-form-group-label">Can adjust?</span>
                     </Col>
                     <Col sm={1}>
                       <Checkbox
+                        name={`frmChk_${layer.key}_f_${fieldObject.field}`}
                         checked={toBool(f.canAdjust)}
                         onChange={event =>
                           this.handleChange(
@@ -597,56 +527,27 @@ class ElementField extends Component {
                     </Col>
                   </FormGroup>
                 ) : null}
-                {['datetime-range'].includes(f.type) ? (
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={3}>
-                      &nbsp;
-                    </Col>
-                    <Col sm={9}>
-                      <div style={{ fontSize: '10px' }}>
-                        <b>Datetime Range: </b>
-                        This type is used for recording the <b>Start</b> time
-                        and <b>Stop</b> time. The <b>Duration</b> is calculated
-                        automatically.
-                        <br />
-                        Please note, for the layout design, it takes an indepent
-                        row with 4 columns.
-                      </div>
-                    </Col>
-                  </FormGroup>
-                ) : null}
+                {renderDatetimeRange({ fieldObject })}
                 {groupOptions}
                 {tableOptions}
                 {selectOptions}
                 {formulaField}
                 {textFormula}
-                {['dummy'].includes(f.type) ? null : (
-                  <FormGroup
-                    controlId={`frmCtrlFid_${layerKey}_${f.field}_required`}
-                    style={skipRequired}
-                  >
-                    <Col componentClass={ControlLabel} sm={3}>
-                      Required
-                    </Col>
-                    <Col sm={9}>
-                      <Checkbox
-                        checked={f.required}
-                        onChange={event =>
-                          this.handleChange(
-                            event,
-                            f.required,
-                            f.field,
-                            layerKey,
-                            'required',
-                            'checkbox'
-                          )
-                        }
-                      />
-                    </Col>
-                  </FormGroup>
-                )}
-                {['integer', 'text'].includes(f.type)
-                  ? this.renderTextFieldGroup(f, 'Placeholder', 'placeholder')
+                {['Element'].includes(genericType)
+                  ? renderRequired({
+                      layer,
+                      fieldObject,
+                      fnChange: this.handleChange,
+                    })
+                  : null}
+                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type)
+                  ? renderTextFieldGroup({
+                      layer,
+                      fieldObject,
+                      label: 'Placeholder',
+                      field: 'placeholder',
+                      fnChange: this.handleChange,
+                    })
                   : null}
               </Form>
             </Panel.Body>
@@ -663,23 +564,19 @@ class ElementField extends Component {
 
 ElementField.propTypes = {
   genericType: PropTypes.string, // PropTypes.arrayOf(PropTypes.object),
+  layer: PropTypes.object.isRequired,
   layerKey: PropTypes.string.isRequired,
   select_options: PropTypes.array.isRequired,
   position: PropTypes.number.isRequired,
-  field: PropTypes.shape({
-    field: PropTypes.string,
-    type: PropTypes.string,
-    label: PropTypes.string,
-  }).isRequired,
+  field: PropTypes.object.isRequired,
   onMove: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  unitsSystem: PropTypes.object,
+  unitsSystem: PropTypes.array,
   onFieldSubFieldChange: PropTypes.func.isRequired,
   onDummyAdd: PropTypes.func.isRequired,
-  onShowFieldCond: PropTypes.func.isRequired,
 };
 
 ElementField.defaultProps = { genericType: 'Element', unitsSystem: [] };
 
-export { ElementField, ElementFieldTypes };
+export default ElementField;

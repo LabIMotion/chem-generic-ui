@@ -1,14 +1,28 @@
+import { isLayerInWF } from 'generic-ui-core';
 import {
   notifyError,
+  notifyFieldAdd,
   notifyLayerUpdate,
   notifySuccess,
 } from './designer-message';
-import { isLayerInWF } from '../../components/tools/utils';
 
 export const isValidKlass = klass => /\b[a-z]{3,5}\b/.test(klass);
 export const isValidField = field => /^[a-zA-Z0-9_]*$/.test(field);
 
-export const validateElementKlassInput = element => {
+export const validateFieldName = _fieldKey => {
+  if (_fieldKey === null || _fieldKey.trim().length === 0) {
+    return notifyFieldAdd(false, 'please input field name first!');
+  }
+  if (!isValidField(_fieldKey)) {
+    return notifyFieldAdd(
+      false,
+      'only can be alphanumeric (a-z, A-Z, 0-9 and underscores).'
+    );
+  }
+  return notifyFieldAdd();
+};
+
+export const validateInput = element => {
   if (element.name === '') {
     return notifyError('Please input Element.', `Element [${element.name}]`);
   }
@@ -50,7 +64,12 @@ export const validateLayerDeletion = (_element, _delKey) => {
       `Layer [${_delKey}]`
     );
   }
-  return notifySuccess();
+  return notifySuccess(
+    [
+      'Operation successfully.',
+      "Remember to save once you've finished editing.",
+    ].join(' ')
+  );
 };
 
 export const validateLayerInput = (layer, act = 'new') => {
@@ -65,7 +84,7 @@ export const validateLayerInput = (layer, act = 'new') => {
   }
   if (parseInt(layer.cols || 1, 10) < 1) {
     return notifyError(
-      'The minimun of Column per Row is 1, please input a different one.',
+      'The minimum number of columns per row is 1. Please enter a different value.',
       `Layer [${layer.key}]`
     );
   }
@@ -97,9 +116,9 @@ export const validateSelectList = (_element, _name) => {
       `Select List [${selectName}]`
     );
   }
-  if (_element?.properties_template?.select_options[`${selectName}`]) {
+  if (_element?.properties_template.select_options[`${selectName}`]) {
     return notifyError(
-      'This name of Select List is already taken. Please choose another one.',
+      'This name of Select List is already in use. Please choose another one.',
       `Select List [${selectName}]`
     );
   }
@@ -113,7 +132,7 @@ export const validateOptionAdd = (optionKey, selectOptions) => {
   }
   if (selectOptions.filter(x => x.key === optionKey).length > 1) {
     return notifyError(
-      'This option key is used already, please change another option key',
+      `This option key [${optionKey}] is already in use. Please choose a different option key.`,
       'Add new option'
     );
   }

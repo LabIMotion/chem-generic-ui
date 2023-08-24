@@ -154,27 +154,31 @@ const source = (type, props, id) => {
   }
 };
 
-const GenericElDropTarget = ({ canDrop, isOver, opt }) => {
+const GenericElDropTarget = (props) => {
+  const { opt, onDrop } = props;
   const { onNavi } = opt;
-  const iconClass =
-    opt.dndItems && opt.dndItems[0] === 'molecule' ? 'sample' : opt.dndItems[0];
-  const className = `target${isOver ? ' is-over' : ''}${
-    canDrop ? ' can-drop' : ''
-  }`;
-  const [{ isHovered }, drop] = useDrop({
+
+  const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: opt.dndItems,
     drop: item => {
       // Handle the drop event here...
       const sourceProps = item.element;
       const sourceTag = source(opt.type.split('_')[1], sourceProps, opt.id);
-      opt.onDrop(sourceTag);
+      onDrop(sourceTag);
     },
     collect: monitor => {
       return {
-        isHovered: monitor.isOver(),
+        isOver: monitor.isOver(),
+        isOverValidTarget: monitor.canDrop(),
       };
     },
   });
+
+  const iconClass =
+    opt.dndItems && opt.dndItems[0] === 'molecule' ? 'sample' : opt.dndItems[0];
+  const className = `target${isOver ? ' is-over' : ''}${
+    isOverValidTarget ? ' can-drop' : ''
+  }`;
 
   return (
     <div ref={drop} className={className}>
@@ -184,9 +188,8 @@ const GenericElDropTarget = ({ canDrop, isOver, opt }) => {
 };
 
 GenericElDropTarget.propTypes = {
-  canDrop: PropTypes.bool.isRequired,
-  isOver: PropTypes.bool.isRequired,
   opt: PropTypes.object.isRequired,
+  onDrop: PropTypes.func.isRequired,
 };
 
 export default GenericElDropTarget;

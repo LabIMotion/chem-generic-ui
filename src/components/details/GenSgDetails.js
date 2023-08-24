@@ -3,10 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
 import { Panel } from 'react-bootstrap';
+import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
-import {
-  genUnits, toBool, toNum
-} from '../tools/utils';
+import { toBool, toNum } from '../tools/utils';
 import organizeSubValues from '../tools/collate';
 
 class SegmentDetails extends Component {

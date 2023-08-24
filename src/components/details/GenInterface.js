@@ -4,8 +4,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { cloneDeep, findIndex, sortBy } from 'lodash';
+// import { DndProvider } from 'react-dnd';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
+import {
+  FieldTypes,
+  genUnits,
+  swapAryEls,
+  unitConversion,
+} from 'generic-ui-core';
 import GenAnaModal from './GenAnaModal';
-import FieldTypes from '../fields/FieldTypes';
 import LayersLayout from '../layers/LayersLayout';
 import LayerModal from '../layers/LayerModal';
 import Constants from '../tools/Constants';
@@ -17,13 +24,9 @@ import {
   orgLayerObject,
   reformCondFields,
 } from '../tools/orten';
-import {
-  genUnits,
-  swapAryEls,
-  unitConversion,
-  uploadFiles,
-} from '../tools/utils';
+import { uploadFiles } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
+import splitFlowElements from '../../utils/flow/split-flow-elements';
 
 const initialState = {
   showViewLayer: false,
@@ -31,7 +34,9 @@ const initialState = {
   showAnaModal: false,
 };
 
-const reducer = (state, action) => ({ ...state, ...action });
+const reducer = (state, action) => {
+  return { ...state, ...action };
+};
 
 const GenInterface = props => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
@@ -133,10 +138,15 @@ const GenInterface = props => {
         if (preValue && preValue !== '' && preValue !== value) {
           rmNeeded = true;
         }
-        const { flow } = properties_release;
+        const { flow, flowObject } = properties_release;
         const preLayer = properties.layers[`${layer}`];
+
+        const { nodes, edges, viewport } = flowObject
+        ? cloneDeep(flowObject)
+        : splitFlowElements(flow);
+
         // value is the next node's id
-        const nxLayer = getFlowLayer(flow, value, layer, preLayer.wf_position);
+        const nxLayer = getFlowLayer({ nodes, edges, viewport }, value, layer, preLayer.wf_position);
         if (nxLayer) {
           properties.layers = addToObject(properties.layers, layer, nxLayer);
         }
@@ -144,7 +154,7 @@ const GenInterface = props => {
           properties.layers = removeFromObject(
             properties.layers,
             layer,
-            getWFNode(flow, preValue)
+            getWFNode({ nodes, edges, viewport }, preValue)
           );
         }
         // update next step value
@@ -228,7 +238,7 @@ const GenInterface = props => {
     let propsChange = true;
     switch (type) {
       case 'drop-layer':
-        layerDrop(field, layer);
+        layerDrop(field, layer); // src, tar
         propsChange = false;
         break;
       case 'layer-data-change':
@@ -250,21 +260,21 @@ const GenInterface = props => {
         propsChange = false;
         dispatch({ showAnaModal: true, selectedLayerKey: layer.key });
         break;
-      case 'wf-next':
+      case FieldTypes.F_WF_NEXT:
         propsChange = false;
         layerNext(event, layer);
         break;
-      case 'checkbox':
+      case FieldTypes.F_CHECKBOX:
         value = event.target.checked;
         break;
-      case 'formula-field':
+      case FieldTypes.F_FORMULA_FIELD:
         if (event.target) {
           ({ value } = event.target);
         } else {
           value = event;
         }
         break;
-      case 'upload': {
+      case FieldTypes.F_UPLOAD: {
         const vals = uploadFiles(properties, event, field, layer);
         value = vals[0];
         if (vals[1].length > 0)
@@ -280,19 +290,19 @@ const GenInterface = props => {
         }
         break;
       }
-      case 'select':
+      case FieldTypes.F_SELECT:
         value = event ? event.value : null;
         break;
-      case 'drag_molecule':
-      case 'drag_sample':
-      case 'drag_element':
+      case FieldTypes.F_DRAG_MOLECULE:
+      case FieldTypes.F_DRAG_SAMPLE:
+      case FieldTypes.F_DRAG_ELEMENT:
       case FieldTypes.F_DATETIME_RANGE:
         value = event;
         break;
       case FieldTypes.F_DATETIME:
         value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
         break;
-      case 'integer':
+      case FieldTypes.F_INTEGER:
         ({ value } = event.target);
         value = Math.trunc(value);
         break;
@@ -332,13 +342,13 @@ const GenInterface = props => {
         layer === '' &&
         ['name', 'search_name', 'search_short_label'].includes(field)
       ) {
-        console.log(field);
+        // console.log(field);
       } else {
         properties.layers[`${layer}`].fields.find(
           e => e.field === field
         ).value = value;
         if (
-          type === 'system-defined' &&
+          type === FieldTypes.F_SYSTEM_DEFINED &&
           (!properties.layers[`${layer}`].fields.find(e => e.field === field)
             .value_system ||
             properties.layers[`${layer}`].fields.find(e => e.field === field)
@@ -403,7 +413,7 @@ const GenInterface = props => {
 
   const paramsLayersLayout = {
     layers: generic.properties.layers,
-    options: generic.properties_release.select_options || {},
+    options: generic.properties_release?.select_options || {},
     funcChange: handleInputChange,
     funcSubChange: handleSubChange,
     funcClick: handleUnitClick,
@@ -440,11 +450,13 @@ const GenInterface = props => {
   );
 
   return (
+    // <DndProvider backend={HTML5Backend}>
     <>
       {layersLayout}
       {addLayerModal}
       {anaModal}
     </>
+    // </DndProvider>
   );
 };
 

@@ -1,9 +1,9 @@
 const successLevel = 'success';
 const errorLevel = 'error';
 
-export const notifyError = (message = 'operation error', title = 'Error') => {
+export const notifyError = (msg = 'operation error', title = 'Error') => {
   return {
-    message,
+    msg,
     title,
     lvl: errorLevel,
     isSuccess: false,
@@ -11,11 +11,11 @@ export const notifyError = (message = 'operation error', title = 'Error') => {
 };
 
 export const notifySuccess = (
-  message = 'operation successfully',
+  msg = "Operation successfully. Remember to save once you've finished editing.",
   title = 'Success'
 ) => {
   return {
-    message,
+    msg,
     title,
     lvl: successLevel,
     isSuccess: true,
@@ -24,31 +24,25 @@ export const notifySuccess = (
 
 export const notifyDummyAdd = (
   isSuccess = true,
-  message = 'add dummy field successfully',
+  msg = 'add dummy field successfully',
   title = 'Add dummy field'
-) => (isSuccess ? notifySuccess(message, title) : notifyError(message, title));
+) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyFieldAdd = (
-  isSuccess,
-  message = 'add new field successfully',
+  isSuccess = true,
+  msg = 'add new field successfully',
   title = 'Add new field'
-) => (isSuccess ? notifySuccess(message, title) : notifyError(message, title));
+) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyFieldRemove = (
   isSuccess = true,
-  message = 'remove field successfully',
+  msg = 'remove field successfully',
   title = 'Remove field'
-) => (isSuccess ? notifySuccess(message, title) : notifyError(message, title));
-
-// export const notifyLayerUpdate = (
-//   isSuccess = true,
-//   message = 'update layer successfully',
-//   title = 'Update layer'
-// ) => (isSuccess ? notifySuccess(message, title) : notifyError(message, title));
+) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyLayerUpdate = (
   info = { type: null, layerKey: null },
-  message = 'update layer successfully',
+  msg = 'update layer successfully',
   title = 'Update layer'
 ) => {
   const { type, layerKey } = info;
@@ -70,6 +64,6 @@ export const notifyLayerUpdate = (
         title
       );
     default:
-      return notifySuccess(message, title);
+      return notifySuccess(msg, title);
   }
 };

@@ -8,7 +8,10 @@ import WorkflowModal from '../elements/WorkflowModal';
 const WorkflowDesignBtn = props => {
   const { element, fnSave, genericType } = props;
   const [show, setShow] = useState(false);
-  console.log('WorkflowDesignBtn: element=', element);
+  // console.log('WorkflowDesignBtn: element=', element);
+
+  if (genericType !== Constants.GENERIC_TYPES.ELEMENT) return null;
+
   return (
     <>
       <OverlayTrigger
@@ -37,6 +40,7 @@ WorkflowDesignBtn.propTypes = {
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   fnSave: PropTypes.func.isRequired,
 };

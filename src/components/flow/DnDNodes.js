@@ -33,7 +33,7 @@ const DnDNodes = props => {
 
   return (
     <>
-      {nodes.map(node => (
+      {(nodes?.filter(e => e.wf) || []).map(node => (
         <DnDNode key={node.key} id={node.id} node={node} />
       ))}
     </>

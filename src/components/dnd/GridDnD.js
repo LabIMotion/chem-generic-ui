@@ -3,15 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
 
-const GridDnD = ({
-  field,
-  rowValue,
-  handleMove,
-  isDragging,
-  isOver,
-  canDrop,
-}) => {
+const GridDnD = ({ field, rowValue, handleMove }) => {
   const [{ isDraggingSource }, drag] = useDrag({
+    type: 'GRID',
     item: { fid: field, rId: rowValue.id, type: 'GRID' },
     collect: monitor => {
       return {
@@ -19,7 +13,7 @@ const GridDnD = ({
       };
     },
   });
-  const [{ isOverTarget }, drop] = useDrop({
+  const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: 'GRID',
     drop: item => {
       const tar = { fid: field, rId: rowValue.id };
@@ -30,14 +24,14 @@ const GridDnD = ({
     },
     collect: monitor => {
       return {
-        isOverTarget: monitor.isOver(),
-        canDrop: monitor.canDrop(),
+        isOver: monitor.isOver(),
+        isOverValidTarget: monitor.canDrop(),
       };
     },
   });
   const className = `generic_grid_dnd${isOver ? ' is-over' : ''}${
-    canDrop ? ' can-drop' : ''
-  }${isDragging ? ' is-dragging' : ''}`;
+    isOverValidTarget ? ' can-drop' : ''
+  }${isDraggingSource ? ' is-dragging' : ''}`;
   return (
     <div ref={drop}>
       <div ref={drag} className={className}>
@@ -50,12 +44,9 @@ const GridDnD = ({
 };
 
 GridDnD.propTypes = {
-  field: PropTypes.object.isRequired,
+  field: PropTypes.string.isRequired,
   rowValue: PropTypes.object.isRequired,
   handleMove: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
-  isOver: PropTypes.bool.isRequired,
-  canDrop: PropTypes.bool.isRequired,
 };
 
 export default GridDnD;

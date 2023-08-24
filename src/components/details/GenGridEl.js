@@ -25,9 +25,9 @@ const GenGridEl = props => {
     fnCopyKlass,
     fnDeleteKlass,
     fnEditKlass,
+    genericType,
     fnDeActivateKlass,
     fnShowProp,
-    fnShowPropJson,
   } = props;
 
   const columnDefs = [
@@ -40,10 +40,12 @@ const GenGridEl = props => {
     {
       headerName: 'Action',
       cellRenderer: ActionRenderer,
+      minWidth: 50,
       cellRendererParams: {
         fnCopy: fnCopyKlass,
         fnDelete: fnDeleteKlass,
         fnEdit: fnEditKlass,
+        genericType,
       },
       sortable: false,
       filter: false,
@@ -51,6 +53,7 @@ const GenGridEl = props => {
     {
       headerName: 'Active',
       field: 'is_active',
+      minWidth: 50,
       cellRenderer: ActiveRenderer,
       cellRendererParams: { fnDeActivate: fnDeActivateKlass },
     },
@@ -73,11 +76,16 @@ const GenGridEl = props => {
     {
       headerName: 'Template',
       cellRenderer: TemplateRenderer,
-      cellRendererParams: { fnShow: fnShowProp, fnShowJson: fnShowPropJson },
+      width: 50,
+      cellRendererParams: { fnShow: fnShowProp }, // , fnShowJson: fnShowPropJson
       sortable: false,
       filter: false,
     },
+    { headerName: 'Version', field: 'version' },
     { headerName: 'Released at', field: 'released_at' },
+    { headerName: 'Updated at', field: 'updated_at' },
+    { headerName: 'Id', field: 'uuid' },
+    { headerName: 'Sync Time', field: 'sync_time' },
   ];
 
   return (
@@ -96,8 +104,9 @@ GenGridEl.propTypes = {
   fnDeActivateKlass: PropTypes.func.isRequired,
   fnDeleteKlass: PropTypes.func.isRequired,
   fnEditKlass: PropTypes.func.isRequired,
+  genericType: PropTypes.string.isRequired,
   fnShowProp: PropTypes.func.isRequired,
-  fnShowPropJson: PropTypes.func.isRequired,
+  // fnShowPropJson: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
   theme: PropTypes.string,
 };

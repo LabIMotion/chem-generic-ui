@@ -14,7 +14,7 @@ const FlowSidebar = props => {
     sortBy(propertiesTemplate.layers, l => l.position);
 
   const addNode = node => {
-    console.log('addNode', node);
+    // console.log('addNode', node);
     fnAdd(node);
   };
 

@@ -22,7 +22,6 @@ const AttrModal = props => {
           label: formRef.current.k_label.value.trim(),
           desc: formRef.current.k_desc.value.trim(),
           element_klass: formRef.current.k_klass.value,
-          identifier: formRef.current.k_identifier.value.trim(),
         };
         const verify = validateSegmentKlassInput(inputs);
         _fnAction(new Response(verify, inputs));
@@ -89,8 +88,7 @@ const AttrModal = props => {
       case Constants.GENERIC_TYPES.SEGMENT: {
         const updates = {
           label: formRef.current.k_label.value.trim(),
-          desc: formRef.current.k_desc.value.trim(),
-          identifier: formRef.current.k_identifier.value.trim(),
+          desc: formRef.current.k_desc.value.trim()
         };
         const inputs = { ...data, ...updates };
         const verify = validateSegmentKlassInput(inputs);
@@ -122,6 +120,7 @@ const AttrModal = props => {
       case 'c':
         button = (
           <Button
+            key={`_attr_modal_btn_${_action}`}
             bsStyle="primary"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
@@ -132,6 +131,7 @@ const AttrModal = props => {
       case 'cc':
         button = (
           <Button
+            key={`_attr_modal_btn_${_action}`}
             bsStyle="primary"
             onClick={_fnAction ? () => handleCopy(_fnAction) : () => {}}
           >
@@ -142,6 +142,7 @@ const AttrModal = props => {
       case 'u':
         button = (
           <Button
+            key={`_attr_modal_btn_${_action}`}
             bsStyle="primary"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
@@ -152,6 +153,7 @@ const AttrModal = props => {
       case 'd':
         button = (
           <Button
+            key={`_attr_modal_btn_${_action}`}
             bsStyle="danger"
             onClick={_fnAction ? () => handleDelete(_fnAction) : () => {}}
           >
@@ -169,7 +171,7 @@ const AttrModal = props => {
     const buttons = [];
     actions.forEach(e => {
       buttons.push(actionBtn(e.action, e.fnAction));
-      buttons.push(<span>&nbsp;</span>);
+      buttons.push(<span key={`_attr_modal_span_${e.action}`}>&nbsp;</span>);
     });
     return buttons;
   };
@@ -214,15 +216,18 @@ const AttrModal = props => {
 };
 
 AttrModal.propTypes = {
-  actions: PropTypes.arrayOf({
-    action: PropTypes.oneOf(['c', 'cc', 'u', 'd']),
-    fnAction: PropTypes.func,
-  }).isRequired,
-  data: PropTypes.object, // required for update action, the selected record
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      action: PropTypes.oneOf(['c', 'cc', 'u', 'd']),
+      fnAction: PropTypes.func,
+    })
+  ).isRequired,
+  data: PropTypes.object, // required for update action
   editable: PropTypes.bool,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   klasses: PropTypes.array, // required for Segment creation
   showProps: PropTypes.shape({

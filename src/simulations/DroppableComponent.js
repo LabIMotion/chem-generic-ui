@@ -51,7 +51,7 @@ const DroppableComponent = props => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'dnd-type',
     drop: (item, monitor) => {
-      console.log('item', item);
+      // console.log('item', item);
       // console.log('monitor', monitor);
       // console.log('monitor.getDropResult()', monitor.getClientOffset());
       addNode(item, monitor.getClientOffset());
@@ -65,7 +65,7 @@ const DroppableComponent = props => {
     params => setEdges(eds => addEdge(params, eds)),
     []
   );
-  console.log('nodes', nodes);
+  // console.log('nodes', nodes);
   return (
     <div ref={drop} className="dndflow" style={{ height: 800 }}>
       <ReactFlowProvider>

@@ -88,28 +88,27 @@ const show = (opt, iconClass, onDrop) => {
 };
 
 const GenericElTableDropTarget = props => {
-  const { connectDropTarget, isOver, canDrop, opt, onDrop } = props;
-  const [{ isOver: isDragOver }, drop] = useDrop({
-    accept: props.opt.dndItems,
+  const { opt, onDrop } = props;
+  const [{ isOver, isOverValidTarget }, drop] = useDrop({
+    accept: opt.dndItems,
     drop: (targetProps, monitor) => {
-      // Handle the drop event here...
-      console.log('drop', targetProps, monitor);
       const sourceProps = monitor.getItem().element;
-      const type = targetProps.opt.sField.type.split('_')[1];
-      const sourceTag = buildTableSource(type, sourceProps, targetProps.opt.id);
-      targetProps.onDrop(sourceTag, targetProps.opt);
+      const type = opt.sField.type.split('_')[1];
+      const { id } = opt;
+      const sourceTag = buildTableSource(type, sourceProps, id);
+      onDrop(sourceTag, opt);
     },
     collect: monitor => {
       return {
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
+        isOverValidTarget: monitor.canDrop(),
       };
     },
   });
   const className = `target${isOver ? ' is-over' : ''}${
-    canDrop ? ' can-drop' : ''
+    isOverValidTarget ? ' can-drop' : ''
   }`;
-  return connectDropTarget(
+  return (
     <div
       className={className}
       ref={drop}
@@ -121,9 +120,6 @@ const GenericElTableDropTarget = props => {
 };
 
 GenericElTableDropTarget.propTypes = {
-  connectDropTarget: PropTypes.func.isRequired,
-  isOver: PropTypes.bool.isRequired,
-  canDrop: PropTypes.bool.isRequired,
   opt: PropTypes.object.isRequired,
   onDrop: PropTypes.func,
 };

@@ -11,95 +11,95 @@ import WorkflowDesignBtn from '../WorkflowDesignBtn';
 import UploadTemplateBtn from '../UploadTemplateBtn';
 
 const TemplateProps = props => {
-  const {
-    data,
-    fnDelete,
-    fnDerive,
-    // fnSaveFlow,
-    // fnSubmit,
-    fnUpdate,
-    fnUpload,
-    genericType,
-  } = props;
+  const { data, fnUpdate, fnSubmit, genericType, innerAction } = props;
 
   return (
-    <Panel>
-      <Panel.Heading>
-        <b>{`Template of Element [${data.name}]`}</b>&nbsp;
-        <span className="generic_version">{`ver.: ${data.uuid}`}</span>
-        <span className="generic_version_draft">
-          {data.uuid === data.properties_template.uuid
-            ? ''
-            : `draft: ${data.properties_template.uuid}`}
-        </span>
-        <span className="button-right">
-          <UploadTemplateBtn
-            data={data}
-            fnUpload={fnUpload}
-            genericType={genericType}
-          />
+    <div>
+      <Panel>
+        <Panel.Heading>
+          <b>{`Template of ${genericType} [${data.name || data.label}]`}</b>
           &nbsp;
-          <WorkflowDesignBtn
-            element={data}
-            fnSave={fnDerive}
-            genericType={genericType}
-          />
-          &nbsp;
-          <ButtonTooltip
-            txt="Save and Release"
-            tip="Save and Release template"
-            // fnClick={() => fnSubmit(true)}
-            fnClick={fnDerive}
-            fa="fa-floppy-o"
-            place="top"
-            bs="success"
-          />
-          &nbsp;
-          <ButtonTooltip
-            txt="Save as draft"
-            tip="Save template as draft"
-            // fnClick={() => fnSubmit(false)}
-            fnClick={fnDerive}
-            fa="fa-floppy-o"
-            place="top"
-            bs="primary"
-          />
-        </span>
-        <div className="clearfix" />
-      </Panel.Heading>
-      <Panel.Body>
-        <Row style={{ maxWidth: '2000px', margin: 'auto' }}>
-          <Col sm={8}>
-            <PropLayers
+          <span className="button-right">
+            <UploadTemplateBtn
               data={data}
-              fnDelete={fnDelete}
-              fnUpdate={fnUpdate}
+              fnUpload={innerAction}
               genericType={genericType}
             />
-          </Col>
-          <Col sm={4}>
-            <SelectOptionLayer generic={data} fnChange={fnUpdate} />
-          </Col>
-        </Row>
-      </Panel.Body>
-    </Panel>
+            &nbsp;
+            <WorkflowDesignBtn
+              element={data}
+              fnSave={innerAction}
+              genericType={genericType}
+            />
+            &nbsp;
+            <ButtonTooltip
+              txt="Save and Release (Major)"
+              tip={[
+                'Save and Release template as major version',
+                '(version number X.Y, X is the major version)',
+              ]}
+              fnClick={fnSubmit}
+              element={{ data, release: 'major' }}
+              fa="fa-floppy-o"
+              place="top"
+              bs="success"
+            />
+            &nbsp;
+            <ButtonTooltip
+              txt="Save and Release (Minor)"
+              tip={[
+                'Save and Release template as minor version',
+                '(version number X.Y, Y is the minor version)',
+              ]}
+              fnClick={fnSubmit}
+              element={{ data, release: 'minor' }}
+              fa="fa-floppy-o"
+              place="top"
+              bs="success"
+            />
+            &nbsp;
+            <ButtonTooltip
+              txt="Save as draft"
+              tip="Save template as draft"
+              fnClick={fnSubmit}
+              element={{ data, release: 'draft' }}
+              fa="fa-floppy-o"
+              place="top"
+              bs="primary"
+            />
+          </span>
+          <div className="clearfix" />
+        </Panel.Heading>
+        <Panel.Body>
+          <Row style={{ maxWidth: '2000px', margin: 'auto' }}>
+            <Col sm={8}>
+              <PropLayers
+                data={data}
+                fnDerive={innerAction}
+                fnUpdate={innerAction}
+                genericType={genericType}
+              />
+            </Col>
+            <Col sm={4}>
+              <SelectOptionLayer generic={data} fnChange={innerAction} />
+            </Col>
+          </Row>
+        </Panel.Body>
+      </Panel>
+    </div>
   );
 };
 
 TemplateProps.propTypes = {
   data: PropTypes.object,
-  fnDelete: PropTypes.func.isRequired,
-  fnDerive: PropTypes.func.isRequired,
-  // fnSaveFlow: PropTypes.func,
-  // fnSubmit: PropTypes.func.isRequired,
+  fnSubmit: PropTypes.func.isRequired,
   fnUpdate: PropTypes.func.isRequired, // update element with new element
-  fnUpload: PropTypes.func.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
+  innerAction: PropTypes.func.isRequired,
 };
-
-// TemplateProps.defaultProps = { fnSaveFlow: () => {} };
 
 export default TemplateProps;

@@ -55,10 +55,8 @@ const DnDFlow = props => {
   );
 
   const onSave = useCallback(() => {
-    console.log('onSave');
     if (reactFlowInstance) {
       const flowObject = reactFlowInstance.toObject();
-      console.log(flowObject);
       // flowObject.elements = storeFlow(flowObject);
       fnSave({ flowObject });
     }

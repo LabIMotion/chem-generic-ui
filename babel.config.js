@@ -23,6 +23,7 @@ module.exports = function (api) {
     // 'react-refresh/babel',
   ];
 
+  plugins.push('@babel/plugin-transform-modules-commonjs');
   if (isEnvDevelopment) {
     plugins.push('react-refresh/babel');
   }

@@ -37,6 +37,7 @@ UploadTemplateBtn.propTypes = {
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   fnUpload: PropTypes.func.isRequired,
 };

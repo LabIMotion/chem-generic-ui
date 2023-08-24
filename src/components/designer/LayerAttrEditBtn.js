@@ -18,7 +18,7 @@ const LayerAttrEditBtn = props => {
           </Tooltip>
         }
       >
-        <Button bsSize="sm" bsStyle="primary" onClick={() => setShow(true)}>
+        <Button bsSize="sm" onClick={() => setShow(true)}>
           <i className="fa fa-pencil" aria-hidden="true" />
         </Button>
       </OverlayTrigger>

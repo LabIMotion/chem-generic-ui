@@ -120,6 +120,8 @@ export default class GroupFields extends React.Component {
   }
 
   autoSizeAll() {
+    const { panelIsExpanded } = this.props;
+    if (!panelIsExpanded) return;
     if (!this.gridApi) return;
     setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 10);
   }
@@ -209,6 +211,7 @@ GroupFields.propTypes = {
   field: PropTypes.object.isRequired,
   updSub: PropTypes.func.isRequired,
   unitsFields: PropTypes.arrayOf(PropTypes.object).isRequired,
+  panelIsExpanded: PropTypes.bool.isRequired,
 };
 
 // AG Grid: As of v27, registering components via grid property frameworkComponents is deprecated. Instead register both JavaScript AND Framework Components via the components property.

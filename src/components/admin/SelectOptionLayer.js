@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, FormControl, InputGroup, Panel } from 'react-bootstrap';
-import { findIndex } from 'lodash';
 import renderDeleteButton from './renderDeleteButton';
 import SelectAttrNewModal from './SelectAttrNewModal';
 import SelectOption from './SelectOption';
@@ -10,41 +9,32 @@ import ButtonTooltip from '../fields/ButtonTooltip';
 import {
   handleAddOption,
   handleAddSelect,
+  handleOptionInput,
 } from '../../utils/template/action-handler';
 
 const SelectOptionLayer = props => {
-  console.log('SelectOptionLayer props', props);
-  // const { generic, fnChange, fnAddSelect, fnAddOption } = props;
   const { generic, fnChange } = props;
 
   const [showAddSelect, setShowAddSelect] = useState(false);
 
   const onAdd = (_key, _optionKey, _selectOptions) => {
     const result = handleAddOption(generic, _key, _optionKey, _selectOptions);
-    // fnAddOption(result);
-    fnChange(result.element);
+    fnChange(result);
     setShowAddSelect(false);
   };
 
   const onCreate = selectName => {
-    const sos = { ...generic.properties_template.select_options };
+    const sos = { ...generic.properties_template?.select_options };
     sos[selectName] = {};
     const result = handleAddSelect(generic, selectName, sos);
-    // fnAddSelect(result);
-    fnChange(result.element);
+    fnChange(result);
     setShowAddSelect(false);
   };
 
   const onOptionInputChange = (event, optionKey, selectKey) => {
-    const element = generic;
-    const options =
-      element?.properties_template?.select_options[selectKey]?.options || [];
-    const idx = findIndex(options, o => o.key === optionKey);
-    const op = {};
-    op.key = optionKey;
-    op.label = event.target.value;
-    options.splice(idx, 1, op);
-    fnChange(element);
+    const input = event.target.value;
+    const result = handleOptionInput(generic, optionKey, selectKey, input);
+    fnChange(result);
   };
 
   const optionR = _params => {
@@ -68,10 +58,10 @@ const SelectOptionLayer = props => {
   };
 
   const selects = [];
-  Object.keys(generic.properties_template.select_options).forEach(root => {
+  Object.keys(generic.properties_template?.select_options).forEach(root => {
     const selectOptions =
-      (generic.properties_template.select_options[root] &&
-        generic.properties_template.select_options[root].options) ||
+      (generic.properties_template?.select_options[root] &&
+        generic.properties_template?.select_options[root].options) ||
       [];
     const options = selectOptions.map(f => (
       <div key={`${f.key}_${root}`} style={{ marginTop: '10px' }}>
@@ -136,13 +126,6 @@ const SelectOptionLayer = props => {
 SelectOptionLayer.propTypes = {
   generic: PropTypes.object.isRequired,
   fnChange: PropTypes.func.isRequired,
-  // fnAddSelect: PropTypes.func,
-  // fnAddOption: PropTypes.func,
 };
-
-// SelectOptionLayer.defaultProps = {
-//   fnAddSelect: () => {},
-//   fnAddOption: () => {},
-// };
 
 export default SelectOptionLayer;

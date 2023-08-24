@@ -12,9 +12,11 @@ const UploadTemplateModal = props => {
 
   const handleReaderLoaded = e => {
     const verify = handleTemplateUploading(e, genericType);
-    const newData = data;
-    newData.properties_template = verify.element;
-    verify.element = newData;
+    if (verify.notify.isSuccess) {
+      const newData = data;
+      newData.properties_template = verify.element;
+      verify.element = newData;
+    }
     fnUpload(verify);
     setShow(false);
   };
@@ -49,6 +51,7 @@ UploadTemplateModal.propTypes = {
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   fnUpload: PropTypes.func.isRequired,
   showProps: PropTypes.shape({

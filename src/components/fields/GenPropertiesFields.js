@@ -27,15 +27,10 @@ import Select from 'react-select';
 import { filter } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import { downloadFile, genUnit, unitConvToBase } from 'generic-ui-core';
 import DateTimeRange from './DateTimeRange';
 import FieldHeader from './FieldHeader';
-import {
-  downloadFile,
-  fieldCls,
-  genUnit,
-  genUnitSup,
-  unitConvToBase,
-} from '../tools/utils';
+import { fieldCls, genUnitSup } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 
@@ -61,12 +56,15 @@ const GenPropertiesCalculate = opt => {
     if (!isNaN(fi)) return;
     const tmpField = calFields.find(e => e.field === fi);
     if (typeof tmpField === 'undefined' || tmpField == null) {
-      newFormula = newFormula.replace(fi, 0);
+      newFormula = newFormula?.replace(fi, 0);
     } else {
       newFormula =
         tmpField.type === 'system-defined'
-          ? newFormula.replace(fi, parseFloat(unitConvToBase(tmpField) || 0))
-          : newFormula.replace(fi, parseFloat(tmpField.value || 0));
+          ? newFormula?.replace(
+              fi,
+              parseFloat(unitConvToBase({ field: tmpField }) || 0)
+            )
+          : newFormula?.replace(fi, parseFloat(tmpField.value || 0));
     }
   });
 
@@ -270,7 +268,7 @@ const GenPropertiesDrop = opt => {
   return (
     <FormGroup>
       {FieldHeader(opt)}
-      <FormControl.Static style={{ paddingBottom: '0px' }}>
+      <div style={{ paddingBottom: '0px' }}>
         <div className={className}>
           {dragTarget}
           {createOpt}
@@ -290,7 +288,7 @@ const GenPropertiesDrop = opt => {
             </OverlayTrigger>
           </div>
         </div>
-      </FormControl.Static>
+      </div>
     </FormGroup>
   );
 };
@@ -313,7 +311,7 @@ const GenPropertiesInputGroup = opt => {
       key={e.id}
       type={e.type}
       name={e.id}
-      value={e.value}
+      value={e.value || ''}
       onChange={o => opt.onSubChange(o, e.id, opt.f_obj)}
     />
   );
@@ -385,11 +383,13 @@ const GenPropertiesNumber = opt => {
 };
 
 const GenPropertiesSelect = opt => {
-  const options = opt.options.map(op => ({
-    value: op.key,
-    name: op.key,
-    label: op.label,
-  }));
+  const options = opt.options.map(op => {
+    return {
+      value: op.key,
+      name: op.key,
+      label: op.label,
+    };
+  });
   let className = opt.isEditable
     ? 'select_generic_properties_editable'
     : 'select_generic_properties_readonly';
@@ -401,13 +401,19 @@ const GenPropertiesSelect = opt => {
   const val = options.find(o => o.value === opt.value) || null;
   const klz = fieldCls(opt.isSpCall);
   const selectStyles = {
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    menu: base => ({ ...base, zIndex: 9999 }),
-    control: base => ({
-      ...base,
-      height: 35,
-      minHeight: 35,
-    }),
+    menuPortal: base => {
+      return { ...base, zIndex: 9999 };
+    },
+    menu: base => {
+      return { ...base, zIndex: 9999 };
+    },
+    control: base => {
+      return {
+        ...base,
+        height: 35,
+        minHeight: 35,
+      };
+    },
   };
   return (
     <FormGroup className={klz[0]}>
@@ -440,7 +446,7 @@ const GenPropertiesSystemDefined = opt => {
       <InputGroup className={klz[1]}>
         <FormControl
           type="number"
-          value={opt.f_obj.value}
+          value={opt.f_obj.value || ''}
           onChange={opt.onChange}
           className={`${className} ${klz[1]}`}
           readOnly={opt.readOnly}
@@ -613,11 +619,10 @@ const renderListGroupItem = (opt, attachment) => {
 const GenPropertiesUpload = opt => {
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return <div>(This is an upload)</div>;
-
   return (
     <FormGroup className="text_generic_properties">
       {FieldHeader(opt)}
-      <FormControl.Static style={{ paddingBottom: '0px', paddingTop: '0px' }}>
+      <div style={{ paddingBottom: '0px', paddingTop: '0px' }}>
         <Dropzone
           id="dropzone"
           onDrop={e =>
@@ -641,10 +646,10 @@ const GenPropertiesUpload = opt => {
             Drop File, or Click to Select.
           </div>
         </Dropzone>
-      </FormControl.Static>
+      </div>
       <ListGroup>
         {attachments.map(attachment => (
-          <ListGroupItem key={attachment.id} className="generic_files">
+          <ListGroupItem key={attachment.uid} className="generic_files">
             {renderListGroupItem(opt, attachment)}
           </ListGroupItem>
         ))}

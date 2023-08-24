@@ -22,41 +22,29 @@ const orderSource = {
     return !props.layer.wf;
   },
   beginDrag(props) {
-    const { layer, field, rowValue } = props;
-    return { wf: layer.wf, fid: field, rId: rowValue.id };
+    return props;
   },
 };
 
-const orderTarget = {
-  canDrop(props, monitor) {
-    const src = monitor.getItem();
-    return !props.layer.wf || !src.wf;
-  },
-  drop(props, monitor) {
-    const { layer, field, rowValue, handleMove } = props;
-    const tar = { wf: layer.wf, fid: field, rId: rowValue.id };
-    const src = monitor.getItem();
-    if (tar.fid === src.fid && tar.rId !== src.rId)
-      handleMove(src.rId, tar.rId);
-  },
-};
+const PanelDnD = props => {
+  const {
+    type,
+    layer,
+    field,
+    rowValue,
+    handleMove,
+    id,
+    handleChange,
+    onAttrChange,
+    bs,
+    hasAi,
+  } = props;
 
-const PanelDnD = ({
-  // isDragging,
-  // isOver,
-  // canDrop,
-  layer,
-  id,
-  handleChange,
-  bs,
-  hasAi,
-  onAttrChange,
-}) => {
   const [{ isDraggingSource }, drag] = useDrag(() => {
     return {
-      type: 'type', // Specify the drag type here
-      canDrag: orderSource.canDrag,
-      item: orderSource.beginDrag,
+      type,
+      canDrag: () => orderSource.canDrag(props),
+      item: () => orderSource.beginDrag(props),
       collect: monitor => {
         return {
           isDraggingSource: monitor.isDragging(),
@@ -66,11 +54,13 @@ const PanelDnD = ({
   });
 
   const [{ isOver, isOverValidTarget }, drop] = useDrop(() => {
-    // Drop configuration
     return {
-      accept: 'type', // Specify the drop type here
-      canDrop: orderTarget.canDrop,
-      drop: orderTarget.drop,
+      accept: type,
+      canDrop: item => !layer.wf || !item.layer.wf,
+      drop: item => {
+        if (field === item.field && layer.key !== item.layer.key)
+          handleMove(item.layer.key, layer.key);
+      },
       collect: monitor => {
         return {
           isOver: monitor.isOver(),
@@ -166,7 +156,14 @@ const PanelDnD = ({
     ) : null;
 
   const btnLayer = wf ? (
-    <ButtonGroup className="pull-right">
+    <ButtonGroup className="pull-right gu_btn_broup_layer">
+      {GenPropertiesDate({
+        isSpCall: false,
+        isAtLayer: true,
+        label: '',
+        value: timeRecord || '',
+        onChange: onAttrChange,
+      })}
       {btnLinkAna}
       {btnAdd}
     </ButtonGroup>
@@ -191,7 +188,7 @@ const PanelDnD = ({
   const panelHeader = (
     <Panel.Heading
       className={klz}
-      style={{ display: 'table-cell', verticalAlign: 'middle' }}
+      style={{ display: 'flow', verticalAlign: 'middle' }}
     >
       <Panel.Title toggle style={{ float: 'left' }}>
         {label}&nbsp;
@@ -207,8 +204,8 @@ const PanelDnD = ({
 
   return (
     <div className={className}>
-      <div className={dndKlz} ref={drop}>
-        <div ref={drag}>{panelHeader}</div>
+      <div className={dndKlz} ref={node => drag(drop(node))}>
+        {panelHeader}
       </div>
     </div>
   );

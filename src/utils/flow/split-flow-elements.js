@@ -17,7 +17,7 @@ const splitFlowElements = flow => {
 
   const nodes = els.filter(el => !el.source);
   const edges = els
-    .filter(el => el.source)
+    .filter(el => el.source && el.source !== el.target)
     .map(el => {
       return { ...el, markerEnd: { type: MarkerType.ArrowClosed } };
     });

@@ -14,6 +14,7 @@ import el from './simulations/_el_sem_v.json';
 
 import './GenericMain.css';
 import './assets/main.scss';
+import './assets/template.scss';
 
 const { version } = require('../package.json');
 

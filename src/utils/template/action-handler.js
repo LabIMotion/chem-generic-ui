@@ -1,4 +1,5 @@
 import { findIndex, sortBy } from 'lodash';
+import { FieldTypes } from 'generic-ui-core';
 import { GenericDummy } from '../../components/tools/utils';
 import { notifyDummyAdd, notifyError, notifySuccess } from './designer-message';
 import {
@@ -11,6 +12,19 @@ import {
 import Response from '../response';
 
 /**
+ * The response object for condition creation.
+ * @param {*} _notify
+ * @param {*} _element
+ * @param {*} _additional
+ * @returns {Response} The response object with extra information.
+ */
+export const responseExt = (_notify, _element, _additional = {}) => {
+  const response = new Response(_notify, _element);
+  response.additional = _additional;
+  return response;
+};
+
+/**
  * The response object for layer creation.
  * @param {*} _notify
  * @param {*} _element
@@ -18,7 +32,7 @@ import Response from '../response';
  * @returns {Response} The response object with extra layerKey.
  */
 const responseCreateLayer = (_notify, _element, _layerKey) => {
-  const response = new Response(_notify, _element, _layerKey);
+  const response = new Response(_notify, _element);
   response.layerKey = _layerKey;
   return response;
 };
@@ -48,19 +62,22 @@ export const handleCreateLayer = (_layer, _element) => {
     );
   }
   const sortedLayers = sortBy(element.properties_template.layers, ['position']);
-  layer.position =
-    !layer.position && sortedLayers.length < 1
-      ? 100
-      : parseInt(
-          (sortedLayers.slice(-1)[0] || { position: 100 }).position,
-          10
-        ) + 10;
+  if (!layer.position) {
+    layer.position =
+      sortedLayers.length < 1
+        ? 100
+        : parseInt(
+            (sortedLayers.slice(-1)[0] || { position: 100 }).position,
+            10
+          ) + 10;
+  }
+  layer.timeRecord = '';
   element.properties_template.layers[`${layer.key}`] = layer;
   return responseCreateLayer(
     notifySuccess(
       [
-        'This new layer is kept in the Template workspace temporarily.',
-        'Please remember to press Save when you finish the editing.',
+        'The new layer has been added.',
+        "Remember to save once you've finished editing.",
       ].join(' '),
       `Layer [${layer.key}]`
     ),
@@ -87,8 +104,8 @@ export const handleUpdateLayer = (_element, _layerKey, _updates) => {
 
   let layer = element?.properties_template?.layers[layerKey];
   const msg = [
-    'The updates of this layer is kept in the workspace temporarily.',
-    'Please remember to press Save when you finish the editing.',
+    'The layer has been updated.',
+    "Remember to save once you've finished editing.",
   ];
 
   layer = { ...layer, ...updates };
@@ -129,7 +146,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
   const element = _element;
   let selectOptions = [];
 
-  if (delStr === 'Select') {
+  if (delStr === FieldTypes.DEL_SELECT) {
     delete element.properties_template.select_options[delKey];
     selectOptions = Object.keys(element.properties_template.select_options).map(
       key => {
@@ -137,7 +154,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
       }
     );
   }
-  if (delStr === 'Option') {
+  if (delStr === FieldTypes.DEL_OPTION) {
     const { options } = element.properties_template.select_options[delRoot];
     if (options && options.length > 0) {
       const idx = options.findIndex(o => o.key === delKey);
@@ -146,7 +163,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
       }
     }
   }
-  if (delStr === 'Layer') {
+  if (delStr === FieldTypes.DEL_LAYER) {
     const verify = validateLayerDeletion(element, delKey);
     if (!verify.isSuccess) {
       const response = new Response(verify, element);
@@ -155,7 +172,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
     }
     delete element.properties_template.layers[delKey];
   }
-  if (delStr === 'Field') {
+  if (delStr === FieldTypes.DEL_FIELD) {
     const { fields } = element.properties_template.layers[delRoot];
     const idx = fields.findIndex(o => o.field === delKey);
     if (idx !== -1) {
@@ -165,23 +182,6 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
   const response = new Response(notifySuccess(), element);
   response.selectOptions = selectOptions;
   return response;
-};
-
-// return notify object and result
-export const handleCondition = (_element, _layerKey, _field) => {
-  const [element, field, layerKey] = [_element, _field, _layerKey];
-  const layer = element?.properties_template?.layers[layerKey];
-  if (!_field && layer?.wf) {
-    return {
-      notify: notifyError(
-        'Layer Restriction cannot be set on workflow layer.',
-        `Layer [${_layerKey}]`
-      ),
-      fieldObj: _field,
-      layerKey,
-    };
-  }
-  return { notify: notifySuccess(), fieldObj: field, layerKey };
 };
 
 export const handleAddDummy = (_element, _layerKey, _field) => {
@@ -209,9 +209,9 @@ export const handleAddSelect = (_element, _name, _options) => {
         label: key,
       };
     });
-    return { notify: verify, element, selectOptions };
+    return responseExt(verify, element, { selectOptions });
   }
-  return { notify: verify, element, selectOptions: options };
+  return responseExt(verify, element, { selectOptions: options });
 };
 
 // return notify and the updated element
@@ -225,9 +225,25 @@ export const handleAddOption = (_element, _key, _optionKey, _selectOptions) => {
   const verify = validateOptionAdd(optionKey, selectOptions);
   if (verify.isSuccess) {
     element.properties_template.select_options[key].options = selectOptions;
-    return { notify: verify, element };
   }
-  return { notify: verify };
+  return responseExt(verify, element);
+};
+
+export const handleOptionInput = (_element, _optionKey, _selectKey, _input) => {
+  const [element, optionKey, selectKey, input] = [
+    _element,
+    _optionKey,
+    _selectKey,
+    _input,
+  ];
+  const options =
+    element?.properties_template?.select_options[selectKey]?.options || [];
+  const idx = findIndex(options, o => o.key === optionKey);
+  const op = {};
+  op.key = optionKey;
+  op.label = input;
+  options.splice(idx, 1, op);
+  return new Response(notifySuccess(), element);
 };
 
 export const handleFieldInputChange = (
@@ -248,9 +264,8 @@ export const handleFieldInputChange = (
     _fieldCheck,
     _type,
   ];
-
   let value = '';
-  if (type === 'select' || type === 'system-defined') {
+  if (type === FieldTypes.F_SELECT || type === FieldTypes.F_SYSTEM_DEFINED) {
     ({ value } = event);
   } else if (type?.startsWith('drag')) {
     value = event;
@@ -266,7 +281,7 @@ export const handleFieldInputChange = (
     return { notify: notifyError('Layer has no fields'), element };
 
   const fieldObj = fields.find(e => e.field === field);
-  if (Object.keys(fieldObj).length === 0)
+  if (!fieldObj || Object.keys(fieldObj).length === 0)
     return { notify: notifyError('Field is undefined'), element };
 
   switch (fieldCheck) {
@@ -285,46 +300,6 @@ export const handleFieldInputChange = (
   return new Response(notifySuccess(), element);
 };
 
-export const handleFieldMove = (_element, _layerKey, _field, _isUp) => {
-  const [element, layerKey, field, isUp] = [_element, _layerKey, _field, _isUp];
-  const layer = element?.properties_template?.layers[layerKey];
-  const { fields } = layer;
-  const idx = findIndex(fields, o => o.field === field);
-  if (idx >= 0 && isUp) {
-    const curObj = fields[idx];
-    curObj.position -= 1;
-    const preObj = fields[idx - 1];
-    preObj.position += 1;
-    fields[idx] = preObj;
-    fields[idx - 1] = curObj;
-  } else if (idx < fields.length - 1 && !isUp) {
-    const curObj = fields[idx];
-    curObj.position += 1;
-    const nexObj = fields[idx + 1];
-    nexObj.position -= 1;
-    fields[idx] = nexObj;
-    fields[idx + 1] = curObj;
-  }
-  element.properties_template.layers[layerKey].fields = fields;
-  return new Response(notifySuccess(), element);
-};
-
-export const handleFieldSubChange = (_element, _layerKey, _field, _cb) => {
-  const [element, layerKey, field, cb] = [_element, _layerKey, _field, _cb];
-  const layer = element?.properties_template?.layers[layerKey];
-  const { fields } = layer;
-  if (layer != null) {
-    const fieldObj = (fields || []).find(o => o.field === field);
-    if (Object.keys(fieldObj).length > 0) {
-      const idx = (fields || []).findIndex(o => o.field === field);
-      fields.splice(idx, 1, field);
-      element.properties_template.layers[layerKey].fields = fields;
-      return { notify: notifySuccess(), element };
-    }
-  }
-  return new Response(notifySuccess(), element);
-};
-
 /**
  * Handles the template upload action.
  * @param {Event} _event
@@ -339,16 +314,20 @@ export const handleTemplateUploading = (_event, _genericType) => {
   try {
     properties = JSON.parse(pt);
   } catch (err) {
-    return { notify: notifyError(`Error Format:${err}`), properties };
+    return new Response(notifyError(`Error Format:${err}`), properties);
   }
 
-  if (properties.klass !== `${_genericType}Klass`) {
-    return {
-      notify: notifyError(
-        `Error, you're trying to update a template from [${properties.klass}]`
+  if (!properties.klass.endsWith(`${_genericType}Klass`)) {
+    return new Response(
+      notifyError(
+        [
+          'The template upload has failed.',
+          'You are attempting to update a template',
+          `from [${properties.klass}] to [${_genericType}Klass]`,
+        ].join(' ')
       ),
-      properties,
-    };
+      properties
+    );
   }
   return new Response(notifySuccess(), properties);
 };

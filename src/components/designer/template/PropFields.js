@@ -3,27 +3,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { sortBy } from 'lodash';
-import { ElementField } from '../../elements/ElementField';
+import { getUnitSystem } from 'generic-ui-core';
+import ElementField from '../../elements/ElementField';
 import {
   handleAddDummy,
-  handleCondition,
   handleDelete,
   handleFieldInputChange,
-  handleFieldMove,
-  handleFieldSubChange,
 } from '../../../utils/template/action-handler';
-import { UnitSystem } from '../../tools/utils';
+import { handleFieldSubChange } from '../../../utils/template/condition-handler';
+import { handleFieldMove } from '../../../utils/template/field-handler';
 
 const PropFields = props => {
   const { generic, genericType, fnUpdate, layer } = props;
 
-  const onDummyAdd = ({ _layerKey, _field }) => {
+  const onDummyAdd = _e => {
+    const { layerKey: _layerKey, field: _field } = _e;
     const result = handleAddDummy(generic, _layerKey, _field);
-    fnUpdate(result);
-  };
-
-  const onFieldCond = (_field, _layerKey) => {
-    const result = handleCondition(generic, _layerKey, _field);
     fnUpdate(result);
   };
 
@@ -68,7 +63,7 @@ const PropFields = props => {
   );
 
   const selectOptions = Object.keys(
-    generic.properties_template.select_options
+    generic.properties_template?.select_options
   ).map(key => {
     return { value: key, name: key, label: key };
   });
@@ -76,7 +71,8 @@ const PropFields = props => {
   const fields = (layer?.fields || []).map((f, idx) => (
     <ElementField
       genericType={genericType}
-      key={`${layer.key}${f.field}`}
+      key={`${genericType}_${layer.key}_${f.field}`}
+      layer={layer}
       layerKey={layer.key}
       position={idx + 1}
       field={f}
@@ -84,10 +80,9 @@ const PropFields = props => {
       onMove={onFieldMove}
       onDelete={onFieldRemove}
       onChange={onFieldInputChange}
-      unitsSystem={UnitSystem}
+      unitsSystem={getUnitSystem()}
       onFieldSubFieldChange={onFieldSubFieldChange}
       onDummyAdd={onDummyAdd}
-      onShowFieldCond={onFieldCond}
       allLayers={sortedLayers}
     />
   ));

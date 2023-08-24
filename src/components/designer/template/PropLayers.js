@@ -1,15 +1,10 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Badge,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Panel,
-} from 'react-bootstrap';
-import { filter, sortBy } from 'lodash';
+import { Badge, FormGroup, InputGroup, Panel } from 'react-bootstrap';
+import { sortBy } from 'lodash';
+import { FieldTypes } from 'generic-ui-core';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
 import LayerAttrNewBtn from '../LayerAttrNewBtn';
 import Constants from '../../tools/Constants';
@@ -17,74 +12,25 @@ import ButtonTooltip from '../../fields/ButtonTooltip';
 import PropFields from './PropFields';
 import {
   handleAddDummy,
-  handleCondition,
   handleCreateLayer,
   handleUpdateLayer,
 } from '../../../utils/template/action-handler';
-import { notifyFieldAdd } from '../../../utils/template/designer-message';
-import { isValidField } from '../../../utils/template/input-validation';
+import { handleCreateField } from '../../../utils/template/field-handler';
+import ConditionLayerBtn from './ConditionLayerBtn';
 import RemovePropBtn from './RemovePropBtn';
+import NewFieldBtn from './NewFieldBtn';
 
 const PropLayers = props => {
-  console.log('PropLayers props', props);
-  const { data, genericType, fnDelete, fnUpdate } = props;
+  const { data, genericType, fnUpdate } = props;
 
-  const newFieldRef = useRef('');
-
-  const onConditionAdd = ({ _layerKey, _field }) => {
-    const verify = handleCondition(data, _layerKey, _field);
-    fnUpdate(verify, _layerKey, data);
+  const onFieldAdd = _e => {
+    const { newFieldKey, layer } = _e;
+    const result = handleCreateField(newFieldKey, data, layer);
+    fnUpdate(result);
   };
 
-  const onFieldAdd = e => {
-    const { layerKey } = e;
-    const newFieldKey = newFieldRef.current.value;
-    if (newFieldKey === null || newFieldKey.trim().length === 0) {
-      fnUpdate(
-        notifyFieldAdd(false, 'please input field name first!'),
-        layerKey,
-        data
-      );
-      return;
-    }
-    if (!isValidField(newFieldKey)) {
-      fnUpdate(
-        notifyFieldAdd(
-          false,
-          'only can be alphanumeric (a-z, A-Z, 0-9 and underscores).'
-        ),
-        layerKey,
-        data
-      );
-      return;
-    }
-    const layer = data?.properties_template?.layers[layerKey];
-    const fields = layer.fields || [];
-    const dupfields = filter(fields, o => o.field === newFieldKey);
-    if (dupfields && dupfields.length > 0) {
-      fnUpdate(
-        notifyFieldAdd(
-          false,
-          'this field is used already, please change a field name'
-        ),
-        layerKey,
-        data
-      );
-      return;
-    }
-    const newField = {
-      type: 'text',
-      field: newFieldKey,
-      position: 100,
-      label: newFieldKey,
-      default: '',
-    };
-    fields.push(newField);
-    data.properties_template.layers[layerKey].fields = fields;
-    fnUpdate(notifyFieldAdd(), layerKey, data);
-  };
-
-  const onDummyAdd = ({ _layerKey, _field }) => {
+  const onDummyAdd = _e => {
+    const { layerKey: _layerKey, field: _field } = _e;
     const result = handleAddDummy(data, _layerKey, _field);
     fnUpdate(result);
   };
@@ -96,6 +42,14 @@ const PropLayers = props => {
 
   const onLayerUpdate = (_layerKey, _updates) => {
     const result = handleUpdateLayer(data, _layerKey, _updates);
+    fnUpdate(result);
+  };
+
+  const onLayerDelete = result => {
+    fnUpdate(result);
+  };
+
+  const onLayerCondition = result => {
     fnUpdate(result);
   };
 
@@ -113,19 +67,7 @@ const PropLayers = props => {
       />
     );
 
-    const hasCond = layer?.cond_fields?.length > 0 || false;
-    const btnCond = (
-      <ButtonTooltip
-        tip="Restriction Setting"
-        fnClick={onConditionAdd}
-        bs={hasCond ? 'warning' : ''}
-        element={{ l: layerKey, f: null }}
-        fa="fa fa-cogs"
-        place="top"
-        size="sm"
-      />
-    );
-
+    const isAttrOnWF = genericType === Constants.GENERIC_TYPES.ELEMENT;
     const node = (
       <Panel
         className="panel_generic_properties"
@@ -139,60 +81,47 @@ const PropLayers = props => {
             <Badge className="bg-bs-primary">
               Fields:&nbsp;{layer?.fields?.length || 0}
             </Badge>
-            {layer.wf ? (
+            {layer?.wf ? (
               <span>
                 &nbsp;<Badge className="bg-bs-warning">workflow</Badge>
               </span>
             ) : null}
           </Panel.Title>
-          <div>
-            <FormGroup
-              bsSize="sm"
-              style={{ marginBottom: 'unset', display: 'inline-table' }}
-            >
-              <InputGroup>
-                <InputGroup.Button>
-                  {btnCond}
-                  <LayerAttrEditBtn
-                    fnUpdate={onLayerUpdate}
-                    isAttrOnWF
-                    layer={layerKey}
-                  />
-                  <RemovePropBtn
-                    delStr="Layer"
-                    delKey={layerKey}
-                    element={data}
-                    fnDelete={fnDelete}
-                  />
-                </InputGroup.Button>
-                <FormControl
-                  type="text"
-                  name="nf_newfield"
-                  placeholder="Input new field name"
-                  bsSize="sm"
-                  ref={newFieldRef}
+          <FormGroup
+            bsSize="sm"
+            style={{ marginBottom: 'unset', display: 'inline-table' }}
+          >
+            <InputGroup>
+              <InputGroup.Button>
+                <ConditionLayerBtn
+                  element={data}
+                  fnUpdate={onLayerCondition}
+                  layer={layer}
+                  sortedLayers={sortedLayers}
                 />
-                <InputGroup.Button>
-                  <ButtonTooltip
-                    tip="Add new field"
-                    fnClick={onFieldAdd}
-                    element={{ layerKey }}
-                    fa="fa fa-plus"
-                    place="top"
-                    size="sm"
-                  />
-                  <ButtonTooltip
-                    tip="Add Dummy field"
-                    fnClick={onDummyAdd}
-                    element={{ l: layerKey, f: null }}
-                    fa="fa fa-plus-circle"
-                    place="top"
-                    size="sm"
-                  />
-                </InputGroup.Button>
-              </InputGroup>
-            </FormGroup>
-          </div>
+                <LayerAttrEditBtn
+                  fnUpdate={onLayerUpdate}
+                  isAttrOnWF={isAttrOnWF}
+                  layer={layer}
+                />
+                <RemovePropBtn
+                  delStr={FieldTypes.DEL_LAYER}
+                  delKey={layerKey}
+                  element={data}
+                  fnDelete={onLayerDelete}
+                />
+                <ButtonTooltip
+                  tip="Add Dummy field"
+                  fnClick={onDummyAdd}
+                  element={{ layerKey, field: null }}
+                  fa="fa fa-plus-circle"
+                  place="top"
+                  size="sm"
+                />
+              </InputGroup.Button>
+              <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />
+            </InputGroup>
+          </FormGroup>
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body style={{ padding: '15px 0px 15px 0px' }}>
@@ -223,11 +152,11 @@ const PropLayers = props => {
 
 PropLayers.propTypes = {
   data: PropTypes.object.isRequired,
-  fnDelete: PropTypes.func.isRequired, // { notify, element, selectOptions }
   fnUpdate: PropTypes.func.isRequired, // { notify, element }
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
+    Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
 };
 

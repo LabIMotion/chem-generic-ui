@@ -4,11 +4,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Panel, Col, PanelGroup, Row } from 'react-bootstrap';
+import { genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
 import GenProperties from '../fields/GenProperties';
-import { genUnits, showProperties, unitConversion } from '../tools/utils';
+import { showProperties } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
 import DateTimeRange from '../fields/DateTimeRange';
-import FieldTypes from '../fields/FieldTypes';
 
 export default class GenPropertiesLayer extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class GenPropertiesLayer extends Component {
     const { onSubChange } = this.props;
     const sub = f.sub_fields.find(m => m.id === id);
     if (!valueOnly) {
-      if (e.type === 'system-defined') {
+      if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
         const units = genUnits(e.option_layers);
         let uIdx = units.findIndex(u => u.key === e.value_system);
         if (uIdx < units.length - 1) uIdx += 1;
@@ -186,7 +186,7 @@ export default class GenPropertiesLayer extends Component {
     const { color, style, label } = layer;
     // const ai = layer.ai || [];
     let bs = color || 'default';
-    const cl = (style || 'panel_generic_heading').replace(
+    const cl = (style || 'panel_generic_heading')?.replace(
       'panel_generic_heading',
       'panel_generic_heading_slim'
     );
