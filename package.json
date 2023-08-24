@@ -1,6 +1,6 @@
 {
   "name": "chem-generic-ui",
-  "version": "0.6.0-rc-dnd.9",
+  "version": "1.0.0",
   "main": "./dist/bundle.js",
   "license": "MIT",
   "private": false,
