@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "125-dev6-migration" ]
+    branches: [ "main-6" ]
   pull_request:
-    branches: [ "125-dev6-migration" ]
+    branches: [ "main-6" ]
 
 jobs:
   build:
