@@ -22,7 +22,7 @@ export const validateFieldName = _fieldKey => {
   return notifyFieldAdd();
 };
 
-export const validateInput = element => {
+export const validateElementKlassInput = element => {
   if (element.name === '') {
     return notifyError('Please input Element.', `Element [${element.name}]`);
   }
