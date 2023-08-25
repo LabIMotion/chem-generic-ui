@@ -20,7 +20,7 @@ jobs:
       - run: mkdir artifacts
       - name: copy
         run: |
-          cp dist/bundle.js artifacts/
+          cp dist/chem-generic-ui.js artifacts/
           cp src/license-header.txt artifacts/chem-generic-ui.js.LICENSE.txt
       - uses: actions/upload-artifact@v3
         with:
