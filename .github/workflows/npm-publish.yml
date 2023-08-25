@@ -45,8 +45,9 @@ jobs:
       - run: ls -la artifacts
       - run: mkdir dist
       - name: copy
-        run: cp artifacts/chem-generic-ui.js dist/
-        run: cp artifacts/chem-generic-ui.js.LICENSE.txt dist/
+        run: |
+          cp artifacts/chem-generic-ui.js dist/
+          cp artifacts/chem-generic-ui.js.LICENSE.txt dist/
       - run: ls -la dist
       - run: yarn publish
         env:
