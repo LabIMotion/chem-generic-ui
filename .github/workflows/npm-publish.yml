@@ -20,6 +20,7 @@ jobs:
       - run: mkdir artifacts
       - name: copy
         run: cp dist/bundle.js artifacts/
+        run: cp src/license-header.txt artifacts/chem-generic-ui.js.LICENSE.txt
       - uses: actions/upload-artifact@v3
         with:
           name: dist-artifact
@@ -39,11 +40,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-artifact
-          path: artifacts      
+          path: artifacts
       - run: ls -la artifacts
       - run: mkdir dist
       - name: copy
-        run: cp artifacts/bundle.js dist/
+        run: cp artifacts/chem-generic-ui.js dist/
+        run: cp artifacts/chem-generic-ui.js.LICENSE.txt dist/
       - run: ls -la dist
       - run: yarn publish
         env:

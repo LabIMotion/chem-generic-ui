@@ -6,7 +6,6 @@
 //         - install 'util'
 // If you don't want to include a polyfill, you can use an empty module like this:
 //         resolve.fallback: { "util": false }
-
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -18,7 +17,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/'),
     publicPath: '/dist/',
-    filename: 'bundle.js',
+    filename: 'chem-generic-ui.js',
     clean: true,
     library: 'chem-generic-ui',
     libraryTarget: 'umd',
