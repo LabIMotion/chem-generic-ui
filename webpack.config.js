@@ -17,9 +17,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/'),
     publicPath: '/dist/',
-    filename: 'chem-generic-ui.js',
+    filename: 'bundle.js',
     clean: true,
-    library: 'chem-generic-ui',
     libraryTarget: 'umd',
   },
   optimization: {
