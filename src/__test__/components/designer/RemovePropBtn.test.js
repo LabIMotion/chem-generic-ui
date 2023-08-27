@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, render, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import RemovePropBtn from '../../../components/designer/template/RemovePropBtn';
 
 // Mock the handleDelete function since it's not provided in the test
