@@ -10,6 +10,7 @@ import { isLayerInWF, reUnit } from 'generic-ui-core';
 export { default as Designer } from './components/designer/Designer';
 export { default as GenButtonReload } from './components/fields/ButtonReload';
 export { default as GenInterface } from './components/details/GenInterface';
+export { default as GenGridBase } from './components/details/GenGridBase';
 export { default as FlowViewerModal } from './components/flow/FlowViewerModal'; // be used in App as a global FlowViewer modal
 export { default as Workflow } from './components/flow/Workflow';
 // export { default as GenInterfaceSP } from './components/details/GenInterfaceSP';
