@@ -92,20 +92,11 @@ const DnDFlow = props => {
       //   const reactFlowBounds =
       //     reactFlowWrapper.current.getBoundingClientRect();
       //   const sidebarBounds = reactSidebar.current.getBoundingClientRect();
-      //   console.log('reactFlowBounds', reactFlowBounds);
-      //   console.log('reactSidebarBounds', sidebarBounds);
-      //   console.log('clientOffset', clientOffset);
-
       //   let position = {
       //     x: clientOffset.x - reactFlowBounds.left, // - sidebarBounds.left,
       //     y: clientOffset.y - reactFlowBounds.top, // - sidebarBounds.top,
       //   };
-      //   console.log('position 1', position);
-
       //   position = reactFlowInstance.project(position);
-
-      //   console.log('position 2', position);
-
       //   const newNode = buildDefaultNode({
       //     layer: item,
       //     position,

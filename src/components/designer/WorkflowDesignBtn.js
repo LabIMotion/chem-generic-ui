@@ -8,7 +8,6 @@ import WorkflowModal from '../elements/WorkflowModal';
 const WorkflowDesignBtn = props => {
   const { element, fnSave, genericType } = props;
   const [show, setShow] = useState(false);
-  // console.log('WorkflowDesignBtn: element=', element);
 
   if (genericType !== Constants.GENERIC_TYPES.ELEMENT) return null;
 

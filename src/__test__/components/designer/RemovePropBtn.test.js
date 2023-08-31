@@ -40,7 +40,6 @@ describe('RemovePropBtn', () => {
       const { getByTestId, getByText } = render(<RemovePropBtn {...props} />);
       const button = getByTestId('template-remove-btn');
       fireEvent.focus(button);
-      // console.log(document.body.innerHTML);
       const popover = getByText(
         'remove this option: [option1] from select [select1] ?'
       );

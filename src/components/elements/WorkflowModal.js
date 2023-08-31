@@ -12,7 +12,6 @@ const WorkflowModal = props => {
   if (!show) return null;
 
   const handleSaveFlow = _flowObject => {
-    console.log('WorkflowModal: handleSaveFlow: _flowObject=', _flowObject);
     const flow = _flowObject.flowObject;
     flow['nodes'] = flow['nodes'].map(_node => {
       if (!_node.data) return _node;
@@ -31,7 +30,7 @@ const WorkflowModal = props => {
     // });
 
     element.properties_template.flowObject = flow;
-    delete element.properties_template.flow;  ////////// TO BE CONFIRMED
+    delete element.properties_template.flow;
     fnSaveFlow(new Response(notifySuccess(), element));
     setShow(false);
   };

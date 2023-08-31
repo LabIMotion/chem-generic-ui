@@ -41,8 +41,6 @@ export const handleSaveSorting = _element => {
 // TO-BE: replace layerDrop of GenInterface
 export const layerDrop = (_generic, _source, _target) => {
   const [generic, source, target] = [_generic, _source, _target];
-  console.log('layerDrop source=', source);
-  console.log('layerDrop target=', target);
   if (source === target) return generic;
   const { layers } = generic.properties;
 
