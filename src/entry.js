@@ -21,6 +21,7 @@ export {
   absOlsTermId,
   absOlsTermLabel,
   clsInputGroup,
+  resetProperties,
 } from './components/tools/utils';
 
 export { isLayerInWF, reUnit };

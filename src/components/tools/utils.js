@@ -213,6 +213,25 @@ const fieldCls = (isSpCall = false) => {
   return [clsFrm, clsCol];
 };
 
+export const resetProperties = (_props) => {
+  if (!_props || typeof _props === 'undefined') return _props;
+
+  Object.keys(_props.layers).forEach((key) => {
+    const _newLayer = _props.layers[key] || {};
+    _newLayer.ai = [];
+    (_newLayer.fields || []).forEach((f, idx) => {
+      if (f && (f.type === 'drag_sample' || f.type === 'drag_element' || f.type === 'upload')) {
+        _newLayer.fields[idx].value = null;
+      }
+      if (f && (f.type === 'table')) {
+        _newLayer.fields[idx].sub_values = [];
+      }
+    });
+  });
+  return _props;
+};
+
+
 export {
   createEnum,
   GenericDummy,
