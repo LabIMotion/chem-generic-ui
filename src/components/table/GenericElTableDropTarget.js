@@ -15,7 +15,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
     let elSvg = opt.value.el_svg;
     if (opt.value.el_type === 'sample') {
       if (elSvg && !elSvg.endsWith('.svg') && opt.value.el_decoupled) {
-        elSvg = Constants.IMG_UNDEFINED_STRUCTURE_SVG;
+        elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
       }
     }
     if (elSvg && !elSvg.endsWith('.svg'))
@@ -30,7 +30,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
       </Popover>
     );
     const asShown = path =>
-      path === Constants.IMG_UNDEFINED_STRUCTURE_SVG ? (
+      path === Constants.IMG_NOT_AVAILABLE_SVG ? (
         KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' })
       ) : (
         <OverlayTrigger

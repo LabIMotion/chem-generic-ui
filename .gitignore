@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/.github
 /.pnp
 .pnp.js
 
@@ -10,6 +11,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -25,8 +27,8 @@ yarn-error.log*
 /.out
 .nvmrc
 
-/dist
-
+/public
 .eslintcache
+.prettierrc
 
 tree.html

@@ -272,7 +272,7 @@ const GenPropertiesDrop = opt => {
         <div className={className}>
           {dragTarget}
           {createOpt}
-          <div>
+          <div style={{ zIndex: '3' }}>
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip id={uuid()}>remove</Tooltip>}

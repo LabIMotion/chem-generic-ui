@@ -15,3 +15,7 @@ or Yarn:
 ```
 yarn add chem-generic-ui
 ```
+
+## Issue Reporting & Asking Questions
+
+Kindly utilize the 'Discussion' section for any inquiries, concerns, suggestions, or ideas you may wish to share. We will initiate the process of creating an 'issue' with the appropriate label to provide you with a more comprehensive status overview.
