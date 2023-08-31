@@ -1,11 +1,3 @@
-// BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default.
-// This is no longer the case. Verify if you need this module and configure a polyfill for it.
-
-// If you want to include a polyfill, you need to:
-//         - add a fallback 'resolve.fallback: { "util": require.resolve("util/") }'
-//         - install 'util'
-// If you don't want to include a polyfill, you can use an empty module like this:
-//         resolve.fallback: { "util": false }
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -59,7 +51,6 @@ module.exports = {
     },
   },
   externals: {
-    // Don't bundle react or react-dom
     react: {
       commonjs: 'react',
       commonjs2: 'react',
@@ -182,15 +173,7 @@ module.exports = {
       },
       {
         test: /\.(scss|css)$/i,
-        use: [
-          // Creates `style` nodes from JS strings
-          'style-loader',
-          // Translates CSS into CommonJS
-          'css-loader',
-          'postcss-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
     ],
   },
@@ -204,6 +187,4 @@ module.exports = {
     maxEntrypointSize: 512000,
     maxAssetSize: 512000,
   },
-  // plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
-  // plugins: [new webpack.HotModuleReplacementPlugin()] // no need, https://stackoverflow.com/questions/69102254/webpack-options-has-an-unknown-property-hotonly-invalid-options-object-dev-s
 };

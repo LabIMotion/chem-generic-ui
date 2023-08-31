@@ -1,12 +1,3 @@
-// module.exports = {
-//   presets: ['@babel/preset-env', '@babel/preset-react'],
-//   plugins: [
-//     '@babel/plugin-syntax-jsx',
-//     '@babel/plugin-syntax-dynamic-import',
-//     'react-refresh/babel',
-//   ],
-// };
-
 const isEnvDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = function (api) {
@@ -20,7 +11,6 @@ module.exports = function (api) {
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-transform-react-jsx',
-    // 'react-refresh/babel',
   ];
 
   plugins.push('@babel/plugin-transform-modules-commonjs');

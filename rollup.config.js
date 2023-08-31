@@ -8,7 +8,7 @@ import image from '@rollup/plugin-image';
 import postcss from 'rollup-plugin-postcss';
 
 export default {
-  input: 'src/index.js',
+  input: 'src/enrty.js',
   output: {
     file: 'dist/bundle.js',
     format: 'umd',

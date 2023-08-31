@@ -344,6 +344,8 @@ class ElementField extends Component {
                 : f.label}
               &nbsp;
               <Badge className="bg-bs-field-display">{f.field || ''}</Badge>
+              &nbsp;
+              <Badge className="bg-bs-field-display">{f.type || ''}</Badge>
             </Panel.Title>
             <ButtonGroup bsSize="xsmall">
               <ConditionFieldBtn

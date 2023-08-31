@@ -8,13 +8,13 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 import { filter } from 'lodash';
-import { unitConvertToBase, FieldTypes } from 'generic-ui-core';
+import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from './FieldHeader';
 import { fieldCls, toBool, toNullOrInt } from '../tools/utils';
 
 const PropCalculate = opt => {
   const {
-    f_obj,
+    f_obj: fObj,
     formula,
     isSpCall,
     layer,
@@ -23,7 +23,7 @@ const PropCalculate = opt => {
     type,
     value,
   } = opt;
-  let { canAdjust, decimal } = f_obj;
+  let { canAdjust, decimal } = fObj;
   canAdjust = toBool(canAdjust);
   decimal = toNullOrInt(decimal) || 5;
 
@@ -49,13 +49,7 @@ const PropCalculate = opt => {
     if (typeof tmpField === 'undefined' || tmpField == null) {
       newFormula = newFormula?.replace(fi, 0);
     } else {
-      newFormula =
-        tmpField.type === FieldTypes.F_SYSTEM_DEFINED
-          ? newFormula?.replace(
-              fi,
-              parseFloat(unitConvertToBase({ field: tmpField }) || 0)
-            )
-          : newFormula?.replace(fi, parseFloat(tmpField.value || 0));
+      newFormula = newFormula?.replace(fi, parseFloat(tmpField.value || 0));
     }
   });
 
