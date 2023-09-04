@@ -1,25 +1,27 @@
 import { sortBy } from 'lodash';
-import { reUnit, getUnitSystem } from 'generic-ui-core';
+import { reUnit, FieldTypes } from 'generic-ui-core';
 import { orgLayerObject } from '../../components/tools/orten';
 
 export const handleSaveSorting = _element => {
   const element = _element;
-  const { unitsSystem } = getUnitSystem();
-
   Object.keys(element.properties_template.layers).forEach(key => {
     const layer = element.properties_template.layers[key];
     let sortedFields = layer?.fields || [];
     (sortedFields || []).forEach((f, idx) => {
       const fd = f;
       fd.position = idx + 1;
-      if (fd.type === 'system-defined') {
-        fd.option_layers = reUnit(unitsSystem, fd.option_layers);
+      if (fd.type === FieldTypes.F_SYSTEM_DEFINED) {
+        fd.option_layers = reUnit(fd.option_layers);
       }
-      fd.required = ['integer', 'text'].includes(fd.type) ? fd.required : false;
-      fd.sub_fields = ['input-group', 'table'].includes(fd.type)
+      fd.required = [FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(fd.type)
+        ? fd.required
+        : false;
+      fd.sub_fields = [FieldTypes.F_INPUT_GROUP, FieldTypes.F_TABLE].includes(
+        fd.type
+      )
         ? fd.sub_fields
         : [];
-      if (fd.type !== 'text-formula') {
+      if (fd.type !== FieldTypes.F_TEXT_FORMULA) {
         fd.text_sub_fields = [];
       }
       return fd;
