@@ -13,6 +13,8 @@ const LayerAttrModal = props => {
     const buildLayer = {
       key: formRef.current.lf_layerKey.value.trim(),
       label: formRef.current.lf_label.value.trim(),
+      color: formRef.current.lf_color.value.trim(),
+      style: formRef.current.lf_style.value.trim(),
       cols: parseInt(formRef.current.lf_cols.value.trim() || 1, 10),
       position: parseInt(formRef.current.lf_position.value.trim() || 1, 10),
       wf:
