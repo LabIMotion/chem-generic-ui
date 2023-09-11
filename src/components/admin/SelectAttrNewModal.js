@@ -36,10 +36,11 @@ export default class SelectAttrNewModal extends Component {
                   />
                 </InputGroup>
                 <div className="help">
-                  Select List name is unique in the template
+                  Select List name is unique in the template.
                   <br />
-                  Select List name must contain only lowercase letters and
-                  underscores
+                  Select List name must start with a lowercase letter, and then
+                  have one or more lowercase letters or underscores in the
+                  middle, and end with a lowercase letter.
                   <br />
                   Select List name should not contain special characters like $,
                   !, %, etc.

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 
-const NoDataModal = (props) => {
+const NoDataModal = props => {
   const { show, title, fnHide } = props;
   return (
     <Modal show={show} bsSize="small" onHide={fnHide}>
@@ -16,17 +16,16 @@ const NoDataModal = (props) => {
   );
 };
 
-const GenAnaModal = (props) => {
-  const {
-    show, generic, layer, fnHide, fnLink
-  } = props;
+const GenAnaModal = props => {
+  const { show, generic, layer, fnHide, fnLink } = props;
   if (!show) return null;
   const { name, container, properties } = generic;
-  const specLayer = (properties && properties.layers && properties.layers[layer]); // pick up the layer
-  const title = specLayer.label;
-  let ai = (container && container.children && container.children[0].children) || [];
-  ai = ai.filter(x => !x.is_new); // get ai is not new
-  if (ai.length < 1 || !title) { // means no analysis
+  const specLayer = properties && properties.layers && properties.layers[layer];
+  const title = specLayer.label || '(no label)';
+  let ai =
+    (container && container.children && container.children[0].children) || [];
+  ai = ai.filter(x => !x.is_new);
+  if (ai.length < 1 || !title) {
     return (
       <NoDataModal
         show={show}
@@ -36,12 +35,10 @@ const GenAnaModal = (props) => {
     );
   }
 
-  const layerAi = (specLayer.ai) || []; // means linked analisys array
+  const layerAi = specLayer.ai || [];
   const row = _ai => (
-    <div>
-      <div className="generic_grid_row generic_grid_row_left">
-        {_ai.name}
-      </div>
+    <div key={`_row_linked_analysis_${_ai.id}_${layer}`}>
+      <div className="generic_grid_row generic_grid_row_left">{_ai.name}</div>
       <div className="generic_grid_row generic_grid_row_left">
         <Button
           bsStyle="success"
@@ -66,7 +63,7 @@ const GenAnaModal = (props) => {
   );
 
   const rows = [];
-  ai.forEach((_ai) => {
+  ai.forEach(_ai => {
     rows.push(row(_ai));
   });
 
@@ -74,13 +71,9 @@ const GenAnaModal = (props) => {
     <Modal show={show} onHide={fnHide}>
       <Modal.Header closeButton>
         <Modal.Title>
-          <b>{name}</b>
-          {' '}
-          Analyses
+          <b>{name}</b> Analyses
           <br />
-          select to link/unlink to Layer
-          {' '}
-          <b>{title}</b>
+          select to link/unlink to Layer <b>{title}</b>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -97,7 +90,7 @@ GenAnaModal.propTypes = {
   generic: PropTypes.object.isRequired,
   layer: PropTypes.string.isRequired,
   fnHide: PropTypes.func.isRequired,
-  fnLink: PropTypes.func.isRequired
+  fnLink: PropTypes.func.isRequired,
 };
 
 export default GenAnaModal;
