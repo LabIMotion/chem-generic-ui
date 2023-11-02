@@ -1,0 +1,611 @@
+@use 'color' as *;
+@use 'flow-default';
+@use 'flow';
+@use 'modal';
+
+.gu_btn_text_success {
+  color: $color-btn-success;
+}
+
+.gu_btn_text_danger {
+  color: $color-btn-warning;
+}
+
+.gu_flow_dnd_sidebar {
+  border-width: 0px 0px 1px 0px;
+  border-color: black;
+  border-style: solid;
+}
+
+.gu_sp_form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  .gu_sp_label {
+    width: 100%;
+    margin: 0px 5px;
+    text-align: left;
+    font-weight: bold;
+  }
+  .gu_sp_column {
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+}
+
+.gu_button_right {
+  float: right;
+  right: 0px;
+  z-index: 0;
+  margin-left: 2px;
+}
+
+.bg-bs-primary {
+  background-color: $color-bs-primary !important;
+}
+
+.bg-bs-warning {
+  background-color: $color-bs-warning !important;
+}
+
+.bg-bs-field-display {
+  background-color: unset !important;
+  color: $color-attention-emphasis !important;
+  border: $color-attention-emphasis solid 1px;
+}
+
+.icon_generic_nav {
+  font-family: FontAwesome, Helvetica, Arial, sans-serif !important;
+}
+
+.field_required {
+  background-color: $color-required;
+}
+
+.template_panel_heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px 5px 10px !important;
+}
+
+.panel_generic_properties {
+  border-left: unset !important;
+  border-right: unset !important;
+  border-bottom: unset !important;
+  line-height: 26px !important;
+  box-shadow: unset !important;
+  margin-bottom: unset !important;
+  .panel-title {
+    font-weight: bold;
+  }
+  .default_style {
+    font-size: 14px;
+    line-height: normal;
+  }
+}
+
+.panel_generic_properties_body {
+  padding-left: unset !important;
+  padding-right: unset !important;
+}
+
+@mixin generic_panel_header {
+  font-weight: bold;
+  padding: 10px 0px !important;
+}
+
+.panel_generic_heading_slim {
+  padding: 5px 0px !important;
+}
+
+.panel_generic_heading {
+  @include generic_panel_header;
+}
+
+.panel_generic_heading_bu {
+  @include generic_panel_header;
+  text-decoration: underline;
+}
+
+.panel_generic_heading_bui {
+  @include generic_panel_header;
+  text-decoration: underline;
+  font-style: italic;
+}
+
+.text_generic_properties {
+  .dummy {
+    background-color: unset !important;
+    border: unset !important;
+    box-shadow: unset !important;
+  }
+  .editable {
+    background-color: $color-editable;
+  }
+  .readonly {
+    background-color: $color-readonly;
+  }
+  .required {
+    background-color: $color-required;
+  }
+  input:invalid {
+    border: 1px solid $color-invalid;
+  }
+}
+
+.select_generic_properties_editable {
+  .Select-control {
+    background-color: $color-editable;
+  }
+}
+
+.select_generic_properties_readonly {
+  .Select-control {
+    background-color: $color-readonly;
+  }
+}
+
+.select_generic_properties_required {
+  .Select-control {
+    background-color: $color-required;
+  }
+}
+
+.drop_generic_properties {
+  display: flex;
+  align-items: center;
+  .target {
+    height: 100%;
+    width: 100%;
+    margin: 0px 10px 0px 10px;
+    display: inline-block;
+    .indicator {
+      font-size: x-large;
+    }
+    .s-img {
+      display: flex;
+      img {
+        height: 4vh;
+        width: 4vw;
+      }
+    }
+    .data {
+      font-size: medium;
+      line-height: normal !important;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      align-self: center;
+      width: 100%;
+    }
+    &.can-drop {
+      .indicator {
+        border: 2px dashed $color-can-drop;
+        color: $color-can-drop;
+      }
+      .data {
+        border: 2px dashed $color-can-drop;
+        color: $color-can-drop;
+      }
+    }
+    &.is-over {
+      .indicator {
+        border: 2px dashed $color-is-over;
+        color: $color-is-over;
+      }
+      .data {
+        border: 2px dashed $color-is-over;
+        color: $color-is-over;
+      }
+    }
+  }
+  .btn_del {
+    float: right;
+    align-self: center;
+  }
+  .sample_radios {
+    font-size: xx-small;
+    line-height: 2;
+    display: inline-flex;
+    padding-right: 5px;
+  }
+}
+
+.generic_criteria_modal {
+  display: block;
+  padding-left: 0px;
+  top: 45% !important;
+  width: 75vw !important;
+}
+
+.search_criteria_mof {
+  .modal_body {
+    max-height: 70vh;
+    height: 70vh;
+    overflow: auto;
+  }
+  .btn_footer {
+    margin-top: 10px;
+  }
+}
+
+.input-form {
+  .input-group-addon {
+    font-weight: bold;
+  }
+  .help {
+    font-size: 80%;
+    margin: 6px;
+    font-style: italic;
+  }
+}
+
+.g-ds-note {
+  color: black !important;
+  float: left !important;
+  text-align: left !important;
+  font-weight: lighter !important;
+  .g-ds-title {
+    text-decoration: underline;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+}
+
+.g_input_group {
+  padding: 6px 6px !important;
+}
+
+.g_input_group_label {
+  background-color: lightgray !important;
+  width: unset !important;
+  white-space: nowrap !important;
+  padding: 6px 6px !important;
+}
+
+.g_col_w {
+  width: 20% !important;
+}
+
+.generic_grid {
+  display: block;
+  > div {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+@mixin generic_grid_cell {
+  width: 100%;
+  margin: 6px 0px 6px 6px;
+  text-align: center;
+  line-height: 15px;
+  align-self: center;
+}
+
+.generic_grid_header {
+  @include generic_grid_cell;
+  font-weight: bolder;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.generic_grid_row {
+  @include generic_grid_cell;
+}
+
+.generic_grid_row_left {
+  text-align: left;
+}
+
+@mixin generic_version_badge {
+  background-color: #777;
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.generic_version {
+  @include generic_version_badge;
+  background-color: unset;
+  color: blue;
+}
+
+.generic_version_draft {
+  @include generic_version_badge;
+  background-color: unset;
+  color: black;
+}
+
+.generic_version_block {
+  display: block;
+  padding: 6px 10px;
+  margin: 10px;
+  border-radius: 0px;
+  border: thin solid $color-default;
+  font-size: 1.2em;
+  > div {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}
+
+.generic_block_select {
+  border-width: medium;
+  border-style: solid;
+}
+
+.generic_panel_none {
+  border-color: #ddd !important;
+  > .panel-heading {
+    background-color: white !important;
+  }
+}
+
+.generic_tbl_chks {
+  line-height: 1em;
+  margin: 0px -10px !important;
+  > label {
+    display: inline-flex;
+    align-content: center;
+    align-items: center;
+    > input {
+      margin-top: 0px;
+    }
+  }
+}
+
+.generic_btn_default {
+  background-color: $color-default !important;
+  color: $color-editable !important;
+}
+
+.drop_generic_table_wrap {
+  .target {
+    .s-img {
+      position: relative;
+      border: 1px solid transparent;
+      img {
+        height: 4vw;
+        width: 4vw;
+      }
+      .del_btn {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+      }
+      .link_btn {
+        position: absolute;
+        bottom: 0%;
+        left: 0%;
+      }
+    }
+    .s-img:hover {
+      border: 1px solid $color-selected-border;
+    }
+    .data {
+      font-size: unset;
+      white-space: unset;
+      text-align: left;
+    }
+    &.can-drop {
+      .s-img {
+        border: 2px dashed $color-can-drop;
+        color: $color-can-drop;
+      }
+    }
+    &.is-over {
+      .s-img {
+        border: 2px dashed $color-is-over;
+        color: $color-is-over;
+      }
+    }
+  }
+}
+
+.generic_grid_img {
+  border: $color-readonly solid thin;
+}
+
+.generic_sam_options {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: x-small;
+  .radio {
+    margin-top: unset;
+    margin-bottom: unset;
+  }
+}
+
+.generic_files {
+  padding: 0px 5px !important;
+  > div > div > div {
+    text-align: left;
+    align-self: center;
+    .form-group {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+.grid-btn-none {
+  font-size: large;
+  color: white;
+}
+
+.generic_grid_dnd {
+  > div {
+    display: table;
+    width: 100%;
+    > div {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+  .dnd {
+    cursor: move;
+  }
+  .dnd-btn {
+    font-size: large;
+    span {
+      cursor: move;
+    }
+  }
+  &.can-drop {
+    border: 2px dashed $color-can-drop;
+    color: $color-can-drop;
+  }
+  &.is-over {
+    border: 2px dashed $color-is-over;
+    color: $color-is-over;
+  }
+  &.is-dragging {
+    opacity: 0.2;
+  }
+}
+
+.generic_layer_modal {
+  > .layer_header {
+    background-color: white;
+    color: $color-bs-primary;
+    font-size: 20px;
+  }
+  // > .panel-body {
+  // background-color: #d9edf7;
+  // }
+}
+
+.generic_layer_column {
+  @include generic_grid_cell;
+  border: 1px solid $color-bs-primary;
+  background-color: white;
+  margin: 5px;
+  padding: 10px;
+  color: $color-bs-primary;
+  border-radius: 4px;
+}
+
+.generic_layer_column > div:first-child {
+  display: flex;
+}
+
+.generic_layer_column > div:first-child > button {
+  float: right;
+  border-radius: 50%;
+}
+
+.generic_layer_column > div:first-child > div {
+  width: 100%;
+}
+
+.generic_wf_modal {
+  max-height: 100%;
+  overflow: auto;
+}
+
+.generic_wf_modal > div:first-child {
+  height: 100vh;
+  width: 100%;
+}
+
+.flow_view_draggable {
+  z-index: 100;
+  // position: relative;
+  width: 50vw;
+  top: 12%;
+  left: 10%;
+  .panel-body {
+    padding: 5px;
+    > .body_bg {
+      max-height: 100%;
+      overflow: auto;
+      > .body_canvas {
+        resize: both;
+        overflow: auto;
+        height: 70vh;
+        width: 40vw;
+        min-height: 250px;
+        min-width: 900px;
+        max-width: 1600px;
+        max-height: 840px;
+      }
+    }
+  }
+}
+
+.gu_date_picker {
+  margin-right: 2px;
+  input {
+    border-radius: 4px;
+    box-shadow: inset 0 2px 2px #e9e9e9;
+    border: 1px solid #ccc;
+    padding: 4px 12px;
+    width: 100%;
+  }
+}
+
+.gu_date_picker_layer {
+  display: inline-flex;
+  line-height: normal;
+  float: right;
+}
+
+.gu_datetime_range {
+  display: flex;
+  flex-wrap: nowrap;
+  div {
+    width: 100%;
+  }
+}
+
+.gu_btn_broup_layer {
+  display: table;
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+    line-height: initial;
+  }
+  .form-group {
+    margin-bottom: unset;
+    float: left;
+  }
+}
+
+// https://github.com/Hacker0x01/react-datepicker/issues/624#issuecomment-261696513
+
+.react-datepicker {
+  font-size: 1.3rem !important;
+  display: flex !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+  top: 2px !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+  margin: 0.5rem !important;
+}
+// ===================================================================
+
+.pre_line_tooltip {
+  .tooltip-inner {
+    white-space: pre-wrap !important;
+  }
+}
