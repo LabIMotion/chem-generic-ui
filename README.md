@@ -5,10 +5,10 @@ A React component for dynamically building user interfaces.
 This library is purely written in JavaScript and is based on the [React](https://reactjs.org/) library.
 
 **Community**
-- GitHub discussions
+- [GitHub discussions](https://github.com/LabIMotion/chem-generic-ui/discussions)
 
 **Code**
-- GitHub repository
+- [GitHub code](https://github.com/LabIMotion/chem-generic-ui)
 
 
 ## Projects
@@ -37,7 +37,7 @@ yarn add chem-generic-ui
 
 ## Engage with Us
 
-Feel free to utilize the 'Discussion' section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
+Feel free to utilize the [Discussions](https://github.com/LabIMotion/chem-generic-ui/discussions) section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
 
 ## License
 
