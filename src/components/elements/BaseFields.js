@@ -33,6 +33,16 @@ const ElementFieldTypes = [
 
 const SegmentFieldTypes = [
   {
+    value: FieldTypes.F_DRAG_SAMPLE,
+    name: FieldTypes.F_DRAG_SAMPLE,
+    label: 'Drag Sample',
+  },
+  {
+    value: FieldTypes.F_DRAG_ELEMENT,
+    name: FieldTypes.F_DRAG_ELEMENT,
+    label: 'Drag Element',
+  },
+  {
     value: FieldTypes.F_INPUT_GROUP,
     name: FieldTypes.F_INPUT_GROUP,
     label: 'Input Group',

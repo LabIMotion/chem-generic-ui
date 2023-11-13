@@ -52,7 +52,7 @@ const AttrModal = props => {
         const updates = {
           label: formRef.current.k_label.value.trim(),
           desc: formRef.current.k_desc.value.trim(),
-          identifier: formRef.current.k_identifier.value.trim(),
+          element_klass: formRef.current.k_klass.value,
         };
         const inputs = { ...data, ...updates };
         const verify = validateSegmentKlassInput(inputs);

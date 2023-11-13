@@ -103,7 +103,7 @@ const show = (opt, iconClass, onNavi) => {
   return KlzIcon(`icon-${iconClass} indicator`, { width: '4vw' });
 };
 
-const source = (type, props, id) => {
+const source = (type, props, id, classStr) => {
   let isAssoc = false;
   const taggable = (props && props.tag && props.tag.taggable_data) || {};
   if (taggable.element && taggable.element.id === id) {
@@ -128,7 +128,7 @@ const source = (type, props, id) => {
       return {
         el_id: props.id,
         is_new: true,
-        cr_opt: isAssoc === true ? 1 : 0,
+        cr_opt: classStr === 'GenericEl' && isAssoc === true ? 1 : 0,
         isAssoc,
         el_type: 'sample',
         el_label: props.short_label,
@@ -163,7 +163,7 @@ const GenericElDropTarget = (props) => {
     drop: item => {
       // Handle the drop event here...
       const sourceProps = item.element;
-      const sourceTag = source(opt.type.split('_')[1], sourceProps, opt.id);
+      const sourceTag = source(opt.type.split('_')[1], sourceProps, opt.id, opt.classStr);
       onDrop(sourceTag);
     },
     collect: monitor => {

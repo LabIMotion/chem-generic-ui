@@ -67,6 +67,7 @@ export default class GenPropertiesLayer extends Component {
       selectOptions,
       id,
       layers,
+      classStr,
       isPreview,
       isSearch,
       onNavi,
@@ -129,6 +130,7 @@ export default class GenPropertiesLayer extends Component {
               layers={layers}
               id={id}
               layer={layer}
+              classStr={classStr || ''}
               f_obj={f}
               label={f.label}
               value={f.value || ''}
@@ -249,6 +251,7 @@ GenPropertiesLayer.propTypes = {
   onChange: PropTypes.func.isRequired,
   onSubChange: PropTypes.func.isRequired,
   onClick: PropTypes.func,
+  classStr: PropTypes.string,
   layers: PropTypes.object.isRequired,
   isPreview: PropTypes.bool,
   isSearch: PropTypes.bool,
@@ -264,6 +267,7 @@ GenPropertiesLayer.defaultProps = {
   selectOptions: {},
   onClick: () => {},
   isPreview: false,
+  classStr: '',
   isSearch: false,
   activeWF: false,
   isSpCall: false,
