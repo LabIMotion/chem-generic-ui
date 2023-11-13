@@ -10,6 +10,7 @@ const LayersLayout = props => {
     funcChange,
     funcSubChange,
     funcClick,
+    classStr,
     extLys,
     id,
     isPreview,
@@ -29,6 +30,7 @@ const LayersLayout = props => {
           key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
           field={e.field}
           label={e.label || ''}
+          classStr={classStr || ''}
           description={e.generic.description || ''}
           value={e.generic[e.field] || ''}
           type={e.type}
@@ -54,6 +56,7 @@ const LayersLayout = props => {
           id={id}
           key={uk}
           layer={layer}
+          classStr={classStr || ''}
           onChange={funcChange}
           onSubChange={funcSubChange}
           selectOptions={options}

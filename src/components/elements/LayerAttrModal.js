@@ -87,7 +87,7 @@ const LayerAttrModal = props => {
 
   const addTitles = () => {
     const title = [];
-    const mapping = { c: 'New Layer11', u: 'Edit Layer attributes' };
+    const mapping = { c: 'New Layer', u: 'Edit Layer attributes' };
     actions.map(e => title.push(mapping[e.action]));
     return title.join('/');
   };
