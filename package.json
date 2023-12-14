@@ -15,10 +15,6 @@
   ],
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "cc:ubuntu6:clean": "rm -rf /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/dist/*",
-    "cc:ubuntu6:cp": "cp -f ./dist/* /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/dist/.",
-    "cc:ubuntu6:cpp": "cp -f package.json /home/ubuntu/workspace/github/dev6/node_modules/chem-generic-ui/package.json",
-    "cc:ubuntu6": "yarn build && yarn cc:ubuntu6:clean && yarn cc:ubuntu6:cp && yarn cc:ubuntu6:cpp",
     "test": "jest --verbose"
   },
   "dependencies": {
