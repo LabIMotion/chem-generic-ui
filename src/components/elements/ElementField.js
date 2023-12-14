@@ -25,9 +25,11 @@ import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import TermLink from '../fields/TermLink';
 import {
   renderDatetimeRange,
   renderDummyFieldGroup,
+  renderNameField,
   renderTextFieldGroup,
   renderOwnRow,
   renderRequired,
@@ -40,6 +42,7 @@ class ElementField extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
+    this.handleOntChange = this.handleOntChange.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
@@ -54,7 +57,6 @@ class ElementField extends Component {
   };
 
   handleChange(e, orig, fe, lk, fc, tp) {
-    const { value } = e;
     if (
       (tp === FieldTypes.F_SELECT || tp === FieldTypes.F_SYSTEM_DEFINED) &&
       e === null
@@ -71,6 +73,18 @@ class ElementField extends Component {
   handleMove(_params) {
     const { l, f, isUp } = _params;
     this.props.onMove(l, f, isUp);
+  }
+
+  handleOntChange(_params) {
+    const { field: fieldObject, layer } = this.props;
+    this.handleChange(
+      { value: _params?.data },
+      fieldObject['field'],
+      fieldObject.field,
+      layer.key,
+      'ontology', // 'field',
+      'select' // 'Ontology' // 'text'
+    );
   }
 
   handleAddDummy(_params) {
@@ -346,6 +360,7 @@ class ElementField extends Component {
               <Badge className="bg-bs-field-display">{f.field || ''}</Badge>
               &nbsp;
               <Badge className="bg-bs-field-display">{f.type || ''}</Badge>
+              {TermLink(fieldObject.ontology)}
             </Panel.Title>
             <ButtonGroup bsSize="xsmall">
               <ConditionFieldBtn
@@ -383,12 +398,13 @@ class ElementField extends Component {
             <Panel.Body>
               <Form horizontal className="default_style">
                 {renderDummyFieldGroup({ layer, fieldObject })}
-                {renderTextFieldGroup({
+                {renderNameField({
                   layer,
                   fieldObject,
                   label: 'Field Name',
                   field: 'field',
                   fnChange: this.handleChange,
+                  fnOntChange: this.handleOntChange,
                 })}
                 {renderTextFieldGroup({
                   layer,

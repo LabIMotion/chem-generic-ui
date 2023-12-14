@@ -290,6 +290,10 @@ export const handleFieldInputChange = (
     case 'canAdjust':
       fieldObj[`${fieldCheck}`] = !orig;
       break;
+    case 'ontology':
+      if (value) fieldObj[`${fieldCheck}`] = value;
+      else delete fieldObj[`${fieldCheck}`];
+      break;
     default:
       fieldObj[`${fieldCheck}`] = value;
       break;
@@ -297,6 +301,7 @@ export const handleFieldInputChange = (
   const idx = findIndex(fields, o => o.field === field);
   fields.splice(idx, 1, fieldObj);
   element.properties_template.layers[layerKey].fields = fields;
+  console.log('handleFieldInputChange', element);
   return new Response(notifySuccess(), element);
 };
 
