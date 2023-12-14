@@ -11,3 +11,17 @@
   }
 }
 
+@mixin gu-ontology-select-code {
+  border-radius: 0.375rem;
+  float: right;
+}
+
+.gu-ontology-select-code-prefix {
+  @include gu-ontology-select-code;
+  background-color: $color-bs-primary !important;
+}
+
+.gu-ontology-select-code-short {
+  @include gu-ontology-select-code;
+  background-color: $color-bs-info !important;
+}

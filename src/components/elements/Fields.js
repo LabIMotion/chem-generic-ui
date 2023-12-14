@@ -8,6 +8,8 @@ import {
   FormGroup,
 } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
+import OntologySelect from './OntologySelect';
+import { ButtonOntologySelect } from '../fields/ModalOntologySelect';
 
 export const renderDatetimeRange = ({ fieldObject }) =>
   [FieldTypes.F_DATETIME_RANGE].includes(fieldObject.type) ? (
@@ -45,6 +47,43 @@ export const renderDummyFieldGroup = ({ layer, fieldObject }) =>
     </FormGroup>
   ) : null;
 
+export const renderNameField = ({
+  layer,
+  fieldObject,
+  label,
+  field,
+  fnChange,
+  fnOntChange,
+}) => (
+  <FormGroup className="gu-form-group">
+    <Col sm={3}>
+      <span className="gu-form-group-label">{label}</span>
+    </Col>
+    <Col sm={9} style={{ display: 'inline-flex' }}>
+      <FormControl
+        type="text"
+        name={`f_${field}`}
+        defaultValue={fieldObject[field]}
+        disabled={field === 'field'}
+        onChange={event =>
+          fnChange(
+            event,
+            fieldObject[field],
+            fieldObject.field,
+            layer.key,
+            field,
+            'text'
+          )
+        }
+      />
+      <ButtonOntologySelect
+        modalComponent={<OntologySelect fnSelected={fnOntChange} defaultValue={fieldObject?.ontology} />}
+        customClass={fieldObject?.ontology ? 'gu-ontology-selected' : null}
+      />
+    </Col>
+  </FormGroup>
+);
+
 export const renderTextFieldGroup = ({
   layer,
   fieldObject,
@@ -78,7 +117,14 @@ export const renderTextFieldGroup = ({
     </FormGroup>
   );
 
-export const renderCheck = ({ layer, fieldObject, fnChange, label, field }) => (
+export const renderCheck = ({
+  layer,
+  fieldObject,
+  fnChange,
+  label,
+  field,
+  note,
+}) => (
   <FormGroup className="gu-form-group">
     <Col sm={3}>
       <span className="gu-form-group-label">{label}</span>
@@ -97,7 +143,9 @@ export const renderCheck = ({ layer, fieldObject, fnChange, label, field }) => (
             'checkbox'
           )
         }
-      />
+      >
+        {note}
+      </Checkbox>
     </Col>
   </FormGroup>
 );
@@ -125,5 +173,17 @@ export const renderRequired = ({ layer, fieldObject, fnChange }) =>
         fnChange,
         label: 'Required',
         field: 'required',
+      })
+    : null;
+
+export const renderReadonly = ({ layer, fieldObject, fnChange }) =>
+  [FieldTypes.F_TEXT].includes(fieldObject.type)
+    ? renderCheck({
+        layer,
+        fieldObject,
+        fnChange,
+        label: 'Readonly',
+        field: 'readonly',
+        note: "When in 'Read-Only' mode, it displays as plain text with a placeholder if available.",
       })
     : null;

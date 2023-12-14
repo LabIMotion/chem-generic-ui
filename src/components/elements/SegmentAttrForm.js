@@ -1,20 +1,14 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
-import {
-  Form,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Button,
-} from 'react-bootstrap';
+import { Form, FormControl, FormGroup, InputGroup } from 'react-bootstrap';
 
 export default class SegmentAttrForm extends Component {
   render() {
     const { element, editable, klasses } = this.props;
 
     const klassOptions = klasses?.map(k => (
-      <option key={uuid()} value={k.id}>
+      <option key={k.id} value={k.id}>
         {k.label}
       </option>
     ));
@@ -49,8 +43,9 @@ export default class SegmentAttrForm extends Component {
           <InputGroup>
             <InputGroup.Addon>Assign to Element</InputGroup.Addon>
             <FormControl
+              key={element?.element_klass?.id}
               componentClass="select"
-              value={element?.element_klass?.id}
+              defaultValue={element?.element_klass?.id}
               inputRef={ref => {
                 this.k_klass = ref;
               }}

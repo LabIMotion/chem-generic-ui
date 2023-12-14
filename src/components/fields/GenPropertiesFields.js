@@ -299,6 +299,13 @@ const GenDummy = () => (
   </FormGroup>
 );
 
+const GenLabel = (opt, value) => (
+  <FormGroup className="text_generic_properties">
+    {FieldHeader(opt)}
+    <div>{value}</div>
+  </FormGroup>
+);
+
 const GenPropertiesInputGroup = opt => {
   const fLab = e => (
     <div key={uuid()} className="form-control g_input_group_label">
@@ -477,6 +484,8 @@ const GenPropertiesTable = opt => (
 );
 
 const GenPropertiesText = opt => {
+  const { f_obj: fObj } = opt;
+  if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);

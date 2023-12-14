@@ -37,7 +37,7 @@ yarn add chem-generic-ui
 
 ## Engage with Us
 
-Feel free to utilize the [Discussions](https://github.com/LabIMotion/chem-generic-ui/discussions) section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
+Feel free to utilize the [Discussions](https://github.com/LabIMotion/labimotion/discussions) section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
 
 ## License
 
