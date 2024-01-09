@@ -6,7 +6,12 @@ import organizeSubValues from './collate';
 
 // current generic value, new klass value
 const reinventGeneric = (generic, klass) => {
-  if (!generic || !klass || !generic.properties || !klass.properties_release) {
+  if (
+    !generic ||
+    Object.keys(klass || {}).length < 1 ||
+    !generic.properties ||
+    !klass.properties_release
+  ) {
     return [undefined, undefined];
   }
   const newProps = cloneDeep(klass.properties_release);
