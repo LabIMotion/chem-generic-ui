@@ -33,6 +33,7 @@ import {
   renderTextFieldGroup,
   renderOwnRow,
   renderRequired,
+  renderReadonly,
 } from './Fields';
 
 class ElementField extends Component {
@@ -558,6 +559,11 @@ class ElementField extends Component {
                       fnChange: this.handleChange,
                     })
                   : null}
+                {renderReadonly({
+                  layer,
+                  fieldObject,
+                  fnChange: this.handleChange,
+                })}
                 {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type)
                   ? renderTextFieldGroup({
                       layer,

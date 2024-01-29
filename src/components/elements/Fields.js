@@ -117,7 +117,14 @@ export const renderTextFieldGroup = ({
     </FormGroup>
   );
 
-export const renderCheck = ({ layer, fieldObject, fnChange, label, field }) => (
+export const renderCheck = ({
+  layer,
+  fieldObject,
+  fnChange,
+  label,
+  field,
+  note,
+}) => (
   <FormGroup className="gu-form-group">
     <Col sm={3}>
       <span className="gu-form-group-label">{label}</span>
@@ -136,7 +143,9 @@ export const renderCheck = ({ layer, fieldObject, fnChange, label, field }) => (
             'checkbox'
           )
         }
-      />
+      >
+        {note}
+      </Checkbox>
     </Col>
   </FormGroup>
 );
@@ -164,5 +173,17 @@ export const renderRequired = ({ layer, fieldObject, fnChange }) =>
         fnChange,
         label: 'Required',
         field: 'required',
+      })
+    : null;
+
+export const renderReadonly = ({ layer, fieldObject, fnChange }) =>
+  [FieldTypes.F_TEXT].includes(fieldObject.type)
+    ? renderCheck({
+        layer,
+        fieldObject,
+        fnChange,
+        label: 'Readonly',
+        field: 'readonly',
+        note: "When in 'Read-Only' mode, it displays as plain text with a placeholder if available.",
       })
     : null;

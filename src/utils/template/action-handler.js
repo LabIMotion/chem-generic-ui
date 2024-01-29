@@ -286,6 +286,7 @@ export const handleFieldInputChange = (
 
   switch (fieldCheck) {
     case 'required':
+    case 'readonly':
     case 'hasOwnRow':
     case 'canAdjust':
       fieldObj[`${fieldCheck}`] = !orig;
