@@ -2,6 +2,25 @@
 
 A React component for dynamically building user interfaces.
 
+This library is purely written in JavaScript and is based on the [React](https://reactjs.org/) library.
+
+**Community**
+- [GitHub discussions](https://github.com/LabIMotion/chem-generic-ui/discussions)
+
+**Code**
+- [GitHub code](https://github.com/LabIMotion/chem-generic-ui)
+
+
+## Projects
+
+Our favorite projects:
+
+### :star: LabIMotion: Designer, you design what you need.
+
+[LabIMotion](https://www.chemotion.net/docs/labimotion)
+
+[![LabIMotion: Designer, you design what you need](https://img.youtube.com/vi/8o1U4QXU-B0/0.jpg)](https://www.youtube.com/watch?v=8o1U4QXU-B0)
+
 ## Installation
 
 The chem-generic-ui library is available as an NPM package. Install it either with NPM:
@@ -16,6 +35,10 @@ or Yarn:
 yarn add chem-generic-ui
 ```
 
-## Issue Reporting & Asking Questions
+## Engage with Us
 
-Kindly utilize the 'Discussion' section for any inquiries, concerns, suggestions, or ideas you may wish to share. We will initiate the process of creating an 'issue' with the appropriate label to provide you with a more comprehensive status overview.
+Feel free to utilize the [Discussions](https://github.com/LabIMotion/labimotion/discussions) section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
+
+## License
+
+Code released under the [AGPL-3.0 License](https://www.gnu.org/licenses/agpl-3.0.txt).
