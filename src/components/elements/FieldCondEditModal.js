@@ -2,10 +2,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { Modal, Button } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
+} from 'react-bootstrap';
+import { cloneDeep } from 'lodash';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
-import GenericSubField from './GenericSubField';
+import GenericSubField from '../models/GenericSubField';
 
 const AddRowBtn = ({ addRow }) => (
   <Button active onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
@@ -35,9 +41,9 @@ DelRowBtn.propTypes = {
 export default class FieldCondEditModal extends Component {
   constructor(props) {
     super(props);
-    this.formRef = React.createRef();
 
     this.autoSizeAll = this.autoSizeAll.bind(this);
+    this.getColumnDefs = this.getColumnDefs.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
     this.delRow = this.delRow.bind(this);
     this.addRow = this.addRow.bind(this);
@@ -45,12 +51,40 @@ export default class FieldCondEditModal extends Component {
     this.selField = this.selField.bind(this);
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
+    this.onOpChanged = this.onOpChanged.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.gridApi) {
+      const { allLayers, field, layer } = this.props;
+      const condOperator =
+        (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
+
+      const { field: preField, layer: preLayer } = prevProps;
+      const condOperatorPre =
+        (preField == null ? preLayer.cond_operator : preField.cond_operator) ??
+        1;
+
+      if (condOperator !== condOperatorPre && field !== null) {
+        const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
+        this.gridApi.setColumnDefs(columnDefs);
+        this.autoSizeAll();
+      }
+    }
   }
 
   onGridReady(e) {
+    const { allLayers, field, layer } = this.props;
+    const condOperator =
+      (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
+    const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
+    this.gridApi.setColumnDefs(columnDefs);
+    this.autoSizeAll();
+  }
 
+  getColumnDefs(allLayers, condOperator, field) {
     const columnDefs = [
       {
         rowDrag: true,
@@ -69,7 +103,7 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         cellRenderer: LayerSelect,
         cellRendererParams: {
-          allLayers: this.props.allLayers,
+          allLayers,
           selLayer: this.selLayer,
         },
       },
@@ -81,7 +115,7 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         cellRenderer: FieldSelect,
         cellRendererParams: {
-          allLayers: this.props.allLayers,
+          allLayers,
           selField: this.selField,
           types: ['text', 'select', 'checkbox'],
         },
@@ -94,22 +128,36 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         onCellValueChanged: this.onCellValueChanged,
       },
-      {
-        headerName: '',
-        colId: 'actions',
-        headerComponent: AddRowBtn,
-        headerComponentParams: { addRow: this.addRow },
-        cellRenderer: DelRowBtn,
-        cellRendererParams: { delRow: this.delRow },
-        editable: false,
-        filter: false,
-        minWidth: 35,
-        width: 35,
-      },
     ];
 
-    this.gridApi.setColumnDefs(columnDefs);
-    this.autoSizeAll();
+    const displayAsObject = {
+      headerName: 'Display as',
+      field: 'label',
+      editable: condOperator === 1,
+      minWidth: 120,
+      width: 120,
+      onCellValueChanged: this.onCellValueChanged,
+    };
+
+    const actionObject = {
+      headerName: '',
+      colId: 'actions',
+      headerComponent: AddRowBtn,
+      headerComponentParams: { addRow: this.addRow },
+      cellRenderer: DelRowBtn,
+      cellRendererParams: { delRow: this.delRow },
+      editable: false,
+      filter: false,
+      minWidth: 35,
+      width: 35,
+    };
+
+    if (field !== null) {
+      columnDefs.push(displayAsObject);
+    }
+    columnDefs.push(actionObject);
+
+    return columnDefs;
   }
 
   delRow() {
@@ -133,7 +181,12 @@ export default class FieldCondEditModal extends Component {
         : ((allLayers.find(e => e.key === ly) || {}).fields || []).filter(e =>
             ['text', 'select', 'checkbox'].includes(e.type)
           )[0].field;
-    const newSub = new GenericSubField({ layer: ly, field: fd, value: '' });
+    const newSub = new GenericSubField({
+      layer: ly,
+      field: fd,
+      value: '',
+      label: '',
+    });
     const idx = this.gridApi.getDisplayedRowCount();
     this.gridApi.applyTransaction({ add: [newSub], addIndex: idx });
     this.refresh();
@@ -206,6 +259,19 @@ export default class FieldCondEditModal extends Component {
     this.refresh();
   }
 
+  onOpChanged(e) {
+    const { updSub, updLayer, layer, layerKey, field } = this.props;
+    if (field == null) {
+      const newLayer = cloneDeep(layer);
+      newLayer.cond_operator = e;
+      updLayer(layerKey, newLayer, () => {});
+    } else {
+      const newField = cloneDeep(field);
+      newField.cond_operator = e;
+      updSub(layerKey, newField, () => {});
+    }
+  }
+
   render() {
     const { showModal, fnClose, layer, layerKey, field, allLayers } =
       this.props;
@@ -220,6 +286,9 @@ export default class FieldCondEditModal extends Component {
         ? `layer:${layer.label}`
         : `field:${field.label}(in layer:${layer.label})`;
 
+    const defaultCondOperator =
+      (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
+
     if (showModal) {
       return (
         <Modal
@@ -232,15 +301,54 @@ export default class FieldCondEditModal extends Component {
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{ overflow: 'auto' }}>
-            <div style={{ fontSize: '10px' }}>
-              <b>Field Restriction: </b>
-              when a restriction has been set, the {lafi} is hidden, it shows
-              only when the [Layer,Field,Value] got matched; if there are more
-              than one setting, the {lafi} shows when one of them got matched.
-            </div>
-            <div style={{ fontSize: '10px' }}>
-              <b>available field type: </b>
-              checkbox (true/false), select, text
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                marginBottom: '4px',
+              }}
+            >
+              <div style={{ flex: '1', fontSize: '10px' }}>
+                <b>Restriction: </b>
+                When a restriction is set, the {lafi} is hidden and will be only
+                displayed when the [Layer,Field,Value] criteria are met.{' '}
+                <b>Match </b>[One of them], [All of them], or [None of them].
+                <br />
+                <b>Restriction on Field: </b>When a restriction is set to `Match
+                One`, an alternative display name can be set for the field via
+                `Display as`. Please note that `Display as` is only effective
+                when a restriction is `Match One`.
+                <br />
+                <b>available field type: </b>
+                Checkbox (true/false), Select, Text
+              </div>
+              <div>
+                <ToggleButtonGroup
+                  type="radio"
+                  name="cond_operator"
+                  defaultValue={defaultCondOperator}
+                  onChange={this.onOpChanged}
+                >
+                  <ToggleButton
+                    value={1}
+                    bsStyle={defaultCondOperator === 1 ? 'success' : 'default'}
+                  >
+                    Match One
+                  </ToggleButton>
+                  <ToggleButton
+                    value={9}
+                    bsStyle={defaultCondOperator === 9 ? 'success' : 'default'}
+                  >
+                    Match All
+                  </ToggleButton>
+                  <ToggleButton
+                    value={0}
+                    bsStyle={defaultCondOperator === 0 ? 'success' : 'default'}
+                  >
+                    Match None
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </div>
             <div style={{ width: '100%', height: '26vh' }}>
               <div

@@ -2,7 +2,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { verifyConditionLayer } from '../../../utils/template/condition-handler';
+import {
+  verifyConditionLayer,
+  handleLayerConditionChange,
+} from '../../../utils/template/condition-handler';
 import FieldCondEditModal from '../../elements/FieldCondEditModal';
 
 const ConditionLayerBtn = props => {
@@ -25,6 +28,8 @@ const ConditionLayerBtn = props => {
 
   const updLayerSubField = (_layerKey, _layer) => {
     element.properties_template.layers[`${_layerKey}`] = _layer;
+    const result = handleLayerConditionChange(element, _layerKey);
+    fnUpdate(result);
   };
 
   const conditionBtn =

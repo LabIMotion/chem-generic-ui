@@ -217,10 +217,10 @@ export default class TextFormula extends React.Component {
     const sub = field.text_sub_fields || [];
     return (
       <div>
-        <div style={{ fontSize: '10px' }}>
+        {/* <div style={{ fontSize: '10px' }}>
           <b>Text-Formula: </b>
           select the text fields which are combined together with separator
-        </div>
+        </div> */}
         <div
           style={{ width: '100%', height: '100%' }}
           className="ag-theme-balham"

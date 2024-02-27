@@ -47,6 +47,7 @@ const DnDFlow = props => {
             animated: true,
             markerEnd: { type: MarkerType.ArrowClosed },
             label: 'next',
+            labelStyle: { fill: 'red', fontWeight: 700 },
           },
           eds
         )

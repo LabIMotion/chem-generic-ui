@@ -16,7 +16,6 @@ import { round } from 'lodash';
 import moment from 'moment';
 import 'moment-precise-range-plugin';
 import { genUnit, genUnits, unitConversion } from 'generic-ui-core';
-import { genUnitSup } from '../tools/utils';
 import GenericSubField from '../models/GenericSubField';
 
 const DateTimeRangeFields = [
@@ -30,6 +29,13 @@ const MomentUnit = {
   h: 'hours',
   min: 'minutes',
   s: 'seconds',
+};
+
+const DurationLabel = {
+  d: 'day(s)',
+  h: 'hour(s)',
+  min: 'min(s)',
+  s: 'sec(s)',
 };
 
 const DateTimeRange = props => {
@@ -241,8 +247,9 @@ const DateTimeRange = props => {
                   dataChange({ field: 'duration', event: 'changeUnit' })
                 }
               >
-                {genUnitSup(genUnit('duration', duration.value_system).label) ||
-                  ''}
+                {DurationLabel[
+                  genUnit('duration', duration.value_system).key
+                ] || ''}
               </Button>
             </InputGroup.Button>
           </InputGroup>

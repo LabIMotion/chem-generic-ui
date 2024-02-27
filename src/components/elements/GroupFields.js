@@ -183,12 +183,12 @@ export default class GroupFields extends React.Component {
     const sub = field.sub_fields || [];
     return (
       <div>
-        <div style={{ fontSize: '10px' }}>
+        {/* <div style={{ fontSize: '10px' }}>
           <b>Input Group: </b>
           define the fields which are grouped together and display as one field;<br />
           note: &#39;System-Defined&#39; represents the Unit field which
           has one input field and one unit converter.
-        </div>
+        </div> */}
         <div style={{ width: '100%', height: '100%' }} className="ag-theme-balham">
           <AgGridReact
             enableColResize

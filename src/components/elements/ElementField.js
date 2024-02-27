@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Badge,
   Button,
   Popover,
   Col,
@@ -19,15 +18,17 @@ import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonTooltip from '../fields/ButtonTooltip';
-import { genUnitSup, toBool, toNullOrInt } from '../tools/utils';
+import { genUnitSup, getFieldProps, toBool, toNullOrInt } from '../tools/utils';
 import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import FieldBadge from '../fields/FieldBadge';
+import InputUnit from '../fields/InputUnit';
 import TermLink from '../fields/TermLink';
 import {
-  renderDatetimeRange,
+  // renderDatetimeRange,
   renderDummyFieldGroup,
   renderNameField,
   renderTextFieldGroup,
@@ -44,6 +45,7 @@ class ElementField extends Component {
     this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleOntChange = this.handleOntChange.bind(this);
+    this.handleUnitChange = this.handleUnitChange.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
@@ -85,6 +87,18 @@ class ElementField extends Component {
       layer.key,
       'ontology', // 'field',
       'select' // 'Ontology' // 'text'
+    );
+  }
+
+  handleUnitChange(_params) {
+    const { field: fieldObject, layer } = this.props;
+    this.handleChange(
+      { value: _params?.data },
+      fieldObject.field,
+      fieldObject.field,
+      layer.key,
+      'value_system', // 'field',
+      FieldTypes.F_SYSTEM_DEFINED
     );
   }
 
@@ -189,6 +203,14 @@ class ElementField extends Component {
       };
     });
     let typeOpts = FieldBase;
+    const colOpts = [
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6' },
+    ];
     if (genericType === 'Element') {
       typeOpts = ElementBase;
     } else if (genericType === 'Segment') {
@@ -200,7 +222,10 @@ class ElementField extends Component {
       f.type === FieldTypes.F_FORMULA_FIELD ? (
         <FormGroup className="gu-form-group">
           <Col sm={3}>
-            <span className="gu-form-group-label">Formula</span>
+            <span className="gu-form-group-label">
+              {getFieldProps('formula').label}{' '}
+              {getFieldProps('formula').fieldTooltip}
+            </span>
           </Col>
           <Col sm={9}>
             <div style={{ display: 'flex' }}>
@@ -230,14 +255,19 @@ class ElementField extends Component {
     const selectOptionsOpts =
       f.type === FieldTypes.F_SELECT ? select_options : unitConfig;
     const selectOptionsVal =
-      selectOptionsOpts?.find(o => o.value === f.option_layers) || undefined;
+      selectOptionsOpts?.find(o => o.value === f.option_layers) || null;
     const selectOptions =
       f.type === FieldTypes.F_SELECT ||
       f.type === FieldTypes.F_SYSTEM_DEFINED ? (
         <FormGroup className="gu-form-group">
           <Col sm={3}>
             <span className="gu-form-group-label">
-              {f.type === FieldTypes.F_SELECT ? 'Options' : ' '}
+              {f.type === FieldTypes.F_SELECT
+                ? `${getFieldProps('options').label} `
+                : ' '}
+              {f.type === FieldTypes.F_SELECT
+                ? getFieldProps('options').fieldTooltip
+                : null}
             </span>
           </Col>
           <Col sm={9}>
@@ -250,6 +280,13 @@ class ElementField extends Component {
                     },
                     menu: base => {
                       return { ...base, zIndex: 9999 };
+                    },
+                    control: base => {
+                      return {
+                        ...base,
+                        height: 35,
+                        minHeight: 35,
+                      };
                     },
                   }}
                   name={f.field}
@@ -268,9 +305,9 @@ class ElementField extends Component {
                   }
                 />
               </span>
-              {f.type === FieldTypes.F_SELECT
-                ? null
-                : this.availableUnits(f.option_layers)}
+              {f.type === FieldTypes.F_SELECT ? null : (
+                <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
+              )}
             </div>
           </Col>
         </FormGroup>
@@ -358,9 +395,11 @@ class ElementField extends Component {
                 ? '(dummy field)'
                 : f.label}
               &nbsp;
-              <Badge className="bg-bs-field-display">{f.field || ''}</Badge>
+              <FieldBadge fieldObj={f} prop="field" />
               &nbsp;
-              <Badge className="bg-bs-field-display">{f.type || ''}</Badge>
+              <FieldBadge fieldObj={f} prop="type" />
+              &nbsp;
+              <FieldBadge fieldObj={f} prop="cols" />
               {TermLink(fieldObject.ontology)}
             </Panel.Title>
             <ButtonGroup bsSize="xsmall">
@@ -402,7 +441,6 @@ class ElementField extends Component {
                 {renderNameField({
                   layer,
                   fieldObject,
-                  label: 'Field Name',
                   field: 'field',
                   fnChange: this.handleChange,
                   fnOntChange: this.handleOntChange,
@@ -410,14 +448,12 @@ class ElementField extends Component {
                 {renderTextFieldGroup({
                   layer,
                   fieldObject,
-                  label: 'Display Name',
                   field: 'label',
                   fnChange: this.handleChange,
                 })}
                 {renderTextFieldGroup({
                   layer,
                   fieldObject,
-                  label: 'Hover Info',
                   field: 'description',
                   fnChange: this.handleChange,
                 })}
@@ -426,12 +462,55 @@ class ElementField extends Component {
                   fieldObject,
                   fnChange: this.handleChange,
                 })}
+                <FormGroup className="gu-form-group">
+                  <Col sm={3}>
+                    <span className="gu-form-group-label">
+                      {getFieldProps('cols').label}{' '}
+                      {getFieldProps('cols').fieldTooltip}
+                    </span>
+                  </Col>
+                  <Col sm={9}>
+                    <div style={{ display: 'flex' }}>
+                      <span style={{ width: '100%' }}>
+                        <Select
+                          styles={{
+                            menuPortal: base => {
+                              return { ...base, zIndex: 9999 };
+                            },
+                            menu: base => {
+                              return { ...base, zIndex: 9999 };
+                            },
+                          }}
+                          name={f.field}
+                          multi={false}
+                          options={colOpts}
+                          value={colOpts?.find(
+                            o => o.value === (f.cols || layer.cols)
+                          )}
+                          onChange={event =>
+                            this.handleChange(
+                              event,
+                              f.type,
+                              f.field,
+                              layerKey,
+                              'cols',
+                              'select'
+                            )
+                          }
+                        />
+                      </span>
+                    </div>
+                  </Col>
+                </FormGroup>
                 {[FieldTypes.F_DUMMY, FieldTypes.F_FORMULA_FIELD].includes(
                   f.type
                 ) ? null : (
                   <FormGroup className="gu-form-group">
                     <Col sm={3}>
-                      <span className="gu-form-group-label">Type</span>
+                      <span className="gu-form-group-label">
+                        {getFieldProps('type').label}{' '}
+                        {getFieldProps('type').fieldTooltip}
+                      </span>
                     </Col>
                     <Col sm={9}>
                       <div style={{ display: 'flex' }}>
@@ -468,7 +547,10 @@ class ElementField extends Component {
                 {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
                   <FormGroup className="gu-form-group">
                     <Col sm={3}>
-                      <span className="gu-form-group-label">Type</span>
+                      <span className="gu-form-group-label">
+                        {getFieldProps('type').label}{' '}
+                        {getFieldProps('type').fieldTooltip}
+                      </span>
                     </Col>
                     <Col sm={3}>
                       <div style={{ display: 'flex' }}>
@@ -500,10 +582,13 @@ class ElementField extends Component {
                         </span>
                       </div>
                     </Col>
-                    <Col sm={1}>
-                      <span className="gu-form-group-label">Decimal</span>
-                    </Col>
                     <Col sm={2}>
+                      <span className="gu-form-group-label">
+                        {getFieldProps('decimal').label}{' '}
+                        {getFieldProps('decimal').fieldTooltip}
+                      </span>
+                    </Col>
+                    <Col sm={1}>
                       <div style={{ display: 'flex' }}>
                         <span style={{ width: '100%' }}>
                           <FormControl
@@ -526,7 +611,10 @@ class ElementField extends Component {
                       </div>
                     </Col>
                     <Col sm={2}>
-                      <span className="gu-form-group-label">Can adjust?</span>
+                      <span className="gu-form-group-label">
+                        {getFieldProps('canAdjust').label}{' '}
+                        {getFieldProps('canAdjust').fieldTooltip}
+                      </span>
                     </Col>
                     <Col sm={1}>
                       <Checkbox
@@ -546,7 +634,7 @@ class ElementField extends Component {
                     </Col>
                   </FormGroup>
                 ) : null}
-                {renderDatetimeRange({ fieldObject })}
+                {/* {renderDatetimeRange({ fieldObject })} */}
                 {groupOptions}
                 {tableOptions}
                 {selectOptions}
@@ -568,7 +656,6 @@ class ElementField extends Component {
                   ? renderTextFieldGroup({
                       layer,
                       fieldObject,
-                      label: 'Placeholder',
                       field: 'placeholder',
                       fnChange: this.handleChange,
                     })

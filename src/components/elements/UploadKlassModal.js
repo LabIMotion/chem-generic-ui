@@ -4,19 +4,14 @@ import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Modal } from 'react-bootstrap';
 import Constants from '../tools/Constants';
-import { handleTemplateUploading } from '../../utils/template/action-handler';
+import { handleKlassUploading } from '../../utils/template/action-handler';
 
-const UploadTemplateModal = props => {
+const UploadKlassModal = props => {
   const { data, genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
 
   const handleReaderLoaded = e => {
-    const verify = handleTemplateUploading(e, genericType);
-    if (verify.notify.isSuccess) {
-      const newData = data;
-      newData.properties_template = verify.element;
-      verify.element = newData;
-    }
+    const verify = handleKlassUploading(e, genericType);
     fnUpload(verify);
     setShow(false);
   };
@@ -30,7 +25,7 @@ const UploadTemplateModal = props => {
   return (
     <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Upload template to Work Area</Modal.Title>
+        <Modal.Title>{`Import ${genericType} and its template`}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone
@@ -46,7 +41,7 @@ const UploadTemplateModal = props => {
   );
 };
 
-UploadTemplateModal.propTypes = {
+UploadKlassModal.propTypes = {
   data: PropTypes.object.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
@@ -60,4 +55,4 @@ UploadTemplateModal.propTypes = {
   }).isRequired,
 };
 
-export default UploadTemplateModal;
+export default UploadKlassModal;

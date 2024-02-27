@@ -2,6 +2,7 @@ import React from 'react';
 import { sortBy } from 'lodash';
 import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
+import { showProperties } from '../tools/utils';
 
 const LayersLayout = props => {
   const {
@@ -72,40 +73,9 @@ const LayersLayout = props => {
         />
       );
       layout.push(ig);
-    } else if (layer.cond_fields && layer.cond_fields.length > 0) {
-      let showLayer = false;
-
-      for (let i = 0; i < layer.cond_fields.length; i += 1) {
-        const cond = layer.cond_fields[i] || {};
-        const fd =
-          ((layers[cond.layer] || {}).fields || []).find(
-            f => f.field === cond.field
-          ) || {};
-        if (
-          fd.type === 'checkbox' &&
-          ((['false', 'no', 'f', '0'].includes(
-            (cond.value || '').trim().toLowerCase()
-          ) &&
-            (typeof (fd && fd.value) === 'undefined' || fd.value === false)) ||
-            (['true', 'yes', 't', '1'].includes(
-              (cond.value || '').trim().toLowerCase()
-            ) &&
-              typeof fd.value !== 'undefined' &&
-              fd.value === true))
-        ) {
-          showLayer = true;
-          break;
-        } else if (
-          ['text', 'select'].includes(fd.type) &&
-          typeof (fd && fd.value) !== 'undefined' &&
-          (fd.value || '').trim() === (cond.value || '').trim()
-        ) {
-          showLayer = true;
-          break;
-        }
-      }
-
-      if (showLayer === true) {
+    } else if (layer?.cond_fields?.length > 0) {
+      const [showLayer, showLabel] = showProperties(layer, layers);
+      if (showLayer) {
         const igs = (
           <GenPropertiesLayer
             id={id}

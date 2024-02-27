@@ -62,6 +62,7 @@ const AttrModal = props => {
       }
       case Constants.GENERIC_TYPES.ELEMENT: {
         const updates = {
+          name: formRef.current.k_name.value.trim(),
           label: formRef.current.k_label.value.trim(),
           klass_prefix: formRef.current.k_prefix.value.trim(),
           icon_name: formRef.current.k_iconname.value.trim(),

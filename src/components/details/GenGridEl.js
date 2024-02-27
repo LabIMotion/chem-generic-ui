@@ -27,6 +27,7 @@ const GenGridEl = props => {
     fnEditKlass,
     genericType,
     fnDeActivateKlass,
+    fnDownloadKlass,
     fnShowProp,
   } = props;
 
@@ -45,6 +46,7 @@ const GenGridEl = props => {
         fnCopy: fnCopyKlass,
         fnDelete: fnDeleteKlass,
         fnEdit: fnEditKlass,
+        fnDownload: fnDownloadKlass,
         genericType,
       },
       sortable: false,
@@ -102,6 +104,7 @@ GenGridEl.propTypes = {
   gridData: PropTypes.array.isRequired,
   fnCopyKlass: PropTypes.func.isRequired,
   fnDeActivateKlass: PropTypes.func.isRequired,
+  fnDownloadKlass: PropTypes.func.isRequired,
   fnDeleteKlass: PropTypes.func.isRequired,
   fnEditKlass: PropTypes.func.isRequired,
   genericType: PropTypes.string.isRequired,

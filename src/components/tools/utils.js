@@ -3,6 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { findIndex, cloneDeep } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import Attachment from '../models/Attachment';
+import FieldTooltip from '../fields/FieldTooltip';
+import DocuConst from './DocuConst';
 
 const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
 
@@ -55,44 +57,64 @@ const uploadFiles = (properties, event, field, layer) => {
   return [value, files];
 };
 
-// move from GenPropertiesLayer.js
-const showProperties = (fObj, layers) => {
-  let showField = true;
-  if (fObj && fObj.cond_fields && fObj.cond_fields.length > 0) {
-    showField = false;
-    for (let i = 0; i < fObj.cond_fields.length; i += 1) {
-      const cond = fObj.cond_fields[i] || {};
-      const { layer, field, value } = cond;
-      if (field && field !== '') {
-        const fd =
-          ((layers[layer] || {}).fields || []).find(f => f.field === field) ||
-          {};
-        if (
-          fd.type === 'checkbox' &&
-          ((['false', 'no', 'f', '0'].includes(
-            (value || '').trim().toLowerCase()
-          ) &&
-            (typeof (fd && fd.value) === 'undefined' || fd.value === false)) ||
-            (['true', 'yes', 't', '1'].includes(
-              (value || '').trim().toLowerCase()
-            ) &&
-              typeof (fd && fd.value) !== 'undefined' &&
-              fd.value === true))
-        ) {
-          showField = true;
-          break;
-        } else if (
-          ['text', 'select'].includes(fd && fd.type) &&
-          typeof (fd && fd.value) !== 'undefined' &&
-          ((fd && fd.value) || '').trim() === (value || '').trim()
-        ) {
-          showField = true;
-          break;
-        }
+// fd: from layer; value: from cond;
+const isCheckboxMatch = (fd, value) => {
+  const falseValues = ['false', 'no', 'f', '0'];
+  const trueValues = ['true', 'yes', 't', '1'];
+  const normalizedValue = (value || 'false').trim().toLowerCase();
+
+  const isFalseMatch =
+    falseValues.includes(normalizedValue) && (fd.value || false) === false;
+  const isTrueMatch =
+    trueValues.includes(normalizedValue) && (fd.value || false) === true;
+
+  return fd.type === FieldTypes.F_CHECKBOX && (isFalseMatch || isTrueMatch);
+};
+
+const isSelectMatch = (fd, value) =>
+  fd.type === FieldTypes.F_SELECT &&
+  (fd.value || '').trim() === (value || '').trim();
+
+const isTextMatch = (fd, value) =>
+  fd.type === FieldTypes.F_TEXT &&
+  (fd.value || '').trim() === (value || '').trim();
+
+// ConditionOperator = 1 (ANY), 9 (ALL), 0 (NONE)
+const showProperties = (dataObj, layers) => {
+  // always show because no restriction
+  if (!dataObj?.cond_fields?.length) return [true, ''];
+
+  // default operator is ANY(1)
+  const matchOp = dataObj.cond_operator ?? 1;
+  let matchCount = 0;
+
+  for (let i = 0; i < dataObj.cond_fields.length; i += 1) {
+    const { layer, field, value, label } = dataObj.cond_fields[i] || {};
+
+    if (!field) return [true, ''];
+
+    const fd = layers[layer]?.fields?.find(f => f.field === field) || {};
+
+    if (
+      isCheckboxMatch(fd, value) ||
+      isSelectMatch(fd, value) ||
+      isTextMatch(fd, value)
+    ) {
+      matchCount += 1;
+
+      // if match ANY, return true immediately if any condition is met
+      if (matchOp === 1) {
+        return [true, label];
       }
     }
   }
-  return showField;
+
+  // if match NONE, return true only if no condition is met
+  // if match ALL, return true only if all conditions are met
+  if (matchOp === 0) return [matchCount === 0, ''];
+  if (matchOp === 9) return [matchCount === dataObj.cond_fields.length, ''];
+
+  return [false, ''];
 };
 
 class GenericDummy {
@@ -110,7 +132,7 @@ const inputEventVal = (event, type) => {
   if (type === FieldTypes.F_SELECT) {
     return event ? event.value : null;
   }
-  if (type.startsWith('drag')) {
+  if (type.startsWith(FieldTypes.F_DRAG)) {
     return event;
   }
   if (type === FieldTypes.F_CHECKBOX) {
@@ -213,24 +235,122 @@ const fieldCls = (isSpCall = false) => {
   return [clsFrm, clsCol];
 };
 
-export const resetProperties = (_props) => {
+export const resetProperties = _props => {
   if (!_props || typeof _props === 'undefined') return _props;
 
-  Object.keys(_props.layers).forEach((key) => {
-    const _newLayer = _props.layers[key] || {};
-    _newLayer.ai = [];
-    (_newLayer.fields || []).forEach((f, idx) => {
-      if (f && (f.type === 'drag_sample' || f.type === 'drag_element' || f.type === 'upload')) {
-        _newLayer.fields[idx].value = null;
+  Object.keys(_props.layers).forEach(key => {
+    const newLayer = _props.layers[key] || {};
+    newLayer.ai = [];
+    (newLayer.fields || []).forEach((f, idx) => {
+      if (
+        f &&
+        [
+          FieldTypes.F_DRAG_SAMPLE,
+          FieldTypes.F_DRAG_ELEMENT,
+          FieldTypes.F_UPLOAD,
+        ].includes(f.type)
+      ) {
+        newLayer.fields[idx].value = null;
       }
-      if (f && (f.type === 'table')) {
-        _newLayer.fields[idx].sub_values = [];
+      if (f && f.type === FieldTypes.F_TABLE) {
+        newLayer.fields[idx].sub_values = [];
       }
     });
   });
   return _props;
 };
 
+const docFields = [
+  DocuConst.DOC_SITE,
+  'guides',
+  'designer',
+  'components',
+  'fields',
+].join('/');
+const propDefault = {
+  cols: {
+    label: 'Column Width Division',
+    // tooltip: [
+    //   'Determine the portion of the row width allocated to this component.',
+    //   "Specify how much of the row width this component occupies.",
+    // ].join(' '),
+    doc: [docFields, '#column-width-division'].join(''),
+  },
+  description: {
+    label: 'Hover Info',
+    doc: [docFields, '#hover-info'].join(''),
+  },
+  field: {
+    label: 'Field Name',
+    doc: [docFields, '#field-name'].join(''),
+  },
+  hasOwnRow: {
+    label: 'Has its own line',
+    doc: [docFields, '#has-its-own-line'].join(''),
+  },
+  label: { label: 'Display Name', doc: [docFields, '#display-name'].join('') },
+  placeholder: {
+    label: 'Placeholder',
+    doc: [docFields, '/types', '/text', '#placeholder'].join(''),
+  },
+  type: {
+    label: 'Type',
+    doc: [docFields, '/types'].join(''),
+  },
+  // special cases
+  canAdjust: {
+    label: 'Can adjust?',
+    doc: [docFields, '/types', '/formula-field', '#can-adjust'].join(''),
+  },
+  decimal: {
+    label: 'Decimal',
+    doc: [docFields, '/types', '/formula-field', '#decimal'].join(''),
+  },
+  formula: {
+    label: 'Formula',
+    doc: [docFields, '/types', '/formula-field', '#formula'].join(''),
+  },
+  options: {
+    label: 'Options',
+    doc: [docFields, '/types', '/select', '#options'].join(''),
+  },
+  readonly: {
+    label: 'Readonly',
+    doc: [docFields, '/types', '/text', '#read-only'].join(''),
+  },
+  required: {
+    label: 'Required',
+    doc: [docFields, '/types', '/text', '#required'].join(''),
+  },
+  supportedUnits: {
+    label: 'Default unit',
+    doc: [docFields, '/types', '/system-defined', '#supported-units'].join(''),
+  },
+  // designer
+  designer: {
+    label: 'LabIMotion Designer',
+    doc: [DocuConst.DOC_SITE, 'guides', 'designer'].join('/'),
+  },
+  templateFeatures: {
+    label: 'Template Features',
+    doc: [DocuConst.DOC_SITE, 'guides', 'designer', 'template-features'].join(
+      '/'
+    ),
+  },
+};
+
+const getFieldProps = name => {
+  if (!propDefault[name]) return {};
+  return {
+    label: propDefault[name].label,
+    fieldTooltip: (
+      <FieldTooltip
+        tooltip={propDefault[name].tooltip}
+        link={propDefault[name].doc}
+      />
+    ),
+  };
+};
 
 export {
   createEnum,
@@ -250,4 +370,5 @@ export {
   KlzIcon,
   fieldCls,
   toNullOrInt,
+  getFieldProps,
 };

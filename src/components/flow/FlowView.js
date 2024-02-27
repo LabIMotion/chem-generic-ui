@@ -11,6 +11,7 @@ import ReactFlow, {
 // import ExampleFlow from './ExampleFlow';
 import LayerNode from './LayerNode';
 import { buildFlowElements } from '../../utils/flow/build-flow-elements';
+import FlowImageButton from './FlowImageButton';
 
 const nodeTypes = {
   selectorNode: LayerNode,
@@ -44,6 +45,7 @@ const FlowView = props => {
             onInit={setReactFlowInstance}
           >
             <Controls />
+            <FlowImageButton />
           </ReactFlow>
         </div>
       </ReactFlowProvider>
@@ -51,8 +53,5 @@ const FlowView = props => {
   );
 };
 
-FlowView.propTypes = {
-  properties: PropTypes.object.isRequired,
-};
-
+FlowView.propTypes = { properties: PropTypes.object.isRequired };
 export default FlowView;

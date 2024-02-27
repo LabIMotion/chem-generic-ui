@@ -17,6 +17,7 @@ export { default as Workflow } from './components/flow/Workflow';
 export { buildInitWF } from './components/tools/orten';
 export { default as GenericElCriteriaModal } from './components/elements/GenericElCriteriaModal';
 export { default as SegmentCriteria } from './components/elements/SegmentCriteria';
+export { default as GenButtonExport } from './components/actions/ButtonExport';
 export {
   absOlsTermId,
   absOlsTermLabel,

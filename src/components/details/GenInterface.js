@@ -417,7 +417,7 @@ const GenInterface = props => {
     funcChange: handleInputChange,
     funcSubChange: handleSubChange,
     funcClick: handleUnitClick,
-    classStr: generic?.constructor?.name,
+    classStr: generic?.short_label,
     extLys: extLayers || [],
     id: genId,
     isPreview: isPreview || false,

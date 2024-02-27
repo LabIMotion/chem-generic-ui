@@ -76,17 +76,20 @@ export default class GenPropertiesLayer extends Component {
     const { fields, key, sp } = layer;
     let { cols } = layer;
     if (isSpCall && !!sp) cols = 1;
-    const perRow = cols || 1;
-    const col = Math.floor(12 / perRow);
-    const klaz = 12 % perRow > 0 ? 'g_col_w' : '';
+    let perRow = cols || 1;
+    let col = Math.floor(12 / perRow);
     const vs = [];
     let op = [];
-    let newRow = 0;
     let rowId = 1;
+    let ttlCols = 0;
     (fields || []).forEach((f, i) => {
-      if (showProperties(f, layers)) {
+      perRow = f.cols || cols;
+      col = Math.floor(12 / perRow);
+      const [showProp, showLabel] = showProperties(f, layers);
+      if (showProp) {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
           vs.push(
@@ -104,26 +107,23 @@ export default class GenPropertiesLayer extends Component {
         const unit = genUnits(f.option_layers)[0] || {};
         const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
         const rCol = f.type === 'table' || hasOwnRow ? 12 / (tabCol || 1) : col; // rCol: columns per row
-        newRow =
-          f.type === 'table' || hasOwnRow
-            ? (newRow += perRow / (tabCol || 1))
-            : (newRow += 1);
-
-        if (newRow > perRow) {
+        if (f.type === 'table' || hasOwnRow) {
+          ttlCols = 99;
+        }
+        if (ttlCols >= 60) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
-          newRow =
-            f.type === 'table' || hasOwnRow
-              ? (newRow = perRow / (tabCol || 1))
-              : (newRow = 1);
         }
+        ttlCols += Math.floor(60 / perRow);
+        const nCol = f.type === 'table' || hasOwnRow || perRow !== 5;
         const eachCol = (
           <Col
             key={`prop_${key}_${f.priority}_${f.field}`}
             md={rCol}
             lg={rCol}
-            className={f.type === 'table' || hasOwnRow ? '' : klaz}
+            className={nCol ? '' : 'g_col_w'}
           >
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
@@ -132,7 +132,7 @@ export default class GenPropertiesLayer extends Component {
               layer={layer}
               classStr={classStr || ''}
               f_obj={f}
-              label={f.label}
+              label={showLabel || f.label}
               value={f.value || ''}
               description={f.description || ''}
               type={f.type || 'text'}
@@ -164,14 +164,15 @@ export default class GenPropertiesLayer extends Component {
           </Col>
         );
         op.push(eachCol);
-        if (newRow % perRow === 0) newRow = 0;
-        if (newRow === 0 || fields.length === i + 1) {
+        if (fields.length === i + 1) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
         }
       } else if (fields.length === i + 1) {
         vs.push(<Row key={rowId}>{op}</Row>);
+        ttlCols = 0;
         rowId += 1;
         op = [];
       }

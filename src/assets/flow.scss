@@ -1,12 +1,19 @@
 @use "color" as *;
 
+@mixin node-position-absolute-top-right {
+  position: absolute;
+  top: 0px;
+  right: 2px;
+}
+
 .gu_flow_default_element {
+  .add {
+    @include node-position-absolute-top-right;
+    color: $color-bs-primary;
+  }
   .chk {
-    position: absolute;
-    top: 0px;
-    right: 2px;
-    color: green;
-    // z-index: 100;
+    @include node-position-absolute-top-right;
+    color: $color-green;
   }
   .border_line {
     border-width: 0px 0px 1px 0px;

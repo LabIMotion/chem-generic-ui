@@ -21,7 +21,7 @@ const AttrNewBtn = props => {
           </Tooltip>
         }
       >
-        <Button bsStyle="primary" onClick={() => setShow(true)}>
+        <Button onClick={() => setShow(true)}>
           New {genericType}&nbsp;
           <i className="fa fa-plus" aria-hidden="true" />
         </Button>

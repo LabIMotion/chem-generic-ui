@@ -10,6 +10,7 @@ import {
 import { FieldTypes } from 'generic-ui-core';
 import OntologySelect from './OntologySelect';
 import { ButtonOntologySelect } from '../fields/ModalOntologySelect';
+import { getFieldProps } from '../tools/utils';
 
 export const renderDatetimeRange = ({ fieldObject }) =>
   [FieldTypes.F_DATETIME_RANGE].includes(fieldObject.type) ? (
@@ -50,14 +51,15 @@ export const renderDummyFieldGroup = ({ layer, fieldObject }) =>
 export const renderNameField = ({
   layer,
   fieldObject,
-  label,
   field,
   fnChange,
   fnOntChange,
 }) => (
   <FormGroup className="gu-form-group">
     <Col sm={3}>
-      <span className="gu-form-group-label">{label}</span>
+      <span className="gu-form-group-label">
+        {getFieldProps(field).label} {getFieldProps(field).fieldTooltip}
+      </span>
     </Col>
     <Col sm={9} style={{ display: 'inline-flex' }}>
       <FormControl
@@ -77,24 +79,25 @@ export const renderNameField = ({
         }
       />
       <ButtonOntologySelect
-        modalComponent={<OntologySelect fnSelected={fnOntChange} defaultValue={fieldObject?.ontology} />}
+        modalComponent={
+          <OntologySelect
+            fnSelected={fnOntChange}
+            defaultValue={fieldObject?.ontology}
+          />
+        }
         customClass={fieldObject?.ontology ? 'gu-ontology-selected' : null}
       />
     </Col>
   </FormGroup>
 );
 
-export const renderTextFieldGroup = ({
-  layer,
-  fieldObject,
-  label,
-  field,
-  fnChange,
-}) =>
+export const renderTextFieldGroup = ({ layer, fieldObject, field, fnChange }) =>
   [FieldTypes.F_DUMMY].includes(fieldObject.type) ? null : (
     <FormGroup className="gu-form-group">
       <Col sm={3}>
-        <span className="gu-form-group-label">{label}</span>
+        <span className="gu-form-group-label">
+          {getFieldProps(field).label} {getFieldProps(field).fieldTooltip}
+        </span>
       </Col>
       <Col sm={9}>
         <FormControl
@@ -117,17 +120,12 @@ export const renderTextFieldGroup = ({
     </FormGroup>
   );
 
-export const renderCheck = ({
-  layer,
-  fieldObject,
-  fnChange,
-  label,
-  field,
-  note,
-}) => (
+export const renderCheck = ({ layer, fieldObject, fnChange, field, note }) => (
   <FormGroup className="gu-form-group">
     <Col sm={3}>
-      <span className="gu-form-group-label">{label}</span>
+      <span className="gu-form-group-label">
+        {getFieldProps(field).label} {getFieldProps(field).fieldTooltip}
+      </span>
     </Col>
     <Col sm={9}>
       <Checkbox
@@ -161,7 +159,6 @@ export const renderOwnRow = ({ layer, fieldObject, fnChange }) =>
         layer,
         fieldObject,
         fnChange,
-        label: 'Has its own line',
         field: 'hasOwnRow',
       });
 
@@ -171,7 +168,6 @@ export const renderRequired = ({ layer, fieldObject, fnChange }) =>
         layer,
         fieldObject,
         fnChange,
-        label: 'Required',
         field: 'required',
       })
     : null;
@@ -182,7 +178,6 @@ export const renderReadonly = ({ layer, fieldObject, fnChange }) =>
         layer,
         fieldObject,
         fnChange,
-        label: 'Readonly',
         field: 'readonly',
         note: "When in 'Read-Only' mode, it displays as plain text with a placeholder if available.",
       })

@@ -103,10 +103,10 @@ export default class Preview extends Component {
     const { data, src, canDL } = this.props;
     const t = (v, idx) => {
       const s = v.uuid === compareUUID ? 'generic_block_select' : '';
-      const ver = v.released_at ? `version: ${v.uuid}` : 'version:';
+      const ver = v.released_at ? `Id: ${v.uuid}` : 'Id:';
       let at = v.released_at
-        ? `released at: ${v.released_at} (UTC)`
-        : '(Work In Progress)';
+        ? `Released at: ${v.released_at} (UTC)`
+        : '(In Progress)';
       if (src === 'properties') {
         at = `saved at: ${v.released_at} (UTC)`;
       }
