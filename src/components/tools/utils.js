@@ -68,7 +68,7 @@ const showProperties = (fObj, layers) => {
           ((layers[layer] || {}).fields || []).find(f => f.field === field) ||
           {};
         if (
-          fd.type === 'checkbox' &&
+          fd.type === FieldTypes.F_CHECKBOX &&
           ((['false', 'no', 'f', '0'].includes(
             (value || '').trim().toLowerCase()
           ) &&
@@ -82,7 +82,13 @@ const showProperties = (fObj, layers) => {
           showField = true;
           break;
         } else if (
-          ['text', 'select'].includes(fd && fd.type) &&
+          [FieldTypes.F_SELECT].includes(fd?.type) &&
+          (fd?.value || '').trim() === (value || '').trim()
+        ) {
+          showField = true;
+          break;
+        } else if (
+          [FieldTypes.F_TEXT].includes(fd && fd.type) &&
           typeof (fd && fd.value) !== 'undefined' &&
           ((fd && fd.value) || '').trim() === (value || '').trim()
         ) {
@@ -110,7 +116,7 @@ const inputEventVal = (event, type) => {
   if (type === FieldTypes.F_SELECT) {
     return event ? event.value : null;
   }
-  if (type.startsWith('drag')) {
+  if (type.startsWith(FieldTypes.F_DRAG)) {
     return event;
   }
   if (type === FieldTypes.F_CHECKBOX) {
@@ -213,24 +219,30 @@ const fieldCls = (isSpCall = false) => {
   return [clsFrm, clsCol];
 };
 
-export const resetProperties = (_props) => {
+export const resetProperties = _props => {
   if (!_props || typeof _props === 'undefined') return _props;
 
-  Object.keys(_props.layers).forEach((key) => {
-    const _newLayer = _props.layers[key] || {};
-    _newLayer.ai = [];
-    (_newLayer.fields || []).forEach((f, idx) => {
-      if (f && (f.type === 'drag_sample' || f.type === 'drag_element' || f.type === 'upload')) {
-        _newLayer.fields[idx].value = null;
+  Object.keys(_props.layers).forEach(key => {
+    const newLayer = _props.layers[key] || {};
+    newLayer.ai = [];
+    (newLayer.fields || []).forEach((f, idx) => {
+      if (
+        f &&
+        [
+          FieldTypes.F_DRAG_SAMPLE,
+          FieldTypes.F_DRAG_ELEMENT,
+          FieldTypes.F_UPLOAD,
+        ].includes(f.type)
+      ) {
+        newLayer.fields[idx].value = null;
       }
-      if (f && (f.type === 'table')) {
-        _newLayer.fields[idx].sub_values = [];
+      if (f && f.type === FieldTypes.F_TABLE) {
+        newLayer.fields[idx].sub_values = [];
       }
     });
   });
   return _props;
 };
-
 
 export {
   createEnum,

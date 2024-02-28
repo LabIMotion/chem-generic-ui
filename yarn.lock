@@ -4734,10 +4734,10 @@ functions-have-names@^1.2.2, functions-have-names@^1.2.3:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
-generic-ui-core@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/generic-ui-core/-/generic-ui-core-1.0.0.tgz#cdd40d15f398731ba9dc6b92840051985eee0a56"
-  integrity sha512-i2BwJHB4i3IcgJnLtKLEKuzOXdWG4Bht93gv+Olz5NsIXn2u19zKPPrqbRj3xGsq1s0Ek++VjPXvTJdsGBRteQ==
+generic-ui-core@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/generic-ui-core/-/generic-ui-core-1.1.0.tgz#c925b1781b454522d79ea69843b0677e3ff15e10"
+  integrity sha512-C2R71zWbf3FKTRcfLlcbAbrmVqlljxEgCLNsOMJcGmIwD6JhMEuEm6+EeeXcuKPluX0wiFeiX+t1xY82KJ6srQ==
   dependencies:
     chem-units "^0.0.5"
     lodash "^4.17.21"
