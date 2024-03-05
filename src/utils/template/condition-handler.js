@@ -75,3 +75,11 @@ export const handleFieldSubChange = (
     layerKey,
   });
 };
+
+export const handleLayerConditionChange = (_element, _layerKey) => {
+  const [element, layerKey] = [_element, _layerKey];
+  return responseCondition(notifySuccess(), element, {
+    fieldObj: null,
+    layerKey,
+  });
+};

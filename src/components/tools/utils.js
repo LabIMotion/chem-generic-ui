@@ -55,50 +55,60 @@ const uploadFiles = (properties, event, field, layer) => {
   return [value, files];
 };
 
-// move from GenPropertiesLayer.js
-const showProperties = (fObj, layers) => {
-  let showField = true;
-  if (fObj && fObj.cond_fields && fObj.cond_fields.length > 0) {
-    showField = false;
-    for (let i = 0; i < fObj.cond_fields.length; i += 1) {
-      const cond = fObj.cond_fields[i] || {};
-      const { layer, field, value } = cond;
-      if (field && field !== '') {
-        const fd =
-          ((layers[layer] || {}).fields || []).find(f => f.field === field) ||
-          {};
-        if (
-          fd.type === FieldTypes.F_CHECKBOX &&
-          ((['false', 'no', 'f', '0'].includes(
-            (value || '').trim().toLowerCase()
-          ) &&
-            (typeof (fd && fd.value) === 'undefined' || fd.value === false)) ||
-            (['true', 'yes', 't', '1'].includes(
-              (value || '').trim().toLowerCase()
-            ) &&
-              typeof (fd && fd.value) !== 'undefined' &&
-              fd.value === true))
-        ) {
-          showField = true;
-          break;
-        } else if (
-          [FieldTypes.F_SELECT].includes(fd?.type) &&
-          (fd?.value || '').trim() === (value || '').trim()
-        ) {
-          showField = true;
-          break;
-        } else if (
-          [FieldTypes.F_TEXT].includes(fd && fd.type) &&
-          typeof (fd && fd.value) !== 'undefined' &&
-          ((fd && fd.value) || '').trim() === (value || '').trim()
-        ) {
-          showField = true;
-          break;
-        }
-      }
+const isCheckboxMatch = (fd, value) => {
+  const falseValues = ['false', 'no', 'f', '0'];
+  const trueValues = ['true', 'yes', 't', '1'];
+  const normalizedValue = (value || '').trim().toLowerCase();
+
+  const isFalseMatch =
+    falseValues.includes(normalizedValue) && fd.value === false;
+  const isTrueMatch = trueValues.includes(normalizedValue) && fd.value === true;
+
+  return fd.type === FieldTypes.F_CHECKBOX && (isFalseMatch || isTrueMatch);
+};
+
+const isSelectMatch = (fd, value) =>
+  fd.type === FieldTypes.F_SELECT &&
+  (fd.value || '').trim() === (value || '').trim();
+
+const isTextMatch = (fd, value) =>
+  fd.type === FieldTypes.F_TEXT &&
+  (fd.value || '').trim() === (value || '').trim();
+
+// ConditionOperator = 1 (ANY), 9 (ALL), 0 (NONE)
+const showProperties = (dataObj, layers) => {
+  // always show because no restriction
+  if (!dataObj?.cond_fields?.length) return true;
+
+  // default operator is ANY(1)
+  const matchOp = dataObj.cond_operator ?? 1;
+  let matchCount = 0;
+
+  for (let i = 0; i < dataObj.cond_fields.length; i += 1) {
+    const { layer, field, value } = dataObj.cond_fields[i] || {};
+
+    if (!field) return true;
+
+    const fd = layers[layer]?.fields?.find(f => f.field === field) || {};
+
+    if (
+      isCheckboxMatch(fd, value) ||
+      isSelectMatch(fd, value) ||
+      isTextMatch(fd, value)
+    ) {
+      matchCount += 1;
+
+      // if match ANY, return true immediately if any condition is met
+      if (matchOp === 1) return true;
     }
   }
-  return showField;
+
+  // if match NONE, return true only if no condition is met
+  // if match ALL, return true only if all conditions are met
+  if (matchOp === 0) return matchCount === 0;
+  if (matchOp === 9) return matchCount === dataObj.cond_fields.length;
+
+  return false;
 };
 
 class GenericDummy {

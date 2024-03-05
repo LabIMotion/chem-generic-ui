@@ -2,7 +2,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { Modal, Button } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
+} from 'react-bootstrap';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
 import GenericSubField from './GenericSubField';
@@ -45,9 +50,11 @@ export default class FieldCondEditModal extends Component {
     this.selField = this.selField.bind(this);
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
+    this.onOpChanged = this.onOpChanged.bind(this);
   }
 
   onGridReady(e) {
+    const { allLayers } = this.props;
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
 
@@ -69,7 +76,7 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         cellRenderer: LayerSelect,
         cellRendererParams: {
-          allLayers: this.props.allLayers,
+          allLayers,
           selLayer: this.selLayer,
         },
       },
@@ -81,7 +88,7 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         cellRenderer: FieldSelect,
         cellRendererParams: {
-          allLayers: this.props.allLayers,
+          allLayers,
           selField: this.selField,
           types: ['text', 'select', 'checkbox'],
         },
@@ -206,6 +213,17 @@ export default class FieldCondEditModal extends Component {
     this.refresh();
   }
 
+  onOpChanged(e) {
+    const { updSub, updLayer, layer, layerKey, field } = this.props;
+    if (field == null) {
+      layer.cond_operator = e;
+      updLayer(layerKey, layer, () => {});
+    } else {
+      field.cond_operator = e;
+      updSub(layerKey, field, () => {});
+    }
+  }
+
   render() {
     const { showModal, fnClose, layer, layerKey, field, allLayers } =
       this.props;
@@ -220,6 +238,9 @@ export default class FieldCondEditModal extends Component {
         ? `layer:${layer.label}`
         : `field:${field.label}(in layer:${layer.label})`;
 
+    const defaultCondOperator =
+      (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
+
     if (showModal) {
       return (
         <Modal
@@ -232,15 +253,49 @@ export default class FieldCondEditModal extends Component {
             <Modal.Title>{title}</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{ overflow: 'auto' }}>
-            <div style={{ fontSize: '10px' }}>
-              <b>Field Restriction: </b>
-              when a restriction has been set, the {lafi} is hidden, it shows
-              only when the [Layer,Field,Value] got matched; if there are more
-              than one setting, the {lafi} shows when one of them got matched.
-            </div>
-            <div style={{ fontSize: '10px' }}>
-              <b>available field type: </b>
-              checkbox (true/false), select, text
+            <div
+              style={{
+                alignItems: 'center',
+                display: 'flex',
+                marginBottom: '4px',
+              }}
+            >
+              <div style={{ flex: '1', fontSize: '10px' }}>
+                <b>Restriction: </b>
+                when a restriction has been set, the {lafi} is hidden, it shows
+                only when the [Layer,Field,Value] got matched. <b>Match:</b> One
+                of them, All of them, None of them.
+                <br />
+                <b>available field type: </b>
+                checkbox (true/false), select, text
+              </div>
+              <div>
+                <ToggleButtonGroup
+                  type="radio"
+                  name="cond_operator"
+                  defaultValue={defaultCondOperator}
+                  onChange={this.onOpChanged}
+                >
+                  <ToggleButton
+                    value={1}
+                    bsStyle={defaultCondOperator === 1 ? 'success' : 'default'}
+                  >
+                    Match One
+                  </ToggleButton>
+                  <ToggleButton
+                    value={9}
+                    bsStyle={defaultCondOperator === 9 ? 'success' : 'default'}
+                  >
+                    Match All
+                  </ToggleButton>
+                  <ToggleButton
+                    value={0}
+                    bsStyle={defaultCondOperator === 0 ? 'success' : 'default'}
+                  >
+                    Match None
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
             </div>
             <div style={{ width: '100%', height: '26vh' }}>
               <div

@@ -1,6 +1,15 @@
 
 # Chem-Generic-UI Changelog
 
+## [1.1.2]
+> 2024-02-29
+
+* Features and enhancements:
+  * Introduced the feature to set the match option on the restriction setting.
+
+* Bug fixes:
+  * Fixed the issue with the restriction is not functioning properly in the initial view of template.
+
 ## [1.1.1]
 > 2024-01-30
 
