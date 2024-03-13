@@ -84,7 +84,8 @@ export default class GenPropertiesLayer extends Component {
     let newRow = 0;
     let rowId = 1;
     (fields || []).forEach((f, i) => {
-      if (showProperties(f, layers)) {
+      const [showProp, showLabel] = showProperties(f, layers);
+      if (showProp) {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {
           vs.push(<Row key={rowId}>{op}</Row>);
           rowId += 1;
@@ -132,7 +133,7 @@ export default class GenPropertiesLayer extends Component {
               layer={layer}
               classStr={classStr || ''}
               f_obj={f}
-              label={f.label}
+              label={showLabel || f.label}
               value={f.value || ''}
               description={f.description || ''}
               type={f.type || 'text'}

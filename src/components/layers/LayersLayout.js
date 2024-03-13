@@ -74,7 +74,7 @@ const LayersLayout = props => {
       );
       layout.push(ig);
     } else if (layer?.cond_fields?.length > 0) {
-      const showLayer = showProperties(layer, layers);
+      const [showLayer, showLabel] = showProperties(layer, layers);
       if (showLayer) {
         const igs = (
           <GenPropertiesLayer

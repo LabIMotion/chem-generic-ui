@@ -55,14 +55,16 @@ const uploadFiles = (properties, event, field, layer) => {
   return [value, files];
 };
 
+// fd: from layer; value: from cond;
 const isCheckboxMatch = (fd, value) => {
   const falseValues = ['false', 'no', 'f', '0'];
   const trueValues = ['true', 'yes', 't', '1'];
-  const normalizedValue = (value || '').trim().toLowerCase();
+  const normalizedValue = (value || 'false').trim().toLowerCase();
 
   const isFalseMatch =
-    falseValues.includes(normalizedValue) && fd.value === false;
-  const isTrueMatch = trueValues.includes(normalizedValue) && fd.value === true;
+    falseValues.includes(normalizedValue) && (fd.value || false) === false;
+  const isTrueMatch =
+    trueValues.includes(normalizedValue) && (fd.value || false) === true;
 
   return fd.type === FieldTypes.F_CHECKBOX && (isFalseMatch || isTrueMatch);
 };
@@ -78,16 +80,16 @@ const isTextMatch = (fd, value) =>
 // ConditionOperator = 1 (ANY), 9 (ALL), 0 (NONE)
 const showProperties = (dataObj, layers) => {
   // always show because no restriction
-  if (!dataObj?.cond_fields?.length) return true;
+  if (!dataObj?.cond_fields?.length) return [true, ''];
 
   // default operator is ANY(1)
   const matchOp = dataObj.cond_operator ?? 1;
   let matchCount = 0;
 
   for (let i = 0; i < dataObj.cond_fields.length; i += 1) {
-    const { layer, field, value } = dataObj.cond_fields[i] || {};
+    const { layer, field, value, label } = dataObj.cond_fields[i] || {};
 
-    if (!field) return true;
+    if (!field) return [true, ''];
 
     const fd = layers[layer]?.fields?.find(f => f.field === field) || {};
 
@@ -99,16 +101,18 @@ const showProperties = (dataObj, layers) => {
       matchCount += 1;
 
       // if match ANY, return true immediately if any condition is met
-      if (matchOp === 1) return true;
+      if (matchOp === 1) {
+        return [true, label];
+      }
     }
   }
 
   // if match NONE, return true only if no condition is met
   // if match ALL, return true only if all conditions are met
-  if (matchOp === 0) return matchCount === 0;
-  if (matchOp === 9) return matchCount === dataObj.cond_fields.length;
+  if (matchOp === 0) return [matchCount === 0, ''];
+  if (matchOp === 9) return [matchCount === dataObj.cond_fields.length, ''];
 
-  return false;
+  return [false, ''];
 };
 
 class GenericDummy {

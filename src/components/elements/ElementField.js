@@ -25,6 +25,7 @@ import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import FieldBadge from '../fields/FieldBadge';
 import TermLink from '../fields/TermLink';
 import {
   renderDatetimeRange,
@@ -358,9 +359,9 @@ class ElementField extends Component {
                 ? '(dummy field)'
                 : f.label}
               &nbsp;
-              <Badge className="bg-bs-field-display">{f.field || ''}</Badge>
+              <FieldBadge fieldObj={f} prop="field" />
               &nbsp;
-              <Badge className="bg-bs-field-display">{f.type || ''}</Badge>
+              <FieldBadge fieldObj={f} prop="type" />
               {TermLink(fieldObject.ontology)}
             </Panel.Title>
             <ButtonGroup bsSize="xsmall">

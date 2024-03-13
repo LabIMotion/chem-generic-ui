@@ -8,9 +8,10 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from 'react-bootstrap';
+import { cloneDeep } from 'lodash';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
-import GenericSubField from './GenericSubField';
+import GenericSubField from '../models/GenericSubField';
 
 const AddRowBtn = ({ addRow }) => (
   <Button active onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
@@ -40,9 +41,9 @@ DelRowBtn.propTypes = {
 export default class FieldCondEditModal extends Component {
   constructor(props) {
     super(props);
-    this.formRef = React.createRef();
 
     this.autoSizeAll = this.autoSizeAll.bind(this);
+    this.getColumnDefs = this.getColumnDefs.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
     this.delRow = this.delRow.bind(this);
     this.addRow = this.addRow.bind(this);
@@ -53,11 +54,37 @@ export default class FieldCondEditModal extends Component {
     this.onOpChanged = this.onOpChanged.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.gridApi) {
+      const { allLayers, field, layer } = this.props;
+      const condOperator =
+        (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
+
+      const { field: preField, layer: preLayer } = prevProps;
+      const condOperatorPre =
+        (preField == null ? preLayer.cond_operator : preField.cond_operator) ??
+        1;
+
+      if (condOperator !== condOperatorPre && field !== null) {
+        const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
+        this.gridApi.setColumnDefs(columnDefs);
+        this.autoSizeAll();
+      }
+    }
+  }
+
   onGridReady(e) {
-    const { allLayers } = this.props;
+    const { allLayers, field, layer } = this.props;
+    const condOperator =
+      (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
+    const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
+    this.gridApi.setColumnDefs(columnDefs);
+    this.autoSizeAll();
+  }
 
+  getColumnDefs(allLayers, condOperator, field) {
     const columnDefs = [
       {
         rowDrag: true,
@@ -101,22 +128,36 @@ export default class FieldCondEditModal extends Component {
         width: 120,
         onCellValueChanged: this.onCellValueChanged,
       },
-      {
-        headerName: '',
-        colId: 'actions',
-        headerComponent: AddRowBtn,
-        headerComponentParams: { addRow: this.addRow },
-        cellRenderer: DelRowBtn,
-        cellRendererParams: { delRow: this.delRow },
-        editable: false,
-        filter: false,
-        minWidth: 35,
-        width: 35,
-      },
     ];
 
-    this.gridApi.setColumnDefs(columnDefs);
-    this.autoSizeAll();
+    const displayAsObject = {
+      headerName: 'Display as',
+      field: 'label',
+      editable: condOperator === 1,
+      minWidth: 120,
+      width: 120,
+      onCellValueChanged: this.onCellValueChanged,
+    };
+
+    const actionObject = {
+      headerName: '',
+      colId: 'actions',
+      headerComponent: AddRowBtn,
+      headerComponentParams: { addRow: this.addRow },
+      cellRenderer: DelRowBtn,
+      cellRendererParams: { delRow: this.delRow },
+      editable: false,
+      filter: false,
+      minWidth: 35,
+      width: 35,
+    };
+
+    if (field !== null) {
+      columnDefs.push(displayAsObject);
+    }
+    columnDefs.push(actionObject);
+
+    return columnDefs;
   }
 
   delRow() {
@@ -140,7 +181,12 @@ export default class FieldCondEditModal extends Component {
         : ((allLayers.find(e => e.key === ly) || {}).fields || []).filter(e =>
             ['text', 'select', 'checkbox'].includes(e.type)
           )[0].field;
-    const newSub = new GenericSubField({ layer: ly, field: fd, value: '' });
+    const newSub = new GenericSubField({
+      layer: ly,
+      field: fd,
+      value: '',
+      label: '',
+    });
     const idx = this.gridApi.getDisplayedRowCount();
     this.gridApi.applyTransaction({ add: [newSub], addIndex: idx });
     this.refresh();
@@ -216,11 +262,13 @@ export default class FieldCondEditModal extends Component {
   onOpChanged(e) {
     const { updSub, updLayer, layer, layerKey, field } = this.props;
     if (field == null) {
-      layer.cond_operator = e;
-      updLayer(layerKey, layer, () => {});
+      const newLayer = cloneDeep(layer);
+      newLayer.cond_operator = e;
+      updLayer(layerKey, newLayer, () => {});
     } else {
-      field.cond_operator = e;
-      updSub(layerKey, field, () => {});
+      const newField = cloneDeep(field);
+      newField.cond_operator = e;
+      updSub(layerKey, newField, () => {});
     }
   }
 
@@ -262,12 +310,17 @@ export default class FieldCondEditModal extends Component {
             >
               <div style={{ flex: '1', fontSize: '10px' }}>
                 <b>Restriction: </b>
-                when a restriction has been set, the {lafi} is hidden, it shows
-                only when the [Layer,Field,Value] got matched. <b>Match:</b> One
-                of them, All of them, None of them.
+                When a restriction is set, the {lafi} is hidden and will be only
+                displayed when the [Layer,Field,Value] criteria are met.{' '}
+                <b>Match </b>[One of them], [All of them], or [None of them].
+                <br />
+                <b>Restriction on Field: </b>When a restriction is set to `Match
+                One`, an alternative display name can be set for the field via
+                `Display as`. Please note that `Display as` is only effective
+                when a restriction is `Match One`.
                 <br />
                 <b>available field type: </b>
-                checkbox (true/false), select, text
+                Checkbox (true/false), Select, Text
               </div>
               <div>
                 <ToggleButtonGroup
