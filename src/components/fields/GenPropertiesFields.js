@@ -453,7 +453,11 @@ const GenPropertiesSystemDefined = opt => {
       <InputGroup className={klz[1]}>
         <FormControl
           type="number"
-          value={opt.f_obj.value || ''}
+          value={
+            opt.f_obj.value !== undefined && opt.f_obj.value !== null
+              ? opt.f_obj.value
+              : ''
+          }
           onChange={opt.onChange}
           className={`${className} ${klz[1]}`}
           readOnly={opt.readOnly}
