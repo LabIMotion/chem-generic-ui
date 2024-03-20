@@ -49,6 +49,6 @@ jobs:
           cp artifacts/bundle.js dist/
           cp artifacts/bundle.js.LICENSE.txt dist/
       - run: ls -la dist
-      - run: yarn publish
+      - run: yarn publish --tag ${{ github.event.release.prerelease && 'next' || 'latest' }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
