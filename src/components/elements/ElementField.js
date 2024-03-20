@@ -26,6 +26,7 @@ import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
 import FieldBadge from '../fields/FieldBadge';
+import InputUnit from '../fields/InputUnit';
 import TermLink from '../fields/TermLink';
 import {
   renderDatetimeRange,
@@ -45,6 +46,7 @@ class ElementField extends Component {
     this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleOntChange = this.handleOntChange.bind(this);
+    this.handleUnitChange = this.handleUnitChange.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
@@ -86,6 +88,18 @@ class ElementField extends Component {
       layer.key,
       'ontology', // 'field',
       'select' // 'Ontology' // 'text'
+    );
+  }
+
+  handleUnitChange(_params) {
+    const { field: fieldObject, layer } = this.props;
+    this.handleChange(
+      { value: _params?.data },
+      fieldObject.field,
+      fieldObject.field,
+      layer.key,
+      'value_system', // 'field',
+      FieldTypes.F_SYSTEM_DEFINED
     );
   }
 
@@ -231,7 +245,7 @@ class ElementField extends Component {
     const selectOptionsOpts =
       f.type === FieldTypes.F_SELECT ? select_options : unitConfig;
     const selectOptionsVal =
-      selectOptionsOpts?.find(o => o.value === f.option_layers) || undefined;
+      selectOptionsOpts?.find(o => o.value === f.option_layers) || null;
     const selectOptions =
       f.type === FieldTypes.F_SELECT ||
       f.type === FieldTypes.F_SYSTEM_DEFINED ? (
@@ -252,6 +266,13 @@ class ElementField extends Component {
                     menu: base => {
                       return { ...base, zIndex: 9999 };
                     },
+                    control: base => {
+                      return {
+                        ...base,
+                        height: 35,
+                        minHeight: 35,
+                      };
+                    },
                   }}
                   name={f.field}
                   multi={false}
@@ -269,9 +290,9 @@ class ElementField extends Component {
                   }
                 />
               </span>
-              {f.type === FieldTypes.F_SELECT
-                ? null
-                : this.availableUnits(f.option_layers)}
+              {f.type === FieldTypes.F_SELECT ? null : (
+                <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
+              )}
             </div>
           </Col>
         </FormGroup>

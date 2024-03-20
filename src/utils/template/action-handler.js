@@ -1,5 +1,5 @@
 import { findIndex, sortBy } from 'lodash';
-import { FieldTypes } from 'generic-ui-core';
+import { FieldTypes, genUnits, reUnit } from 'generic-ui-core';
 import { GenericDummy } from '../../components/tools/utils';
 import { notifyDummyAdd, notifyError, notifySuccess } from './designer-message';
 import {
@@ -295,6 +295,30 @@ export const handleFieldInputChange = (
       if (value) fieldObj[`${fieldCheck}`] = value;
       else delete fieldObj[`${fieldCheck}`];
       break;
+    case 'option_layers':
+      fieldObj[`${fieldCheck}`] = value;
+      if (type === FieldTypes.F_SYSTEM_DEFINED) {
+        const defaultSI = reUnit(value);
+        fieldObj[`${fieldCheck}`] = defaultSI;
+        const defaultUnit = genUnits(defaultSI)[0]?.key;
+        fieldObj.value_system = defaultUnit;
+      }
+      break;
+    case 'type': // change selected type
+      fieldObj[`${fieldCheck}`] = value;
+      // give default unit if select system-defined
+      if (value === FieldTypes.F_SYSTEM_DEFINED) {
+        const defaultSI = reUnit('');
+        fieldObj.option_layers = defaultSI;
+        fieldObj.value_system = genUnits(defaultSI)[0]?.key;
+      } else {
+        fieldObj.option_layers = undefined;
+        fieldObj.value_system = undefined;
+      }
+      break;
+    case 'value_system':
+      if (value) fieldObj[`${fieldCheck}`] = value;
+      break;
     default:
       fieldObj[`${fieldCheck}`] = value;
       break;
@@ -302,7 +326,6 @@ export const handleFieldInputChange = (
   const idx = findIndex(fields, o => o.field === field);
   fields.splice(idx, 1, fieldObj);
   element.properties_template.layers[layerKey].fields = fields;
-  console.log('handleFieldInputChange', element);
   return new Response(notifySuccess(), element);
 };
 
