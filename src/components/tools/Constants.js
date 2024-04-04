@@ -10,4 +10,24 @@ export default Object.freeze({
     ALPINE: { VALUE: 'ag-theme-alpine', PAGE_SIZE: 6 },
     BALHAM: { VALUE: 'ag-theme-balham', PAGE_SIZE: 10 },
   },
+  OLS_EBI: {
+    BASE: 'https://www.ebi.ac.uk/ols4/api/select',
+    PARAM: [
+      'rows=20',
+      'collection=efo',
+      'obsoletes=false',
+      'local=false',
+      'fieldList=id,iri,label,short_form,obo_id,ontology_name,ontology_prefix,description,type',
+    ].join('&'),
+  },
+  OLS_TIB: {
+    BASE: 'https://service.tib.eu/ts4tib/api/select',
+    PARAM: [
+      'rows=20',
+      'collection=nfdi4chem',
+      'obsoletes=false',
+      'local=false',
+      'fieldList=id,iri,label,short_form,obo_id,ontology_name,ontology_prefix,description,type',
+    ].join('&'),
+  },
 });
