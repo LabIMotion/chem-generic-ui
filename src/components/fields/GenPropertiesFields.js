@@ -198,7 +198,7 @@ const GenPropertiesDrop = opt => {
     : 'drop_generic_properties';
 
   let createOpt = null;
-  if (opt.value.is_new === true && opt.classStr === 'GenericEl') {
+  if (opt.value.is_new === true && opt.classStr) {
     createOpt = (
       <div className="sample_radios">
         <OverlayTrigger
