@@ -76,14 +76,17 @@ export default class GenPropertiesLayer extends Component {
     const { fields, key, sp } = layer;
     let { cols } = layer;
     if (isSpCall && !!sp) cols = 1;
-    const perRow = cols || 1;
-    const col = Math.floor(12 / perRow);
-    const klaz = 12 % perRow > 0 ? 'g_col_w' : '';
+    let perRow = cols || 1;
+    let col = Math.floor(12 / perRow);
+    let klaz = 12 % perRow > 0 ? 'g_col_w' : '';
     const vs = [];
     let op = [];
     let newRow = 0;
     let rowId = 1;
     (fields || []).forEach((f, i) => {
+      perRow = f.cols || cols;
+      col = Math.floor(12 / perRow);
+      klaz = 12 % perRow > 0 ? 'g_col_w' : '';
       const [showProp, showLabel] = showProperties(f, layers);
       if (showProp) {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {

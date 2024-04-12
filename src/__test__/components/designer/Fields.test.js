@@ -46,14 +46,17 @@ describe('render Dummy Field', () => {
 describe('render text field', () => {
   it('should render text field group', () => {
     const layer = { key: 'layer1' };
-    const fieldObject = { type: 'text', field: 'field1', field1: 'value1' };
-    const label = 'Field Label';
-    const field = 'field1';
+    const fieldObject = {
+      type: 'text',
+      field: 'placeholder',
+      placeholder: 'value1',
+    };
+    const field = 'placeholder';
     const fnChange = jest.fn();
     const { getByText, getByRole } = render(
-      renderTextFieldGroup({ layer, fieldObject, label, field, fnChange })
+      renderTextFieldGroup({ layer, fieldObject, field, fnChange })
     );
-    const labelElement = getByText('Field Label');
+    const labelElement = getByText('Placeholder');
     const inputElement = getByRole('textbox');
     expect(labelElement).toBeInTheDocument();
     expect(inputElement).toHaveValue('value1');
@@ -61,23 +64,26 @@ describe('render text field', () => {
     expect(fnChange).toHaveBeenCalledWith(
       expect.any(Object),
       'value1',
-      'field1',
+      'placeholder',
       'layer1',
-      'field1',
+      'placeholder',
       'text'
     );
   });
 
   it('should not render text field', () => {
     const layer = { key: 'layer1' };
-    const fieldObject = { type: 'dummy', field: 'field1', field1: 'value1' };
-    const label = 'Field Label';
+    const fieldObject = {
+      type: 'dummy',
+      field: 'placeholder',
+      field1: 'value1',
+    };
     const field = 'field1';
     const fnChange = jest.fn();
     const { queryByText } = render(
-      renderTextFieldGroup({ layer, fieldObject, label, field, fnChange })
+      renderTextFieldGroup({ layer, fieldObject, field, fnChange })
     );
-    const labelElement = queryByText('Field Label');
+    const labelElement = queryByText('Placeholder');
     expect(labelElement).not.toBeInTheDocument();
   });
 });

@@ -5,6 +5,10 @@
   display: inline-flex;
   width: 100%;
 
+  > div[class^="col-"] {
+    padding-right: 0;
+  }
+
   .gu-form-group-label {
     float: right;
     font-weight: 700;

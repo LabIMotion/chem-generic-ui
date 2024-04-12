@@ -238,7 +238,7 @@ export default class TableDef extends React.Component {
     const sub = field.sub_fields || [];
     return (
       <div>
-        <div style={{ fontSize: '10px' }}>
+        {/* <div style={{ fontSize: '10px' }}>
           <b>Table: </b>
           define a table with the column type as{' '}
           <b>drag_molecule, drag_sample(only available</b>
@@ -246,7 +246,7 @@ export default class TableDef extends React.Component {
           note: <b>drag_sample</b> stands for Sample and contains at least its
           image and short label information; <b>system-defined</b> represents
           the unit field, which has an input field and a unit converter.
-        </div>
+        </div> */}
         <div
           style={{ width: '100%', height: '100%' }}
           className="ag-theme-balham"

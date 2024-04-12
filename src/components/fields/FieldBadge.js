@@ -8,7 +8,10 @@ const FieldBadge = props => {
   let badgeText = fieldObj[prop] || '';
 
   if (prop === 'type' && fieldObj[prop] === 'select') {
-    badgeText = `${badgeText}:${fieldObj?.option_layers}`;
+    badgeText = `${badgeText}: ${fieldObj?.option_layers}`;
+  }
+  if (prop === 'cols' && !!badgeText) {
+    badgeText = `column width division: ${badgeText}`;
   }
 
   return <Badge className="bg-bs-field-display">{badgeText}</Badge>;

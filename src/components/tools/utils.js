@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { findIndex, cloneDeep } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import Attachment from '../models/Attachment';
+import FieldTooltip from '../fields/FieldTooltip';
 
 const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
 
@@ -258,6 +259,84 @@ export const resetProperties = _props => {
   return _props;
 };
 
+const docSite = 'https://www.chemotion.net/docs/labimotion';
+const docFields = [docSite, 'guides', 'designer', 'components', 'fields'].join(
+  '/'
+);
+const propDefault = {
+  cols: {
+    label: 'Column Width Division',
+    // tooltip: [
+    //   'Determine the portion of the row width allocated to this component.',
+    //   "Specify how much of the row width this component occupies.",
+    // ].join(' '),
+    doc: [docFields, '#column-width-division'].join(''),
+  },
+  description: {
+    label: 'Hover Info',
+    doc: [docFields, '#hover-info'].join(''),
+  },
+  field: {
+    label: 'Field Name',
+    doc: [docFields, '#field-name'].join(''),
+  },
+  hasOwnRow: {
+    label: 'Has its own line',
+    doc: [docFields, '#has-its-own-row'].join(''),
+  },
+  label: { label: 'Display Name', doc: [docFields, '#display-name'].join('') },
+  placeholder: {
+    label: 'Placeholder',
+    doc: [docFields, '/types', '/text', '#placeholder'].join(''),
+  },
+  type: {
+    label: 'Type',
+    doc: [docFields, '/types'].join(''),
+  },
+  // special cases
+  canAdjust: {
+    label: 'Can adjust?',
+    doc: [docFields, '/types', '/formula-field', '#can-adjust'].join(''),
+  },
+  decimal: {
+    label: 'Decimal',
+    doc: [docFields, '/types', '/formula-field', '#decimal'].join(''),
+  },
+  formula: {
+    label: 'Formula',
+    doc: [docFields, '/types', '/formula-field', '#formula'].join(''),
+  },
+  options: {
+    label: 'Options',
+    doc: [docFields, '/types', '/select', '#options'].join(''),
+  },
+  readonly: {
+    label: 'Readonly',
+    doc: [docFields, '/types', '/text', '#read-only'].join(''),
+  },
+  required: {
+    label: 'Required',
+    doc: [docFields, '/types', '/text', '#required'].join(''),
+  },
+  supportedUnits: {
+    label: 'Default unit',
+    doc: [docFields, '/types', '/system-defined', '#supported-units'].join(''),
+  },
+};
+
+const getFieldProps = name => {
+  if (!propDefault[name]) return {};
+  return {
+    label: propDefault[name].label,
+    fieldTooltip: (
+      <FieldTooltip
+        tooltip={propDefault[name].tooltip}
+        link={propDefault[name].doc}
+      />
+    ),
+  };
+};
+
 export {
   createEnum,
   GenericDummy,
@@ -276,4 +355,5 @@ export {
   KlzIcon,
   fieldCls,
   toNullOrInt,
+  getFieldProps,
 };

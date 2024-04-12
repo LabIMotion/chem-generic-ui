@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { genUnit, getUnitSystem } from 'generic-ui-core';
-import { genUnitSup } from '../tools/utils';
+import { getFieldProps, genUnitSup } from '../tools/utils';
 
 const getNextUnit = (currentUnit, units) => {
   // Find the index of the current unit in the units array
@@ -73,7 +73,8 @@ const InputUnit = props => {
         className="gu-form-group-label"
         style={{ whiteSpace: 'nowrap', margin: '0px 5px' }}
       >
-        Default unit
+        {getFieldProps('supportedUnits').label}{' '}
+        {getFieldProps('supportedUnits').fieldTooltip}
       </span>
       <OverlayTrigger
         animation
