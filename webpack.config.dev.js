@@ -1,6 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+// added for tunning the build performance
+// const CompressionPlugin = require('compression-webpack-plugin'); // no need to compress the files for a library
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   mode: 'development',
@@ -9,7 +13,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist/'),
     publicPath: '/dist/',
-    filename: 'bundle.js',
+    filename: chunkData =>
+      chunkData.chunk.name === 'main' ? 'bundle.js' : '[name].bundle.js', // tunning the build performance
     clean: true,
     libraryTarget: 'umd',
   },
@@ -17,7 +22,7 @@ module.exports = {
     minimize: false,
     minimizer: [new TerserPlugin()],
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all', // Changed from 'async' to 'all' for tunning the build performance
       minSize: 20000,
       minRemainingSize: 0,
       minChunks: 1,
@@ -28,17 +33,21 @@ module.exports = {
         defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          filename: '[name].bundle.js',
+          filename: 'vendor-[name].bundle.js', // change from '[name].bundle.js' to 'vendor-[name].bundle.js' for tunning the build performance
           maxSize: 30000,
           reuseExistingChunk: true,
         },
         default: {
           minChunks: 2,
           priority: -20,
-          filename: 'bundle.js',
+          filename: 'default-[name].bundle.js', // Changed from 'bundle.js' to 'default-[name].bundle.js' for tunning the build performance
           reuseExistingChunk: true,
         },
       },
+    },
+    // tunning the build performance
+    runtimeChunk: {
+      name: 'runtime',
     },
   },
   resolve: {
@@ -181,6 +190,9 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
+    // added for tunning the build performance
+    // new CompressionPlugin(), // no need to compress the files for a library
+    new BundleAnalyzerPlugin(),
   ],
   performance: {
     hints: 'warning',

@@ -14,6 +14,7 @@ const FlowViewerModal = props => {
     properties_release: propertiesRelease,
     properties,
     shortLabel,
+    flowType,
   } = data;
   if (Object.keys(propertiesRelease || {}).length < 1) return null;
 
@@ -58,6 +59,7 @@ const FlowViewerModal = props => {
                 <FlowView
                   properties={properties}
                   propertiesRelease={propertiesRelease}
+                  flowType={flowType}
                 />
               </div>
             </div>
@@ -74,6 +76,7 @@ FlowViewerModal.propTypes = {
     properties_release: PropTypes.object,
     properties: PropTypes.object,
     shortLabel: PropTypes.string,
+    flowType: PropTypes.string,
   }).isRequired,
   fnHide: PropTypes.func.isRequired,
 };

@@ -1,26 +1,12 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep, findKey } from 'lodash';
 import { v4 as uuid } from 'uuid';
 import Constants from '../../components/tools/Constants';
+import createLayerNodeIcon from '../../components/flow/NodeIcon';
 import splitFlowElements from './split-flow-elements';
-
-const createCheckElement = () => (
-  <div className="chk">
-    <FontAwesomeIcon icon={faCheckCircle} />
-  </div>
-);
-
-const createLayerElement = (layer, checked) => (
-  <div className="gu_flow_default_element">
-    {checked ? createCheckElement() : null}
-    <div className="border_line">
-      <b>{layer.label}</b>
-    </div>
-    <div>({layer.key})</div>
-  </div>
-);
+import extendFlowElements from './ext-flow-elements';
+import arrangedFlowElements from './arranged-flow-elements';
 
 const updateDataProperties = (els, layers, properties) =>
   els.map(d => {
@@ -33,8 +19,8 @@ const updateDataProperties = (els, layers, properties) =>
       );
 
       const label = matchingLayer
-        ? createLayerElement(layer, true)
-        : createLayerElement(layer, false);
+        ? createLayerNodeIcon(layer, true)
+        : createLayerNodeIcon(layer, false);
 
       d.data = { label, layer, lKey: layer.key };
     }
@@ -55,24 +41,45 @@ export const buildDefaultNode = props => {
     data: {
       lKey: layer.key,
       layer,
-      label: createLayerElement(layer, false),
+      label: createLayerNodeIcon(layer, false),
     },
     position: position || { x: 0, y: 0 },
   };
 };
 
 /**
- * buildFlowElements, to replace conFlowEls
+ * buildFlowElements
  *
- * @param {object} props
- * @return {object} Returns a flow object.
+ * @param {Object} props
+ * @return {Object} Returns a flow object.
  */
 export const buildFlowElements = props => {
-  const { properties, propertiesRelease } = props;
+  const { properties, propertiesRelease, flowType = 'default' } = props;
+  console.log('properties=', properties);
   const { flow, flowObject, layers } = propertiesRelease;
   const { nodes, edges, viewport } = flowObject
     ? cloneDeep(flowObject)
     : splitFlowElements(flow);
+
+  if (flowType !== 'default') {
+    // if properties is an empty object, use propertiesRelease
+    const flowProperties =
+      Object.keys(properties).length === 0 ? propertiesRelease : properties;
+    const arrangedElements = arrangedFlowElements(nodes, flowProperties);
+    return {
+      nodes: arrangedElements.nodes,
+      edges: arrangedElements.edges,
+      viewport: {
+        x: 0,
+        y: 0,
+        zoom: 1,
+      },
+    };
+  }
+
+  const extendElements = extendFlowElements(nodes, layers, properties);
   const updatedNodes = updateDataProperties(nodes, layers, properties);
+  updatedNodes.push(...extendElements.nodes);
+  edges.push(...extendElements.edges);
   return { nodes: updatedNodes, edges, viewport };
 };

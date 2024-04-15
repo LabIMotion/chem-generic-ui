@@ -4,6 +4,8 @@ export const flowInputNode = {
   type: 'input',
   data: { label: 'Start' },
   position: { x: 250, y: 15 },
+  width: 150,
+  height: 39,
 };
 
 export const flowOutputNode = {
@@ -11,6 +13,8 @@ export const flowOutputNode = {
   type: 'output',
   data: { label: 'End' },
   position: { x: 250, y: 255 },
+  width: 150,
+  height: 39,
 };
 
 export const initialNodes = [flowInputNode, flowOutputNode];
