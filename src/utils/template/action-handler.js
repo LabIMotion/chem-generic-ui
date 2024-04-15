@@ -360,3 +360,35 @@ export const handleTemplateUploading = (_event, _genericType) => {
   }
   return new Response(notifySuccess(), properties);
 };
+
+/**
+ * Handles the klass upload action.
+ * @param {Event} _event
+ * @param {string} _genericType
+ * @returns Returns a Response object.
+ */
+export const handleKlassUploading = (_event, _genericType) => {
+  const reader = _event.target;
+  const pt = reader.result;
+  let data = {};
+
+  try {
+    data = JSON.parse(pt);
+  } catch (err) {
+    return new Response(notifyError(`Error Format:${err}`), data);
+  }
+
+  if (!data.properties_template.klass.endsWith(`${_genericType}Klass`)) {
+    return new Response(
+      notifyError(
+        [
+          'The template upload has failed.',
+          'You are attempting to update a template',
+          `from [${properties.klass}] to [${_genericType}Klass]`,
+        ].join(' ')
+      ),
+      properties
+    );
+  }
+  return new Response(notifySuccess(), data);
+};

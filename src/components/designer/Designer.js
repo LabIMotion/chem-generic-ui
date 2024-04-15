@@ -9,15 +9,17 @@ import GenGridSg from '../details/GenGridSg';
 import GenGridDs from '../details/GenGridDs';
 import getPageSizeForTheme from '../../utils/grid';
 import Template from './template/Template';
+import AttrUploadBtn from './AttrUploadBtn';
 
 const Designer = _props => {
   const {
     fnCopy,
     fnCreate,
-    fnDeActivateKlass,
+    fnUpload,
     fnDelete,
     fnSubmit,
     fnActive,
+    fnDownload,
     fnUpdate,
     genericType,
     gridData,
@@ -54,6 +56,7 @@ const Designer = _props => {
           <GenGridEl
             fnCopyKlass={fnCopy}
             fnDeActivateKlass={fnActive}
+            fnDownloadKlass={fnDownload}
             fnDeleteKlass={fnDelete}
             fnEditKlass={fnUpdate}
             genericType={genericType}
@@ -69,6 +72,7 @@ const Designer = _props => {
           <GenGridSg
             fnCopyKlass={fnCopy}
             fnDeActivateKlass={fnActive}
+            fnDownloadKlass={fnDownload}
             fnDeleteKlass={fnDelete}
             fnEditKlass={fnUpdate}
             genericType={genericType}
@@ -85,6 +89,7 @@ const Designer = _props => {
           <GenGridDs
             fnCopyKlass={fnCopy}
             fnDeActivateKlass={fnActive}
+            fnDownloadKlass={fnDownload}
             fnEditKlass={fnUpdate}
             genericType={genericType}
             fnShowProp={onDataSelected}
@@ -108,6 +113,12 @@ const Designer = _props => {
               fnCreate={fnCreate}
               genericType={genericType}
               klasses={klasses || []}
+            />}
+          btnUpload={
+            <AttrUploadBtn
+              data={klasses}
+              fnUpload={fnUpload}
+              genericType={genericType}
             />
           }
           fnClickLarge={() => setTheme(Constants.GRID_THEME.ALPINE.VALUE)}

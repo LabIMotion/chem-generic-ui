@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const GridToolbar = ({ btnNew, fnClickLarge, fnClickSmall }) => (
+const GridToolbar = ({ btnNew, btnUpload, fnClickLarge, fnClickSmall }) => (
   <ButtonGroup bsSize="xs">
+    {btnUpload}
     {btnNew}
     <OverlayTrigger
       placement="top"
@@ -26,10 +27,11 @@ const GridToolbar = ({ btnNew, fnClickLarge, fnClickSmall }) => (
 
 GridToolbar.propTypes = {
   btnNew: PropTypes.element,
+  btnUpload: PropTypes.element,
   fnClickLarge: PropTypes.func.isRequired,
   fnClickSmall: PropTypes.func.isRequired,
 };
 
-GridToolbar.defaultProps = { btnNew: null };
+GridToolbar.defaultProps = { btnNew: null, btnUpload: null };
 
 export default GridToolbar;

@@ -27,6 +27,7 @@ const GenGridSg = props => {
     fnDeleteKlass,
     fnEditKlass,
     fnDeActivateKlass,
+    fnDownloadKlass,
     genericType,
     fnShowProp,
   } = props;
@@ -45,6 +46,7 @@ const GenGridSg = props => {
         fnCopy: fnCopyKlass,
         fnDelete: fnDeleteKlass,
         fnEdit: fnEditKlass,
+        fnDownload: fnDownloadKlass,
         genericType,
         klasses,
       },

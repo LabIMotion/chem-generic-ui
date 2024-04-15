@@ -2,50 +2,46 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import AttrModal from '../elements/AttrModal';
 import Constants from '../tools/Constants';
+import UploadKlassModal from '../elements/UploadKlassModal';
 
-const AttrNewBtn = props => {
-  const { fnCreate, genericType, klasses } = props;
+const AttrUploadBtn = props => {
+  const { data, fnUpload, genericType } = props;
   const [show, setShow] = useState(false);
 
   if (genericType === Constants.GENERIC_TYPES.DATASET) return null;
-
+  
   return (
     <>
       <OverlayTrigger
         placement="top"
         overlay={
-          <Tooltip id="_tooltip_element_new">
-            create a new {genericType}
-          </Tooltip>
+          <Tooltip id="_tooltip_klass_upload">{`Upload ${genericType}`}</Tooltip>
         }
       >
-        <Button onClick={() => setShow(true)}>
-          New {genericType}&nbsp;
-          <i className="fa fa-plus" aria-hidden="true" />
+        <Button bsSize="xs" onClick={() => setShow(true)}>
+          Upload &nbsp;
+          <i className="fa fa-upload" aria-hidden="true" />
         </Button>
       </OverlayTrigger>
-      <AttrModal
-        actions={[{ action: 'c', fnAction: fnCreate }]}
+      <UploadKlassModal
+        data={data}
+        fnUpload={fnUpload}
         genericType={genericType}
-        klasses={klasses}
         showProps={{ show, setShow }}
       />
     </>
   );
 };
 
-AttrNewBtn.propTypes = {
-  fnCreate: PropTypes.func.isRequired,
+AttrUploadBtn.propTypes = {
+  data: PropTypes.object.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  klasses: PropTypes.array, // required for Segment
+  fnUpload: PropTypes.func.isRequired,
 };
 
-AttrNewBtn.defaultProps = { klasses: [] };
-
-export default AttrNewBtn;
+export default AttrUploadBtn;
