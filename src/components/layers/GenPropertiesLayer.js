@@ -78,19 +78,18 @@ export default class GenPropertiesLayer extends Component {
     if (isSpCall && !!sp) cols = 1;
     let perRow = cols || 1;
     let col = Math.floor(12 / perRow);
-    let klaz = 12 % perRow > 0 ? 'g_col_w' : '';
     const vs = [];
     let op = [];
-    let newRow = 0;
     let rowId = 1;
+    let ttlCols = 0;
     (fields || []).forEach((f, i) => {
       perRow = f.cols || cols;
       col = Math.floor(12 / perRow);
-      klaz = 12 % perRow > 0 ? 'g_col_w' : '';
       const [showProp, showLabel] = showProperties(f, layers);
       if (showProp) {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
           vs.push(
@@ -108,20 +107,16 @@ export default class GenPropertiesLayer extends Component {
         const unit = genUnits(f.option_layers)[0] || {};
         const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
         const rCol = f.type === 'table' || hasOwnRow ? 12 / (tabCol || 1) : col; // rCol: columns per row
-        newRow =
-          f.type === 'table' || hasOwnRow
-            ? (newRow += perRow / (tabCol || 1))
-            : (newRow += 1);
-
-        if (newRow > perRow) {
+        if (f.type === 'table' || hasOwnRow) {
+          ttlCols = 99;
+        }
+        if (ttlCols >= 60) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
-          newRow =
-            f.type === 'table' || hasOwnRow
-              ? (newRow = perRow / (tabCol || 1))
-              : (newRow = 1);
         }
+        ttlCols += Math.floor(60 / perRow);
         const eachCol = (
           <Col
             key={`prop_${key}_${f.priority}_${f.field}`}
@@ -168,14 +163,15 @@ export default class GenPropertiesLayer extends Component {
           </Col>
         );
         op.push(eachCol);
-        if (newRow % perRow === 0) newRow = 0;
-        if (newRow === 0 || fields.length === i + 1) {
+        if (fields.length === i + 1) {
           vs.push(<Row key={rowId}>{op}</Row>);
+          ttlCols = 0;
           rowId += 1;
           op = [];
         }
       } else if (fields.length === i + 1) {
         vs.push(<Row key={rowId}>{op}</Row>);
+        ttlCols = 0;
         rowId += 1;
         op = [];
       }
