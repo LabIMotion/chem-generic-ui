@@ -117,12 +117,13 @@ export default class GenPropertiesLayer extends Component {
           op = [];
         }
         ttlCols += Math.floor(60 / perRow);
+        const nCol = f.type === 'table' || hasOwnRow || perRow !== 5;
         const eachCol = (
           <Col
             key={`prop_${key}_${f.priority}_${f.field}`}
             md={rCol}
             lg={rCol}
-            className={f.type === 'table' || hasOwnRow ? '' : klaz}
+            className={nCol ? '' : 'g_col_w'}
           >
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
