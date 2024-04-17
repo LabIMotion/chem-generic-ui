@@ -314,6 +314,7 @@ export const handleFieldInputChange = (
       } else {
         fieldObj.option_layers = undefined;
         fieldObj.value_system = undefined;
+        fieldObj.sub_fields = undefined;
       }
       break;
     case 'value_system':
@@ -383,11 +384,11 @@ export const handleKlassUploading = (_event, _genericType) => {
       notifyError(
         [
           'The template upload has failed.',
-          'You are attempting to update a template',
-          `from [${properties.klass}] to [${_genericType}Klass]`,
+          `You are attempting to upload a ${_genericType}`,
+          `from [${data.properties_template.klass}] to [${_genericType}Klass]`,
         ].join(' ')
       ),
-      properties
+      data
     );
   }
   return new Response(notifySuccess(), data);
