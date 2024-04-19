@@ -343,23 +343,22 @@ export const handleTemplateUploading = (_event, _genericType) => {
 
   try {
     properties = JSON.parse(pt);
+    if (!properties.klass.endsWith(`${_genericType}Klass`)) {
+      return new Response(
+        notifyError(
+          [
+            'The template upload has failed.',
+            'You are attempting to update a template',
+            `from [${properties.klass}] to [${_genericType}Klass]`,
+          ].join(' ')
+        ),
+        properties
+      );
+    }
+    return new Response(notifySuccess(), properties);
   } catch (err) {
     return new Response(notifyError(`Error Format:${err}`), properties);
   }
-
-  if (!properties.klass.endsWith(`${_genericType}Klass`)) {
-    return new Response(
-      notifyError(
-        [
-          'The template upload has failed.',
-          'You are attempting to update a template',
-          `from [${properties.klass}] to [${_genericType}Klass]`,
-        ].join(' ')
-      ),
-      properties
-    );
-  }
-  return new Response(notifySuccess(), properties);
 };
 
 /**
@@ -375,21 +374,20 @@ export const handleKlassUploading = (_event, _genericType) => {
 
   try {
     data = JSON.parse(pt);
+    if (!data.properties_template.klass.endsWith(`${_genericType}Klass`)) {
+      return new Response(
+        notifyError(
+          [
+            'The template upload has failed.',
+            `You are attempting to upload a ${_genericType}`,
+            `from [${data.properties_template.klass}] to [${_genericType}Klass]`,
+          ].join(' ')
+        ),
+        data
+      );
+    }
+    return new Response(notifySuccess(), data);
   } catch (err) {
-    return new Response(notifyError(`Error Format:${err}`), data);
+    return new Response(notifyError(`Error Format: ${err}`), data);
   }
-
-  if (!data.properties_template.klass.endsWith(`${_genericType}Klass`)) {
-    return new Response(
-      notifyError(
-        [
-          'The template upload has failed.',
-          `You are attempting to upload a ${_genericType}`,
-          `from [${data.properties_template.klass}] to [${_genericType}Klass]`,
-        ].join(' ')
-      ),
-      data
-    );
-  }
-  return new Response(notifySuccess(), data);
 };
