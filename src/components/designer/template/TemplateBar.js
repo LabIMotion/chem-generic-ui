@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import DocuConst from '../../tools/DocuConst';
 
 const TemplateBar = props => {
   const { notify, active, fnSwitch } = props;
@@ -45,6 +46,19 @@ const TemplateBar = props => {
             Preview Design
           </Button>
         </OverlayTrigger>
+        <Button
+          bsStyle="link"
+          href={[
+            DocuConst.DOC_SITE,
+            'guides',
+            'designer',
+            'template-features',
+          ].join('/')}
+          target="_blank"
+          onClick={e => e.stopPropagation()}
+        >
+          <i className="fa fa-info-circle" aria-hidden="true" />
+        </Button>
       </ButtonGroup>
       {show && notify !== null && (
         <span className={notify.isSuccess ? 'alert-success' : 'alert-danger'}>

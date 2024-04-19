@@ -12,9 +12,7 @@ const UploadKlassModal = props => {
 
   const handleReaderLoaded = e => {
     const verify = handleKlassUploading(e, genericType);
-    if (verify.notify.isSuccess) {
-      fnUpload(verify);
-    }
+    fnUpload(verify);
     setShow(false);
   };
 

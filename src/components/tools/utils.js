@@ -4,6 +4,7 @@ import { findIndex, cloneDeep } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import Attachment from '../models/Attachment';
 import FieldTooltip from '../fields/FieldTooltip';
+import DocuConst from './DocuConst';
 
 const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
 
@@ -259,10 +260,13 @@ export const resetProperties = _props => {
   return _props;
 };
 
-const docSite = 'https://www.chemotion.net/docs/labimotion';
-const docFields = [docSite, 'guides', 'designer', 'components', 'fields'].join(
-  '/'
-);
+const docFields = [
+  DocuConst.DOC_SITE,
+  'guides',
+  'designer',
+  'components',
+  'fields',
+].join('/');
 const propDefault = {
   cols: {
     label: 'Column Width Division',
@@ -322,9 +326,16 @@ const propDefault = {
     label: 'Default unit',
     doc: [docFields, '/types', '/system-defined', '#supported-units'].join(''),
   },
+  // designer
   designer: {
     label: 'LabIMotion Designer',
-    doc: [docSite, 'guides', 'designer'].join('/'),
+    doc: [DocuConst.DOC_SITE, 'guides', 'designer'].join('/'),
+  },
+  templateFeatures: {
+    label: 'Template Features',
+    doc: [DocuConst.DOC_SITE, 'guides', 'designer', 'template-features'].join(
+      '/'
+    ),
   },
 };
 
