@@ -14,7 +14,7 @@ const FieldTooltip = ({ link }) => {
       target="_blank"
       onClick={e => e.stopPropagation()}
     >
-      <i className="fa fa-question-circle" aria-hidden="true" />
+      <i className="fa fa-info-circle" aria-hidden="true" />
     </Button>
   );
 };

@@ -30,7 +30,7 @@ const UploadTemplateModal = props => {
   return (
     <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>{`Upload ${genericType} Templates`}</Modal.Title>
+        <Modal.Title>Upload template to Work Area</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone

@@ -10,6 +10,7 @@ import GenGridDs from '../details/GenGridDs';
 import getPageSizeForTheme from '../../utils/grid';
 import Template from './template/Template';
 import AttrUploadBtn from './AttrUploadBtn';
+import { getFieldProps } from '../tools/utils';
 
 const Designer = _props => {
   const {
@@ -113,7 +114,8 @@ const Designer = _props => {
               fnCreate={fnCreate}
               genericType={genericType}
               klasses={klasses || []}
-            />}
+            />
+          }
           btnUpload={
             <AttrUploadBtn
               data={klasses}
@@ -124,6 +126,7 @@ const Designer = _props => {
           fnClickLarge={() => setTheme(Constants.GRID_THEME.ALPINE.VALUE)}
           fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}
         />
+        {getFieldProps('designer').fieldTooltip}
       </ButtonToolbar>
       {genGrid()}
       {data ? (

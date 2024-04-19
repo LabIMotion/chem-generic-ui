@@ -1,10 +1,19 @@
 import React from 'react';
 import AttrEditBtn from '../../designer/AttrEditBtn';
 import AttrCopyBtn from '../../designer/AttrCopyBtn';
-import ButtonTooltip from '../../fields/ButtonTooltip';
+import ButtonTooltipFA from '../../fields/ButtonTooltipFA';
 
 const ActionRenderer = params => {
-  const { data, fnCopy, fnDelete, fnEdit, fnDownload, klasses, node, genericType } = params;
+  const {
+    data,
+    fnCopy,
+    fnDelete,
+    fnEdit,
+    fnDownload,
+    klasses,
+    node,
+    genericType,
+  } = params;
 
   const onSelect = () => {
     node.setSelected(true, true);
@@ -34,12 +43,11 @@ const ActionRenderer = params => {
         klasses={klasses || []}
       />
       &nbsp;
-      <ButtonTooltip
-        tip="Download"
+      <ButtonTooltipFA
+        tip={`export ${genericType} and its template`}
         fnClick={onDownload}
         element={data}
-        fa="fa-download"
-    />
+      />
     </span>
   );
 };

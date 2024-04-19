@@ -14,11 +14,13 @@ const UploadTemplateBtn = props => {
       <OverlayTrigger
         placement="top"
         overlay={
-          <Tooltip id="_tooltip_template_upload">{`Upload ${genericType} Templates`}</Tooltip>
+          <Tooltip id="_tooltip_template_upload">
+            Upload template to Work Area
+          </Tooltip>
         }
       >
         <Button bsSize="xs" onClick={() => setShow(true)}>
-          Upload template&nbsp;
+          Upload template to Work Area&nbsp;
           <i className="fa fa-upload" aria-hidden="true" />
         </Button>
       </OverlayTrigger>

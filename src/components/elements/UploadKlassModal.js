@@ -6,7 +6,6 @@ import { Modal } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { handleKlassUploading } from '../../utils/template/action-handler';
 
-
 const UploadKlassModal = props => {
   const { data, genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
@@ -17,7 +16,6 @@ const UploadKlassModal = props => {
       fnUpload(verify);
     }
     setShow(false);
-
   };
 
   const handleUploadTemplate = file => {
@@ -29,7 +27,7 @@ const UploadKlassModal = props => {
   return (
     <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>{`Upload ${genericType} Templates`}</Modal.Title>
+        <Modal.Title>{`Import ${genericType} and its template`}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone

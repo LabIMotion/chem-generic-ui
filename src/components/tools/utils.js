@@ -322,6 +322,10 @@ const propDefault = {
     label: 'Default unit',
     doc: [docFields, '/types', '/system-defined', '#supported-units'].join(''),
   },
+  designer: {
+    label: 'LabIMotion Designer',
+    doc: [docSite, 'guides', 'designer'].join('/'),
+  },
 };
 
 const getFieldProps = name => {
