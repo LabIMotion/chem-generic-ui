@@ -1,8 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Constants from '../tools/Constants';
+import FIcons from '../icons/FIcons';
 import UploadKlassModal from '../elements/UploadKlassModal';
 
 const AttrUploadBtn = props => {
@@ -16,11 +17,11 @@ const AttrUploadBtn = props => {
       <OverlayTrigger
         placement="top"
         overlay={
-          <Tooltip id="_tooltip_klass_upload">{`import a ${genericType} and its template`}</Tooltip>
+          <Tooltip id="_tooltip_klass_upload">{`Import a ${genericType} and its template`}</Tooltip>
         }
       >
-        <Button bsSize="xs" onClick={() => setShow(true)}>
-          Import &nbsp; <Glyphicon glyph="import" />
+        <Button onClick={() => setShow(true)}>
+          {FIcons.faFileImport}&nbsp;Import
         </Button>
       </OverlayTrigger>
       <UploadKlassModal

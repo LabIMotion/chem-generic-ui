@@ -7,13 +7,14 @@ import DnDNodes from './DnDNodes';
 const DnDSidebar = props => {
   const { element } = props;
 
-  const sortedLayers =
-    element.properties_template &&
-    element.properties_template.layers &&
-    sortBy(element.properties_template.layers, l => l.position);
-  if (element.properties_template == null) {
+  if (element?.properties_template == null) {
     return null;
   }
+  const sortedLayers = sortBy(
+    element.properties_template.layers || [],
+    l => l.position
+  );
+  const inputs = sortedLayers.filter(e => e.wf);
 
   return (
     <aside>
@@ -25,7 +26,7 @@ const DnDSidebar = props => {
         To remove the node from the pane, click on the node and press
         &apos;Del&apos; button.
       </div>
-      <DnDNodes nodes={sortedLayers} />
+      <DnDNodes nodes={inputs} />
     </aside>
   );
 };

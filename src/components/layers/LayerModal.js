@@ -1,12 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button, Tooltip, Modal, OverlayTrigger
-} from 'react-bootstrap';
+import { Button, Tooltip, Modal, OverlayTrigger } from 'react-bootstrap';
 import { sortBy } from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import FIcons from '../icons/FIcons';
 
 const block = (layer, fnAdd) => (
   <div className="generic_layer_column">
@@ -20,7 +17,7 @@ const block = (layer, fnAdd) => (
       </div>
       <OverlayTrigger delayShow={1000} placement="top" overlay={<Tooltip id="_tooltip_layers">click to add layer</Tooltip>}>
         <Button bsStyle="primary" onClick={event => fnAdd(event, layer)}>
-          <FontAwesomeIcon icon={faPlus} />
+          {FIcons.faPlus}
         </Button>
       </OverlayTrigger>
     </div>

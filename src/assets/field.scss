@@ -29,3 +29,19 @@
   @include gu-ontology-select-code;
   background-color: $color-bs-info !important;
 }
+
+.gu-xsmall-input-group.gu-xsmall-input-group {
+  > input, > span {
+    min-height: calc(1.5em + .5rem + calc(var(--bs-border-width) * 2));
+    font-size: 0.875rem;
+    height: 2.2rem; // 1.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.gu-drop-zone {
+  border: 3px dashed $color-lightgray;
+  color: $color-grey;
+  text-align: center;
+  width: 100%;
+}

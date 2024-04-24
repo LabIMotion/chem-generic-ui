@@ -36,6 +36,10 @@ import {
   renderRequired,
   renderReadonly,
 } from './Fields';
+import PositionDnD from '../dnd/PositionDnD';
+import DroppablePanel from '../dnd/DroppablePanel';
+import DnDs from '../dnd/DnDs';
+import FIcons from '../icons/FIcons';
 
 class ElementField extends Component {
   constructor(props) {
@@ -49,7 +53,14 @@ class ElementField extends Component {
     this.handleAddDummy = this.handleAddDummy.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
   }
+
+  handleDrop = _params => {
+    const { onMove } = this.props;
+    const { source, target, rid } = _params;
+    onMove.onPosition(rid.key, target, source.fid);
+  };
 
   handlePanelToggle = () => {
     this.setState(prevState => {
@@ -66,16 +77,18 @@ class ElementField extends Component {
     ) {
       return;
     }
+    const { onChange } = this.props;
     const env = e;
     if (fc === 'decimal') {
       env.target.value = toNullOrInt(e.target.value) || 5;
     }
-    this.props.onChange(env, orig, fe, lk, fc, tp);
+    onChange(env, orig, fe, lk, fc, tp);
   }
 
   handleMove(_params) {
+    const { onMove } = this.props;
     const { l, f, isUp } = _params;
-    this.props.onMove(l, f, isUp);
+    onMove.onField(l, f, isUp);
   }
 
   handleOntChange(_params) {
@@ -103,15 +116,18 @@ class ElementField extends Component {
   }
 
   handleAddDummy(_params) {
-    this.props.onDummyAdd(_params);
+    const { onDummyAdd } = this.props;
+    onDummyAdd(_params);
   }
 
   updSubField(layerKey, field, cb) {
-    this.props.onFieldSubFieldChange(layerKey, field, cb);
+    const { onFieldSubFieldChange } = this.props;
+    onFieldSubFieldChange(layerKey, field, cb);
   }
 
   handelDelete(delStr, delKey, delRoot) {
-    this.props.onDelete(delStr, delKey, delRoot);
+    const { onDelete } = this.props;
+    onDelete(delStr, delKey, delRoot);
   }
 
   availableUnits(val) {
@@ -141,9 +157,7 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button bsSize="xs">
-          <i className="fa fa-table" aria-hidden="true" />
-        </Button>
+        <Button className="btn-gxs">{FIcons.faTableCells}</Button>
       </OverlayTrigger>
     );
   }
@@ -155,14 +169,14 @@ class ElementField extends Component {
         {msg} <br />
         <div className="btn-toolbar">
           <Button
-            bsSize="xsmall"
+            bsSize="sm"
             bsStyle="danger"
             onClick={() => this.handelDelete(delStr, delKey, delRoot)}
           >
             Yes
           </Button>
           <span>&nbsp;&nbsp;</span>
-          <Button bsSize="xsmall" bsStyle="warning" onClick={this.handleClick}>
+          <Button bsSize="sm" bsStyle="warning" onClick={this.handleClick}>
             No
           </Button>
         </div>
@@ -177,9 +191,7 @@ class ElementField extends Component {
         trigger="focus"
         overlay={popover}
       >
-        <Button bsSize="xs">
-          <i className="fa fa-trash-o" aria-hidden="true" />
-        </Button>
+        <Button className="btn-gxs">{FIcons.faTrashCan}</Button>
       </OverlayTrigger>
     );
   }
@@ -193,6 +205,7 @@ class ElementField extends Component {
       genericType,
       allLayers,
       select_options,
+      position,
     } = this.props;
     const { panelIsExpanded } = this.state;
     const unitConfig = unitsSystem.map(_c => {
@@ -385,55 +398,75 @@ class ElementField extends Component {
         </Col>
       </FormGroup>
     ) : null;
+
+    const nodeHeader = (
+      <Panel.Heading className="template_panel_heading">
+        <Panel.Title toggle onClick={this.handlePanelToggle}>
+          {position}&nbsp;
+          {[FieldTypes.F_DUMMY].includes(f.type) ? '(dummy field)' : f.label}
+          &nbsp;
+          <FieldBadge fieldObj={f} prop="field" />
+          &nbsp;
+          <FieldBadge fieldObj={f} prop="type" />
+          &nbsp;
+          <FieldBadge fieldObj={f} prop="cols" />
+          {TermLink(fieldObject.ontology)}
+        </Panel.Title>
+        <ButtonGroup bsSize="sm" style={{ display: 'inline-flex' }}>
+          <ConditionFieldBtn
+            field={f}
+            fnUpdateSub={this.updSubField}
+            layer={layer}
+            sortedLayers={allLayers}
+          />
+          <ButtonTooltip
+            tip="Move Up"
+            fnClick={this.handleMove}
+            element={{ l: layerKey, f: f.field, isUp: true }}
+            fa="faArrowUp"
+            place="top"
+            disabled={position === 1}
+          />
+          <ButtonTooltip
+            tip="Move Down"
+            fnClick={this.handleMove}
+            element={{ l: layerKey, f: f.field, isUp: false }}
+            fa="faArrowDown"
+            place="top"
+          />
+          {this.renderDeleteButton('Field', f.field, layerKey)}
+          <ButtonTooltip
+            tip="Add Dummy field"
+            fnClick={this.handleAddDummy}
+            element={{ layerKey, field: f.field }}
+            fa="faSquare"
+            place="top"
+          />
+          <PositionDnD
+            type={`${DnDs.LAYER_FIELD}_${layer.key}`}
+            field={f}
+            rowValue={layer}
+            isButton
+          />
+        </ButtonGroup>
+      </Panel.Heading>
+    );
+
+    const addArrange = _node => (
+      <DroppablePanel
+        type={`${DnDs.LAYER_FIELD}_${layer.key}`}
+        field={f}
+        rowValue={layer}
+        fnCb={this.handleDrop}
+      >
+        {_node}
+      </DroppablePanel>
+    );
+
     return (
       <div>
-        <Panel>
-          <Panel.Heading className="template_panel_heading">
-            <Panel.Title toggle onClick={this.handlePanelToggle}>
-              {this.props.position}&nbsp;
-              {[FieldTypes.F_DUMMY].includes(f.type)
-                ? '(dummy field)'
-                : f.label}
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="field" />
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="type" />
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="cols" />
-              {TermLink(fieldObject.ontology)}
-            </Panel.Title>
-            <ButtonGroup bsSize="xsmall">
-              <ConditionFieldBtn
-                field={f}
-                fnUpdateSub={this.updSubField}
-                layer={layer}
-                sortedLayers={allLayers}
-              />
-              <ButtonTooltip
-                tip="Move Up"
-                fnClick={this.handleMove}
-                element={{ l: layerKey, f: f.field, isUp: true }}
-                fa="fa-arrow-up"
-                place="top"
-                disabled={this.props.position === 1}
-              />
-              <ButtonTooltip
-                tip="Move Down"
-                fnClick={this.handleMove}
-                element={{ l: layerKey, f: f.field, isUp: false }}
-                fa="fa-arrow-down"
-                place="top"
-              />
-              {this.renderDeleteButton('Field', f.field, layerKey)}
-              <ButtonTooltip
-                tip="Add Dummy field"
-                fnClick={this.handleAddDummy}
-                element={{ layerKey, field: f.field }}
-                fa="fa fa-plus-circle"
-                place="top"
-              />
-            </ButtonGroup>
-          </Panel.Heading>
+        <Panel style={{ width: '100%', marginLeft: '10px' }}>
+          {addArrange(nodeHeader)}
           <Panel.Collapse>
             <Panel.Body>
               <Form horizontal className="default_style">
@@ -669,7 +702,11 @@ class ElementField extends Component {
   }
 
   render() {
-    return <Col md={12}>{this.renderComponent()}</Col>;
+    return (
+      <Col md={12} style={{ paddingLeft: '0px' }}>
+        {this.renderComponent()}
+      </Col>
+    );
   }
 }
 
@@ -680,7 +717,10 @@ ElementField.propTypes = {
   select_options: PropTypes.array.isRequired,
   position: PropTypes.number.isRequired,
   field: PropTypes.object.isRequired,
-  onMove: PropTypes.func.isRequired,
+  onMove: PropTypes.shape({
+    onField: PropTypes.func.isRequired,
+    onPosition: PropTypes.func.isRequired,
+  }).isRequired,
   onDelete: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   unitsSystem: PropTypes.array,

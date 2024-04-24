@@ -6,7 +6,7 @@ import { Checkbox, FormGroup } from 'react-bootstrap';
 const AttrChk = (props) => {
   const { chkAttr, node, attrOpts } = props;
   return (
-    <FormGroup bsSize="small" className="generic_tbl_chks">
+    <FormGroup bsSize="sm" className="generic_tbl_chks">
       {attrOpts.map(e => <Checkbox key={e.value} inline checked={node.data.value.includes(e.value)} onChange={() => chkAttr(e.value, !(node.data.value.includes(e.value)), node)}>{e.label}</Checkbox>)}
     </FormGroup>
   );

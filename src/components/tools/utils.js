@@ -247,10 +247,11 @@ export const resetProperties = _props => {
         [
           FieldTypes.F_DRAG_SAMPLE,
           FieldTypes.F_DRAG_ELEMENT,
+          FieldTypes.F_SYS_REACTION,
           FieldTypes.F_UPLOAD,
         ].includes(f.type)
       ) {
-        newLayer.fields[idx].value = null;
+        newLayer.fields[idx].value = undefined;
       }
       if (f && f.type === FieldTypes.F_TABLE) {
         newLayer.fields[idx].sub_values = [];

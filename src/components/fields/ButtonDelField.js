@@ -40,7 +40,6 @@ const ButtonDelField = props => {
       fnParams={fnParams}
       bs="default"
       place="top"
-      size="sm"
     />
   );
 };

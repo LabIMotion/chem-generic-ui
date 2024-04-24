@@ -6,6 +6,7 @@ import { useDrop } from 'react-dnd';
 import { Tooltip, OverlayTrigger, Popover } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { KlzIcon } from '../tools/utils';
+import FIcons from '../icons/FIcons';
 
 const show = (opt, iconClass, onNavi) => {
   if (opt.value?.el_id) {
@@ -98,7 +99,7 @@ const show = (opt, iconClass, onNavi) => {
     return simg(elSvg, opt.value.el_tip, label);
   }
   if (iconClass === 'element') {
-    return <span className="fa fa-link icon_generic_nav indicator" />;
+    return <span className="indicator">{FIcons.faLink}</span>;
   }
   return KlzIcon(`icon-${iconClass} indicator`, { width: '4vw' });
 };

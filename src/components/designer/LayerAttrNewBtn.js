@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import LayerAttrModal from '../elements/LayerAttrModal';
+import FIcons from '../icons/FIcons';
 
 const LayerAttrNewBtn = props => {
   const { fnCreate, isAttrOnWF } = props;
@@ -14,13 +15,8 @@ const LayerAttrNewBtn = props => {
         placement="top"
         overlay={<Tooltip id="_tooltip_layer_new">add new layer</Tooltip>}
       >
-        <Button
-          className="button-right"
-          bsSize="xs"
-          onClick={() => setShow(true)}
-        >
-          Add new layer&nbsp;
-          <i className="fa fa-plus" aria-hidden="true" />
+        <Button className="button-right btn-gxs" onClick={() => setShow(true)}>
+          {FIcons.faPlus}&nbsp;Add new layer
         </Button>
       </OverlayTrigger>
       <LayerAttrModal

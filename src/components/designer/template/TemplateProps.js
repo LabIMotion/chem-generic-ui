@@ -40,7 +40,7 @@ const TemplateProps = props => {
               ]}
               fnClick={fnSubmit}
               element={{ data, release: 'major' }}
-              fa="fa-floppy-o"
+              fa="faFloppyDisk"
               place="top"
               bs="success"
             />
@@ -53,7 +53,7 @@ const TemplateProps = props => {
               ]}
               fnClick={fnSubmit}
               element={{ data, release: 'minor' }}
-              fa="fa-floppy-o"
+              fa="faFloppyDisk"
               place="top"
               bs="success"
             />
@@ -63,7 +63,7 @@ const TemplateProps = props => {
               tip="Save template as draft"
               fnClick={fnSubmit}
               element={{ data, release: 'draft' }}
-              fa="fa-floppy-o"
+              fa="faFloppyDisk"
               place="top"
               bs="primary"
             />

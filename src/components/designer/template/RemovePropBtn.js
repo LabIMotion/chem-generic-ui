@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
 import { handleDelete } from '../../../utils/template/action-handler';
+import FIcons from '../../icons/FIcons';
 
 // replace renderDeleteButton
 const RemovePropBtn = props => {
@@ -40,7 +41,7 @@ const RemovePropBtn = props => {
       {msg} <br />
       <div className="btn-toolbar">
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="danger"
           aria-hidden="true"
           onClick={onClick}
@@ -50,7 +51,7 @@ const RemovePropBtn = props => {
         </Button>
         <span>&nbsp;&nbsp;</span>
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="warning"
           data-testid="template-remove-no-btn"
         >
@@ -69,7 +70,7 @@ const RemovePropBtn = props => {
       overlay={popover}
     >
       <Button bsSize="sm" data-testid="template-remove-btn">
-        <i className="fa fa-trash-o" aria-hidden="true" />
+        {FIcons.faTrashCan}
       </Button>
     </OverlayTrigger>
   );

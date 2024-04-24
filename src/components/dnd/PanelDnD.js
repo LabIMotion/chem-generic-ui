@@ -8,14 +8,9 @@ import {
   Button,
 } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowsAlt,
-  faPlus,
-  faMinus,
-  faSitemap,
-} from '@fortawesome/free-solid-svg-icons';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
+import Constants from '../tools/Constants';
+import FIcons from '../icons/FIcons';
 
 const orderSource = {
   canDrag(props) {
@@ -31,7 +26,6 @@ const PanelDnD = props => {
     type,
     layer,
     field,
-    rowValue,
     handleMove,
     id,
     handleChange,
@@ -81,70 +75,64 @@ const PanelDnD = props => {
     'panel_generic_heading_slim'
   );
 
-  const btnLinkAna = hasAi ? (
+  const createButton = (icon, tooltip, tooltipId, handleClick) => (
     <OverlayTrigger
       delayShow={1000}
       placement="top"
-      overlay={<Tooltip id="_tooltip_link_ana">link analysis</Tooltip>}
+      overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
     >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'ana-modal')}
-      >
-        <i className="fa fa-paperclip" aria-hidden="true" />
-      </Button>
-    </OverlayTrigger>
-  ) : null;
-
-  const btnAdd = (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id="_tooltip_add_layer">add layer</Tooltip>}
-    >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'layer-modal')}
-      >
-        <FontAwesomeIcon icon={faPlus} />
+      <Button className="btn-gxs" onClick={handleClick}>
+        {icon}
       </Button>
     </OverlayTrigger>
   );
 
-  const btnRemove = (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id="_tooltip_remove_layer">remove layer</Tooltip>}
-    >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'layer-remove')}
-      >
-        <FontAwesomeIcon icon={faMinus} />
-      </Button>
-    </OverlayTrigger>
+  const btnLinkAna = hasAi
+    ? createButton(
+        FIcons.faPaperclip,
+        'link analysis',
+        '_tooltip_link_ana',
+        event => handleChange(event, id, layer, 'ana-modal')
+      )
+    : null;
+
+  const btnReaction = createButton(
+    FIcons.faFlask,
+    'Add reaction',
+    '_tooltip_layer_add_reaction',
+    event => handleChange(event, id, layer, 'layer-add-reaction')
   );
 
-  const wfIcon = wf ? (
-    <span>
-      <FontAwesomeIcon icon={faSitemap} />
-    </span>
-  ) : null;
+  const btnAdd = createButton(
+    FIcons.faPlus,
+    'Add layer',
+    '_tooltip_add_layer',
+    event => handleChange(event, id, layer, 'layer-modal')
+  );
+
+  const btnRemove = createButton(
+    FIcons.faMinus,
+    'Remove layer',
+    '_tooltip_remove_layer',
+    event => handleChange(event, id, layer, 'layer-remove')
+  );
+
+  const wfIcon = wf ? <span>{FIcons.faDiagramProject}</span> : null;
 
   const moveIcon = (
     <OverlayTrigger
       delayShow={1000}
       placement="top"
-      overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}
+      overlay={<Tooltip id={uuid()}>Change position via drag and drop</Tooltip>}
     >
       <Button onClick={() => {}} bsSize="xsmall">
-        <FontAwesomeIcon icon={faArrowsAlt} />
+        {FIcons.faArrowsUpDownLeftRight}
       </Button>
     </OverlayTrigger>
   );
 
   const splitKey = key.split('.');
+  const isSys = key.startsWith(Constants.SYS_REACTION);
 
   const extHead =
     splitKey.length > 1 ? (
@@ -157,28 +145,34 @@ const PanelDnD = props => {
 
   const btnLayer = wf ? (
     <ButtonGroup className="pull-right gu_btn_broup_layer">
-      {GenPropertiesDate({
-        isSpCall: false,
-        isAtLayer: true,
-        label: '',
-        value: timeRecord || '',
-        onChange: onAttrChange,
-      })}
+      {isSys
+        ? null
+        : GenPropertiesDate({
+            isSpCall: false,
+            isAtLayer: true,
+            label: '',
+            value: timeRecord || '',
+            onChange: onAttrChange,
+          })}
+      {btnReaction}
       {btnLinkAna}
-      {btnAdd}
+      {isSys ? null : btnAdd}
     </ButtonGroup>
   ) : (
     <ButtonGroup className="pull-right gu_btn_broup_layer">
       <div className="pull-right btn-group">
-        {GenPropertiesDate({
-          isSpCall: false,
-          isAtLayer: true,
-          label: '',
-          value: timeRecord || '',
-          onChange: onAttrChange,
-        })}
+        {isSys
+          ? null
+          : GenPropertiesDate({
+              isSpCall: false,
+              isAtLayer: true,
+              label: '',
+              value: timeRecord || '',
+              onChange: onAttrChange,
+            })}
+        {btnReaction}
         {btnLinkAna}
-        {btnAdd}
+        {isSys ? null : btnAdd}
         {btnRemove}
         {moveIcon}
       </div>

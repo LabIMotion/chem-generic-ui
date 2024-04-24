@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import AttrModal from '../elements/AttrModal';
 import Constants from '../tools/Constants';
+import FIcons from '../icons/FIcons';
 
 const AttrCopyBtn = props => {
   const { data, fnCopy, fnSelect, genericType, klasses } = props;
@@ -21,12 +22,12 @@ const AttrCopyBtn = props => {
         placement="top"
         overlay={
           <Tooltip id="_tooltip_element_clone">
-            copy {genericType} to ...{' '}
+            Copy {genericType} to ...{' '}
           </Tooltip>
         }
       >
-        <Button bsSize="xs" onClick={onSelect}>
-          <i className="fa fa-clone" aria-hidden="true" />
+        <Button className="btn-gxs" onClick={onSelect}>
+          {FIcons.faClone}
         </Button>
       </OverlayTrigger>
       <AttrModal

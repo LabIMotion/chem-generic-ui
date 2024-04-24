@@ -5,7 +5,7 @@
 /* eslint-disable no-eval */
 /* eslint-disable no-restricted-globals */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -19,7 +19,6 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 // import DatePicker, { registerLocale } from 'react-datepicker';
-import DatePicker from 'react-datepicker';
 // import ptBR from 'date-fns/locale/pt-BR';
 import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
@@ -33,6 +32,10 @@ import FieldHeader from './FieldHeader';
 import { fieldCls, genUnitSup } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
+import FieldUploadItem from './FieldUploadItem';
+import DropReaction from '../dnd/DropReaction';
+import ButtonDatePicker from './ButtonDatePicker';
+import FIcons from '../icons/FIcons';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -103,7 +106,7 @@ const GenPropertiesCalculate = opt => {
               className="clipboardBtn"
               onClick={() => opt.onChange(showTxt)}
             >
-              <i className="fa fa-arrow-right" aria-hidden="true" />
+              {FIcons.faArrowRight}
             </Button>
           </OverlayTrigger>
         </InputGroup.Button>
@@ -160,23 +163,11 @@ const GenPropertiesDate = opt => {
   const newVal =
     opt.value &&
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
-  // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
   return (
     <FormGroup className={klz[0]}>
       {FieldHeader(opt)}
       <div className={klzLayer}>
-        <DatePicker
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="dd/MM/yyyy HH:mm"
-          // locale="ptBR"
-          selected={newVal}
-          onSelect={opt.onChange} // when day is clicked
-          onChange={opt.onChange} // only when value has changed
-          placeholderText="DD/MM/YYYY hh:mm"
-        />
+        <ButtonDatePicker onChange={opt.onChange} val={newVal} />
       </div>
     </FormGroup>
   );
@@ -198,7 +189,7 @@ const GenPropertiesDrop = opt => {
     : 'drop_generic_properties';
 
   let createOpt = null;
-  if (opt.value.is_new === true && opt.classStr) {
+  if (opt.value?.is_new === true && opt.classStr) {
     createOpt = (
       <div className="sample_radios">
         <OverlayTrigger
@@ -254,7 +245,7 @@ const GenPropertiesDrop = opt => {
   }
   const defaultIcon =
     opt.type === 'drag_element' ? (
-      <span className="fa fa-link icon_generic_nav indicator" />
+      <span className="indicator">{FIcons.faLink}</span>
     ) : (
       <span className="icon-sample indicator" />
     );
@@ -278,12 +269,11 @@ const GenPropertiesDrop = opt => {
               overlay={<Tooltip id={uuid()}>remove</Tooltip>}
             >
               <Button
-                className="btn_del"
+                className="btn_del btn-gxs"
                 bsStyle="danger"
-                bsSize="xsmall"
                 onClick={() => opt.onChange({})}
               >
-                <i className="fa fa-trash-o" aria-hidden="true" />
+                {FIcons.faTrashCan}
               </Button>
             </OverlayTrigger>
           </div>
@@ -297,6 +287,10 @@ const GenDummy = () => (
   <FormGroup className="text_generic_properties">
     <FormControl type="text" className="dummy" readOnly />
   </FormGroup>
+);
+
+const GenDropReaction = opt => (
+  <DropReaction field={opt.f_obj} onNavi={opt.onNavi} onChange={opt.onChange} />
 );
 
 const GenLabel = (opt, value) => (
@@ -488,6 +482,7 @@ const GenPropertiesTable = opt => (
 );
 
 const GenPropertiesText = opt => {
+  const [id] = useState(uuid());
   const { f_obj: fObj } = opt;
   if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
@@ -497,6 +492,7 @@ const GenPropertiesText = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={id}
         type="text"
         value={opt.value}
         onChange={opt.onChange}
@@ -510,6 +506,7 @@ const GenPropertiesText = opt => {
 };
 
 const GenPropertiesTextArea = opt => {
+  const [id] = useState(uuid());
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
@@ -517,6 +514,7 @@ const GenPropertiesTextArea = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={id}
         componentClass="textarea"
         value={opt.value}
         onChange={opt.onChange}
@@ -530,9 +528,10 @@ const GenPropertiesTextArea = opt => {
 };
 
 const GenTextFormula = opt => {
+  const [id] = useState(uuid());
   const { layers } = opt;
   const subs = [];
-  (opt.f_obj && opt.f_obj.text_sub_fields).map(e => {
+  (opt.f_obj?.text_sub_fields || []).map(e => {
     const { layer, field, separator } = e;
     if (field && field !== '') {
       if (field.includes('[@@]')) {
@@ -565,6 +564,7 @@ const GenTextFormula = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={id}
         type="text"
         value={subs.join('')}
         className={`readonly ${klz[1]}`}
@@ -578,28 +578,35 @@ const GenTextFormula = opt => {
 const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
     <Button
-      bsSize="xsmall"
       id={attachment.uid}
-      className="button-right"
+      className="button-right btn-gxs"
       onClick={() =>
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
     >
-      <i className="fa fa-times" aria-hidden="true" />
+      {FIcons.faTimes}
     </Button>
   );
   const filename = attachment.aid ? (
-    <a
-      onClick={() =>
-        downloadFile({
-          contents: `/api/v1/attachments/${attachment.aid}`,
-          name: attachment.filename,
-        })
-      }
-      style={{ cursor: 'pointer' }}
-    >
-      {attachment.filename}
-    </a>
+    <>
+      <a
+        onClick={() =>
+          downloadFile({
+            contents: `/api/v1/attachments/${attachment.aid}`,
+            name: attachment.filename,
+          })
+        }
+        style={{ cursor: 'pointer' }}
+        title={attachment.filename}
+      >
+        {attachment.filename}
+      </a>
+      <br />
+      <img
+        src={`/api/v1/attachments/thumbnail/${attachment.aid}`}
+        alt={attachment.filename}
+      />
+    </>
   ) : (
     attachment.filename
   );
@@ -607,9 +614,9 @@ const renderListGroupItem = (opt, attachment) => {
     <div className="generic_grid">
       <div>
         <div>{delBtn}</div>
-        <div className="generic_grid_row">{filename}</div>
+        <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
-          <FormGroup bsSize="small">
+          <FormGroup bsSize="sm">
             <FormControl
               type="text"
               value={attachment.label || ''}
@@ -645,12 +652,11 @@ const GenPropertiesUpload = opt => {
               val: e,
             })
           }
-          style={{ height: 34, width: '100%', border: '3px dashed lightgray' }}
+          className="gu-drop-zone"
+          style={{ height: 34 }}
         >
           <div
             style={{
-              textAlign: 'center',
-              color: 'gray',
               textOverflow: 'ellipsis',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
@@ -663,7 +669,8 @@ const GenPropertiesUpload = opt => {
       <ListGroup>
         {attachments.map(attachment => (
           <ListGroupItem key={attachment.uid} className="generic_files">
-            {renderListGroupItem(opt, attachment)}
+            {/* {renderListGroupItem(opt, attachment)} */}
+            <FieldUploadItem opt={opt} attachment={attachment} />
           </ListGroupItem>
         ))}
       </ListGroup>
@@ -723,4 +730,5 @@ export {
   GenPropertiesTextArea,
   GenPropertiesUpload,
   GenWFNext,
+  GenDropReaction,
 };

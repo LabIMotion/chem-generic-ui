@@ -7,8 +7,8 @@ const DocsButton = () => (
     overlay={<Tooltip id="_tooltip_documentation">Docs</Tooltip>}
   >
     <Button
+      className="btn-gxs"
       style={{ float: 'right' }}
-      bsSize="xsmall"
       onClick={() =>
         window.open('https://cllinde.gitbook.io/labimotion', '_blank')
       }

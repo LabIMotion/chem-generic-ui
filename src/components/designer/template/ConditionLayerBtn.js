@@ -7,6 +7,7 @@ import {
   handleLayerConditionChange,
 } from '../../../utils/template/condition-handler';
 import FieldCondEditModal from '../../elements/FieldCondEditModal';
+import FIcons from '../../icons/FIcons';
 
 const ConditionLayerBtn = props => {
   const { element, fnUpdate, layer, sortedLayers } = props;
@@ -35,11 +36,11 @@ const ConditionLayerBtn = props => {
   const conditionBtn =
     layer?.cond_fields?.length > 0 || false ? (
       <Button bsStyle="warning" bsSize="sm" onClick={onClick}>
-        <i className="fa fa-cogs" aria-hidden="true" />
+        {FIcons.faGears}
       </Button>
     ) : (
       <Button bsSize="sm" onClick={onClick}>
-        <i className="fa fa-cogs" aria-hidden="true" />
+        {FIcons.faGears}
       </Button>
     );
 

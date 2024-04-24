@@ -4,78 +4,41 @@ import { Modal } from 'react-bootstrap';
 import RepoGridDs from './RepoGridDs';
 import RepoGridSg from './RepoGridSg';
 import RepoGridEl from './RepoGridEl';
-import GridTheme from './GridTheme';
 
-const RepoNewModal = props => {
-  const { showModal, fnClose, gridData, fnCreate, content } = props;
-  const handleCreate = _e => {
-    fnCreate(_e);
-  };
+const contentComponents = {
+  Dataset: RepoGridDs,
+  Segment: RepoGridSg,
+  Element: RepoGridEl,
+};
 
-  switch (content) {
-    case 'Dataset':
-      return (
-        <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Fetch from LabIMotion Hub (Generic Dataset)
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ overflow: 'auto' }}>
-            <RepoGridDs
-              fnApi={handleCreate}
-              gridData={gridData}
-              pageSize={GridTheme['ag-theme-balham'].pageSize}
-              theme="ag-theme-balham"
-            />
-          </Modal.Body>
-        </Modal>
-      );
-    case 'Segment':
-      return (
-        <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Fetch from LabIMotion Hub (Generic Segment)
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ overflow: 'auto' }}>
-            <RepoGridSg
-              fnApi={handleCreate}
-              gridData={gridData}
-              pageSize={GridTheme['ag-theme-balham'].pageSize}
-              theme="ag-theme-balham"
-            />
-          </Modal.Body>
-        </Modal>
-      );
-    case 'Element':
-      return (
-        <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Fetch from LabIMotion Hub (Generic Element)
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ overflow: 'auto' }}>
-            <RepoGridEl
-              fnApi={handleCreate}
-              gridData={gridData}
-              pageSize={GridTheme['ag-theme-balham'].pageSize}
-              theme="ag-theme-balham"
-            />
-          </Modal.Body>
-        </Modal>
-      );
-    default:
-      break;
-  }
+const RepoNewModal = ({ showModal, fnClose, gridData, fnCreate, content }) => {
+  const ContentComponent = contentComponents[content];
+  if (!ContentComponent) return null;
+
+  const title = `Generic ${content} Templates`;
+
+  return (
+    <Modal
+      backdrop="static"
+      bsSize="lg"
+      show={showModal}
+      onHide={() => fnClose()}
+      dialogClassName="gu_modal-68w"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body style={{ overflow: 'auto' }}>
+        <ContentComponent fnApi={fnCreate} gridData={gridData} />
+      </Modal.Body>
+    </Modal>
+  );
 };
 
 RepoNewModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
-  gridData: PropTypes.array.isRequired,
+  gridData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fnClose: PropTypes.func.isRequired,
   fnCreate: PropTypes.func.isRequired,
 };

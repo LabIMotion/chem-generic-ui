@@ -3,6 +3,13 @@ import { validateFieldName } from './input-validation';
 import { notifyFieldAdd, notifySuccess } from './designer-message';
 import Response from '../response';
 
+const resetPosition = _fields => {
+  const updatedFields = _fields.map((f, idx) => {
+    return { ...f, position: idx + 1 };
+  });
+  return updatedFields;
+};
+
 /**
  * Handles the field creation.
  * @param {string} _newFieldKey The name of the field.
@@ -63,5 +70,55 @@ export const handleFieldMove = (_element, _layerKey, _field, _isUp) => {
     fields[idx + 1] = curObj;
   }
   element.properties_template.layers[layerKey].fields = fields;
+  return new Response(notifySuccess(), element);
+};
+
+export const handlePositionChange = (_element, _layerKey, _target, _source) => {
+  const [element, layerKey, target, source] = [
+    _element,
+    _layerKey,
+    _target,
+    _source,
+  ];
+  const layer = element?.properties_template?.layers[layerKey];
+  if (layer) {
+    const { fields } = layer;
+    const sourceIdx = findIndex(fields, o => o.field === source.field);
+    const targetIdx = findIndex(fields, o => o.field === target.field);
+    if (sourceIdx < 0 || targetIdx < 0) {
+      return new Response(notifySuccess(), element);
+    }
+    const removedElement = fields.splice(sourceIdx, 1)[0];
+    fields.splice(targetIdx, 0, removedElement);
+    element.properties_template.layers[layerKey].fields = resetPosition(fields);
+    return new Response(notifySuccess(), element);
+  }
+  return new Response(notifySuccess(), element);
+};
+
+export const handleLayerPositionChange = (_element, _target, _source) => {
+  const [element, target, source] = [_element, _target, _source];
+  const layers = { ...element.properties_template.layers }; // Create a copy of layers
+
+  const layerKeys = Object.keys(layers).sort(
+    (a, b) => layers[a].position - layers[b].position
+  );
+  const sourceIdx = layerKeys.indexOf(source.key);
+  const targetIdx = layerKeys.indexOf(target.key);
+  if (sourceIdx < 0 || targetIdx < 0) {
+    return new Response(notifySuccess(), element);
+  }
+  // Remove the source layer and insert it at the target position
+  const removedLayerKey = layerKeys.splice(sourceIdx, 1)[0];
+  layerKeys.splice(targetIdx, 0, removedLayerKey);
+
+  // Create a new layers object with the updated order
+  const newLayers = {};
+  layerKeys.forEach((key, idx) => {
+    newLayers[key] = layers[key];
+    newLayers[key].position = (idx + 1) * 10;
+  });
+
+  element.properties_template.layers = newLayers;
   return new Response(notifySuccess(), element);
 };

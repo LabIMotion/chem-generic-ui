@@ -16,6 +16,7 @@ import {
   GenTextFormula,
   GenWFNext,
   GenPropertiesText,
+  GenDropReaction,
 } from './GenPropertiesFields';
 import PropCalculate from './PropCalculate';
 
@@ -50,6 +51,8 @@ const GenProperties = opt => {
       return GenPropertiesUpload(fieldProps);
     case 'dummy':
       return GenDummy();
+    case 'sys-reaction':
+      return GenDropReaction(fieldProps);
     case 'table':
       return GenPropertiesTable(fieldProps);
     case 'text-formula':

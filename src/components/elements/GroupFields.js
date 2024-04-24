@@ -5,9 +5,12 @@ import React from 'react';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 import GenericSubField from '../models/GenericSubField';
 import DefinedRenderer from './DefinedRenderer';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary"><i className="fa fa-plus" aria-hidden="true" /></Button>
+  <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+    {FIcons.faPlus}
+  </Button>
 );
 
 AddRowBtn.propTypes = { addRow: PropTypes.func.isRequired };
@@ -17,13 +20,17 @@ const DelRowBtn = ({ delRow, node }) => {
   const btnClick = () => {
     delRow(data);
   };
-  return (<Button onClick={btnClick} bsSize="xsmall"><i className="fa fa-times" aria-hidden="true" /></Button>);
+  return (
+    <Button onClick={btnClick} className="btn-gxs">
+      {FIcons.faTimes}
+    </Button>
+  );
 };
 
 DelRowBtn.propTypes = { delRow: PropTypes.func.isRequired, node: PropTypes.object.isRequired };
 
 const TypeSelect = ({ selType, node }) => (
-  <FormGroup bsSize="small" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+  <FormGroup bsSize="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
     <FormControl componentClass="select" placeholder="select the type" onChange={e => selType(e, node)} defaultValue={node.data.type}>
       <option value="label">label</option>
       <option value="number">number</option>
@@ -157,7 +164,7 @@ export default class GroupFields extends React.Component {
     const rows = [];
     this.gridApi.forEachNode((nd) => { rows.push(nd.data); });
     field.sub_fields = rows;
-    this.gridApi.setRowData(rows);
+    this.gridApi.setGridOption('rowData', rows);
     updSub(layerKey, field, () => {});
   }
 
@@ -183,12 +190,6 @@ export default class GroupFields extends React.Component {
     const sub = field.sub_fields || [];
     return (
       <div>
-        {/* <div style={{ fontSize: '10px' }}>
-          <b>Input Group: </b>
-          define the fields which are grouped together and display as one field;<br />
-          note: &#39;System-Defined&#39; represents the Unit field which
-          has one input field and one unit converter.
-        </div> */}
         <div style={{ width: '100%', height: '100%' }} className="ag-theme-balham">
           <AgGridReact
             enableColResize

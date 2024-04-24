@@ -44,7 +44,7 @@ const ActionRenderer = params => {
       />
       &nbsp;
       <ButtonTooltipFA
-        tip={`export ${genericType} and its template`}
+        tip={`Export ${genericType} and its template`}
         fnClick={onDownload}
         element={data}
       />

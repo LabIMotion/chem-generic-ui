@@ -11,7 +11,10 @@ import {
   handleFieldInputChange,
 } from '../../../utils/template/action-handler';
 import { handleFieldSubChange } from '../../../utils/template/condition-handler';
-import { handleFieldMove } from '../../../utils/template/field-handler';
+import {
+  handleFieldMove,
+  handlePositionChange,
+} from '../../../utils/template/field-handler';
 
 const PropFields = props => {
   const { generic, genericType, fnUpdate, layer } = props;
@@ -57,6 +60,11 @@ const PropFields = props => {
     fnUpdate(result);
   };
 
+  const onPositionMove = (_layerKey, _target, _source) => {
+    const result = handlePositionChange(generic, _layerKey, _target, _source);
+    fnUpdate(result);
+  };
+
   const sortedLayers = sortBy(
     generic.properties_template.layers,
     l => l.position
@@ -77,7 +85,7 @@ const PropFields = props => {
       position={idx + 1}
       field={f}
       select_options={selectOptions}
-      onMove={onFieldMove}
+      onMove={{ onField: onFieldMove, onPosition: onPositionMove }}
       onDelete={onFieldRemove}
       onChange={onFieldInputChange}
       unitsSystem={getUnitSystem()}

@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
+import FIcons from '../icons/FIcons';
 
 const FieldTooltip = ({ link }) => {
   if (!link) return null;
@@ -9,12 +10,11 @@ const FieldTooltip = ({ link }) => {
     <Button
       style={{ padding: '0' }}
       bsStyle="link"
-      bsSize="xsmall"
       href={link}
       target="_blank"
       onClick={e => e.stopPropagation()}
     >
-      <i className="fa fa-info-circle" aria-hidden="true" />
+      {FIcons.faCircleQuestion}
     </Button>
   );
 };

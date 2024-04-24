@@ -49,8 +49,7 @@ export default class SelectAttrNewModal extends Component {
             </Form>
             <FormGroup>
               <Button bsStyle="primary" onClick={() => this.handleCreate()}>
-                Add new select list to template workspace&nbsp;
-                <i className="fa fa-hdd-o" aria-hidden="true" />
+                Add new select list to template workarea
               </Button>
               &nbsp;
               <Button bsStyle="warning" onClick={() => fnClose()}>

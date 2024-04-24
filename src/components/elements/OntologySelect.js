@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AsyncSelect from 'react-select/async';
-
-const TS_BASE = 'https://service.tib.eu/ts4tib/api/select';
-const TS_PARAM = [
-  'rows=20',
-  'collection=nfdi4chem',
-  'obsoletes=false',
-  'local=false',
-  'fieldList=id,iri,label,short_form,obo_id,ontology_name,ontology_prefix,description,type',
-].join('&');
+import { buildTSS } from 'generic-ui-core';
 
 const constructOption = data => {
   if (data) {
@@ -52,7 +44,7 @@ const constructOptions = data => {
 
 const OntologySelect = props => {
   const { fnSelected, defaultValue } = props;
-  const [data, setData] = useState(null);
+  const [, setData] = useState(null);
 
   const fetchData = async inputValue => {
     try {
@@ -60,7 +52,7 @@ const OntologySelect = props => {
         return [];
       }
 
-      const response = await fetch(`${TS_BASE}?q=${inputValue}&${TS_PARAM}`);
+      const response = await fetch(buildTSS(inputValue));
       if (!response.ok) {
         throw new Error('Network request failed');
       }

@@ -12,9 +12,7 @@ import ReactFlow, {
 } from 'reactflow';
 import { Button } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
-
+import FIcons from '../icons/FIcons';
 import DnDSidebar from './DnDSidebar';
 import LayerNode from './LayerNode';
 import {
@@ -47,7 +45,7 @@ const DnDFlow = props => {
             animated: true,
             markerEnd: { type: MarkerType.ArrowClosed },
             label: 'next',
-            labelStyle: { fill: 'red', fontWeight: 700 },
+            // labelStyle: { fill: 'red', fontWeight: 700 },
           },
           eds
         )
@@ -143,9 +141,8 @@ const DnDFlow = props => {
               fitView
             >
               <div className="save__controls">
-                <Button bsSize="xs" onClick={onSave}>
-                  Save to draft&nbsp;
-                  <FontAwesomeIcon icon={faFloppyDisk} />
+                <Button bsSize="sm" onClick={onSave}>
+                  {FIcons.faFloppyDisk}&nbsp;Save to draft
                 </Button>
               </div>
               <Controls />
@@ -154,7 +151,6 @@ const DnDFlow = props => {
           <DnDSidebar element={element} />
         </ReactFlowProvider>
       </div>
-      {/* <DnDSidebar element={element} /> */}
     </>
   );
 };

@@ -27,6 +27,7 @@ import {
 import { uploadFiles } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
 import splitFlowElements from '../../utils/flow/split-flow-elements';
+import { addLayer, layerDropReaction } from './handler';
 
 const initialState = {
   showViewLayer: false,
@@ -56,6 +57,16 @@ const GenInterface = props => {
   if (Object.keys(generic).length === 0) return null;
 
   const { container } = generic;
+
+  const layerReactionDrop = (_field, _layerKey) => {
+    layerDropReaction(generic, _field, _layerKey);
+    fnChange(generic);
+  };
+
+  const layerReaction = _layer => {
+    addLayer(generic, _layer, 'REACTION');
+    fnChange(generic);
+  };
 
   const layerDrop = (_source, _target) => {
     const { layers } = generic.properties;
@@ -249,6 +260,17 @@ const GenInterface = props => {
         event.stopPropagation();
         layerRemove(field, layer);
         propsChange = false;
+        break;
+      case 'sys-reaction': {
+        const { target } = event;
+        propsChange = false;
+        layerReactionDrop(target, layer);
+        break;
+      }
+      case 'layer-add-reaction':
+        event.stopPropagation();
+        propsChange = false;
+        layerReaction(layer);
         break;
       case 'layer-modal':
         event.stopPropagation();
@@ -451,13 +473,11 @@ const GenInterface = props => {
   );
 
   return (
-    // <DndProvider backend={HTML5Backend}>
     <>
       {layersLayout}
       {addLayerModal}
       {anaModal}
     </>
-    // </DndProvider>
   );
 };
 

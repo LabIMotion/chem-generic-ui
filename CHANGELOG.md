@@ -1,5 +1,26 @@
-
 # Chem-Generic-UI Changelog
+
+## [1.4.0]
+> 2024-08-22
+
+* Features and enhancements:
+  * Added image preview feature for the "Upload" type field when the uploaded file is an image.
+  * Introduced the `Drag Reaction to Element` feature for users.
+  * Introduced the feature to use the drag-and-drop functionality to arrange the layer or field order.
+  * Auto-mapping CV dataset data to reaction description.
+  * Added the ability for users to record their work steps and visualize them as a flow diagram.
+  * Refactored the "Date-Time" component in the layer header.
+  * Style: Better view size for template hub.
+  * Style: Aligned field styles for better consistency.
+  * Style: Selection options style to be vertically aligned.
+
+* Chores:
+  * Bumped ejs from 3.1.9 to 3.1.10
+  * Bumped ws from 7.5.9 to 7.5.10
+  * Bumped braces from 3.0.2 to 3.0.3
+  * Upgraded ag-grid to 32.0.1
+  * Upgraded nodejs to 18.20.3
+  * Upgraded yarn to 1.22.22
 
 ## [1.3.0]
 > 2024-04-24

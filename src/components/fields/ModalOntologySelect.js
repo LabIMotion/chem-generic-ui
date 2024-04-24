@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Button, Popover, OverlayTrigger } from 'react-bootstrap';
+import FIcons from '../icons/FIcons';
 
 export const ModalOntologySelect = props => {
   const { showProps, modalComponent } = props;
@@ -11,9 +12,7 @@ export const ModalOntologySelect = props => {
       <Modal.Header closeButton>
         <Modal.Title>Select Term</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        {modalComponent}
-      </Modal.Body>
+      <Modal.Body>{modalComponent}</Modal.Body>
     </Modal>
   );
 };
@@ -41,7 +40,12 @@ export const ButtonOntologySelect = props => {
         overlay={popover}
       >
         <Button onClick={() => setShow(true)}>
-          {customClass ? <span><i style={{ color: 'green' }} className="fa fa-check-circle" aria-hidden="true" />&nbsp;</span> : null}
+          {customClass ? (
+            <span>
+              <span style={{ color: 'green' }}>{FIcons.faCircleCheck}</span>
+              &nbsp;
+            </span>
+          ) : null}
           Term
         </Button>
       </OverlayTrigger>

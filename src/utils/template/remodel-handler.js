@@ -1,11 +1,11 @@
-/* eslint-disable no-restricted-globals */
 import { findIndex, cloneDeep } from 'lodash';
 import { FieldTypes, genUnits } from 'generic-ui-core';
-import { toBool, toNum } from './utils';
-import organizeSubValues from './collate';
+import { toBool, toNum } from '../../components/tools/utils';
+import organizeSubValues from '../../components/tools/collate';
+import Constants from '../../components/tools/Constants';
 
 // current generic value, new klass value
-const reinventGeneric = (generic, klass) => {
+export const remodel = (generic, klass) => {
   if (
     !generic ||
     Object.keys(klass || {}).length < 1 ||
@@ -121,7 +121,11 @@ const reinventGeneric = (generic, klass) => {
                     });
                   }
                 }
-                if (['number', 'system-defined'].includes(nSub.type)) {
+                if (
+                  [FieldTypes.F_NUMBER, FieldTypes.F_SYSTEM_DEFINED].includes(
+                    nSub.type
+                  )
+                ) {
                   const nvl =
                     typeof hitSub.value === 'undefined' ||
                     hitSub.value == null ||
@@ -171,4 +175,26 @@ const reinventGeneric = (generic, klass) => {
   return [generic.properties, newProps];
 };
 
-export default reinventGeneric;
+// input source generic and target generic; when there are reaction layers in the source generic, add them to the target generic
+export const importReaction = (source, target) => {
+  let newTarget = target;
+  let hasReaction = false;
+  if (source && source.properties && target && target.properties) {
+    const srcProps = source.properties;
+    const srcLayers = srcProps.layers;
+
+    const reactionLayers = Object.keys(srcLayers).filter(key =>
+      key.startsWith(Constants.SYS_REACTION)
+    );
+
+    // add these reaction layers to the target generic
+    if (reactionLayers.length > 0) {
+      hasReaction = true;
+      newTarget = cloneDeep(target);
+      reactionLayers.forEach(key => {
+        newTarget.properties.layers[key] = srcLayers[key];
+      });
+    }
+  }
+  return [hasReaction, newTarget];
+};

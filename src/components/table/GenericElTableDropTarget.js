@@ -8,6 +8,7 @@ import { Tooltip, OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { KlzIcon } from '../tools/utils';
 import buildTableSource from '../../utils/table/build-table-source';
+import FIcons from '../icons/FIcons';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   if (opt.value && opt.value.el_id) {
@@ -55,11 +56,10 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
               overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
             >
               <Button
-                className="btn_del"
-                bsSize="xsmall"
+                className="btn_del btn-gxs"
                 onClick={() => onDrop({}, params)}
               >
-                <i className="fa fa-trash-o" aria-hidden="true" />
+                {FIcons.faTrashCan}
               </Button>
             </OverlayTrigger>
           </div>

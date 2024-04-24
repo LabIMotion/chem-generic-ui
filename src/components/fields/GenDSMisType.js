@@ -1,27 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import FIcons from '../icons/FIcons';
 
-const GenDSMisType = (props) => {
+const GenDSMisType = props => {
   const { uiCtrl } = props;
   if (uiCtrl) {
     return (
       <OverlayTrigger
         placement="top"
         delay={300}
-        overlay={(
+        overlay={
           <Tooltip id="tooltip">
             Type (Chemical Methods Ontology) has been changed.
             <br />
             Please review this Dataset content.
           </Tooltip>
-)}
+        }
       >
         <span style={{ color: 'red' }}>
-          <FontAwesomeIcon icon={faExclamationCircle} />
-&nbsp;
+          {FIcons.faExclamationCircle}
+          &nbsp;
         </span>
       </OverlayTrigger>
     );

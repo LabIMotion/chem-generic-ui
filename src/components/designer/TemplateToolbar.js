@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, ButtonToolbar, Pager } from 'react-bootstrap';
+import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
 const TemplateToolbar = ({ btnNew }) => (
   <div style={{ margin: '10px 0px' }}>
     <ButtonToolbar>
-      <ButtonGroup bsSize="small">
+      <ButtonGroup bsSize="sm">
         <Button>Template</Button>
         <Button>Preview</Button>
       </ButtonGroup>
 
-      <ButtonGroup style={{ float: 'right' }} bsSize="small">
+      <ButtonGroup style={{ float: 'right' }} bsSize="sm">
         <Button>Save and Release</Button>
         <Button>Save as draft</Button>
       </ButtonGroup>

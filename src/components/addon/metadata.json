@@ -1,0 +1,29 @@
+{
+  "CHMO:0000025": [
+    {
+      "var": "cvConc",
+      "layer": "sample_preparation",
+      "field": "concentration"
+    },
+    {
+      "var": "cvSolvent",
+      "layer": "sample_preparation",
+      "field": "solvent"
+    },
+    {
+      "var": "cvRef",
+      "layer": "meas",
+      "field": "reference_internal"
+    },
+    {
+      "var": "cvRefOthers",
+      "layer": "meas",
+      "field": "reference_internal_others"
+    },
+    {
+      "var": "cvScanRate",
+      "layer": "meas",
+      "field": "scan_rate"
+    }
+  ]
+}

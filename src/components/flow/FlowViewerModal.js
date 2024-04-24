@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Panel } from 'react-bootstrap';
 import Draggable from 'react-draggable';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import FlowView from './FlowView';
+import FIcons from '../icons/FIcons';
 
 const FlowViewerModal = props => {
   const { show, data, fnHide } = props;
@@ -29,7 +28,7 @@ const FlowViewerModal = props => {
 
   if (!hasFlow && !hasFlowObject) {
     return (
-      <Modal show={show} bsSize="small" onHide={fnHide}>
+      <Modal show={show} bsSize="sm" onHide={fnHide}>
         <Modal.Header closeButton>
           <Modal.Title>{`${shortLabel} workflow`}</Modal.Title>
         </Modal.Header>
@@ -46,11 +45,10 @@ const FlowViewerModal = props => {
             {`${shortLabel} workflow`}
             <Button
               bsStyle="danger"
-              bsSize="xsmall"
-              className="gu_button_right"
+              className="gu_button_right btn-gxs"
               onClick={fnHide}
             >
-              <FontAwesomeIcon icon={faTimes} />
+              {FIcons.faTimes}
             </Button>
           </Panel.Heading>
           <Panel.Body>

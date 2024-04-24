@@ -9,13 +9,19 @@ import LayerAttrEditBtn from '../LayerAttrEditBtn';
 import LayerAttrNewBtn from '../LayerAttrNewBtn';
 import Constants from '../../tools/Constants';
 import ButtonTooltip from '../../fields/ButtonTooltip';
+import DnDs from '../../dnd/DnDs';
+import DroppablePanel from '../../dnd/DroppablePanel';
+import PositionDnD from '../../dnd/PositionDnD';
 import PropFields from './PropFields';
 import {
   handleAddDummy,
   handleCreateLayer,
   handleUpdateLayer,
 } from '../../../utils/template/action-handler';
-import { handleCreateField } from '../../../utils/template/field-handler';
+import {
+  handleCreateField,
+  handleLayerPositionChange,
+} from '../../../utils/template/field-handler';
 import ConditionLayerBtn from './ConditionLayerBtn';
 import RemovePropBtn from './RemovePropBtn';
 import NewFieldBtn from './NewFieldBtn';
@@ -53,6 +59,38 @@ const PropLayers = props => {
     fnUpdate(result);
   };
 
+  const onPositionMove = _item => {
+    const { target, source } = _item;
+    const result = handleLayerPositionChange(
+      data,
+      { key: target.field },
+      { key: source.fid.field }
+    );
+    fnUpdate(result);
+  };
+
+  const addArrange = (node, layerKey, noButton = true) => {
+    const pBtn = (
+      <PositionDnD
+        type={DnDs.LAYER}
+        field={{ field: layerKey }}
+        rowValue={{ key: '' }}
+        isButton={false}
+      />
+    );
+    return (
+      <DroppablePanel
+        type={DnDs.LAYER}
+        field={{ field: layerKey }}
+        rowValue={{ key: '' }}
+        fnCb={onPositionMove}
+      >
+        {noButton ? null : pBtn}
+        {node}
+      </DroppablePanel>
+    );
+  };
+
   const layers = [];
   const sortedLayers = sortBy(data.properties_template.layers, l => l.position);
   (sortedLayers || []).forEach(layer => {
@@ -68,61 +106,74 @@ const PropLayers = props => {
     );
 
     const isAttrOnWF = genericType === Constants.GENERIC_TYPES.ELEMENT;
+    const nodeHeader = (
+      <Panel.Heading className="template_panel_heading">
+        <Panel.Title toggle>
+          {layer.label}&nbsp;<Badge>{layer.key}</Badge>&nbsp;
+          <Badge className="bg-bs-primary">
+            {layer.cols} column(s) per row
+          </Badge>
+          &nbsp;
+          <Badge className="bg-bs-primary">
+            {layer?.fields?.length || 0} field(s)
+          </Badge>
+          {layer?.wf ? (
+            <span>
+              &nbsp;<Badge className="bg-bs-warning">workflow</Badge>
+            </span>
+          ) : null}
+        </Panel.Title>
+        <FormGroup
+          bsSize="sm"
+          style={{ marginBottom: 'unset', display: 'inline-table' }}
+        >
+          <InputGroup>
+            <InputGroup.Button>
+              <ConditionLayerBtn
+                element={data}
+                fnUpdate={onLayerCondition}
+                layer={layer}
+                sortedLayers={sortedLayers}
+              />
+              <LayerAttrEditBtn
+                fnUpdate={onLayerUpdate}
+                isAttrOnWF={isAttrOnWF}
+                layer={layer}
+              />
+              <RemovePropBtn
+                delStr={FieldTypes.DEL_LAYER}
+                delKey={layerKey}
+                element={data}
+                fnDelete={onLayerDelete}
+              />
+              <ButtonTooltip
+                tip="Add Dummy field"
+                fnClick={onDummyAdd}
+                element={{ layerKey, field: null }}
+                fa="faSquare"
+                place="top"
+              />
+            </InputGroup.Button>
+            <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />
+            <InputGroup.Button>
+              <PositionDnD
+                type={DnDs.LAYER}
+                field={{ field: layerKey }}
+                rowValue={{ key: '' }}
+                isButton
+              />
+            </InputGroup.Button>
+          </InputGroup>
+        </FormGroup>
+      </Panel.Heading>
+    );
     const node = (
       <Panel
         className="panel_generic_properties"
         defaultExpanded
         key={`idxLayer_${layerKey}`}
       >
-        <Panel.Heading className="template_panel_heading">
-          <Panel.Title toggle>
-            {layer.label}&nbsp;<Badge>{layer.key}</Badge>&nbsp;
-            <Badge>Columns per Row:&nbsp;{layer.cols}</Badge>&nbsp;
-            <Badge className="bg-bs-primary">
-              Fields:&nbsp;{layer?.fields?.length || 0}
-            </Badge>
-            {layer?.wf ? (
-              <span>
-                &nbsp;<Badge className="bg-bs-warning">workflow</Badge>
-              </span>
-            ) : null}
-          </Panel.Title>
-          <FormGroup
-            bsSize="sm"
-            style={{ marginBottom: 'unset', display: 'inline-table' }}
-          >
-            <InputGroup>
-              <InputGroup.Button>
-                <ConditionLayerBtn
-                  element={data}
-                  fnUpdate={onLayerCondition}
-                  layer={layer}
-                  sortedLayers={sortedLayers}
-                />
-                <LayerAttrEditBtn
-                  fnUpdate={onLayerUpdate}
-                  isAttrOnWF={isAttrOnWF}
-                  layer={layer}
-                />
-                <RemovePropBtn
-                  delStr={FieldTypes.DEL_LAYER}
-                  delKey={layerKey}
-                  element={data}
-                  fnDelete={onLayerDelete}
-                />
-                <ButtonTooltip
-                  tip="Add Dummy field"
-                  fnClick={onDummyAdd}
-                  element={{ layerKey, field: null }}
-                  fa="fa fa-plus-circle"
-                  place="top"
-                  size="sm"
-                />
-              </InputGroup.Button>
-              <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />
-            </InputGroup>
-          </FormGroup>
-        </Panel.Heading>
+        {addArrange(nodeHeader, layerKey)}
         <Panel.Collapse>
           <Panel.Body style={{ padding: '15px 0px 15px 0px' }}>
             {fields}

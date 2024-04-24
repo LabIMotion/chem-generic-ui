@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
+import FIcons from '../icons/FIcons';
 
 const ButtonTooltipFA = props => {
   const { tip } = props;
@@ -11,20 +12,18 @@ const ButtonTooltipFA = props => {
       {tt.join('\r\n')}
     </Tooltip>
   );
-  const { size, bs, fnClick, element, place, icon, disabled, txt, btnCls } =
-    props;
+  const { bs, fnClick, element, place, icon, disabled, txt } = props;
   const content = txt ? <span>{txt} </span> : '';
   if (bs === '') {
     return (
       <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
         <Button
-          className={btnCls}
-          bsSize={size}
+          className="btn-gxs"
           onClick={() => fnClick(element)}
           disabled={disabled}
         >
-          {content}
           {icon}
+          {content}
         </Button>
       </OverlayTrigger>
     );
@@ -32,14 +31,13 @@ const ButtonTooltipFA = props => {
   return (
     <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
       <Button
-        className={btnCls}
-        bsSize={size}
+        className="btn-gxs"
         bsStyle={bs}
         onClick={() => fnClick(element)}
         disabled={disabled}
       >
-        {content}
         {icon}
+        {content}
       </Button>
     </OverlayTrigger>
   );
@@ -50,23 +48,19 @@ ButtonTooltipFA.propTypes = {
   element: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   fnClick: PropTypes.func.isRequired,
   bs: PropTypes.string,
-  size: PropTypes.string,
   place: PropTypes.string,
   icon: PropTypes.element,
   disabled: PropTypes.bool,
   txt: PropTypes.string,
-  btnCls: PropTypes.string,
 };
 
 ButtonTooltipFA.defaultProps = {
   bs: '',
-  size: 'xs',
   place: 'top',
-  icon: <Glyphicon glyph="export" />,
+  icon: FIcons.faFileExport,
   disabled: false,
   txt: null,
   element: {},
-  btnCls: '',
 };
 
 export default ButtonTooltipFA;

@@ -8,8 +8,8 @@ const GridSelect = (props) => {
     all, onChange, node, dVal
   } = props;
   return (
-    <FormGroup bsSize="small" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
-      <FormControl componentClass="select" placeholder="select..." onChange={e => onChange(e, node)} defaultValue={dVal}>
+    <FormGroup bsSize="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+      <FormControl componentClass="select" placeholder="select..." onChange={e => onChange(e, node)} defaultValue={dVal} id={`${node.data.id}__${dVal}`}>
         {all.map(e => <option key={e.key} value={e.val}>{e.lab}</option>)}
       </FormControl>
     </FormGroup>

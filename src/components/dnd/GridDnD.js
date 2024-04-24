@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
+import FIcons from '../icons/FIcons';
 
 const GridDnD = ({ field, rowValue, handleMove }) => {
   const [{ isDraggingSource }, drag] = useDrag({
@@ -36,7 +37,7 @@ const GridDnD = ({ field, rowValue, handleMove }) => {
     <div ref={drop}>
       <div ref={drag} className={className}>
         <div className="dnd-btn">
-          <span className="text-info fa fa-arrows" />
+          <span className="text-info">{FIcons.faArrowsUpDownLeftRight}</span>
         </div>
       </div>
     </div>

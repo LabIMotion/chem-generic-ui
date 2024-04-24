@@ -45,7 +45,7 @@ export default class KlassAttrForm extends Component {
           </InputGroup>
           <div className="help">
             Icon is used to represent a particular element. Please use the icon code from
-            <Button bsStyle="link" bsSize="xsmall" href="https://fontawesome.com/v4.7/icons/" target="_blank">Font Awesome 4</Button><br />
+            <Button bsStyle="link" className="btn-gxs" href="https://fontawesome.com/v4.7/icons/" target="_blank">Font Awesome 4</Button><br />
             The icon code format is like &lsquo; fa fa-abc &rsquo;.
           </div>
         </FormGroup>

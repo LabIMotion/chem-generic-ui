@@ -122,10 +122,10 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="primary"
+            bsStyle="warning"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
-            Create&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Create
           </Button>
         );
         break;
@@ -133,10 +133,10 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="primary"
+            bsStyle="warning"
             onClick={_fnAction ? () => handleCopy(_fnAction) : () => {}}
           >
-            Copy&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Copy
           </Button>
         );
         break;
@@ -144,10 +144,10 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="primary"
+            bsStyle="warning"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
-            Update&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Update
           </Button>
         );
         break;
@@ -158,7 +158,7 @@ const AttrModal = props => {
             bsStyle="danger"
             onClick={_fnAction ? () => handleDelete(_fnAction) : () => {}}
           >
-            Delete&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Delete
           </Button>
         );
         break;
@@ -203,8 +203,8 @@ const AttrModal = props => {
               <FormGroup>
                 {addActions()}
                 <ButtonGroup>
-                  <Button bsStyle="warning" onClick={() => setShow(false)}>
-                    Cancel
+                  <Button bsStyle="primary" onClick={() => setShow(false)}>
+                    Close
                   </Button>
                 </ButtonGroup>
               </FormGroup>

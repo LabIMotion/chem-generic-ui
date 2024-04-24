@@ -2,19 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import FIcons from '../icons/FIcons';
 
-const ButtonConfirm = (props) => {
-  const {
-    msg, size, bs, fnClick, fnParams, place, fa, disabled
-  } = props;
+const ButtonConfirm = props => {
+  const { msg, size, bs, fnClick, fnParams, place, fa, disabled } = props;
   const popover = (
     <Popover id="popover-button-confirm">
-      {msg}
-      {' '}
-      <br />
+      {msg} <br />
       <div className="btn-toolbar">
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="danger"
           aria-hidden="true"
           onClick={() => fnClick(fnParams)}
@@ -22,15 +19,23 @@ const ButtonConfirm = (props) => {
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>
-        <Button bsSize="xsmall" bsStyle="warning">No</Button>
+        <Button bsSize="sm" bsStyle="warning">
+          No
+        </Button>
       </div>
     </Popover>
   );
 
   return (
-    <OverlayTrigger animation placement={place} root trigger="focus" overlay={popover}>
+    <OverlayTrigger
+      animation
+      placement={place}
+      root
+      trigger="focus"
+      overlay={popover}
+    >
       <Button bsSize={size} bsStyle={bs} disabled={disabled}>
-        <i className={`fa ${fa}`} aria-hidden="true" />
+        {FIcons[fa]}
       </Button>
     </OverlayTrigger>
   );
@@ -48,7 +53,11 @@ ButtonConfirm.propTypes = {
 };
 
 ButtonConfirm.defaultProps = {
-  bs: 'danger', size: 'xs', place: 'right', fa: 'fa-trash-o', disabled: false
+  bs: 'danger',
+  size: 'sm',
+  place: 'right',
+  fa: 'faTrashCan',
+  disabled: false,
 };
 
 export default ButtonConfirm;

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import GridDnD from '../dnd/GridDnD';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
   <OverlayTrigger
@@ -11,8 +12,8 @@ const AddRowBtn = ({ addRow }) => (
     placement="top"
     overlay={<Tooltip id={uuid()}>add entry</Tooltip>}
   >
-    <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
-      <i className="fa fa-plus" aria-hidden="true" />
+    <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+      {FIcons.faPlus}
     </Button>
   </OverlayTrigger>
 );
@@ -27,8 +28,8 @@ const DelRowBtn = ({ delRow, node }) => {
       placement="top"
       overlay={<Tooltip id={uuid()}>remove</Tooltip>}
     >
-      <Button onClick={() => delRow(data)} bsSize="xsmall">
-        <i className="fa fa-times" aria-hidden="true" />
+      <Button onClick={() => delRow(data)} className="btn-gxs">
+        {FIcons.faMinus}
       </Button>
     </OverlayTrigger>
   );
@@ -40,9 +41,7 @@ DelRowBtn.propTypes = {
 };
 
 const NullRowBtn = () => (
-  <div className="grid-btn-none">
-    <span className="fa fa-arrows" />
-  </div>
+  <div className="grid-btn-none">{FIcons.faArrowsUpDownLeftRight}</div>
 );
 
 const DnDRowBtn = ({ moveRow, field, type, node }) => (

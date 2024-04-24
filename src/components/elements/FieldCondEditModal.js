@@ -12,10 +12,11 @@ import { cloneDeep } from 'lodash';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
 import GenericSubField from '../models/GenericSubField';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button active onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
-    <i className="fa fa-plus" aria-hidden="true" />
+  <Button active onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+    {FIcons.faPlus}
   </Button>
 );
 
@@ -27,8 +28,8 @@ const DelRowBtn = ({ delRow, node }) => {
     delRow(data);
   };
   return (
-    <Button active onClick={btnClick} bsSize="xsmall" bsStyle="danger">
-      <i className="fa fa-trash" aria-hidden="true" />
+    <Button active onClick={btnClick} className="btn-gxs" bsStyle="danger">
+      {FIcons.faTrashCan}
     </Button>
   );
 };
@@ -67,7 +68,7 @@ export default class FieldCondEditModal extends Component {
 
       if (condOperator !== condOperatorPre && field !== null) {
         const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
-        this.gridApi.setColumnDefs(columnDefs);
+        this.gridApi.setGridOption('columnDefs', columnDefs);
         this.autoSizeAll();
       }
     }
@@ -80,7 +81,7 @@ export default class FieldCondEditModal extends Component {
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
     const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
-    this.gridApi.setColumnDefs(columnDefs);
+    this.gridApi.setGridOption('columnDefs', columnDefs);
     this.autoSizeAll();
   }
 
@@ -218,7 +219,7 @@ export default class FieldCondEditModal extends Component {
     this.gridApi.forEachNode(nd => {
       rows.push(nd.data);
     });
-    this.gridApi.setRowData(rows);
+    this.gridApi.setGridOption('rowData', rows);
     if (field == null) {
       layer.cond_fields = rows;
       updLayer(layerKey, layer, () => {});

@@ -77,14 +77,12 @@ const SelectOptionLayer = props => {
       >
         <Panel.Heading className="template_panel_heading">
           <Panel.Title toggle>{root}</Panel.Title>
-          <div>
-            <SelectOption
-              generic={generic}
-              root={root}
-              fnAddOption={onAdd}
-              fnChange={fnChange}
-            />
-          </div>
+          <SelectOption
+            generic={generic}
+            root={root}
+            fnAddOption={onAdd}
+            fnChange={fnChange}
+          />
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body>{options}</Panel.Body>
@@ -103,10 +101,9 @@ const SelectOptionLayer = props => {
             <ButtonTooltip
               tip="Add new select list"
               fnClick={() => setShowAddSelect(true)}
-              fa="fa-plus"
-              size="xs"
+              fa="faPlus"
               txt="Add new select list"
-              btnCls="button-right"
+              btnCls="button-right btn-gxs"
             />
           </Panel.Title>
         </Panel.Heading>

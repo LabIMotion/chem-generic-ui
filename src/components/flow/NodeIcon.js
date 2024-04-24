@@ -1,13 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import FIcons from '../icons/FIcons';
 
 const NodeIcon = ({ nodeClass, nodeIcon }) => (
-  <div className={nodeClass}>
-    <FontAwesomeIcon icon={nodeIcon} />
-  </div>
+  <div className={nodeClass}>{nodeIcon}</div>
 );
 
 NodeIcon.propTypes = {
@@ -15,12 +12,19 @@ NodeIcon.propTypes = {
   nodeIcon: PropTypes.object.isRequired,
 };
 
-const createLayerNodeIcon = (layer, checked, nodeClass = 'chk') => {
-  const nodeIcon = nodeClass === 'chk' ? faCircleCheck : faCirclePlus;
+const createLayerNodeIcon = (
+  layer,
+  checked,
+  nodeClass = 'chk',
+  extCSS = ''
+) => {
+  const nodeIcon =
+    nodeClass === 'chk' ? FIcons.faCircleCheck : FIcons.faCirclePlus;
+  const klz = `border_line ${extCSS}`;
   return (
     <div className="gu_flow_default_element">
       {checked ? <NodeIcon nodeClass={nodeClass} nodeIcon={nodeIcon} /> : null}
-      <div className="border_line">
+      <div className={klz}>
         <b>{layer.label}</b>
       </div>
       <div>({layer.key})</div>

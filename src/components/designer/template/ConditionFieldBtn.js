@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FieldCondEditModal from '../../elements/FieldCondEditModal';
+import FIcons from '../../icons/FIcons';
 
 const ConditionFieldBtn = props => {
   const { field, fnUpdateSub, layer, sortedLayers } = props;
@@ -19,11 +20,11 @@ const ConditionFieldBtn = props => {
   const conditionBtn =
     field?.cond_fields?.length > 0 || false ? (
       <Button bsStyle="warning" bsSize="sm" onClick={onClick}>
-        <i className="fa fa-cogs" aria-hidden="true" />
+        {FIcons.faGears}
       </Button>
     ) : (
       <Button bsSize="sm" onClick={onClick}>
-        <i className="fa fa-cogs" aria-hidden="true" />
+        {FIcons.faGears}
       </Button>
     );
 
