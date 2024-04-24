@@ -1,6 +1,33 @@
 
 # Chem-Generic-UI Changelog
 
+## [1.3.0]
+> 2024-04-24
+
+* Features and enhancements:
+  * Introduce new options to restriction setting for designer
+  * Introduce the customized field name based on certain conditions for designer
+  * Introduce the default unit feature for designer
+  * Introduce the element export function in docx format for user
+  * Dynamic field columns for designer
+  * Export and import klass and its template within the same instance or across instances for designer
+  * Add error handling on export and import klass and its template function
+  * Add helpers for designer
+
+* Bug fixes:
+  * Fix missing options for drag sample
+  * Fix dynamic column width issue
+  * Re-label datetime range
+  * Rename button title
+
+* Chores:
+  * Upgrade generic-ui-core
+  * Bump follow-redirects from 1.15.4 to 1.15.6
+  * Bump webpack-dev-middleware from 5.3.3 to 5.3.4
+  * Upgrade node
+  * Bump express from 4.18.2 to 4.19.2
+  * Upgrade yarn 1.22.19
+
 ## [1.1.2]
 > 2024-02-29
 
