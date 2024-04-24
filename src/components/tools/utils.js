@@ -286,7 +286,7 @@ const propDefault = {
   },
   hasOwnRow: {
     label: 'Has its own line',
-    doc: [docFields, '#has-its-own-row'].join(''),
+    doc: [docFields, '#has-its-own-line'].join(''),
   },
   label: { label: 'Display Name', doc: [docFields, '#display-name'].join('') },
   placeholder: {
