@@ -55,7 +55,6 @@ export const buildDefaultNode = props => {
  */
 export const buildFlowElements = props => {
   const { properties, propertiesRelease, flowType = 'default' } = props;
-  console.log('properties=', properties);
   const { flow, flowObject, layers } = propertiesRelease;
   const { nodes, edges, viewport } = flowObject
     ? cloneDeep(flowObject)

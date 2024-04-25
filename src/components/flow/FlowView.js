@@ -45,7 +45,7 @@ const FlowView = props => {
             onInit={setReactFlowInstance}
           >
             <Controls />
-            <FlowImageButton />
+            {/* <FlowImageButton /> */}
           </ReactFlow>
         </div>
       </ReactFlowProvider>
