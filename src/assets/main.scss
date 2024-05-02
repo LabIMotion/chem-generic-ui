@@ -17,6 +17,10 @@
   border-style: solid;
 }
 
+.gu_field_label {
+  font-weight: bold;
+}
+
 .gu_sp_form {
   display: flex;
   align-items: center;
@@ -78,6 +82,7 @@
   line-height: 26px !important;
   box-shadow: unset !important;
   margin-bottom: unset !important;
+  font-size: unset !important;
   .panel-title {
     font-weight: bold;
   }
