@@ -33,6 +33,7 @@ import FieldHeader from './FieldHeader';
 import { fieldCls, genUnitSup } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
+import FieldUploadItem from './FieldUploadItem';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -589,17 +590,25 @@ const renderListGroupItem = (opt, attachment) => {
     </Button>
   );
   const filename = attachment.aid ? (
-    <a
-      onClick={() =>
-        downloadFile({
-          contents: `/api/v1/attachments/${attachment.aid}`,
-          name: attachment.filename,
-        })
-      }
-      style={{ cursor: 'pointer' }}
-    >
-      {attachment.filename}
-    </a>
+    <>
+      <a
+        onClick={() =>
+          downloadFile({
+            contents: `/api/v1/attachments/${attachment.aid}`,
+            name: attachment.filename,
+          })
+        }
+        style={{ cursor: 'pointer' }}
+        title={attachment.filename}
+      >
+        {attachment.filename}
+      </a>
+      <br />
+      <img
+        src={`/api/v1/attachments/thumbnail/${attachment.aid}`}
+        alt={attachment.filename}
+      />
+    </>
   ) : (
     attachment.filename
   );
@@ -607,7 +616,7 @@ const renderListGroupItem = (opt, attachment) => {
     <div className="generic_grid">
       <div>
         <div>{delBtn}</div>
-        <div className="generic_grid_row">{filename}</div>
+        <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
           <FormGroup bsSize="small">
             <FormControl
@@ -663,7 +672,8 @@ const GenPropertiesUpload = opt => {
       <ListGroup>
         {attachments.map(attachment => (
           <ListGroupItem key={attachment.uid} className="generic_files">
-            {renderListGroupItem(opt, attachment)}
+            {/* {renderListGroupItem(opt, attachment)} */}
+            <FieldUploadItem opt={opt} attachment={attachment} />
           </ListGroupItem>
         ))}
       </ListGroup>

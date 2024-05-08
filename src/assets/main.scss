@@ -439,6 +439,10 @@
       margin-bottom: 0px;
     }
   }
+  .file_text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .grid-btn-none {
