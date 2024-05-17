@@ -36,6 +36,9 @@ import {
   renderRequired,
   renderReadonly,
 } from './Fields';
+import PositionDnD from '../dnd/PositionDnD';
+import DroppablePanel from '../dnd/DroppablePanel';
+import DnDs from '../dnd/DnDs';
 
 class ElementField extends Component {
   constructor(props) {
@@ -49,7 +52,14 @@ class ElementField extends Component {
     this.handleAddDummy = this.handleAddDummy.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
   }
+
+  handleDrop = _params => {
+    const { onMove } = this.props;
+    const { source, target, rid } = _params;
+    onMove.onPosition(rid.key, target, source);
+  };
 
   handlePanelToggle = () => {
     this.setState(prevState => {
@@ -66,16 +76,18 @@ class ElementField extends Component {
     ) {
       return;
     }
+    const { onChange } = this.props;
     const env = e;
     if (fc === 'decimal') {
       env.target.value = toNullOrInt(e.target.value) || 5;
     }
-    this.props.onChange(env, orig, fe, lk, fc, tp);
+    onChange(env, orig, fe, lk, fc, tp);
   }
 
   handleMove(_params) {
+    const { onMove } = this.props;
     const { l, f, isUp } = _params;
-    this.props.onMove(l, f, isUp);
+    onMove.onField(l, f, isUp);
   }
 
   handleOntChange(_params) {
@@ -103,15 +115,18 @@ class ElementField extends Component {
   }
 
   handleAddDummy(_params) {
-    this.props.onDummyAdd(_params);
+    const { onDummyAdd } = this.props;
+    onDummyAdd(_params);
   }
 
   updSubField(layerKey, field, cb) {
-    this.props.onFieldSubFieldChange(layerKey, field, cb);
+    const { onFieldSubFieldChange } = this.props;
+    onFieldSubFieldChange(layerKey, field, cb);
   }
 
   handelDelete(delStr, delKey, delRoot) {
-    this.props.onDelete(delStr, delKey, delRoot);
+    const { onDelete } = this.props;
+    onDelete(delStr, delKey, delRoot);
   }
 
   availableUnits(val) {
@@ -387,129 +402,96 @@ class ElementField extends Component {
     ) : null;
     return (
       <div>
-        <Panel>
-          <Panel.Heading className="template_panel_heading">
-            <Panel.Title toggle onClick={this.handlePanelToggle}>
-              {this.props.position}&nbsp;
-              {[FieldTypes.F_DUMMY].includes(f.type)
-                ? '(dummy field)'
-                : f.label}
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="field" />
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="type" />
-              &nbsp;
-              <FieldBadge fieldObj={f} prop="cols" />
-              {TermLink(fieldObject.ontology)}
-            </Panel.Title>
-            <ButtonGroup bsSize="xsmall">
-              <ConditionFieldBtn
-                field={f}
-                fnUpdateSub={this.updSubField}
-                layer={layer}
-                sortedLayers={allLayers}
-              />
-              <ButtonTooltip
-                tip="Move Up"
-                fnClick={this.handleMove}
-                element={{ l: layerKey, f: f.field, isUp: true }}
-                fa="fa-arrow-up"
-                place="top"
-                disabled={this.props.position === 1}
-              />
-              <ButtonTooltip
-                tip="Move Down"
-                fnClick={this.handleMove}
-                element={{ l: layerKey, f: f.field, isUp: false }}
-                fa="fa-arrow-down"
-                place="top"
-              />
-              {this.renderDeleteButton('Field', f.field, layerKey)}
-              <ButtonTooltip
-                tip="Add Dummy field"
-                fnClick={this.handleAddDummy}
-                element={{ layerKey, field: f.field }}
-                fa="fa fa-plus-circle"
-                place="top"
-              />
-            </ButtonGroup>
-          </Panel.Heading>
-          <Panel.Collapse>
-            <Panel.Body>
-              <Form horizontal className="default_style">
-                {renderDummyFieldGroup({ layer, fieldObject })}
-                {renderNameField({
-                  layer,
-                  fieldObject,
-                  field: 'field',
-                  fnChange: this.handleChange,
-                  fnOntChange: this.handleOntChange,
-                })}
-                {renderTextFieldGroup({
-                  layer,
-                  fieldObject,
-                  field: 'label',
-                  fnChange: this.handleChange,
-                })}
-                {renderTextFieldGroup({
-                  layer,
-                  fieldObject,
-                  field: 'description',
-                  fnChange: this.handleChange,
-                })}
-                {renderOwnRow({
-                  layer,
-                  fieldObject,
-                  fnChange: this.handleChange,
-                })}
-                <FormGroup className="gu-form-group">
-                  <Col sm={3}>
-                    <span className="gu-form-group-label">
-                      {getFieldProps('cols').label}{' '}
-                      {getFieldProps('cols').fieldTooltip}
-                    </span>
-                  </Col>
-                  <Col sm={9}>
-                    <div style={{ display: 'flex' }}>
-                      <span style={{ width: '100%' }}>
-                        <Select
-                          styles={{
-                            menuPortal: base => {
-                              return { ...base, zIndex: 9999 };
-                            },
-                            menu: base => {
-                              return { ...base, zIndex: 9999 };
-                            },
-                          }}
-                          name={f.field}
-                          multi={false}
-                          options={colOpts}
-                          value={colOpts?.find(
-                            o => o.value === (f.cols || layer.cols)
-                          )}
-                          onChange={event =>
-                            this.handleChange(
-                              event,
-                              f.type,
-                              f.field,
-                              layerKey,
-                              'cols',
-                              'select'
-                            )
-                          }
-                        />
-                      </span>
-                    </div>
-                  </Col>
-                </FormGroup>
-                {[FieldTypes.F_DUMMY, FieldTypes.F_FORMULA_FIELD].includes(
-                  f.type
-                ) ? null : (
+        <DroppablePanel
+          type={DnDs.LAYER_FIELD}
+          field={f}
+          rowValue={layer}
+          fnCb={this.handleDrop}
+        >
+          <PositionDnD type={DnDs.LAYER_FIELD} field={f} rowValue={layer} />
+          <Panel style={{ width: '100%' }}>
+            <Panel.Heading className="template_panel_heading">
+              <Panel.Title toggle onClick={this.handlePanelToggle}>
+                {/* <Button>
+                  <FontAwesomeIcon icon={faGripVertical} />
+                </Button> */}
+                {this.props.position}&nbsp;
+                {[FieldTypes.F_DUMMY].includes(f.type)
+                  ? '(dummy field)'
+                  : f.label}
+                &nbsp;
+                <FieldBadge fieldObj={f} prop="field" />
+                &nbsp;
+                <FieldBadge fieldObj={f} prop="type" />
+                &nbsp;
+                <FieldBadge fieldObj={f} prop="cols" />
+                {TermLink(fieldObject.ontology)}
+              </Panel.Title>
+              <ButtonGroup bsSize="xsmall">
+                <ConditionFieldBtn
+                  field={f}
+                  fnUpdateSub={this.updSubField}
+                  layer={layer}
+                  sortedLayers={allLayers}
+                />
+                <ButtonTooltip
+                  tip="Move Up"
+                  fnClick={this.handleMove}
+                  element={{ l: layerKey, f: f.field, isUp: true }}
+                  fa="fa-arrow-up"
+                  place="top"
+                  disabled={this.props.position === 1}
+                />
+                <ButtonTooltip
+                  tip="Move Down"
+                  fnClick={this.handleMove}
+                  element={{ l: layerKey, f: f.field, isUp: false }}
+                  fa="fa-arrow-down"
+                  place="top"
+                />
+                {this.renderDeleteButton('Field', f.field, layerKey)}
+                <ButtonTooltip
+                  tip="Add Dummy field"
+                  fnClick={this.handleAddDummy}
+                  element={{ layerKey, field: f.field }}
+                  fa="fa fa-plus-circle"
+                  place="top"
+                />
+              </ButtonGroup>
+            </Panel.Heading>
+            <Panel.Collapse>
+              <Panel.Body>
+                <Form horizontal className="default_style">
+                  {renderDummyFieldGroup({ layer, fieldObject })}
+                  {renderNameField({
+                    layer,
+                    fieldObject,
+                    field: 'field',
+                    fnChange: this.handleChange,
+                    fnOntChange: this.handleOntChange,
+                  })}
+                  {renderTextFieldGroup({
+                    layer,
+                    fieldObject,
+                    field: 'label',
+                    fnChange: this.handleChange,
+                  })}
+                  {renderTextFieldGroup({
+                    layer,
+                    fieldObject,
+                    field: 'description',
+                    fnChange: this.handleChange,
+                  })}
+                  {renderOwnRow({
+                    layer,
+                    fieldObject,
+                    fnChange: this.handleChange,
+                  })}
                   <FormGroup className="gu-form-group">
                     <Col sm={3}>
                       <span className="gu-form-group-label">
-                        {getFieldProps('type').label}{' '}
-                        {getFieldProps('type').fieldTooltip}
+                        {getFieldProps('cols').label}{' '}
+                        {getFieldProps('cols').fieldTooltip}
                       </span>
                     </Col>
                     <Col sm={9}>
@@ -526,15 +508,17 @@ class ElementField extends Component {
                             }}
                             name={f.field}
                             multi={false}
-                            options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
+                            options={colOpts}
+                            value={colOpts?.find(
+                              o => o.value === (f.cols || layer.cols)
+                            )}
                             onChange={event =>
                               this.handleChange(
                                 event,
                                 f.type,
                                 f.field,
                                 layerKey,
-                                'type',
+                                'cols',
                                 'select'
                               )
                             }
@@ -543,133 +527,179 @@ class ElementField extends Component {
                       </div>
                     </Col>
                   </FormGroup>
-                )}
-                {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
-                  <FormGroup className="gu-form-group">
-                    <Col sm={3}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('type').label}{' '}
-                        {getFieldProps('type').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={3}>
-                      <div style={{ display: 'flex' }}>
-                        <span style={{ width: '100%' }}>
-                          <Select
-                            styles={{
-                              menuPortal: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                              menu: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                            }}
-                            name={f.field}
-                            multi={false}
-                            options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
-                            onChange={event =>
-                              this.handleChange(
-                                event,
-                                f.type,
-                                f.field,
-                                layerKey,
-                                'type',
-                                'select'
-                              )
-                            }
-                          />
+                  {[FieldTypes.F_DUMMY, FieldTypes.F_FORMULA_FIELD].includes(
+                    f.type
+                  ) ? null : (
+                    <FormGroup className="gu-form-group">
+                      <Col sm={3}>
+                        <span className="gu-form-group-label">
+                          {getFieldProps('type').label}{' '}
+                          {getFieldProps('type').fieldTooltip}
                         </span>
-                      </div>
-                    </Col>
-                    <Col sm={2}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('decimal').label}{' '}
-                        {getFieldProps('decimal').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={1}>
-                      <div style={{ display: 'flex' }}>
-                        <span style={{ width: '100%' }}>
-                          <FormControl
-                            name={`frmDecimal_${layer.key}_f_${fieldObject.field}`}
-                            type="number"
-                            value={f.decimal}
-                            onChange={event =>
-                              this.handleChange(
-                                event,
-                                f.label,
-                                f.field,
-                                this.props.layerKey,
-                                'decimal',
-                                'text'
-                              )
-                            }
-                            min={1}
-                          />
+                      </Col>
+                      <Col sm={9}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ width: '100%' }}>
+                            <Select
+                              styles={{
+                                menuPortal: base => {
+                                  return { ...base, zIndex: 9999 };
+                                },
+                                menu: base => {
+                                  return { ...base, zIndex: 9999 };
+                                },
+                              }}
+                              name={f.field}
+                              multi={false}
+                              options={typeOpts}
+                              value={typeOpts?.find(o => o.value === f.type)}
+                              onChange={event =>
+                                this.handleChange(
+                                  event,
+                                  f.type,
+                                  f.field,
+                                  layerKey,
+                                  'type',
+                                  'select'
+                                )
+                              }
+                            />
+                          </span>
+                        </div>
+                      </Col>
+                    </FormGroup>
+                  )}
+                  {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
+                    <FormGroup className="gu-form-group">
+                      <Col sm={3}>
+                        <span className="gu-form-group-label">
+                          {getFieldProps('type').label}{' '}
+                          {getFieldProps('type').fieldTooltip}
                         </span>
-                      </div>
-                    </Col>
-                    <Col sm={2}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('canAdjust').label}{' '}
-                        {getFieldProps('canAdjust').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={1}>
-                      <Checkbox
-                        name={`frmChk_${layer.key}_f_${fieldObject.field}`}
-                        checked={toBool(f.canAdjust)}
-                        onChange={event =>
-                          this.handleChange(
-                            event,
-                            toBool(f.canAdjust),
-                            f.field,
-                            layerKey,
-                            'canAdjust',
-                            'checkbox'
-                          )
-                        }
-                      />
-                    </Col>
-                  </FormGroup>
-                ) : null}
-                {/* {renderDatetimeRange({ fieldObject })} */}
-                {groupOptions}
-                {tableOptions}
-                {selectOptions}
-                {formulaField}
-                {textFormula}
-                {['Element'].includes(genericType)
-                  ? renderRequired({
-                      layer,
-                      fieldObject,
-                      fnChange: this.handleChange,
-                    })
-                  : null}
-                {renderReadonly({
-                  layer,
-                  fieldObject,
-                  fnChange: this.handleChange,
-                })}
-                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type)
-                  ? renderTextFieldGroup({
-                      layer,
-                      fieldObject,
-                      field: 'placeholder',
-                      fnChange: this.handleChange,
-                    })
-                  : null}
-              </Form>
-            </Panel.Body>
-          </Panel.Collapse>
-        </Panel>
+                      </Col>
+                      <Col sm={3}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ width: '100%' }}>
+                            <Select
+                              styles={{
+                                menuPortal: base => {
+                                  return { ...base, zIndex: 9999 };
+                                },
+                                menu: base => {
+                                  return { ...base, zIndex: 9999 };
+                                },
+                              }}
+                              name={f.field}
+                              multi={false}
+                              options={typeOpts}
+                              value={typeOpts?.find(o => o.value === f.type)}
+                              onChange={event =>
+                                this.handleChange(
+                                  event,
+                                  f.type,
+                                  f.field,
+                                  layerKey,
+                                  'type',
+                                  'select'
+                                )
+                              }
+                            />
+                          </span>
+                        </div>
+                      </Col>
+                      <Col sm={2}>
+                        <span className="gu-form-group-label">
+                          {getFieldProps('decimal').label}{' '}
+                          {getFieldProps('decimal').fieldTooltip}
+                        </span>
+                      </Col>
+                      <Col sm={1}>
+                        <div style={{ display: 'flex' }}>
+                          <span style={{ width: '100%' }}>
+                            <FormControl
+                              name={`frmDecimal_${layer.key}_f_${fieldObject.field}`}
+                              type="number"
+                              value={f.decimal}
+                              onChange={event =>
+                                this.handleChange(
+                                  event,
+                                  f.label,
+                                  f.field,
+                                  this.props.layerKey,
+                                  'decimal',
+                                  'text'
+                                )
+                              }
+                              min={1}
+                            />
+                          </span>
+                        </div>
+                      </Col>
+                      <Col sm={2}>
+                        <span className="gu-form-group-label">
+                          {getFieldProps('canAdjust').label}{' '}
+                          {getFieldProps('canAdjust').fieldTooltip}
+                        </span>
+                      </Col>
+                      <Col sm={1}>
+                        <Checkbox
+                          name={`frmChk_${layer.key}_f_${fieldObject.field}`}
+                          checked={toBool(f.canAdjust)}
+                          onChange={event =>
+                            this.handleChange(
+                              event,
+                              toBool(f.canAdjust),
+                              f.field,
+                              layerKey,
+                              'canAdjust',
+                              'checkbox'
+                            )
+                          }
+                        />
+                      </Col>
+                    </FormGroup>
+                  ) : null}
+                  {/* {renderDatetimeRange({ fieldObject })} */}
+                  {groupOptions}
+                  {tableOptions}
+                  {selectOptions}
+                  {formulaField}
+                  {textFormula}
+                  {['Element'].includes(genericType)
+                    ? renderRequired({
+                        layer,
+                        fieldObject,
+                        fnChange: this.handleChange,
+                      })
+                    : null}
+                  {renderReadonly({
+                    layer,
+                    fieldObject,
+                    fnChange: this.handleChange,
+                  })}
+                  {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type)
+                    ? renderTextFieldGroup({
+                        layer,
+                        fieldObject,
+                        field: 'placeholder',
+                        fnChange: this.handleChange,
+                      })
+                    : null}
+                </Form>
+              </Panel.Body>
+            </Panel.Collapse>
+          </Panel>
+        </DroppablePanel>
       </div>
     );
   }
 
   render() {
-    return <Col md={12}>{this.renderComponent()}</Col>;
+    return (
+      <Col md={12} style={{ paddingLeft: '0px' }}>
+        {this.renderComponent()}
+      </Col>
+    );
   }
 }
 
@@ -680,7 +710,10 @@ ElementField.propTypes = {
   select_options: PropTypes.array.isRequired,
   position: PropTypes.number.isRequired,
   field: PropTypes.object.isRequired,
-  onMove: PropTypes.func.isRequired,
+  onMove: PropTypes.shape({
+    onField: PropTypes.func.isRequired,
+    onPosition: PropTypes.func.isRequired,
+  }).isRequired,
   onDelete: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   unitsSystem: PropTypes.array,

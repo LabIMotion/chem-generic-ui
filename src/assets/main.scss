@@ -3,6 +3,24 @@
 @use 'flow';
 @use 'modal';
 
+@mixin dnd-state($borderColor, $textColor, $opacity: 1) {
+  border: 2px dashed $borderColor;
+  color: $textColor;
+  opacity: $opacity;
+}
+
+.gu_can-drop {
+  @include dnd-state($color-can-drop, $color-can-drop);
+}
+
+.gu_is-over {
+  @include dnd-state($color-is-over, $color-is-over);
+}
+
+.gu_is-dragging {
+  opacity: 0.2;
+}
+
 .gu_btn_text_success {
   color: $color-btn-success;
 }
@@ -469,15 +487,13 @@
     }
   }
   &.can-drop {
-    border: 2px dashed $color-can-drop;
-    color: $color-can-drop;
+    @extend .gu_can-drop;
   }
   &.is-over {
-    border: 2px dashed $color-is-over;
-    color: $color-is-over;
+    @extend .gu_is-over;
   }
   &.is-dragging {
-    opacity: 0.2;
+    @extend .gu_is-dragging;
   }
 }
 
