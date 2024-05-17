@@ -212,7 +212,7 @@ export default class TableRecord extends React.Component {
           headerName: 'Short label',
           cellRenderer: DropLinkRenderer,
           cellParams: { sField: sF, onNavi },
-          width: '5vw',
+          width: '10vw',
         };
         colDefExt.push(addLink);
         const conf = (sF.value || '').split(';') || [];
