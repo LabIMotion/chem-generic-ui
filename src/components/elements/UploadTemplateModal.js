@@ -35,11 +35,10 @@ const UploadTemplateModal = props => {
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone
           onDrop={attach => handleUploadTemplate(attach)}
-          style={{ height: 50, width: '100%', border: '3px dashed lightgray' }}
+          className="gu-drop-zone"
+          style={{ height: 50 }}
         >
-          <div style={{ textAlign: 'center', paddingTop: 12, color: 'gray' }}>
-            Drop File, or Click to Select.
-          </div>
+          <div style={{ paddingTop: 12 }}>Drop File, or Click to Select.</div>
         </Dropzone>
       </Modal.Body>
     </Modal>

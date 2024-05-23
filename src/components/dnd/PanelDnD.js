@@ -11,6 +11,8 @@ import { v4 as uuid } from 'uuid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsAlt,
+  faFlask,
+  faPaperclip,
   faPlus,
   faMinus,
   faSitemap,
@@ -31,7 +33,6 @@ const PanelDnD = props => {
     type,
     layer,
     field,
-    rowValue,
     handleMove,
     id,
     handleChange,
@@ -81,49 +82,43 @@ const PanelDnD = props => {
     'panel_generic_heading_slim'
   );
 
-  const btnLinkAna = hasAi ? (
+  const createButton = (icon, tooltip, tooltipId, handleClick) => (
     <OverlayTrigger
       delayShow={1000}
       placement="top"
-      overlay={<Tooltip id="_tooltip_link_ana">link analysis</Tooltip>}
+      overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
     >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'ana-modal')}
-      >
-        <i className="fa fa-paperclip" aria-hidden="true" />
-      </Button>
-    </OverlayTrigger>
-  ) : null;
-
-  const btnAdd = (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id="_tooltip_add_layer">add layer</Tooltip>}
-    >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'layer-modal')}
-      >
-        <FontAwesomeIcon icon={faPlus} />
+      <Button bsSize="xsmall" onClick={handleClick}>
+        <FontAwesomeIcon icon={icon} />
       </Button>
     </OverlayTrigger>
   );
 
-  const btnRemove = (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id="_tooltip_remove_layer">remove layer</Tooltip>}
-    >
-      <Button
-        bsSize="xsmall"
-        onClick={event => handleChange(event, id, layer, 'layer-remove')}
-      >
-        <FontAwesomeIcon icon={faMinus} />
-      </Button>
-    </OverlayTrigger>
+  const btnLinkAna = hasAi
+    ? createButton(faPaperclip, 'link analysis', '_tooltip_link_ana', event =>
+        handleChange(event, id, layer, 'ana-modal')
+      )
+    : null;
+
+  const btnReaction = createButton(
+    faFlask,
+    'add reaction',
+    '_tooltip_layer_add_reaction',
+    event => handleChange(event, id, layer, 'layer-add-reaction')
+  );
+
+  const btnAdd = createButton(
+    faPlus,
+    'add layer',
+    '_tooltip_add_layer',
+    event => handleChange(event, id, layer, 'layer-modal')
+  );
+
+  const btnRemove = createButton(
+    faMinus,
+    'remove layer',
+    '_tooltip_remove_layer',
+    event => handleChange(event, id, layer, 'layer-remove')
   );
 
   const wfIcon = wf ? (
@@ -164,6 +159,7 @@ const PanelDnD = props => {
         value: timeRecord || '',
         onChange: onAttrChange,
       })}
+      {btnReaction}
       {btnLinkAna}
       {btnAdd}
     </ButtonGroup>
@@ -177,6 +173,7 @@ const PanelDnD = props => {
           value: timeRecord || '',
           onChange: onAttrChange,
         })}
+        {btnReaction}
         {btnLinkAna}
         {btnAdd}
         {btnRemove}

@@ -58,7 +58,7 @@ class ElementField extends Component {
   handleDrop = _params => {
     const { onMove } = this.props;
     const { source, target, rid } = _params;
-    onMove.onPosition(rid.key, target, source);
+    onMove.onPosition(rid.key, target, source.fid);
   };
 
   handlePanelToggle = () => {

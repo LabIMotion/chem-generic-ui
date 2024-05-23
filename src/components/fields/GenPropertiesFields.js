@@ -34,6 +34,7 @@ import { fieldCls, genUnitSup } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 import FieldUploadItem from './FieldUploadItem';
+import DropReaction from '../dnd/DropReaction';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -298,6 +299,10 @@ const GenDummy = () => (
   <FormGroup className="text_generic_properties">
     <FormControl type="text" className="dummy" readOnly />
   </FormGroup>
+);
+
+const GenDropReaction = opt => (
+  <DropReaction field={opt.f_obj} onNavi={opt.onNavi} onChange={opt.onChange} />
 );
 
 const GenLabel = (opt, value) => (
@@ -654,12 +659,11 @@ const GenPropertiesUpload = opt => {
               val: e,
             })
           }
-          style={{ height: 34, width: '100%', border: '3px dashed lightgray' }}
+          className="gu-drop-zone"
+          style={{ height: 34 }}
         >
           <div
             style={{
-              textAlign: 'center',
-              color: 'gray',
               textOverflow: 'ellipsis',
               overflow: 'hidden',
               whiteSpace: 'nowrap',
@@ -733,4 +737,5 @@ export {
   GenPropertiesTextArea,
   GenPropertiesUpload,
   GenWFNext,
+  GenDropReaction,
 };

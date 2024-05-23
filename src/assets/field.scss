@@ -38,3 +38,10 @@
     padding: 0.25rem 0.5rem;
   }
 }
+
+.gu-drop-zone {
+  border: 3px dashed $color-lightgray;
+  color: $color-grey;
+  text-align: center;
+  width: 100%;
+}

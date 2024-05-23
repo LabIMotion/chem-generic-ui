@@ -1,13 +1,26 @@
+/* eslint-disable react/forbid-prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 
-const DroppablePanel = ({ children, type, field: fid, rowValue: rid, fnCb }) => {
+const DroppablePanel = ({
+  children,
+  type,
+  field: fid,
+  rowValue: rid,
+  fnCb,
+}) => {
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: type,
-    canDrop: item => item.fid.field !== fid.field && item.rid.key === rid.key,
-    drop: (item, monitor) => {
-      // item: source, props: target
-      fnCb({ source: item.fid, target: fid, rid });
+    canDrop: item => {
+      if (type === 'element') {
+        // only allow drop reaction to sys-reaction field
+        return item.element.type === 'reaction' && rid.key === 'sys-reaction';
+      }
+      return item.fid.field !== fid.field && item.rid.key === rid.key;
+    },
+    drop: item => {
+      fnCb({ source: item, target: fid, rid });
     },
     collect: monitor => {
       return {
@@ -31,6 +44,17 @@ const DroppablePanel = ({ children, type, field: fid, rowValue: rid, fnCb }) => 
       {children}
     </div>
   );
+};
+
+DroppablePanel.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+  type: PropTypes.string.isRequired,
+  fnCb: PropTypes.func.isRequired,
+  field: PropTypes.object.isRequired,
+  rowValue: PropTypes.object.isRequired,
 };
 
 export default DroppablePanel;
