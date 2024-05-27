@@ -21,7 +21,7 @@ export const addLayer = (_generic, _source, _key) => {
     // re-count layer position
     sortedLayers.map((e, idx) => {
       const el = e;
-      el.position = idx;
+      el.position = (idx + 1) * 10;
       return el;
     });
 

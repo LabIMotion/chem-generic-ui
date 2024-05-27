@@ -26,7 +26,9 @@
     "comma-dangle": [1, "only-multiline"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", {
+      "arrowParens": "avoid"
+    }],
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "jest-dom/prefer-checked": "error",
     "jest-dom/prefer-enabled-disabled": "error",

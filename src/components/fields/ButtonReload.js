@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import reinventGeneric from '../tools/reinventGeneric';
+import { cloneDeep, sortBy } from 'lodash';
+import { importReaction, remodel } from '../../utils/template/remodel-handler';
+import { orgLayerObject } from '../tools/orten';
 
 const BTN_RELOAD_TIP = (
   <Tooltip id="_cgu_tooltip_reload">click to reload the template</Tooltip>
@@ -21,11 +23,22 @@ const ButtonReload = props => {
   }
 
   const handleReload = () => {
+    const original = cloneDeep(generic);
     let outGeneric = generic;
-    const output = reinventGeneric(generic, klass);
+    const output = remodel(generic, klass);
     if (output[1]) {
       outGeneric.properties = output[1];
       outGeneric.changed = true;
+      const importResult = importReaction(original, outGeneric);
+      if (importResult[0]) {
+        outGeneric = importResult[1];
+        const sortedLayers = sortBy(outGeneric.properties.layers, ['position']);
+        sortedLayers.map((e, ix) => {
+          e.position = (ix + 1) * 10;
+          return e;
+        });
+        outGeneric.properties.layers = orgLayerObject(sortedLayers);
+      }
     } else {
       outGeneric = output[1];
     }
