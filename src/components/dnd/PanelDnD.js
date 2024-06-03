@@ -131,7 +131,7 @@ const PanelDnD = props => {
     <OverlayTrigger
       delayShow={1000}
       placement="top"
-      overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}
+      overlay={<Tooltip id={uuid()}>Change position via drag and drop</Tooltip>}
     >
       <Button onClick={() => {}} bsSize="xsmall">
         <FontAwesomeIcon icon={faArrowsAlt} />

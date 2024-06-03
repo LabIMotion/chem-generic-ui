@@ -95,3 +95,30 @@ export const handlePositionChange = (_element, _layerKey, _target, _source) => {
   }
   return new Response(notifySuccess(), element);
 };
+
+export const handleLayerPositionChange = (_element, _target, _source) => {
+  const [element, target, source] = [_element, _target, _source];
+  const layers = { ...element.properties_template.layers }; // Create a copy of layers
+
+  const layerKeys = Object.keys(layers).sort(
+    (a, b) => layers[a].position - layers[b].position
+  );
+  const sourceIdx = layerKeys.indexOf(source.key);
+  const targetIdx = layerKeys.indexOf(target.key);
+  if (sourceIdx < 0 || targetIdx < 0) {
+    return new Response(notifySuccess(), element);
+  }
+  // Remove the source layer and insert it at the target position
+  const removedLayerKey = layerKeys.splice(sourceIdx, 1)[0];
+  layerKeys.splice(targetIdx, 0, removedLayerKey);
+
+  // Create a new layers object with the updated order
+  const newLayers = {};
+  layerKeys.forEach((key, idx) => {
+    newLayers[key] = layers[key];
+    newLayers[key].position = (idx + 1) * 10;
+  });
+
+  element.properties_template.layers = newLayers;
+  return new Response(notifySuccess(), element);
+};

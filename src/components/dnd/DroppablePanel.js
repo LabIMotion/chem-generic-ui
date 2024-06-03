@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import { FieldTypes } from 'generic-ui-core';
 
 const DroppablePanel = ({
   children,
@@ -15,7 +16,10 @@ const DroppablePanel = ({
     canDrop: item => {
       if (type === 'element') {
         // only allow drop reaction to sys-reaction field
-        return item.element.type === 'reaction' && rid.key === 'sys-reaction';
+        return (
+          item.element.type === 'reaction' &&
+          rid.key === FieldTypes.F_SYS_REACTION
+        );
       }
       return item.fid.field !== fid.field && item.rid.key === rid.key;
     },
@@ -30,9 +34,9 @@ const DroppablePanel = ({
     },
   });
 
-  const dropClass = `${isOver ? 'gu_is-over' : ''}${
-    isOverValidTarget ? ' gu_can-drop' : ''
-  }`;
+  const dropClass = `panel-heading template_panel_heading_reset ${
+    isOver ? ' gu_is-over' : ''
+  }${isOverValidTarget ? ' gu_can-drop' : ''}`;
   return (
     <div
       ref={drop}

@@ -1,11 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useDrag } from 'react-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsUpDownLeftRight } from '@fortawesome/free-solid-svg-icons';
+import { v4 as uuid } from 'uuid';
 
-const PositionDnD = ({ type, field: fid, rowValue: rid }) => {
+const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
   const [{ isDraggingSource }, drag] = useDrag({
     type,
     item: () => {
@@ -18,8 +20,29 @@ const PositionDnD = ({ type, field: fid, rowValue: rid }) => {
     },
   });
 
-  const dragClass = `btn ${isDraggingSource ? 'gu_is-dragging' : ''}`;
-  return (
+  const dragClass = `${isDraggingSource ? 'gu_is-dragging' : ''}`;
+
+  const moveIcon = _isDragging => (
+    <div ref={drag} className={dragClass}>
+      <OverlayTrigger
+        delayShow={1000}
+        placement="top"
+        overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}
+      >
+        <Button
+          bsSize="sm"
+          onClick={() => {}}
+          style={{ cursor: _isDragging ? 'grabbing' : 'grab' }}
+        >
+          <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
+        </Button>
+      </OverlayTrigger>
+    </div>
+  );
+
+  return isButton ? (
+    moveIcon(drag, isDraggingSource)
+  ) : (
     <div
       ref={drag}
       className={dragClass}

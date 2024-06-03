@@ -4,13 +4,14 @@
 @use 'modal';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
-  border: 2px dashed $borderColor;
-  color: $textColor;
-  opacity: $opacity;
+  border: 2px dashed $borderColor !important;
+  color: $textColor !important;
+  opacity: $opacity !important;
 }
 
 .gu_can-drop {
   @include dnd-state($color-can-drop, $color-can-drop);
+  cursor: copy;
 }
 
 .gu_is-over {
@@ -19,6 +20,7 @@
 
 .gu_is-dragging {
   opacity: 0.2;
+  cursor: not-allowed;
 }
 
 .gu_btn_text_success {
@@ -91,6 +93,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 5px 10px 5px 10px !important;
+  width: 100%;
+  // border-color: #ddd;
+  // background-color: #f5f5f5;
+  // color: #333333;
+}
+
+.template_panel_heading_reset {
+  padding: 0px;
+  border-bottom: unset;
+  border-top-left-radius: unset;
+  border-top-right-radius: unset;
 }
 
 .panel_generic_properties {
