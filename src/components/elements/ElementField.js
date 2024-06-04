@@ -468,7 +468,7 @@ class ElementField extends Component {
 
     return (
       <div>
-        <Panel style={{ width: '100%' }}>
+        <Panel style={{ width: '100%', marginLeft: '10px' }}>
           {addArrange(nodeHeader)}
           <Panel.Collapse>
             <Panel.Body>
