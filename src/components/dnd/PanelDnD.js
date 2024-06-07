@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
+import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
 
 const orderSource = {
@@ -131,6 +132,7 @@ const PanelDnD = props => {
   );
 
   const splitKey = key.split('.');
+  const isSys = key.startsWith(Constants.SYS_REACTION);
 
   const extHead =
     splitKey.length > 1 ? (
@@ -143,30 +145,34 @@ const PanelDnD = props => {
 
   const btnLayer = wf ? (
     <ButtonGroup className="pull-right gu_btn_broup_layer">
-      {GenPropertiesDate({
-        isSpCall: false,
-        isAtLayer: true,
-        label: '',
-        value: timeRecord || '',
-        onChange: onAttrChange,
-      })}
+      {isSys
+        ? null
+        : GenPropertiesDate({
+            isSpCall: false,
+            isAtLayer: true,
+            label: '',
+            value: timeRecord || '',
+            onChange: onAttrChange,
+          })}
       {btnReaction}
       {btnLinkAna}
-      {btnAdd}
+      {isSys ? null : btnAdd}
     </ButtonGroup>
   ) : (
     <ButtonGroup className="pull-right gu_btn_broup_layer">
       <div className="pull-right btn-group">
-        {GenPropertiesDate({
-          isSpCall: false,
-          isAtLayer: true,
-          label: '',
-          value: timeRecord || '',
-          onChange: onAttrChange,
-        })}
+        {isSys
+          ? null
+          : GenPropertiesDate({
+              isSpCall: false,
+              isAtLayer: true,
+              label: '',
+              value: timeRecord || '',
+              onChange: onAttrChange,
+            })}
         {btnReaction}
         {btnLinkAna}
-        {btnAdd}
+        {isSys ? null : btnAdd}
         {btnRemove}
         {moveIcon}
       </div>

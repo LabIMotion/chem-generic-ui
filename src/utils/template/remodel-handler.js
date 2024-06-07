@@ -2,6 +2,7 @@ import { findIndex, cloneDeep } from 'lodash';
 import { FieldTypes, genUnits } from 'generic-ui-core';
 import { toBool, toNum } from '../../components/tools/utils';
 import organizeSubValues from '../../components/tools/collate';
+import Constants from '../../components/tools/Constants';
 
 // current generic value, new klass value
 export const remodel = (generic, klass) => {
@@ -183,7 +184,7 @@ export const importReaction = (source, target) => {
     const srcLayers = srcProps.layers;
 
     const reactionLayers = Object.keys(srcLayers).filter(key =>
-      key.startsWith('REACTION-')
+      key.startsWith(Constants.SYS_REACTION)
     );
 
     // add these reaction layers to the target generic

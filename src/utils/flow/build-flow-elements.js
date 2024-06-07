@@ -10,7 +10,7 @@ import arrangedFlowElements from './arranged-flow-elements';
 export const removeReactionLayers = _layers => {
   const layers = cloneDeep(_layers || {});
   return Object.keys(layers).reduce((acc, key) => {
-    if (!key.startsWith('REACTION-')) {
+    if (!key.startsWith(Constants.SYS_REACTION)) {
       acc[key] = layers[key];
     }
     return acc;

@@ -10,6 +10,7 @@ export default Object.freeze({
     ALPINE: { VALUE: 'ag-theme-alpine', PAGE_SIZE: 6 },
     BALHAM: { VALUE: 'ag-theme-balham', PAGE_SIZE: 10 },
   },
+  SYS_REACTION: 'REACTION-',
   OLS_EBI: {
     BASE: 'https://www.ebi.ac.uk/ols4/api/select',
     PARAM: [
