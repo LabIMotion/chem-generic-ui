@@ -590,6 +590,12 @@
   }
 }
 
+.gu_date_picker-clear {
+  &::after {
+    background-color: $color-black !important;
+  }
+}
+
 .gu_date_picker_layer {
   display: inline-flex;
   line-height: normal;

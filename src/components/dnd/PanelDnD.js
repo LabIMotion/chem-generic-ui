@@ -98,21 +98,21 @@ const PanelDnD = props => {
 
   const btnReaction = createButton(
     FIcons.faFlask,
-    'add reaction',
+    'Add reaction',
     '_tooltip_layer_add_reaction',
     event => handleChange(event, id, layer, 'layer-add-reaction')
   );
 
   const btnAdd = createButton(
     FIcons.faPlus,
-    'add layer',
+    'Add layer',
     '_tooltip_add_layer',
     event => handleChange(event, id, layer, 'layer-modal')
   );
 
   const btnRemove = createButton(
     FIcons.faMinus,
-    'remove layer',
+    'Remove layer',
     '_tooltip_remove_layer',
     event => handleChange(event, id, layer, 'layer-remove')
   );

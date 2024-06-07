@@ -9,7 +9,7 @@ import FlowDesigner from '../flow/FlowDesigner';
 import FIcons from '../icons/FIcons';
 
 const BTN_FLOW_TIP = (
-  <Tooltip id="_cgu_tooltip_workflow">draw a workflow</Tooltip>
+  <Tooltip id="_cgu_tooltip_workflow">Draw a workflow</Tooltip>
 );
 
 const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {

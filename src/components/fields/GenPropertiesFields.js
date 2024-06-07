@@ -19,7 +19,6 @@ import {
   Tooltip,
 } from 'react-bootstrap';
 // import DatePicker, { registerLocale } from 'react-datepicker';
-import DatePicker from 'react-datepicker';
 // import ptBR from 'date-fns/locale/pt-BR';
 import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
@@ -35,6 +34,7 @@ import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 import FieldUploadItem from './FieldUploadItem';
 import DropReaction from '../dnd/DropReaction';
+import ButtonDatePicker from './ButtonDatePicker';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -162,23 +162,11 @@ const GenPropertiesDate = opt => {
   const newVal =
     opt.value &&
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
-  // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
   return (
     <FormGroup className={klz[0]}>
       {FieldHeader(opt)}
       <div className={klzLayer}>
-        <DatePicker
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          timeCaption="Time"
-          dateFormat="dd/MM/yyyy HH:mm"
-          // locale="ptBR"
-          selected={newVal}
-          onSelect={opt.onChange} // when day is clicked
-          onChange={opt.onChange} // only when value has changed
-          placeholderText="DD/MM/YYYY hh:mm"
-        />
+        <ButtonDatePicker onChange={opt.onChange} val={newVal} />
       </div>
     </FormGroup>
   );

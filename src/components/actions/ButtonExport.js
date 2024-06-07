@@ -5,7 +5,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
 
 const BTN_EXPORT_TIP = (
-  <Tooltip id="_cgu_tooltip_export">click to export as docx file</Tooltip>
+  <Tooltip id="_cgu_tooltip_export">Export as docx file</Tooltip>
 );
 
 const ButtonExport = props => {

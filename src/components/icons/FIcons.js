@@ -18,12 +18,14 @@ import {
   faPlus,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 const icons = {
   faArrowsAlt,
   faArrowsRotate,
   faArrowsUpDownLeftRight,
   faBan,
+  faClock,
   faCircleCheck,
   faCirclePlus,
   faDiagramProject,
