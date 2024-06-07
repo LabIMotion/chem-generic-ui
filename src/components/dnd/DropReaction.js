@@ -1,12 +1,11 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faFlask } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'react-bootstrap';
 import SvgFileZoomPan from 'react-svg-file-zoom-pan';
 import DroppablePanel from './DroppablePanel';
 import Constants from '../tools/Constants';
+import FIcons from '../icons/FIcons';
 
 const DropReaction = props => {
   const { field: fObj, onNavi, onChange } = props;
@@ -33,9 +32,7 @@ const DropReaction = props => {
 
   const reactionError = (
     <>
-      <span style={{ color: 'red' }}>
-        <FontAwesomeIcon icon={faBan} />
-      </span>
+      <span style={{ color: 'red' }}>{FIcons.faBan}</span>
       &nbsp; Reaction is not accessible.
     </>
   );
@@ -57,7 +54,7 @@ const DropReaction = props => {
       className="gu-drop-zone"
       style={{ alignContent: 'center', height: 68 }}
     >
-      Drop Reaction <FontAwesomeIcon icon={faFlask} /> Here
+      Drop Reaction {FIcons.faFlask} Here
     </div>
   );
 

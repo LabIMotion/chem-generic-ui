@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Panel } from 'react-bootstrap';
 import Draggable from 'react-draggable';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import FlowView from './FlowView';
+import FIcons from '../icons/FIcons';
 
 const FlowViewerModal = props => {
   const { show, data, fnHide } = props;
@@ -50,7 +49,7 @@ const FlowViewerModal = props => {
               className="gu_button_right"
               onClick={fnHide}
             >
-              <FontAwesomeIcon icon={faTimes} />
+              {FIcons.faTimes}
             </Button>
           </Panel.Heading>
           <Panel.Body>

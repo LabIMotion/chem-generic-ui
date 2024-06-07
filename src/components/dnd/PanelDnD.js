@@ -8,16 +8,8 @@ import {
   Button,
 } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowsAlt,
-  faFlask,
-  faPaperclip,
-  faPlus,
-  faMinus,
-  faSitemap,
-} from '@fortawesome/free-solid-svg-icons';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
+import FIcons from '../icons/FIcons';
 
 const orderSource = {
   canDrag(props) {
@@ -89,43 +81,42 @@ const PanelDnD = props => {
       overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
     >
       <Button bsSize="xsmall" onClick={handleClick}>
-        <FontAwesomeIcon icon={icon} />
+        {icon}
       </Button>
     </OverlayTrigger>
   );
 
   const btnLinkAna = hasAi
-    ? createButton(faPaperclip, 'link analysis', '_tooltip_link_ana', event =>
-        handleChange(event, id, layer, 'ana-modal')
+    ? createButton(
+        FIcons.faPaperclip,
+        'link analysis',
+        '_tooltip_link_ana',
+        event => handleChange(event, id, layer, 'ana-modal')
       )
     : null;
 
   const btnReaction = createButton(
-    faFlask,
+    FIcons.faFlask,
     'add reaction',
     '_tooltip_layer_add_reaction',
     event => handleChange(event, id, layer, 'layer-add-reaction')
   );
 
   const btnAdd = createButton(
-    faPlus,
+    FIcons.faPlus,
     'add layer',
     '_tooltip_add_layer',
     event => handleChange(event, id, layer, 'layer-modal')
   );
 
   const btnRemove = createButton(
-    faMinus,
+    FIcons.faMinus,
     'remove layer',
     '_tooltip_remove_layer',
     event => handleChange(event, id, layer, 'layer-remove')
   );
 
-  const wfIcon = wf ? (
-    <span>
-      <FontAwesomeIcon icon={faSitemap} />
-    </span>
-  ) : null;
+  const wfIcon = wf ? <span>{FIcons.faDiagramProject}</span> : null;
 
   const moveIcon = (
     <OverlayTrigger
@@ -134,7 +125,7 @@ const PanelDnD = props => {
       overlay={<Tooltip id={uuid()}>Change position via drag and drop</Tooltip>}
     >
       <Button onClick={() => {}} bsSize="xsmall">
-        <FontAwesomeIcon icon={faArrowsAlt} />
+        {FIcons.faArrowsUpDownLeftRight}
       </Button>
     </OverlayTrigger>
   );

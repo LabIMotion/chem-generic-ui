@@ -5,6 +5,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { cloneDeep, sortBy } from 'lodash';
 import { importReaction, remodel } from '../../utils/template/remodel-handler';
 import { orgLayerObject } from '../tools/orten';
+import FIcons from '../icons/FIcons';
 
 const BTN_RELOAD_TIP = (
   <Tooltip id="_cgu_tooltip_reload">click to reload the template</Tooltip>
@@ -48,8 +49,8 @@ const ButtonReload = props => {
 
   return (
     <OverlayTrigger placement="top" overlay={BTN_RELOAD_TIP}>
-      <Button bsSize="xsmall" bsStyle="primary" onClick={() => handleReload()}>
-        <i className="fa fa-refresh" aria-hidden="true" /> Reload
+      <Button bsSize="sm" bsStyle="primary" onClick={() => handleReload()}>
+        {FIcons.faArrowsRotate} Reload
       </Button>
     </OverlayTrigger>
   );

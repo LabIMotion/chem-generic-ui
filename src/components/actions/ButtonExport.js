@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import FIcons from '../icons/FIcons';
 
 const BTN_EXPORT_TIP = (
   <Tooltip id="_cgu_tooltip_export">click to export as docx file</Tooltip>
@@ -17,8 +18,8 @@ const ButtonExport = props => {
 
   return (
     <OverlayTrigger placement="top" overlay={BTN_EXPORT_TIP}>
-      <Button bsSize="xsmall" bsStyle="primary" onClick={() => handleExport()}>
-        <i className="fa fa-download" aria-hidden="true" /> Export
+      <Button bsSize="sm" bsStyle="primary" onClick={() => handleExport()}>
+        {FIcons.faFileWord} Export
       </Button>
     </OverlayTrigger>
   );
