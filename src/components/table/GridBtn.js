@@ -41,9 +41,7 @@ DelRowBtn.propTypes = {
 };
 
 const NullRowBtn = () => (
-  <div className="grid-btn-none">
-    <span className="fa fa-arrows" />
-  </div>
+  <div className="grid-btn-none">{FIcons.faArrowsUpDownLeftRight}</div>
 );
 
 const DnDRowBtn = ({ moveRow, field, type, node }) => (

@@ -245,7 +245,7 @@ const GenPropertiesDrop = opt => {
   }
   const defaultIcon =
     opt.type === 'drag_element' ? (
-      <span className="fa fa-link icon_generic_nav indicator" />
+      <span className="indicator">{FIcons.faLink}</span>
     ) : (
       <span className="icon-sample indicator" />
     );
