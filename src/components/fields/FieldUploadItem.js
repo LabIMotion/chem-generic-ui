@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 import { downloadFile } from 'generic-ui-core';
+import FIcons from '../icons/FIcons';
 
 const FieldUploadItem = ({ opt, attachment }) => {
   const [secondImgSrc, setSecondImgSrc] = useState('');
@@ -53,7 +54,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
     >
-      <i className="fa fa-times" aria-hidden="true" />
+      {FIcons.faTimes}
     </Button>
   );
 

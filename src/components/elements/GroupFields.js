@@ -5,9 +5,12 @@ import React from 'react';
 import { Button, FormGroup, FormControl } from 'react-bootstrap';
 import GenericSubField from '../models/GenericSubField';
 import DefinedRenderer from './DefinedRenderer';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary"><i className="fa fa-plus" aria-hidden="true" /></Button>
+  <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
+    {FIcons.faPlus}
+  </Button>
 );
 
 AddRowBtn.propTypes = { addRow: PropTypes.func.isRequired };
@@ -17,7 +20,11 @@ const DelRowBtn = ({ delRow, node }) => {
   const btnClick = () => {
     delRow(data);
   };
-  return (<Button onClick={btnClick} bsSize="xsmall"><i className="fa fa-times" aria-hidden="true" /></Button>);
+  return (
+    <Button onClick={btnClick} bsSize="xsmall">
+      {FIcons.faTimes}
+    </Button>
+  );
 };
 
 DelRowBtn.propTypes = { delRow: PropTypes.func.isRequired, node: PropTypes.object.isRequired };

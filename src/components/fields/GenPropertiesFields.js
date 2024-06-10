@@ -35,6 +35,7 @@ import TableRecord from '../table/TableRecord';
 import FieldUploadItem from './FieldUploadItem';
 import DropReaction from '../dnd/DropReaction';
 import ButtonDatePicker from './ButtonDatePicker';
+import FIcons from '../icons/FIcons';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -105,7 +106,7 @@ const GenPropertiesCalculate = opt => {
               className="clipboardBtn"
               onClick={() => opt.onChange(showTxt)}
             >
-              <i className="fa fa-arrow-right" aria-hidden="true" />
+              {FIcons.faArrowRight}
             </Button>
           </OverlayTrigger>
         </InputGroup.Button>
@@ -273,7 +274,7 @@ const GenPropertiesDrop = opt => {
                 bsSize="xsmall"
                 onClick={() => opt.onChange({})}
               >
-                <i className="fa fa-trash-o" aria-hidden="true" />
+                {FIcons.faTrashCan}
               </Button>
             </OverlayTrigger>
           </div>
@@ -579,7 +580,7 @@ const renderListGroupItem = (opt, attachment) => {
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
     >
-      <i className="fa fa-times" aria-hidden="true" />
+      {FIcons.faTimes}
     </Button>
   );
   const filename = attachment.aid ? (

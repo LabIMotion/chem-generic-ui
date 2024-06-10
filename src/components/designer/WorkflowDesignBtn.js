@@ -38,7 +38,7 @@ const WorkflowDesignBtn = props => {
         }
       >
         <Button bsSize="xs" onClick={() => setShow(true)}>
-          Workflow&nbsp;{FIcons.faDiagramProject}
+          {FIcons.faDiagramProject}&nbsp;Workflow
         </Button>
       </OverlayTrigger>
       <WorkflowModal genericType={genericType} showProps={{ show, setShow }}>

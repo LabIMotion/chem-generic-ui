@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import GridDnD from '../dnd/GridDnD';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
   <OverlayTrigger
@@ -12,7 +13,7 @@ const AddRowBtn = ({ addRow }) => (
     overlay={<Tooltip id={uuid()}>add entry</Tooltip>}
   >
     <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
-      <i className="fa fa-plus" aria-hidden="true" />
+      {FIcons.faPlus}
     </Button>
   </OverlayTrigger>
 );
@@ -28,7 +29,7 @@ const DelRowBtn = ({ delRow, node }) => {
       overlay={<Tooltip id={uuid()}>remove</Tooltip>}
     >
       <Button onClick={() => delRow(data)} bsSize="xsmall">
-        <i className="fa fa-times" aria-hidden="true" />
+        {FIcons.faMinus}
       </Button>
     </OverlayTrigger>
   );

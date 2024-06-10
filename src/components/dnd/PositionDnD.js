@@ -26,7 +26,7 @@ const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
       <OverlayTrigger
         delayShow={1000}
         placement="top"
-        overlay={<Tooltip id={uuid()}>drag and drop to move position</Tooltip>}
+        overlay={<Tooltip id={uuid()}>Drag and drop to move position</Tooltip>}
       >
         <Button
           bsSize="sm"

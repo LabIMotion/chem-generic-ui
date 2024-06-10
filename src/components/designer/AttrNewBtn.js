@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import AttrModal from '../elements/AttrModal';
 import Constants from '../tools/Constants';
+import FIcons from '../icons/FIcons';
 
 const AttrNewBtn = props => {
   const { fnCreate, genericType, klasses } = props;
@@ -17,13 +18,12 @@ const AttrNewBtn = props => {
         placement="top"
         overlay={
           <Tooltip id="_tooltip_element_new">
-            create a new {genericType}
+            Create a new {genericType}
           </Tooltip>
         }
       >
         <Button onClick={() => setShow(true)}>
-          New {genericType}&nbsp;
-          <i className="fa fa-plus" aria-hidden="true" />
+          {FIcons.faPlus}&nbsp;New {genericType}
         </Button>
       </OverlayTrigger>
       <AttrModal

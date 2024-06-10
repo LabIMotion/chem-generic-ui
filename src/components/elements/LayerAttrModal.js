@@ -50,10 +50,10 @@ const LayerAttrModal = props => {
         button = (
           <Button
             key={`_layer_attr_modal_btn_${_action}`}
-            bsStyle="primary"
+            bsStyle="warning"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
-            Create&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Create
           </Button>
         );
         break;
@@ -61,10 +61,10 @@ const LayerAttrModal = props => {
         button = (
           <Button
             key={`_layer_attr_modal_btn_${_action}`}
-            bsStyle="primary"
+            bsStyle="warning"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
-            Update&nbsp; <i className="fa fa-save" aria-hidden="true" />
+            Update
           </Button>
         );
         break;
@@ -102,8 +102,8 @@ const LayerAttrModal = props => {
           <LayerAttrForm ref={formRef} layer={layer} isAttrOnWF={isAttrOnWF} />
           <FormGroup>
             {addActions()}
-            <Button bsStyle="warning" onClick={() => setShow(false)}>
-              Cancel
+            <Button bsStyle="primary" onClick={() => setShow(false)}>
+              Close
             </Button>
           </FormGroup>
         </div>

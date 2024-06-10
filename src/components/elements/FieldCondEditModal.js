@@ -12,10 +12,11 @@ import { cloneDeep } from 'lodash';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
 import GenericSubField from '../models/GenericSubField';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
   <Button active onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
-    <i className="fa fa-plus" aria-hidden="true" />
+    {FIcons.faPlus}
   </Button>
 );
 
@@ -28,7 +29,7 @@ const DelRowBtn = ({ delRow, node }) => {
   };
   return (
     <Button active onClick={btnClick} bsSize="xsmall" bsStyle="danger">
-      <i className="fa fa-trash" aria-hidden="true" />
+      {FIcons.faTrashCan}
     </Button>
   );
 };

@@ -39,6 +39,7 @@ import {
 import PositionDnD from '../dnd/PositionDnD';
 import DroppablePanel from '../dnd/DroppablePanel';
 import DnDs from '../dnd/DnDs';
+import FIcons from '../icons/FIcons';
 
 class ElementField extends Component {
   constructor(props) {
@@ -156,9 +157,7 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button bsSize="xs">
-          <i className="fa fa-table" aria-hidden="true" />
-        </Button>
+        <Button bsSize="xs">{FIcons.faTableCells}</Button>
       </OverlayTrigger>
     );
   }
@@ -192,9 +191,7 @@ class ElementField extends Component {
         trigger="focus"
         overlay={popover}
       >
-        <Button bsSize="xs">
-          <i className="fa fa-trash-o" aria-hidden="true" />
-        </Button>
+        <Button bsSize="xs">{FIcons.faTrashCan}</Button>
       </OverlayTrigger>
     );
   }
@@ -426,7 +423,7 @@ class ElementField extends Component {
             tip="Move Up"
             fnClick={this.handleMove}
             element={{ l: layerKey, f: f.field, isUp: true }}
-            fa="fa-arrow-up"
+            fa="faArrowUp"
             place="top"
             disabled={position === 1}
           />
@@ -434,7 +431,7 @@ class ElementField extends Component {
             tip="Move Down"
             fnClick={this.handleMove}
             element={{ l: layerKey, f: f.field, isUp: false }}
-            fa="fa-arrow-down"
+            fa="faArrowDown"
             place="top"
           />
           {this.renderDeleteButton('Field', f.field, layerKey)}
@@ -442,7 +439,7 @@ class ElementField extends Component {
             tip="Add Dummy field"
             fnClick={this.handleAddDummy}
             element={{ layerKey, field: f.field }}
-            fa="fa fa-plus-circle"
+            fa="faSquare"
             place="top"
           />
           <PositionDnD

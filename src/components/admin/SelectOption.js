@@ -45,7 +45,7 @@ export default class SelectOption extends Component {
             <ButtonTooltip
               tip="Add new option"
               fnClick={() => this.handleCreate()}
-              fa="fa-plus"
+              fa="faPlus"
               size="sm"
             />
           </InputGroup.Button>

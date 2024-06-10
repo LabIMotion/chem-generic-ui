@@ -11,6 +11,7 @@ import { filter } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from './FieldHeader';
 import { fieldCls, toBool, toNullOrInt } from '../tools/utils';
+import FIcons from '../icons/FIcons';
 
 const PropCalculate = opt => {
   const {
@@ -105,7 +106,7 @@ const PropCalculate = opt => {
                 className="clipboardBtn"
                 onClick={() => onChange(showTxt)}
               >
-                <i className="fa fa-arrow-right" aria-hidden="true" />
+                {FIcons.faArrowRight}
               </Button>
             </OverlayTrigger>
           </InputGroup.Button>

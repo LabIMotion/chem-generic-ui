@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
+import FIcons from '../icons/FIcons';
 
 const ButtonTooltipFA = props => {
   const { tip } = props;
@@ -23,8 +24,8 @@ const ButtonTooltipFA = props => {
           onClick={() => fnClick(element)}
           disabled={disabled}
         >
-          {content}
           {icon}
+          {content}
         </Button>
       </OverlayTrigger>
     );
@@ -38,8 +39,8 @@ const ButtonTooltipFA = props => {
         onClick={() => fnClick(element)}
         disabled={disabled}
       >
-        {content}
         {icon}
+        {content}
       </Button>
     </OverlayTrigger>
   );
@@ -62,7 +63,7 @@ ButtonTooltipFA.defaultProps = {
   bs: '',
   size: 'xs',
   place: 'top',
-  icon: <Glyphicon glyph="export" />,
+  icon: FIcons.faFileExport,
   disabled: false,
   txt: null,
   element: {},

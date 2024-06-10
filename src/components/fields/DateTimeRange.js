@@ -17,6 +17,7 @@ import moment from 'moment';
 import 'moment-precise-range-plugin';
 import { genUnit, genUnits, unitConversion } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
+import FIcons from '../icons/FIcons';
 
 const DateTimeRangeFields = [
   'timeStart',
@@ -148,7 +149,7 @@ const DateTimeRange = props => {
                   dataChange({ field: 'timeStart', event: 'setCurrent' })
                 }
               >
-                <i className="fa fa-clock-o" aria-hidden="true" />
+                {FIcons.faClock}
               </Button>
             </InputGroup.Button>
           </InputGroup>
@@ -172,7 +173,7 @@ const DateTimeRange = props => {
                   dataChange({ field: 'timeStop', event: 'setCurrent' })
                 }
               >
-                <i className="fa fa-clock-o" aria-hidden="true" />
+                {FIcons.faClock}
               </Button>
             </InputGroup.Button>
           </InputGroup>
@@ -203,7 +204,7 @@ const DateTimeRange = props => {
                     navigator.clipboard.writeText(calc);
                   }}
                 >
-                  <i className="fa fa-clipboard" aria-hidden="true" />
+                  {FIcons.faPaste}
                 </Button>
               </OverlayTrigger>
               <OverlayTrigger
@@ -223,7 +224,7 @@ const DateTimeRange = props => {
                     dataChange({ field: 'duration', event: 'copyTo' })
                   }
                 >
-                  <i className="fa fa-arrow-right" aria-hidden="true" />
+                  {FIcons.faArrowRight}
                 </Button>
               </OverlayTrigger>
             </InputGroup.Button>

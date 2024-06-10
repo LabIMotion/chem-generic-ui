@@ -19,7 +19,7 @@ const NewFieldBtn = props => {
         name="field_new"
         placeholder="Input new field name"
         bsSize="sm"
-        onChange={(e) => onInputNewField(e)}
+        onChange={e => onInputNewField(e)}
         style={{ maxWidth: '140px' }}
       />
       <InputGroup.Button>
@@ -27,7 +27,7 @@ const NewFieldBtn = props => {
           tip="Add new field"
           fnClick={fnUpdate}
           element={{ layer, newFieldKey }}
-          fa="fa fa-plus"
+          fa="faPlus"
           place="top"
           size="sm"
         />

@@ -147,7 +147,7 @@ const PropLayers = props => {
                 tip="Add Dummy field"
                 fnClick={onDummyAdd}
                 element={{ layerKey, field: null }}
-                fa="fa fa-plus-circle"
+                fa="faSquare"
                 place="top"
                 size="sm"
               />

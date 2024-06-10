@@ -15,7 +15,6 @@ const renderWFLayerMark = props =>
 
 const TemplateRenderer = params => {
   const { data, fnShow, node } = params;
-  const fa = ['fa-file-text', 'fa-file-code-o'];
 
   const onShow = e => {
     node.setSelected(true, true);
@@ -25,8 +24,8 @@ const TemplateRenderer = params => {
   return (
     <span>
       <ButtonTooltip
-        tip="edit template"
-        fa={fa[0]}
+        tip="Edit template"
+        fa="faFileLines"
         element={data}
         fnClick={onShow}
       />

@@ -6,10 +6,11 @@ import { Button } from 'react-bootstrap';
 import GenericSubField from '../models/GenericSubField';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
+import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
   <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
-    <i className="fa fa-plus" aria-hidden="true" />
+    {FIcons.faPlus}
   </Button>
 );
 
@@ -22,7 +23,7 @@ const DelRowBtn = ({ delRow, node }) => {
   };
   return (
     <Button onClick={btnClick} bsSize="xsmall">
-      <i className="fa fa-times" aria-hidden="true" />
+      {FIcons.faMinus}
     </Button>
   );
 };

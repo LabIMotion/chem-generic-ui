@@ -1,6 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import FIcons from '../icons/FIcons';
 
 const TermLink = _ontology => {
   if (!_ontology) return null;
@@ -23,7 +24,7 @@ const TermLink = _ontology => {
         target="_blank"
         onClick={e => e.stopPropagation()}
       >
-        <i className="fa fa-question-circle" aria-hidden="true" />
+        {FIcons.faCircleQuestion}
       </Button>
     </OverlayTrigger>
   );

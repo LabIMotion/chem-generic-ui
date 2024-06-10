@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import LayerAttrModal from '../elements/LayerAttrModal';
+import FIcons from '../icons/FIcons';
 
 const LayerAttrEditBtn = props => {
   const { fnUpdate, isAttrOnWF, layer } = props;
@@ -14,12 +15,12 @@ const LayerAttrEditBtn = props => {
         placement="top"
         overlay={
           <Tooltip id="_tooltip_layer_edit">
-            edit layer: {layer.label} attributes
+            Edit layer: {layer.label} attributes
           </Tooltip>
         }
       >
         <Button bsSize="sm" onClick={() => setShow(true)}>
-          <i className="fa fa-pencil" aria-hidden="true" />
+          {FIcons.faPencil}
         </Button>
       </OverlayTrigger>
       <LayerAttrModal

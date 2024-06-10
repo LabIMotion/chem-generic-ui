@@ -126,7 +126,7 @@ export default class Preview extends Component {
           msg="Retrieve this version?"
           fnClick={this.retrieveRevision}
           fnParams={{ id: v.id }}
-          fa="fa-reply"
+          fa="faReply"
           bs="default"
           place="top"
         />
@@ -136,7 +136,7 @@ export default class Preview extends Component {
           tip="Download this version"
           fnClick={this.dlRevision}
           element={{ id: v.id }}
-          fa="fa-download"
+          fa="faDownload"
           place="top"
           bs="default"
         />
@@ -154,10 +154,10 @@ export default class Preview extends Component {
             {dl}
             {ret}
             <ButtonTooltip
-              tip="Preview this version"
+              tip="View this version"
               fnClick={this.compare}
               element={{ uuid: v.uuid }}
-              fa="fa-clock-o"
+              fa="faEye"
               place="top"
               bs="default"
             />
@@ -206,7 +206,10 @@ export default class Preview extends Component {
       </Col>
     );
     const contentCol = fullScreen ? 12 : 8;
-    const screenFa = fullScreen ? 'compress' : 'expand';
+    const screenFa = fullScreen
+      ? 'faDownLeftAndUpRightToCenter'
+      : 'faUpRightAndDownLeftFromCenter';
+    const tip = fullScreen ? 'Exit full screen' : 'Full screen';
     return (
       <div>
         {his}
@@ -214,17 +217,16 @@ export default class Preview extends Component {
           <div style={{ margin: '10px 0px' }}>
             <div style={{ float: 'right' }}>
               <ButtonTooltip
-                tip={screenFa}
+                tip={tip}
                 fnClick={this.setScreen}
                 element={!fullScreen}
-                fa={`fa-${screenFa}`}
+                fa={screenFa}
                 place="left"
                 bs="default"
               />
             </div>
             <Badge style={{ backgroundColor: '#ffc107', color: 'black' }}>
-              <i className="fa fa-exclamation-circle" aria-hidden="true" />
-              &nbsp;Sketch Map, the data input here will not be saved.
+              Sketch Map: The data input here will not be saved.
             </Badge>
           </div>
           <div style={{ width: '100%', minHeight: '50vh' }}>{layersLayout}</div>
