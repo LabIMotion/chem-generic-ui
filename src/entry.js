@@ -13,6 +13,7 @@ export { default as GenInterface } from './components/details/GenInterface';
 export { default as GenGridBase } from './components/details/GenGridBase';
 export { default as FlowViewerModal } from './components/flow/FlowViewerModal'; // be used in App as a global FlowViewer modal
 export { default as Workflow } from './components/flow/Workflow';
+export { default as GenFlowViewerBtn } from './components/flow/FlowViewerBtn';
 // export { default as GenInterfaceSP } from './components/details/GenInterfaceSP';
 export { buildInitWF } from './components/tools/orten';
 export { default as GenericElCriteriaModal } from './components/elements/GenericElCriteriaModal';
