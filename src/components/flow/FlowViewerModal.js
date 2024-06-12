@@ -28,7 +28,7 @@ const FlowViewerModal = props => {
 
   if (!hasFlow && !hasFlowObject) {
     return (
-      <Modal show={show} bsSize="small" onHide={fnHide}>
+      <Modal show={show} bsSize="sm" onHide={fnHide}>
         <Modal.Header closeButton>
           <Modal.Title>{`${shortLabel} workflow`}</Modal.Title>
         </Modal.Header>
@@ -45,7 +45,7 @@ const FlowViewerModal = props => {
             {`${shortLabel} workflow`}
             <Button
               bsStyle="danger"
-              bsSize="xsmall"
+              bsSize="gxs"
               className="gu_button_right"
               onClick={fnHide}
             >

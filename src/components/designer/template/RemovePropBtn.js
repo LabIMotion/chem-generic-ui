@@ -41,7 +41,7 @@ const RemovePropBtn = props => {
       {msg} <br />
       <div className="btn-toolbar">
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="danger"
           aria-hidden="true"
           onClick={onClick}
@@ -51,7 +51,7 @@ const RemovePropBtn = props => {
         </Button>
         <span>&nbsp;&nbsp;</span>
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="warning"
           data-testid="template-remove-no-btn"
         >

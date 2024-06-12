@@ -47,7 +47,7 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
   return (
     <>
       <OverlayTrigger placement="top" overlay={BTN_FLOW_TIP}>
-        <Button bsSize="small" bsStyle="primary" onClick={() => setShow(true)}>
+        <Button bsSize="sm" bsStyle="primary" onClick={() => setShow(true)}>
           {FIcons.faPencil} Draw Flow
         </Button>
       </OverlayTrigger>

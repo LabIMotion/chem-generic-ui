@@ -2,6 +2,7 @@
 @use 'flow-default';
 @use 'flow';
 @use 'modal';
+@use 'gui';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
   border: 2px dashed $borderColor !important;

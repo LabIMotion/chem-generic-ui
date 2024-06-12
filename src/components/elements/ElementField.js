@@ -157,7 +157,7 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button bsSize="xs">{FIcons.faTableCells}</Button>
+        <Button bsSize="gxs">{FIcons.faTableCells}</Button>
       </OverlayTrigger>
     );
   }
@@ -169,14 +169,14 @@ class ElementField extends Component {
         {msg} <br />
         <div className="btn-toolbar">
           <Button
-            bsSize="xsmall"
+            bsSize="sm"
             bsStyle="danger"
             onClick={() => this.handelDelete(delStr, delKey, delRoot)}
           >
             Yes
           </Button>
           <span>&nbsp;&nbsp;</span>
-          <Button bsSize="xsmall" bsStyle="warning" onClick={this.handleClick}>
+          <Button bsSize="sm" bsStyle="warning" onClick={this.handleClick}>
             No
           </Button>
         </div>
@@ -191,7 +191,7 @@ class ElementField extends Component {
         trigger="focus"
         overlay={popover}
       >
-        <Button bsSize="xs">{FIcons.faTrashCan}</Button>
+        <Button bsSize="gxs">{FIcons.faTrashCan}</Button>
       </OverlayTrigger>
     );
   }
@@ -426,6 +426,7 @@ class ElementField extends Component {
             fa="faArrowUp"
             place="top"
             disabled={position === 1}
+            size="sm"
           />
           <ButtonTooltip
             tip="Move Down"
@@ -433,6 +434,7 @@ class ElementField extends Component {
             element={{ l: layerKey, f: f.field, isUp: false }}
             fa="faArrowDown"
             place="top"
+            size="sm"
           />
           {this.renderDeleteButton('Field', f.field, layerKey)}
           <ButtonTooltip
@@ -441,6 +443,7 @@ class ElementField extends Component {
             element={{ layerKey, field: f.field }}
             fa="faSquare"
             place="top"
+            size="sm"
           />
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}

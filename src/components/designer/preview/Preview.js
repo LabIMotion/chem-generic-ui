@@ -119,6 +119,7 @@ export default class Preview extends Component {
             fnParams={{ id: v.id, data, uuid: v.uuid }}
             bs="default"
             place="top"
+            size="sm"
           />
         ) : null;
       const ret = v.released_at ? (
@@ -129,6 +130,7 @@ export default class Preview extends Component {
           fa="faReply"
           bs="default"
           place="top"
+          size="sm"
         />
       ) : null;
       const dl = canDL ? (
@@ -139,6 +141,7 @@ export default class Preview extends Component {
           fa="faDownload"
           place="top"
           bs="default"
+          size="sm"
         />
       ) : null;
       return (
@@ -160,6 +163,7 @@ export default class Preview extends Component {
               fa="faEye"
               place="top"
               bs="default"
+              size="sm"
             />
           </div>
         </div>
@@ -223,6 +227,7 @@ export default class Preview extends Component {
                 fa={screenFa}
                 place="left"
                 bs="default"
+                size="sm"
               />
             </div>
             <Badge style={{ backgroundColor: '#ffc107', color: 'black' }}>

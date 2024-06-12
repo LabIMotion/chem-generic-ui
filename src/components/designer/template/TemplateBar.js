@@ -67,7 +67,7 @@ const TemplateBar = props => {
             <b>{notify.title}</b>
             {`: ${notify.msg}`}
           </span>
-          <Button bsSize="xsmall" onClick={onClick}>
+          <Button bsSize="sm" onClick={onClick}>
             {FIcons.faTimes}
           </Button>
         </span>

@@ -12,7 +12,7 @@ const AddRowBtn = ({ addRow }) => (
     placement="top"
     overlay={<Tooltip id={uuid()}>add entry</Tooltip>}
   >
-    <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
+    <Button onClick={() => addRow()} bsSize="gxs" bsStyle="primary">
       {FIcons.faPlus}
     </Button>
   </OverlayTrigger>
@@ -28,7 +28,7 @@ const DelRowBtn = ({ delRow, node }) => {
       placement="top"
       overlay={<Tooltip id={uuid()}>remove</Tooltip>}
     >
-      <Button onClick={() => delRow(data)} bsSize="xsmall">
+      <Button onClick={() => delRow(data)} bsSize="gxs">
         {FIcons.faMinus}
       </Button>
     </OverlayTrigger>

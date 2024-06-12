@@ -61,7 +61,7 @@ ButtonTooltipFA.propTypes = {
 
 ButtonTooltipFA.defaultProps = {
   bs: '',
-  size: 'xs',
+  size: 'gxs',
   place: 'top',
   icon: FIcons.faFileExport,
   disabled: false,

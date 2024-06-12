@@ -57,7 +57,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
             >
               <Button
                 className="btn_del"
-                bsSize="xsmall"
+                bsSize="gxs"
                 onClick={() => onDrop({}, params)}
               >
                 {FIcons.faTrashCan}

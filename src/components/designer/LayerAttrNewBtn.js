@@ -17,7 +17,7 @@ const LayerAttrNewBtn = props => {
       >
         <Button
           className="button-right"
-          bsSize="xs"
+          bsSize="gxs"
           onClick={() => setShow(true)}
         >
           {FIcons.faPlus}&nbsp;Add new layer

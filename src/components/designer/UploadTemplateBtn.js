@@ -20,7 +20,7 @@ const UploadTemplateBtn = props => {
           </Tooltip>
         }
       >
-        <Button bsSize="xs" onClick={() => setShow(true)}>
+        <Button bsSize="sm" onClick={() => setShow(true)}>
           {FIcons.faArrowRightToBracket}&nbsp;Import template into Work Area
         </Button>
       </OverlayTrigger>

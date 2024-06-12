@@ -8,7 +8,7 @@ import DefinedRenderer from './DefinedRenderer';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} bsSize="xsmall" bsStyle="primary">
+  <Button onClick={() => addRow()} bsSize="gxs" bsStyle="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -21,7 +21,7 @@ const DelRowBtn = ({ delRow, node }) => {
     delRow(data);
   };
   return (
-    <Button onClick={btnClick} bsSize="xsmall">
+    <Button onClick={btnClick} bsSize="gxs">
       {FIcons.faTimes}
     </Button>
   );
@@ -30,7 +30,7 @@ const DelRowBtn = ({ delRow, node }) => {
 DelRowBtn.propTypes = { delRow: PropTypes.func.isRequired, node: PropTypes.object.isRequired };
 
 const TypeSelect = ({ selType, node }) => (
-  <FormGroup bsSize="small" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+  <FormGroup bsSize="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
     <FormControl componentClass="select" placeholder="select the type" onChange={e => selType(e, node)} defaultValue={node.data.type}>
       <option value="label">label</option>
       <option value="number">number</option>

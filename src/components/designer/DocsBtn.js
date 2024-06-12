@@ -8,7 +8,7 @@ const DocsButton = () => (
   >
     <Button
       style={{ float: 'right' }}
-      bsSize="xsmall"
+      bsSize="gxs"
       onClick={() =>
         window.open('https://cllinde.gitbook.io/labimotion', '_blank')
       }

@@ -19,7 +19,7 @@ const TermLink = _ontology => {
     >
       <Button
         bsStyle="link"
-        bsSize="xsmall"
+        bsSize="gxs"
         href={`${TIB}${encodeURIComponent(iri)}`}
         target="_blank"
         onClick={e => e.stopPropagation()}

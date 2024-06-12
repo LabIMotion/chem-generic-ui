@@ -26,7 +26,7 @@ const AttrEditBtn = props => {
           </Tooltip>
         }
       >
-        <Button bsSize="xs" onClick={onSelect}>
+        <Button bsSize="gxs" onClick={onSelect}>
           {FIcons.faPencil}
         </Button>
       </OverlayTrigger>

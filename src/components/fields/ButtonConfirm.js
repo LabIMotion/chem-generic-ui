@@ -11,7 +11,7 @@ const ButtonConfirm = props => {
       {msg} <br />
       <div className="btn-toolbar">
         <Button
-          bsSize="xsmall"
+          bsSize="sm"
           bsStyle="danger"
           aria-hidden="true"
           onClick={() => fnClick(fnParams)}
@@ -19,7 +19,7 @@ const ButtonConfirm = props => {
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>
-        <Button bsSize="xsmall" bsStyle="warning">
+        <Button bsSize="sm" bsStyle="warning">
           No
         </Button>
       </div>
@@ -54,7 +54,7 @@ ButtonConfirm.propTypes = {
 
 ButtonConfirm.defaultProps = {
   bs: 'danger',
-  size: 'xs',
+  size: 'gxs',
   place: 'right',
   fa: 'faTrashCan',
   disabled: false,

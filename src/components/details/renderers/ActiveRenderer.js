@@ -31,6 +31,7 @@ const ActiveRenderer = params => {
       element={data}
       fa={attrs[value].fa}
       btnCls={attrs[value].cls}
+      size="gxs"
     />
   );
 };

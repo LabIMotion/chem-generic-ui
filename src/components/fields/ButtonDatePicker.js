@@ -40,7 +40,7 @@ const ButtonDatePicker = ({ onChange, val }) => {
   return (
     <OverlayTrigger placement="top" overlay={BTN_DATETIME_PICKER_TIP}>
       <Button
-        bsSize="xsmall"
+        bsSize="gxs"
         onClick={() => setShowDatePicker(!showDatePicker)}
       >
         {FIcons.faClock}

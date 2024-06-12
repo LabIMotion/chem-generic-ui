@@ -28,6 +28,7 @@ const TemplateRenderer = params => {
         fa="faFileLines"
         element={data}
         fnClick={onShow}
+        size="gxs"
       />
       &nbsp;
       {renderWFLayerMark(data.properties_template)}

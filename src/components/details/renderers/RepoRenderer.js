@@ -17,6 +17,7 @@ const RepoRenderer = params => {
         fa={fa[0]}
         element={data}
         fnClick={onCall}
+        size="sm"
       />
     </span>
   );

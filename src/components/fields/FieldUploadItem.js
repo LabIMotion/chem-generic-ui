@@ -47,7 +47,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
 
   const delBtn = (
     <Button
-      bsSize="xsmall"
+      bsSize="gxs"
       id={attachment.uid}
       className="button-right"
       onClick={() =>
@@ -83,7 +83,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
         <div>{delBtn}</div>
         <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
-          <FormGroup bsSize="small">
+          <FormGroup bsSize="sm">
             <FormControl
               type="text"
               value={attachment.label || ''}
@@ -103,7 +103,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
         {secondImgSrc && (
           <>
             <div style={{ alignSelf: 'flex-end', display: 'inline-flex' }}>
-              <InputGroup bsSize="small" className="gu-xsmall-input-group">
+              <InputGroup bsSize="sm" className="gu-xsmall-input-group">
                 <FormControl
                   type="number"
                   step="any"
@@ -113,7 +113,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
                 <InputGroup.Addon>%</InputGroup.Addon>
               </InputGroup>
               <Button
-                bsSize="xs"
+                bsSize="gxs"
                 onClick={() => window.open(secondImgSrc, '_blank')}
               >
                 Original

@@ -37,7 +37,7 @@ const WorkflowDesignBtn = props => {
           <Tooltip id="_tooltip_template_upload">Design workflow</Tooltip>
         }
       >
-        <Button bsSize="xs" onClick={() => setShow(true)}>
+        <Button bsSize="sm" onClick={() => setShow(true)}>
           {FIcons.faDiagramProject}&nbsp;Workflow
         </Button>
       </OverlayTrigger>

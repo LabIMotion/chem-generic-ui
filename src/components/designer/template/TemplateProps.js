@@ -43,6 +43,7 @@ const TemplateProps = props => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
+              size="sm"
             />
             &nbsp;
             <ButtonTooltip
@@ -56,6 +57,7 @@ const TemplateProps = props => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
+              size="sm"
             />
             &nbsp;
             <ButtonTooltip
@@ -66,6 +68,7 @@ const TemplateProps = props => {
               fa="faFloppyDisk"
               place="top"
               bs="primary"
+              size="sm"
             />
           </span>
           <div className="clearfix" />

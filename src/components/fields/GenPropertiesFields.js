@@ -271,7 +271,7 @@ const GenPropertiesDrop = opt => {
               <Button
                 className="btn_del"
                 bsStyle="danger"
-                bsSize="xsmall"
+                bsSize="gxs"
                 onClick={() => opt.onChange({})}
               >
                 {FIcons.faTrashCan}
@@ -573,7 +573,7 @@ const GenTextFormula = opt => {
 const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
     <Button
-      bsSize="xsmall"
+      bsSize="gxs"
       id={attachment.uid}
       className="button-right"
       onClick={() =>
@@ -612,7 +612,7 @@ const renderListGroupItem = (opt, attachment) => {
         <div>{delBtn}</div>
         <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
-          <FormGroup bsSize="small">
+          <FormGroup bsSize="sm">
             <FormControl
               type="text"
               value={attachment.label || ''}
