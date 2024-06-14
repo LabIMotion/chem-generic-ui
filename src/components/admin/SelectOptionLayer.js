@@ -77,14 +77,12 @@ const SelectOptionLayer = props => {
       >
         <Panel.Heading className="template_panel_heading">
           <Panel.Title toggle>{root}</Panel.Title>
-          <div>
-            <SelectOption
-              generic={generic}
-              root={root}
-              fnAddOption={onAdd}
-              fnChange={fnChange}
-            />
-          </div>
+          <SelectOption
+            generic={generic}
+            root={root}
+            fnAddOption={onAdd}
+            fnChange={fnChange}
+          />
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body>{options}</Panel.Body>
