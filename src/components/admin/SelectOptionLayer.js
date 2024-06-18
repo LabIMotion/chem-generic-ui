@@ -102,9 +102,8 @@ const SelectOptionLayer = props => {
               tip="Add new select list"
               fnClick={() => setShowAddSelect(true)}
               fa="faPlus"
-              size="gxs"
               txt="Add new select list"
-              btnCls="button-right"
+              btnCls="button-right btn-gxs"
             />
           </Panel.Title>
         </Panel.Heading>

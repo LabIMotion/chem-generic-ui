@@ -15,11 +15,7 @@ const LayerAttrNewBtn = props => {
         placement="top"
         overlay={<Tooltip id="_tooltip_layer_new">add new layer</Tooltip>}
       >
-        <Button
-          className="button-right"
-          bsSize="gxs"
-          onClick={() => setShow(true)}
-        >
+        <Button className="button-right btn-gxs" onClick={() => setShow(true)}>
           {FIcons.faPlus}&nbsp;Add new layer
         </Button>
       </OverlayTrigger>

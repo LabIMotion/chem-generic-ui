@@ -16,7 +16,7 @@ const FieldLabel = props => {
         placement="top"
         overlay={<Tooltip id={uuid()}>{desc}</Tooltip>}
       >
-        <span>{label}</span>
+        <span className={klz}>{label}</span>
       </OverlayTrigger>
       {TermLink(ontology)}
     </>

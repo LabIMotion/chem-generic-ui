@@ -45,8 +45,7 @@ const FlowViewerModal = props => {
             {`${shortLabel} workflow`}
             <Button
               bsStyle="danger"
-              bsSize="gxs"
-              className="gu_button_right"
+              className="gu_button_right btn-gxs"
               onClick={fnHide}
             >
               {FIcons.faTimes}

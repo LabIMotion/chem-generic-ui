@@ -12,15 +12,13 @@ const ButtonTooltipFA = props => {
       {tt.join('\r\n')}
     </Tooltip>
   );
-  const { size, bs, fnClick, element, place, icon, disabled, txt, btnCls } =
-    props;
+  const { bs, fnClick, element, place, icon, disabled, txt } = props;
   const content = txt ? <span>{txt} </span> : '';
   if (bs === '') {
     return (
       <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
         <Button
-          className={btnCls}
-          bsSize={size}
+          className="btn-gxs"
           onClick={() => fnClick(element)}
           disabled={disabled}
         >
@@ -33,8 +31,7 @@ const ButtonTooltipFA = props => {
   return (
     <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
       <Button
-        className={btnCls}
-        bsSize={size}
+        className="btn-gxs"
         bsStyle={bs}
         onClick={() => fnClick(element)}
         disabled={disabled}
@@ -51,23 +48,19 @@ ButtonTooltipFA.propTypes = {
   element: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   fnClick: PropTypes.func.isRequired,
   bs: PropTypes.string,
-  size: PropTypes.string,
   place: PropTypes.string,
   icon: PropTypes.element,
   disabled: PropTypes.bool,
   txt: PropTypes.string,
-  btnCls: PropTypes.string,
 };
 
 ButtonTooltipFA.defaultProps = {
   bs: '',
-  size: 'gxs',
   place: 'top',
   icon: FIcons.faFileExport,
   disabled: false,
   txt: null,
   element: {},
-  btnCls: '',
 };
 
 export default ButtonTooltipFA;

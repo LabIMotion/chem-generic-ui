@@ -29,7 +29,6 @@ const NewFieldBtn = props => {
           element={{ layer, newFieldKey }}
           fa="faPlus"
           place="top"
-          size="sm"
         />
       </InputGroup.Button>
     </>

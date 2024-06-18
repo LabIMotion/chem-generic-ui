@@ -142,8 +142,7 @@ const DnDFlow = props => {
             >
               <div className="save__controls">
                 <Button bsSize="sm" onClick={onSave}>
-                  Save to draft&nbsp;
-                  {FIcons.faFloppyDisk}
+                  {FIcons.faFloppyDisk}&nbsp;Save to draft
                 </Button>
               </div>
               <Controls />

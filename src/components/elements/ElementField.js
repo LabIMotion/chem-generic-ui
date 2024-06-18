@@ -157,7 +157,7 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button bsSize="gxs">{FIcons.faTableCells}</Button>
+        <Button className="btn-gxs">{FIcons.faTableCells}</Button>
       </OverlayTrigger>
     );
   }
@@ -191,7 +191,7 @@ class ElementField extends Component {
         trigger="focus"
         overlay={popover}
       >
-        <Button bsSize="gxs">{FIcons.faTrashCan}</Button>
+        <Button className="btn-gxs">{FIcons.faTrashCan}</Button>
       </OverlayTrigger>
     );
   }
@@ -426,7 +426,6 @@ class ElementField extends Component {
             fa="faArrowUp"
             place="top"
             disabled={position === 1}
-            size="sm"
           />
           <ButtonTooltip
             tip="Move Down"
@@ -434,7 +433,6 @@ class ElementField extends Component {
             element={{ l: layerKey, f: f.field, isUp: false }}
             fa="faArrowDown"
             place="top"
-            size="sm"
           />
           {this.renderDeleteButton('Field', f.field, layerKey)}
           <ButtonTooltip
@@ -443,7 +441,6 @@ class ElementField extends Component {
             element={{ layerKey, field: f.field }}
             fa="faSquare"
             place="top"
-            size="sm"
           />
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}

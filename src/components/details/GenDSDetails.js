@@ -126,7 +126,7 @@ class GenericDSDetails extends Component {
                 }
               >
                 <Button
-                  bsSize="gxs"
+                  className="btn-gxs"
                   bsStyle="danger"
                   onClick={() => this.handleReload()}
                 >

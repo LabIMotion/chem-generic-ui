@@ -59,7 +59,7 @@ ButtonTooltip.propTypes = {
 
 ButtonTooltip.defaultProps = {
   bs: '',
-  size: 'gxs',
+  size: 'sm',
   place: 'top',
   fa: 'faPencil',
   disabled: false,

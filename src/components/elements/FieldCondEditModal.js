@@ -15,7 +15,7 @@ import GenericSubField from '../models/GenericSubField';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button active onClick={() => addRow()} bsSize="gxs" bsStyle="primary">
+  <Button active onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -28,7 +28,7 @@ const DelRowBtn = ({ delRow, node }) => {
     delRow(data);
   };
   return (
-    <Button active onClick={btnClick} bsSize="gxs" bsStyle="danger">
+    <Button active onClick={btnClick} className="btn-gxs" bsStyle="danger">
       {FIcons.faTrashCan}
     </Button>
   );

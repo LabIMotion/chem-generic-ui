@@ -149,7 +149,6 @@ const PropLayers = props => {
                 element={{ layerKey, field: null }}
                 fa="faSquare"
                 place="top"
-                size="sm"
               />
             </InputGroup.Button>
             <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />

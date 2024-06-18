@@ -47,9 +47,8 @@ const FieldUploadItem = ({ opt, attachment }) => {
 
   const delBtn = (
     <Button
-      bsSize="gxs"
       id={attachment.uid}
-      className="button-right"
+      className="button-right btn-gxs"
       onClick={() =>
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
@@ -113,7 +112,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
                 <InputGroup.Addon>%</InputGroup.Addon>
               </InputGroup>
               <Button
-                bsSize="gxs"
+                className="btn-gxs"
                 onClick={() => window.open(secondImgSrc, '_blank')}
               >
                 Original

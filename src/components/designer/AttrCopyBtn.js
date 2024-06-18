@@ -26,7 +26,7 @@ const AttrCopyBtn = props => {
           </Tooltip>
         }
       >
-        <Button bsSize="gxs" onClick={onSelect}>
+        <Button className="btn-gxs" onClick={onSelect}>
           {FIcons.faClone}
         </Button>
       </OverlayTrigger>

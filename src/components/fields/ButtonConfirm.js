@@ -54,7 +54,7 @@ ButtonConfirm.propTypes = {
 
 ButtonConfirm.defaultProps = {
   bs: 'danger',
-  size: 'gxs',
+  size: 'sm',
   place: 'right',
   fa: 'faTrashCan',
   disabled: false,

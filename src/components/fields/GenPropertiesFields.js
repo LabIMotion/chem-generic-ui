@@ -269,9 +269,8 @@ const GenPropertiesDrop = opt => {
               overlay={<Tooltip id={uuid()}>remove</Tooltip>}
             >
               <Button
-                className="btn_del"
+                className="btn_del btn-gxs"
                 bsStyle="danger"
-                bsSize="gxs"
                 onClick={() => opt.onChange({})}
               >
                 {FIcons.faTrashCan}
@@ -573,9 +572,8 @@ const GenTextFormula = opt => {
 const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
     <Button
-      bsSize="gxs"
       id={attachment.uid}
-      className="button-right"
+      className="button-right btn-gxs"
       onClick={() =>
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }

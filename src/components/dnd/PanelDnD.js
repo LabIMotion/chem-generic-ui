@@ -81,7 +81,7 @@ const PanelDnD = props => {
       placement="top"
       overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
     >
-      <Button bsSize="gxs" onClick={handleClick}>
+      <Button className="btn-gxs" onClick={handleClick}>
         {icon}
       </Button>
     </OverlayTrigger>

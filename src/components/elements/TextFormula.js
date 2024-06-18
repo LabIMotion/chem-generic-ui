@@ -9,7 +9,7 @@ import FieldSelect from './FieldSelect';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} bsSize="gxs" bsStyle="primary">
+  <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -22,7 +22,7 @@ const DelRowBtn = ({ delRow, node }) => {
     delRow(data);
   };
   return (
-    <Button onClick={btnClick} bsSize="gxs">
+    <Button onClick={btnClick} className="btn-gxs">
       {FIcons.faMinus}
     </Button>
   );

@@ -56,8 +56,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
               overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
             >
               <Button
-                className="btn_del"
-                bsSize="gxs"
+                className="btn_del btn-gxs"
                 onClick={() => onDrop({}, params)}
               >
                 {FIcons.faTrashCan}
