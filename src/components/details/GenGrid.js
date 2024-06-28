@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { differenceWith, toPairs, isEqual } from 'lodash';
+import Constants from '../tools/Constants';
 
 const defaultColDef = {
   editable: false,
@@ -85,6 +86,6 @@ GenGrid.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGrid.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGrid.defaultProps = { pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE, theme: Constants.GRID_THEME.BALHAM.VALUE };
 
 export default GenGrid;

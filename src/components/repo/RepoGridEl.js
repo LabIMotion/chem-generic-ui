@@ -39,7 +39,7 @@ const RepoGridEl = props => {
       field: 'description',
       minWidth: 150,
       flex: 3,
-    }
+    },
   ];
 
   return (
