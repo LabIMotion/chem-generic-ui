@@ -491,6 +491,7 @@ const GenPropertiesText = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={fObj.field}
         type="text"
         value={opt.value}
         onChange={opt.onChange}
@@ -511,6 +512,7 @@ const GenPropertiesTextArea = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={opt.f_obj.field}
         componentClass="textarea"
         value={opt.value}
         onChange={opt.onChange}
@@ -526,7 +528,7 @@ const GenPropertiesTextArea = opt => {
 const GenTextFormula = opt => {
   const { layers } = opt;
   const subs = [];
-  (opt.f_obj && opt.f_obj.text_sub_fields).map(e => {
+  (opt.f_obj?.text_sub_fields || []).map(e => {
     const { layer, field, separator } = e;
     if (field && field !== '') {
       if (field.includes('[@@]')) {
@@ -559,6 +561,7 @@ const GenTextFormula = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
+        id={opt.f_obj.field}
         type="text"
         value={subs.join('')}
         className={`readonly ${klz[1]}`}
