@@ -5,7 +5,7 @@
 /* eslint-disable no-eval */
 /* eslint-disable no-restricted-globals */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -482,6 +482,7 @@ const GenPropertiesTable = opt => (
 );
 
 const GenPropertiesText = opt => {
+  const [id] = useState(uuid());
   const { f_obj: fObj } = opt;
   if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
@@ -491,7 +492,7 @@ const GenPropertiesText = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
-        id={fObj.field}
+        id={id}
         type="text"
         value={opt.value}
         onChange={opt.onChange}
@@ -505,6 +506,7 @@ const GenPropertiesText = opt => {
 };
 
 const GenPropertiesTextArea = opt => {
+  const [id] = useState(uuid());
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
@@ -512,7 +514,7 @@ const GenPropertiesTextArea = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
-        id={opt.f_obj.field}
+        id={id}
         componentClass="textarea"
         value={opt.value}
         onChange={opt.onChange}
@@ -526,6 +528,7 @@ const GenPropertiesTextArea = opt => {
 };
 
 const GenTextFormula = opt => {
+  const [id] = useState(uuid());
   const { layers } = opt;
   const subs = [];
   (opt.f_obj?.text_sub_fields || []).map(e => {
@@ -561,7 +564,7 @@ const GenTextFormula = opt => {
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
-        id={opt.f_obj.field}
+        id={id}
         type="text"
         value={subs.join('')}
         className={`readonly ${klz[1]}`}
