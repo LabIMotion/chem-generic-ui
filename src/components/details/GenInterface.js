@@ -473,13 +473,11 @@ const GenInterface = props => {
   );
 
   return (
-    // <DndProvider backend={HTML5Backend}>
     <>
       {layersLayout}
       {addLayerModal}
       {anaModal}
     </>
-    // </DndProvider>
   );
 };
 

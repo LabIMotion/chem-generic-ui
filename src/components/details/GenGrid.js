@@ -38,7 +38,7 @@ class GenGrid extends Component {
           isEqual
         );
         if (changes.length > 0 || updated) {
-          this.gridApi.setRowData(gridData);
+          this.gridApi.setGridOption('rowData', gridData);
           if (selected) {
             this.gridApi.forEachNode(node => {
               node.setSelected(node.data.id === selected.id);
@@ -53,7 +53,7 @@ class GenGrid extends Component {
     const { gridData } = this.props;
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
-    params.api.setRowData(gridData);
+    this.gridApi.setGridOption('rowData', gridData);
   };
 
   render() {

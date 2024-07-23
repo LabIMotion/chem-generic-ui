@@ -14,7 +14,6 @@ import {
   faCircleCheck,
   faCircleInfo,
   faCirclePlus,
-  faCircleQuestion,
   faDiagramProject,
   faDownLeftAndUpRightToCenter,
   faDownload,
@@ -42,6 +41,7 @@ import {
 import {
   faClock,
   faClone,
+  faCircleQuestion,
   faFloppyDisk,
   faPaste,
   faTrashCan,

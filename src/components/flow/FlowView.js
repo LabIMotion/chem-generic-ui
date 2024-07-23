@@ -30,7 +30,6 @@ const FlowView = props => {
   }, [properties, propertiesRelease]);
 
   return (
-    // <ExampleFlow flow={elements} propertiesTemplate={propertiesRelease} />
     <div className="dndflow">
       <ReactFlowProvider>
         <div className="reactflow-wrapper" ref={reactFlowWrapper}>

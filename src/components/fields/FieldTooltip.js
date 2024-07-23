@@ -10,12 +10,11 @@ const FieldTooltip = ({ link }) => {
     <Button
       style={{ padding: '0' }}
       bsStyle="link"
-      bsSize="sm"
       href={link}
       target="_blank"
       onClick={e => e.stopPropagation()}
     >
-      {FIcons.faCircleInfo}
+      {FIcons.faCircleQuestion}
     </Button>
   );
 };

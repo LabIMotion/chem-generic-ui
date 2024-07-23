@@ -18,7 +18,6 @@ const TermLink = _ontology => {
       }
     >
       <Button
-        className="btn-gxs"
         bsStyle="link"
         href={`${TIB}${encodeURIComponent(iri)}`}
         target="_blank"

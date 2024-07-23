@@ -68,7 +68,7 @@ export default class FieldCondEditModal extends Component {
 
       if (condOperator !== condOperatorPre && field !== null) {
         const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
-        this.gridApi.setColumnDefs(columnDefs);
+        this.gridApi.setGridOption('columnDefs', columnDefs);
         this.autoSizeAll();
       }
     }
@@ -81,7 +81,7 @@ export default class FieldCondEditModal extends Component {
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
     const columnDefs = this.getColumnDefs(allLayers, condOperator, field);
-    this.gridApi.setColumnDefs(columnDefs);
+    this.gridApi.setGridOption('columnDefs', columnDefs);
     this.autoSizeAll();
   }
 
@@ -219,7 +219,7 @@ export default class FieldCondEditModal extends Component {
     this.gridApi.forEachNode(nd => {
       rows.push(nd.data);
     });
-    this.gridApi.setRowData(rows);
+    this.gridApi.setGridOption('rowData', rows);
     if (field == null) {
       layer.cond_fields = rows;
       updLayer(layerKey, layer, () => {});

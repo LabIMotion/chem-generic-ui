@@ -128,13 +128,12 @@ const Designer = _props => {
           fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}
         />
         <Button
-          bsSize="sm"
           bsStyle="link"
           href={[DocuConst.DOC_SITE, 'guides', 'designer'].join('/')}
           target="_blank"
           onClick={e => e.stopPropagation()}
         >
-          {FIcons.faCircleInfo}
+          {FIcons.faCircleQuestion}
         </Button>
       </ButtonToolbar>
       {genGrid()}

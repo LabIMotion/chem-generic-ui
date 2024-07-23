@@ -59,7 +59,7 @@ const TemplateBar = props => {
         target="_blank"
         onClick={e => e.stopPropagation()}
       >
-        {FIcons.faCircleInfo}
+        {FIcons.faCircleQuestion}
       </Button>
       {show && notify !== null && (
         <span className={notify.isSuccess ? 'alert-success' : 'alert-danger'}>

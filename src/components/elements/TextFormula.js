@@ -55,8 +55,8 @@ export default class TextFormula extends React.Component {
         allLayers;
       columnDefs.find(c => c.field === 'field').cellRendererParams.allLayers =
         allLayers;
-      this.gridApi.setColumnDefs(columnDefs);
-      this.gridApi.setRowData(sub);
+      this.gridApi.setGridOption('columnDefs', columnDefs);
+      this.gridApi.setGridOption('rowData', sub);
     }
     // this.gridApi && this.gridApi.setRowData(sub);
   }
@@ -123,7 +123,7 @@ export default class TextFormula extends React.Component {
         pinned: 'left',
       },
     ];
-    this.gridApi.setColumnDefs(columnDefs);
+    this.gridApi.setGridOption('columnDefs', columnDefs);
     this.autoSizeAll();
   }
 
@@ -181,7 +181,7 @@ export default class TextFormula extends React.Component {
       rows.push(nd.data);
     });
     field.text_sub_fields = rows;
-    this.gridApi.setRowData(rows);
+    this.gridApi.setGridOption('rowData', rows);
     updSub(layerKey, field, () => {});
   }
 
@@ -218,10 +218,6 @@ export default class TextFormula extends React.Component {
     const sub = field.text_sub_fields || [];
     return (
       <div>
-        {/* <div style={{ fontSize: '10px' }}>
-          <b>Text-Formula: </b>
-          select the text fields which are combined together with separator
-        </div> */}
         <div
           style={{ width: '100%', height: '100%' }}
           className="ag-theme-balham"
