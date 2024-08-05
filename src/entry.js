@@ -26,7 +26,7 @@ export {
   clsInputGroup,
   resetProperties,
 } from './components/tools/utils';
-
+export { default as InlineMetadata } from './components/addon/DatasetMetadata';
 export { isLayerInWF, reUnit };
 export { default as RepoNewModal } from './components/repo/RepoNewModal';
 export { default as PreviewModal } from './components/designer/preview/PreviewModal';
