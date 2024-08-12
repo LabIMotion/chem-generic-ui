@@ -31,4 +31,5 @@ yarn-error.log*
 .eslintcache
 .prettierrc
 
+.npmrc
 tree.html

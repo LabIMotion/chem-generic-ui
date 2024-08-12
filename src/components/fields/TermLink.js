@@ -2,11 +2,12 @@
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
+import buildTS from '../../utils/build-ts';
 
 const TermLink = _ontology => {
-  if (!_ontology) return null;
-  const { label, iri, ontology_prefix: ontologyPrefix } = _ontology;
-  const TIB = `https://service.tib.eu/ts4tib/ontologies/${ontologyPrefix}/terms?iri=`;
+  const toUrl = buildTS(_ontology);
+  if (!toUrl) return null;
+  const { label } = _ontology;
   return (
     <OverlayTrigger
       placement="top"
@@ -19,7 +20,7 @@ const TermLink = _ontology => {
     >
       <Button
         bsStyle="link"
-        href={`${TIB}${encodeURIComponent(iri)}`}
+        href={toUrl}
         target="_blank"
         onClick={e => e.stopPropagation()}
       >

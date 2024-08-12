@@ -25,7 +25,7 @@
     "ag-grid-community": "^32.0.1",
     "ag-grid-react": "^32.0.1",
     "date-fns": "^2.29.3",
-    "generic-ui-core": "^1.4.0",
+    "generic-ui-core": "^1.4.4-rc6",
     "html-to-image": "^1.11.11",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",

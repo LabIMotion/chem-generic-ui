@@ -3,8 +3,10 @@ import AsyncSelect from 'react-select/async';
 
 const TS_BASE = 'https://service.tib.eu/ts4tib/api/select';
 const TS_PARAM = [
-  'rows=20',
-  'collection=nfdi4chem',
+  'rows=30',
+  'classification=NFDI4CHEM',
+  'schema=collection',
+  'type=class',
   'obsoletes=false',
   'local=false',
   'fieldList=id,iri,label,short_form,obo_id,ontology_name,ontology_prefix,description,type',
