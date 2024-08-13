@@ -110,9 +110,12 @@ const PropLayers = props => {
       <Panel.Heading className="template_panel_heading">
         <Panel.Title toggle>
           {layer.label}&nbsp;<Badge>{layer.key}</Badge>&nbsp;
-          <Badge>Columns per Row:&nbsp;{layer.cols}</Badge>&nbsp;
           <Badge className="bg-bs-primary">
-            Fields:&nbsp;{layer?.fields?.length || 0}
+            {layer.cols} column(s) per row
+          </Badge>
+          &nbsp;
+          <Badge className="bg-bs-primary">
+            {layer?.fields?.length || 0} field(s)
           </Badge>
           {layer?.wf ? (
             <span>

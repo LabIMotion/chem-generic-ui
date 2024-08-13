@@ -1,8 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { buildTS } from 'generic-ui-core';
 import FIcons from '../icons/FIcons';
-import buildTS from '../../utils/build-ts';
 
 const TermLink = _ontology => {
   const toUrl = buildTS(_ontology);
