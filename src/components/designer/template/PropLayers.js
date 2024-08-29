@@ -104,8 +104,10 @@ const PropLayers = props => {
         layer={layer}
       />
     );
-
-    const isAttrOnWF = genericType === Constants.GENERIC_TYPES.ELEMENT;
+    const isAttrOnWF = [
+      Constants.GENERIC_TYPES.ELEMENT,
+      Constants.GENERIC_TYPES.SEGMENT,
+    ].includes(genericType);
     const nodeHeader = (
       <Panel.Heading className="template_panel_heading">
         <Panel.Title toggle>

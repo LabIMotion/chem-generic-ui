@@ -13,7 +13,14 @@ const WorkflowDesignBtn = props => {
   const { element, fnSave, genericType } = props;
   const [show, setShow] = useState(false);
 
-  if (genericType !== Constants.GENERIC_TYPES.ELEMENT) return null;
+  if (
+    ![
+      Constants.GENERIC_TYPES.ELEMENT,
+      Constants.GENERIC_TYPES.SEGMENT,
+    ].includes(genericType)
+  ) {
+    return null;
+  }
 
   const handleSaveFlow = _flowObject => {
     const flow = _flowObject.flowObject;

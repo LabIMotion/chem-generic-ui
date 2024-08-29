@@ -1,5 +1,22 @@
 # Chem-Generic-UI Changelog
 
+## [1.4.9]
+> 2024-11-11
+
+* Features and enhancements:
+  * Introduced the `Workflow for Segement` feature.
+  * Given the default wording 'Learn more' for the Designer Helper.
+
+* Bug fixes:
+  * Fixed an issue where an extra line was created in the CV template.
+  * Resolved a page-breaking error that occurred when reloading the template.
+  * Fixed an incorrect layout with the "datetime-range" type field.
+  * Corrected the layout problem for columns with the "hasOwnLine" attribute enabled.
+
+* Chores:
+  * Bumped webpack from 5.86.0 to 5.94.0.
+  * Bumped micromatch from 4.0.5 to 4.0.8.
+
 ## [1.4.0]
 > 2024-08-22
 

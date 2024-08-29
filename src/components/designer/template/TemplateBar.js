@@ -48,19 +48,25 @@ const TemplateBar = props => {
           </Button>
         </OverlayTrigger>
       </ButtonGroup>
-      <Button
-        bsStyle="link"
-        href={[
-          DocuConst.DOC_SITE,
-          'guides',
-          'designer',
-          'template-features',
-        ].join('/')}
-        target="_blank"
-        onClick={e => e.stopPropagation()}
+      <OverlayTrigger
+        delayShow={1000}
+        placement="top"
+        overlay={<Tooltip id="_designer_doc_tooltip">Learn more</Tooltip>}
       >
-        {FIcons.faCircleQuestion}
-      </Button>
+        <Button
+          bsStyle="link"
+          href={[
+            DocuConst.DOC_SITE,
+            'guides',
+            'designer',
+            'template-features',
+          ].join('/')}
+          target="_blank"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {FIcons.faCircleQuestion}
+        </Button>
+      </OverlayTrigger>
       {show && notify !== null && (
         <span className={notify.isSuccess ? 'alert-success' : 'alert-danger'}>
           <span>

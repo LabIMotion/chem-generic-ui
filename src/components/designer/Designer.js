@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import {
+  Button,
+  ButtonToolbar,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
 import AttrNewBtn from './AttrNewBtn';
 import GridToolbar from './GridToolbar';
@@ -13,7 +18,7 @@ import AttrUploadBtn from './AttrUploadBtn';
 import DocuConst from '../tools/DocuConst';
 import FIcons from '../icons/FIcons';
 
-const Designer = _props => {
+const Designer = (_props) => {
   const {
     fnCopy,
     fnCreate,
@@ -31,7 +36,7 @@ const Designer = _props => {
   const [theme, setTheme] = useState(Constants.GRID_THEME.BALHAM.VALUE);
   const [data, setData] = useState(null);
 
-  const onDataSelected = _data => {
+  const onDataSelected = (_data) => {
     if (_data) {
       const updatedData = cloneDeep(_data);
       setData(updatedData);
@@ -127,14 +132,20 @@ const Designer = _props => {
           fnClickLarge={() => setTheme(Constants.GRID_THEME.ALPINE.VALUE)}
           fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}
         />
-        <Button
-          bsStyle="link"
-          href={[DocuConst.DOC_SITE, 'guides', 'designer'].join('/')}
-          target="_blank"
-          onClick={e => e.stopPropagation()}
+        <OverlayTrigger
+          delayShow={1000}
+          placement="top"
+          overlay={<Tooltip id="_field_docsite_tooltip">Learn more</Tooltip>}
         >
-          {FIcons.faCircleQuestion}
-        </Button>
+          <Button
+            bsStyle="link"
+            href={[DocuConst.DOC_SITE, 'guides', 'designer'].join('/')}
+            target="_blank"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {FIcons.faCircleQuestion}
+          </Button>
+        </OverlayTrigger>
       </ButtonToolbar>
       {genGrid()}
       {data ? (

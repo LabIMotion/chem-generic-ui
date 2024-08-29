@@ -3380,10 +3380,10 @@ char-regex@^1.0.2:
   resolved "https://registry.yarnpkg.com/char-regex/-/char-regex-1.0.2.tgz#d744358226217f981ed58f479b1d6bcc29545dcf"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chem-units@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/chem-units/-/chem-units-1.1.0.tgz#65d93db9686a50bb59430e34732f497aa2804be8"
-  integrity sha512-A3jY/B2aEb5s9bmg2lk77QYUl4xCTTCeeKQPbKfwvcD7DseuL40UF6o5Veusfkip8NOcdQ3X6m2hNLMdJKXHbg==
+chem-units@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/chem-units/-/chem-units-1.2.0.tgz#370b89ba225a84112ca1d201adb3343d9cddb9fd"
+  integrity sha512-Yzz6Re1ZSvEwZc0aINCj2yVvsZrdPms+RcF4EPdHLDdJK8ElHG73pFJM+3cIW1sLn9cddDSnqST7Qnltcy+n/w==
 
 "chokidar@>=3.0.0 <4.0.0", chokidar@^3.3.0, chokidar@^3.4.0, chokidar@^3.5.3:
   version "3.5.3"
@@ -4791,12 +4791,12 @@ functions-have-names@^1.2.2, functions-have-names@^1.2.3:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
-generic-ui-core@^1.4.6:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/generic-ui-core/-/generic-ui-core-1.4.6.tgz#342ead068ff6287a1c28ebd3ffe4b91699869588"
-  integrity sha512-GMhFfpwllH2v15rIyt0bctLEZJLyobZKTtind1Kxrlxpp+GY98vVIB2+g5kxsuUZjfWQTgRA/sT2KeeXvHq2Hw==
+generic-ui-core@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/generic-ui-core/-/generic-ui-core-1.5.0.tgz#2ed2d11901f90c1df2b946de1e82e56101e27728"
+  integrity sha512-MkoNSd2KompcjgfoSa+sGH2OAs2vowMJv13Pfas6nzJVDwSCmRTYFxMIKFjzJIhXd70QwAR4DcJ5T2UbwUyjmg==
   dependencies:
-    chem-units "^1.1.0"
+    chem-units "^1.2.0"
     lodash "^4.17.21"
 
 gensync@^1.0.0-beta.2:

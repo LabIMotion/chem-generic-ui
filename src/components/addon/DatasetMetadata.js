@@ -5,7 +5,7 @@ function DatasetMetadata(dcs, idDt) {
   const metadata = {};
   const dc = dcs?.filter(e => idDt === e.id);
 
-  if (dc?.length === 0) {
+  if (dc?.length === 0 || !dc[0].dataset) {
     return metadata;
   }
 

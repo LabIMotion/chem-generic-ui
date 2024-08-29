@@ -91,7 +91,9 @@ export const remodel = (generic, klass) => {
           );
           newProps.layers[key].fields[idx].value_system =
             (vs && vs.key) || units[0].key;
-          newProps.layers[key].fields[idx].value = toNum(curVal);
+          if (curVal) {
+            newProps.layers[key].fields[idx].value = toNum(curVal);
+          }
         }
         if (newFieldType === FieldTypes.F_INPUT_GROUP) {
           if (
