@@ -11,6 +11,11 @@
       "field": "solvent"
     },
     {
+      "var": "cvSolventOthers",
+      "layer": "sample_preparation",
+      "field": "solvent_other"
+    },
+    {
       "var": "cvRef",
       "layer": "meas",
       "field": "reference_internal"
