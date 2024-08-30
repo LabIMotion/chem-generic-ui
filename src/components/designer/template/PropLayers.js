@@ -22,12 +22,14 @@ import {
   handleCreateField,
   handleLayerPositionChange,
 } from '../../../utils/template/field-handler';
+import VocabularyListBtn from './VocabularyListBtn';
 import ConditionLayerBtn from './ConditionLayerBtn';
 import RemovePropBtn from './RemovePropBtn';
 import NewFieldBtn from './NewFieldBtn';
+import LayerSaveBtn from './LayerSaveBtn';
 
 const PropLayers = props => {
-  const { data, genericType, fnUpdate } = props;
+  const { data, genericType, fnUpdate, vocabularies } = props;
 
   const onFieldAdd = _e => {
     const { newFieldKey, layer } = _e;
@@ -104,7 +106,6 @@ const PropLayers = props => {
         layer={layer}
       />
     );
-
     const isAttrOnWF = genericType === Constants.GENERIC_TYPES.ELEMENT;
     const nodeHeader = (
       <Panel.Heading className="template_panel_heading">
@@ -129,6 +130,14 @@ const PropLayers = props => {
         >
           <InputGroup>
             <InputGroup.Button>
+              <LayerSaveBtn layer={layer} />
+              <VocabularyListBtn
+                element={data}
+                vocabularies={vocabularies}
+                fnUpdate={onLayerCondition}
+                layer={layer}
+                sortedLayers={sortedLayers}
+              />
               <ConditionLayerBtn
                 element={data}
                 fnUpdate={onLayerCondition}
@@ -209,6 +218,9 @@ PropLayers.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
+  vocabularies: PropTypes.array,
 };
+
+PropLayers.defaultProps = { vocabularies: [] };
 
 export default PropLayers;

@@ -1,7 +1,7 @@
 const successLevel = 'success';
 const errorLevel = 'error';
 
-export const notifyError = (msg = 'operation error', title = 'Error') => {
+export const notifyError = (msg = 'Operation error.', title = 'Error') => {
   return {
     msg,
     title,
@@ -67,3 +67,6 @@ export const notifyLayerUpdate = (
       return notifySuccess(msg, title);
   }
 };
+
+export const notifySave = (isSuccess = true, msg = 'Save data successfully') =>
+  isSuccess ? notifySuccess(msg) : notifyError(msg);

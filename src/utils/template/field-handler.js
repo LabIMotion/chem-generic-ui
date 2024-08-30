@@ -10,6 +10,34 @@ const resetPosition = _fields => {
   return updatedFields;
 };
 
+export const handleAddVocabulary = (_element, _layer, _selected) => {
+  const [element, layer, selected] = [_element, _layer, _selected];
+
+  const fields = layer.fields || [];
+  const newField = {
+    is_vocabulary: true,
+    identifier: selected.identifier,
+    type: selected.field_type,
+    field: selected.name,
+    position: 100,
+    label: selected.label,
+    default: '',
+  };
+  if (selected.opid) newField.opid = selected.opid;
+  if (selected.source) newField.source = selected.source;
+  if (selected.source_id) newField.source_id = selected.source_id;
+  if (selected.layer_id) newField.layer_id = selected.layer_id;
+  if (selected.field_id) newField.field_id = selected.field_id;
+
+  fields.push(newField);
+  element.properties_template.layers[layer.key].fields = fields;
+
+  return new Response(
+    notifyFieldAdd(true, `New vocabulary has been added successfully.`),
+    element
+  );
+};
+
 /**
  * Handles the field creation.
  * @param {string} _newFieldKey The name of the field.

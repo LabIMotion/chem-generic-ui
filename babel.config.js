@@ -11,6 +11,7 @@ module.exports = function (api) {
     '@babel/plugin-syntax-jsx',
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-transform-react-jsx',
+    '@babel/plugin-transform-class-properties',
   ];
 
   plugins.push('@babel/plugin-transform-modules-commonjs');

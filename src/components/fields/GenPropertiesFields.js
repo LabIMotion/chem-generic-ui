@@ -159,6 +159,11 @@ const GenPropertiesDate = opt => {
   const newVal =
     opt.value &&
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
+  // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
+
+  let readOnly = opt.readOnly || false;
+  const { f_obj: fObj } = opt;
+  if (fObj?.is_vocabulary === true && fObj?.opid >= 7) readOnly = true;
   return (
     <FormGroup className={klz[0]}>
       {FieldHeader(opt)}
@@ -459,21 +464,33 @@ const GenPropertiesTable = opt => (
 
 const GenPropertiesText = opt => {
   const [id] = useState(uuid());
-  const { f_obj: fObj } = opt;
+  const { f_obj: fObj, dic } = opt;
+  let showVal = opt.value;
+  // if (fObj?.readonly && fObj?.is_vocabulary === true) return GenLabel(opt, fObj.value);
   if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
+
+  let readOnly = opt.readOnly || false;
+  if (fObj?.is_vocabulary === true && fObj?.opid >= 7) readOnly = true;
+
+  if (fObj?.is_vocabulary === true && fObj?.opid === 8) {
+    // console.log('88888888 fObj', fObj);
+    // console.log('88888888 dic', dic);
+    showVal = dic[fObj.identifier] || showVal;
+  }
+
   return (
     <FormGroup className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
       <FormControl
         id={id}
         type="text"
-        value={opt.value}
+        value={showVal}
         onChange={opt.onChange}
         className={`${className} ${klz[1]}`}
-        readOnly={opt.readOnly}
+        readOnly={readOnly}
         required={opt.isRequired}
         placeholder={opt.placeholder}
       />

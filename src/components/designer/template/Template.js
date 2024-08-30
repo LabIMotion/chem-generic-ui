@@ -9,7 +9,7 @@ import Preview from '../preview/Preview';
 import { handleSaveSorting } from '../../../utils/template/sorting-handler';
 
 const Template = props => {
-  const { data: inputData, fnUpdate, fnSubmit, genericType, preview } = props;
+  const { data: inputData, vocabularies, fnUpdate, fnSubmit, genericType, preview } = props;
 
   const [opData, setOpData] = useState({
     data: inputData,
@@ -77,6 +77,7 @@ const Template = props => {
       {opData.active === 'w' ? (
         <TemplateProps
           data={opData.data}
+          vocabularies={vocabularies}
           fnUpdate={fnUpdate}
           genericType={genericType}
           innerAction={innerAction}
@@ -110,9 +111,11 @@ Template.propTypes = {
     fnRevisions: PropTypes.func,
     revisions: PropTypes.array,
   }),
+  vocabularies: PropTypes.array,
 };
 
 Template.defaultProps = {
+  vocabularies: [],
   preview: {
     fnDelRevisions: () => {},
     fnRetrieve: () => {},

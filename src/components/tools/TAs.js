@@ -5,6 +5,8 @@ export default Object.freeze({
   adjust_calculation: 'Adjust the calculation',
   add_entry: 'Add an entry',
   add_layer: 'Add a layer',
+  add_std_layer: 'Add this layer to the Layer Standards',
+  add_vocabulary: 'Add into Vocabulary',
   associate_direct: 'Associate with this sample',
   associate_duplicate: 'Duplicate the sample first and then associate with it',
   associate_split: 'Split from the sample first and then associate with it',

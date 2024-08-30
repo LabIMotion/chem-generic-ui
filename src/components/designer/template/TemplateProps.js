@@ -11,7 +11,7 @@ import WorkflowDesignBtn from '../WorkflowDesignBtn';
 import UploadTemplateBtn from '../UploadTemplateBtn';
 
 const TemplateProps = props => {
-  const { data, fnUpdate, fnSubmit, genericType, innerAction } = props;
+  const { data, vocabularies, fnUpdate, fnSubmit, genericType, innerAction } = props;
 
   return (
     <div>
@@ -75,6 +75,7 @@ const TemplateProps = props => {
             <Col sm={8}>
               <PropLayers
                 data={data}
+                vocabularies={vocabularies}
                 fnDerive={innerAction}
                 fnUpdate={innerAction}
                 genericType={genericType}
@@ -92,6 +93,7 @@ const TemplateProps = props => {
 
 TemplateProps.propTypes = {
   data: PropTypes.object,
+  vocabularies: PropTypes.array,
   fnSubmit: PropTypes.func.isRequired,
   fnUpdate: PropTypes.func.isRequired, // update element with new element
   genericType: PropTypes.oneOf([
@@ -101,5 +103,7 @@ TemplateProps.propTypes = {
   ]).isRequired,
   innerAction: PropTypes.func.isRequired,
 };
+
+TemplateProps.defaultProps = { vocabularies: [] };
 
 export default TemplateProps;

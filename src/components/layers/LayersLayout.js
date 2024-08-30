@@ -6,6 +6,7 @@ import { showProperties } from '../tools/utils';
 
 const LayersLayout = props => {
   const {
+    dic,
     layers,
     options,
     funcChange,
@@ -30,6 +31,7 @@ const LayersLayout = props => {
         <GenProperties
           key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
           field={e.field}
+          dic={dic}
           label={e.label || ''}
           classStr={classStr || ''}
           description={e.generic.description || ''}
@@ -54,6 +56,7 @@ const LayersLayout = props => {
     ) {
       const ig = (
         <GenPropertiesLayer
+          dic={dic}
           id={id}
           key={uk}
           layer={layer}
@@ -78,6 +81,7 @@ const LayersLayout = props => {
       if (showLayer) {
         const igs = (
           <GenPropertiesLayer
+            dic={dic}
             id={id}
             key={uk}
             layer={layer}

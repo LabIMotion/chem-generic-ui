@@ -27,6 +27,7 @@ const Designer = _props => {
     gridData,
     klasses,
     preview,
+    vocabularies,
   } = _props;
   const [theme, setTheme] = useState(Constants.GRID_THEME.BALHAM.VALUE);
   const [data, setData] = useState(null);
@@ -140,6 +141,7 @@ const Designer = _props => {
       {data ? (
         <Template
           data={data}
+          vocabularies={vocabularies}
           fnSubmit={fnSubmit}
           // fnDelete={fnDelete}
           // fnDerive={innerAction}
