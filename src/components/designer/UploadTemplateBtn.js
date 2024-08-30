@@ -1,29 +1,23 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import UploadTemplateModal from '../elements/UploadTemplateModal';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const UploadTemplateBtn = props => {
+const UploadTemplateBtn = (props) => {
   const { data, fnUpload, genericType } = props;
   const [show, setShow] = useState(false);
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_template_upload">
-            Import template into Work Area
-          </Tooltip>
-        }
-      >
+      <LTooltip idf="imp_temp_to_area">
         <Button bsSize="sm" onClick={() => setShow(true)}>
           {FIcons.faArrowRightToBracket}&nbsp;Import template into Work Area
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <UploadTemplateModal
         data={data}
         fnUpload={fnUpload}

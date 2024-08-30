@@ -8,9 +8,7 @@ import {
   FormControl,
   FormGroup,
   InputGroup,
-  OverlayTrigger,
   Row,
-  Tooltip,
 } from 'react-bootstrap';
 import { round } from 'lodash';
 import moment from 'moment';
@@ -18,6 +16,7 @@ import 'moment-precise-range-plugin';
 import { genUnit, genUnits, unitConversion } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 const DateTimeRangeFields = [
   'timeStart',
@@ -190,14 +189,7 @@ const DateTimeRange = props => {
               placeholder="Duration"
             />
             <InputGroup.Button>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="copy_duration_to_clipboard">
-                    copy to clipboard
-                  </Tooltip>
-                }
-              >
+              <LTooltip idf="clipboard">
                 <Button
                   active
                   onClick={() => {
@@ -206,17 +198,8 @@ const DateTimeRange = props => {
                 >
                   {FIcons.faPaste}
                 </Button>
-              </OverlayTrigger>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="copy_durationCalc_to_duration">
-                    use this duration
-                    <br />
-                    (rounded to precision 1)
-                  </Tooltip>
-                }
-              >
+              </LTooltip>
+              <LTooltip idf="copy_to_duration">
                 <Button
                   active
                   className="clipboardBtn"
@@ -226,7 +209,7 @@ const DateTimeRange = props => {
                 >
                   {FIcons.faArrowRight}
                 </Button>
-              </OverlayTrigger>
+              </LTooltip>
             </InputGroup.Button>
           </InputGroup>
         </FormGroup>
@@ -239,7 +222,7 @@ const DateTimeRange = props => {
               type="text"
               value={duration.value || ''}
               placeholder="Input Duration..."
-              onChange={event => dataChange({ field: 'duration', event })}
+              onChange={(event) => dataChange({ field: 'duration', event })}
             />
             <InputGroup.Button>
               <Button

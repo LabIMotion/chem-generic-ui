@@ -2,13 +2,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import { useDrop } from 'react-dnd';
-import { Tooltip, OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { KlzIcon } from '../tools/utils';
 import buildTableSource from '../../utils/table/build-table-source';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   if (opt.value && opt.value.el_id) {
@@ -30,7 +30,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
-    const asShown = path =>
+    const asShown = (path) =>
       path === Constants.IMG_NOT_AVAILABLE_SVG ? (
         KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' })
       ) : (
@@ -50,18 +50,14 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         <div className="s-img">
           {asShown(path)}
           <div className="del_btn">
-            <OverlayTrigger
-              delayShow={1000}
-              placement="top"
-              overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
-            >
+            <LTooltip idf="remove_molecule">
               <Button
                 className="btn_del btn-gxs"
                 onClick={() => onDrop({}, params)}
               >
                 {FIcons.faTrashCan}
               </Button>
-            </OverlayTrigger>
+            </LTooltip>
           </div>
         </div>
       ) : (
@@ -87,7 +83,7 @@ const show = (opt, iconClass, onDrop) => {
   return base(opt, iconClass);
 };
 
-const GenericElTableDropTarget = props => {
+const GenericElTableDropTarget = (props) => {
   const { opt, onDrop } = props;
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: opt.dndItems,
@@ -98,7 +94,7 @@ const GenericElTableDropTarget = props => {
       const sourceTag = buildTableSource(type, sourceProps, id);
       onDrop(sourceTag, opt);
     },
-    collect: monitor => {
+    collect: (monitor) => {
       return {
         isOver: monitor.isOver(),
         isOverValidTarget: monitor.canDrop(),

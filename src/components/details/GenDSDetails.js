@@ -2,16 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
-import {
-  Panel,
-  Button,
-  ButtonToolbar,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+import { Panel, Button, ButtonToolbar } from 'react-bootstrap';
 import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
 import { toBool, toNum, absOlsTermLabel } from '../tools/utils';
+import LTooltip from '../shared/LTooltip';
 
 class GenericDSDetails extends Component {
   constructor(props) {
@@ -117,14 +112,7 @@ class GenericDSDetails extends Component {
               Content is designed for: {genericDS.klass_label}
             </span>
             <ButtonToolbar className="pull-right">
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id="_tooltip_reload">
-                    click to reload the content template
-                  </Tooltip>
-                }
-              >
+              <LTooltip idf="reload_temp">
                 <Button
                   className="btn-gxs"
                   bsStyle="danger"
@@ -132,7 +120,7 @@ class GenericDSDetails extends Component {
                 >
                   Reload
                 </Button>
-              </OverlayTrigger>
+              </LTooltip>
             </ButtonToolbar>
           </Panel.Body>
         </Panel>

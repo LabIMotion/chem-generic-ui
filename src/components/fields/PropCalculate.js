@@ -1,19 +1,13 @@
 import React from 'react';
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+import { Button, FormControl, FormGroup, InputGroup } from 'react-bootstrap';
 import { filter } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from './FieldHeader';
 import { fieldCls, toBool, toNullOrInt } from '../tools/utils';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const PropCalculate = opt => {
+const PropCalculate = (opt) => {
   const {
     f_obj: fObj,
     formula,
@@ -97,10 +91,7 @@ const PropCalculate = opt => {
             min={0}
           />
           <InputGroup.Button>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={<Tooltip id="update_calculation_field">adjust</Tooltip>}
-            >
+            <LTooltip idf="adjust_calculation">
               <Button
                 active
                 className="clipboardBtn"
@@ -108,7 +99,7 @@ const PropCalculate = opt => {
               >
                 {FIcons.faArrowRight}
               </Button>
-            </OverlayTrigger>
+            </LTooltip>
           </InputGroup.Button>
           <FormControl
             type="text"

@@ -1,16 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
 import Constants from '../tools/Constants';
 import WorkflowModal from '../elements/WorkflowModal';
 import FlowDesigner from '../flow/FlowDesigner';
 import FIcons from '../icons/FIcons';
-
-const BTN_FLOW_TIP = (
-  <Tooltip id="_cgu_tooltip_workflow">Draw a workflow</Tooltip>
-);
+import LTooltip from '../shared/LTooltip';
 
 const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
   const [show, setShow] = useState(false);
@@ -29,7 +26,7 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
       if (nodes.length === 0) {
         delete updates.properties.u;
       } else {
-        nodes = nodes.map(node => {
+        nodes = nodes.map((node) => {
           if (node.type === Constants.NODE_TYPES.DEFAULT) {
             const { label, ...restData } = node.data;
             return { ...node, data: restData };
@@ -46,11 +43,11 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
 
   return (
     <>
-      <OverlayTrigger placement="top" overlay={BTN_FLOW_TIP}>
+      <LTooltip idf="draw_flow">
         <Button bsSize="sm" bsStyle="primary" onClick={() => setShow(true)}>
           {FIcons.faPencil} Draw Flow
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <WorkflowModal genericType={genericType} showProps={{ show, setShow }}>
         <FlowDesigner element={cloneDeep(generic || {})} fnSave={handleSave} />
       </WorkflowModal>

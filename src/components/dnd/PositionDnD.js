@@ -1,10 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useDrag } from 'react-dnd';
-import { v4 as uuid } from 'uuid';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
   const [{ isDraggingSource }, drag] = useDrag({
@@ -12,7 +12,7 @@ const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
     item: () => {
       return { fid, rid };
     },
-    collect: monitor => {
+    collect: (monitor) => {
       return {
         isDraggingSource: monitor.isDragging(),
       };
@@ -21,13 +21,9 @@ const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
 
   const dragClass = `${isDraggingSource ? 'gu_is-dragging' : ''}`;
 
-  const moveIcon = _isDragging => (
+  const moveIcon = (_isDragging) => (
     <div ref={drag} className={dragClass}>
-      <OverlayTrigger
-        delayShow={1000}
-        placement="top"
-        overlay={<Tooltip id={uuid()}>Drag and drop to move position</Tooltip>}
-      >
+      <LTooltip idf="change_position">
         <Button
           bsSize="sm"
           onClick={() => {}}
@@ -35,7 +31,7 @@ const PositionDnD = ({ type, field: fid, rowValue: rid, isButton = false }) => {
         >
           {FIcons.faArrowsUpDownLeftRight}
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
     </div>
   );
 

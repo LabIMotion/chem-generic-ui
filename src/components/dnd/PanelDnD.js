@@ -11,6 +11,7 @@ import { v4 as uuid } from 'uuid';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 const orderSource = {
   canDrag(props) {
@@ -120,15 +121,11 @@ const PanelDnD = props => {
   const wfIcon = wf ? <span>{FIcons.faDiagramProject}</span> : null;
 
   const moveIcon = (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id={uuid()}>Change position via drag and drop</Tooltip>}
-    >
+    <LTooltip idf="change_position">
       <Button onClick={() => {}} bsSize="xsmall">
         {FIcons.faArrowsUpDownLeftRight}
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 
   const splitKey = key.split('.');

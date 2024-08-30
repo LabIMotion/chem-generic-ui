@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 import UploadKlassModal from '../elements/UploadKlassModal';
 
-const AttrUploadBtn = props => {
+const AttrUploadBtn = (props) => {
   const { data, fnUpload, genericType } = props;
   const [show, setShow] = useState(false);
 
@@ -14,16 +15,11 @@ const AttrUploadBtn = props => {
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_klass_upload">{`Import a ${genericType} and its template`}</Tooltip>
-        }
-      >
+      <LTooltip  idf={`imp_${genericType.toLowerCase()}_n_temp`}>
         <Button onClick={() => setShow(true)}>
           {FIcons.faFileImport}&nbsp;Import
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <UploadKlassModal
         data={data}
         fnUpload={fnUpload}

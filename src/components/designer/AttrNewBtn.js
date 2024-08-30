@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import AttrModal from '../elements/AttrModal';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const AttrNewBtn = props => {
+const AttrNewBtn = (props) => {
   const { fnCreate, genericType, klasses } = props;
   const [show, setShow] = useState(false);
 
@@ -14,18 +15,11 @@ const AttrNewBtn = props => {
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_element_new">
-            Create a new {genericType}
-          </Tooltip>
-        }
-      >
+      <LTooltip idf={`create.${genericType.toLowerCase()}`}>
         <Button onClick={() => setShow(true)}>
           {FIcons.faPlus}&nbsp;New {genericType}
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <AttrModal
         actions={[{ action: 'c', fnAction: fnCreate }]}
         genericType={genericType}

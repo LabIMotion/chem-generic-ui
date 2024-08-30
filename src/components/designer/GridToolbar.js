@@ -1,24 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 const GridToolbar = ({ btnNew, btnUpload, fnClickLarge, fnClickSmall }) => (
   <ButtonGroup bsSize="sm">
     {btnUpload}
     {btnNew}
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip id="_tooltip_theme_large">Enlarge grid size</Tooltip>}
-    >
+    <LTooltip idf="grid_large">
       <Button onClick={fnClickLarge}>{FIcons.faTableCellsLarge}</Button>
-    </OverlayTrigger>
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip id="_tooltip_theme_small">Shrink grid size</Tooltip>}
-    >
+    </LTooltip>
+    <LTooltip idf="grid_small">
       <Button onClick={fnClickSmall}>{FIcons.faTableCells}</Button>
-    </OverlayTrigger>
+    </LTooltip>
   </ButtonGroup>
 );
 

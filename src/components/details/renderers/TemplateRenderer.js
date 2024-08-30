@@ -1,19 +1,14 @@
 import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 import FIcons from '../../icons/FIcons';
+import LTooltip from '../../shared/LTooltip';
 
-const renderWFLayerMark = props =>
+const renderWFLayerMark = (props) =>
   props && (props.flow || props.flowObject) ? (
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip id="tooltip">A workflow is defined.</Tooltip>}
-    >
-      {FIcons.faDiagramProject}
-    </OverlayTrigger>
+    <LTooltip idf="flow_defined">{FIcons.faDiagramProject}</LTooltip>
   ) : null;
 
-const TemplateRenderer = params => {
+const TemplateRenderer = (params) => {
   const { data, fnShow, node } = params;
 
   const onShow = e => {

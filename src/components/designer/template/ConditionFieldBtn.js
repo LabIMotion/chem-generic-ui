@@ -1,11 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import FieldCondEditModal from '../../elements/FieldCondEditModal';
 import FIcons from '../../icons/FIcons';
+import LTooltip from '../../shared/LTooltip';
 
-const ConditionFieldBtn = props => {
+const ConditionFieldBtn = (props) => {
   const { field, fnUpdateSub, layer, sortedLayers } = props;
   const [show, setShow] = useState(false);
 
@@ -30,16 +31,7 @@ const ConditionFieldBtn = props => {
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_restriction_setting">
-            Restriction Setting
-          </Tooltip>
-        }
-      >
-        {conditionBtn}
-      </OverlayTrigger>
+      <LTooltip idf="restriction_setting">{conditionBtn}</LTooltip>
       <FieldCondEditModal
         showModal={show}
         layer={layer}

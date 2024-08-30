@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, FormGroup } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import FIcons from '../icons/FIcons';
-
-const BTN_DATETIME_PICKER_TIP = (
-  <Tooltip id="_cgu_tooltip_datetime_picker">Record time</Tooltip>
-);
+import LTooltip from '../shared/LTooltip';
 
 const DatePickerComponent = ({ handleChange, val }) => (
   <FormGroup>
@@ -29,7 +26,7 @@ const DatePickerComponent = ({ handleChange, val }) => (
 const ButtonDatePicker = ({ onChange, val }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     onChange(date);
     setShowDatePicker(false);
   };
@@ -38,14 +35,14 @@ const ButtonDatePicker = ({ onChange, val }) => {
     return <DatePickerComponent handleChange={handleDateChange} val={val} />;
   }
   return (
-    <OverlayTrigger placement="top" overlay={BTN_DATETIME_PICKER_TIP}>
+    <LTooltip idf="record_time">
       <Button
         className="btn-gxs"
         onClick={() => setShowDatePicker(!showDatePicker)}
       >
         {FIcons.faClock}
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 };
 

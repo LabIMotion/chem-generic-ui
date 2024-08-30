@@ -1,11 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import DocuConst from '../../tools/DocuConst';
 import FIcons from '../../icons/FIcons';
+import LTooltip from '../../shared/LTooltip';
 
-const TemplateBar = props => {
+const TemplateBar = (props) => {
   const { notify, active, fnSwitch } = props;
   const [show, setShow] = useState(false);
 
@@ -13,7 +14,7 @@ const TemplateBar = props => {
     setShow(notify !== null && Object.keys(notify).length > 0);
   }, [notify]);
 
-  const onClick = event => {
+  const onClick = (event) => {
     event.stopPropagation();
     setShow(false);
   };
@@ -21,32 +22,16 @@ const TemplateBar = props => {
   return (
     <span className="gu-designer-template-bar">
       <ButtonGroup>
-        <OverlayTrigger
-          delayShow={500}
-          placement="top"
-          overlay={
-            <Tooltip id="_tooltip_preview_design">
-              click to design the template
-            </Tooltip>
-          }
-        >
+        <LTooltip idf="design_template">
           <Button active={active === 'w'} onClick={() => fnSwitch('w')}>
             Work Area
           </Button>
-        </OverlayTrigger>
-        <OverlayTrigger
-          delayShow={500}
-          placement="top"
-          overlay={
-            <Tooltip id="_tooltip_preview_design">
-              click to preview or view version history
-            </Tooltip>
-          }
-        >
+        </LTooltip>
+        <LTooltip idf="preview_or_versions">
           <Button active={active === 'p'} onClick={() => fnSwitch('p')}>
             Preview Design
           </Button>
-        </OverlayTrigger>
+        </LTooltip>
       </ButtonGroup>
       <Button
         bsStyle="link"

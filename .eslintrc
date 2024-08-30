@@ -14,20 +14,13 @@
     "node": true
   },
   "rules": {
-    "arrow-body-style": [
-      "error",
-      "as-needed",
-      { "requireReturnForObjectLiteral": true }
-    ],
-    // "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
-    "arrow-parens": ["error", "as-needed"],
     "max-len": [1, 100, 2, { "ignoreComments": true }],
     "no-console": ["off"],
     "comma-dangle": [1, "only-multiline"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "prettier/prettier": ["error", {
-      "arrowParens": "avoid"
+      "arrowParens": "always"
     }],
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "jest-dom/prefer-checked": "error",

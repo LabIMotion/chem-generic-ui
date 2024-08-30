@@ -5,7 +5,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import TermLink from './TermLink';
 
-const FieldLabel = props => {
+const FieldLabel = (props) => {
   const { label, desc, isSpCall, ontology } = props;
   const klz = isSpCall
     ? 'gu_sp_label gu_field_label'

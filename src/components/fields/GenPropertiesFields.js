@@ -14,9 +14,7 @@ import {
   InputGroup,
   ListGroup,
   ListGroupItem,
-  OverlayTrigger,
   Radio,
-  Tooltip,
 } from 'react-bootstrap';
 // import DatePicker, { registerLocale } from 'react-datepicker';
 // import ptBR from 'date-fns/locale/pt-BR';
@@ -36,6 +34,7 @@ import FieldUploadItem from './FieldUploadItem';
 import DropReaction from '../dnd/DropReaction';
 import ButtonDatePicker from './ButtonDatePicker';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -97,10 +96,7 @@ const GenPropertiesCalculate = opt => {
           min={0}
         />
         <InputGroup.Button>
-          <OverlayTrigger
-            placement="bottom"
-            overlay={<Tooltip id="update_calculation_field">adjust</Tooltip>}
-          >
+          <LTooltip idf="adjust_calculation_field">
             <Button
               active
               className="clipboardBtn"
@@ -108,7 +104,7 @@ const GenPropertiesCalculate = opt => {
             >
               {FIcons.faArrowRight}
             </Button>
-          </OverlayTrigger>
+          </LTooltip>
         </InputGroup.Button>
         <FormControl
           type="text"
@@ -183,7 +179,7 @@ const GenPropertiesDateTimeRange = opt => {
   );
 };
 
-const GenPropertiesDrop = opt => {
+const GenPropertiesDrop = (opt) => {
   const className = opt.isRequired
     ? 'drop_generic_properties field_required'
     : 'drop_generic_properties';
@@ -192,10 +188,7 @@ const GenPropertiesDrop = opt => {
   if (opt.value?.is_new === true && opt.classStr) {
     createOpt = (
       <div className="sample_radios">
-        <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip id={uuid()}>associate with this sample</Tooltip>}
-        >
+        <LTooltip idf="associate_direct">
           <Radio
             name={`dropS_${opt.value.el_id}`}
             disabled={opt.value.isAssoc === true}
@@ -205,15 +198,8 @@ const GenPropertiesDrop = opt => {
           >
             Current
           </Radio>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip id={uuid()}>
-              split from the sample first and then associate with it
-            </Tooltip>
-          }
-        >
+        </LTooltip>
+        <LTooltip idf="associate_split">
           <Radio
             name={`dropS_${opt.value.el_id}`}
             checked={opt.value.cr_opt === 1}
@@ -222,15 +208,8 @@ const GenPropertiesDrop = opt => {
           >
             Split
           </Radio>
-        </OverlayTrigger>
-        <OverlayTrigger
-          placement="top"
-          overlay={
-            <Tooltip id={uuid()}>
-              duplicate the sample first and then associate with it
-            </Tooltip>
-          }
-        >
+        </LTooltip>
+        <LTooltip idf="associate_duplicate">
           <Radio
             name={`dropS_${opt.value.el_id}`}
             checked={opt.value.cr_opt === 2}
@@ -239,7 +218,7 @@ const GenPropertiesDrop = opt => {
           >
             Copy
           </Radio>
-        </OverlayTrigger>
+        </LTooltip>
       </div>
     );
   }
@@ -264,10 +243,7 @@ const GenPropertiesDrop = opt => {
           {dragTarget}
           {createOpt}
           <div style={{ zIndex: '3' }}>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip id={uuid()}>remove</Tooltip>}
-            >
+            <LTooltip idf="remove">
               <Button
                 className="btn_del btn-gxs"
                 bsStyle="danger"
@@ -275,7 +251,7 @@ const GenPropertiesDrop = opt => {
               >
                 {FIcons.faTrashCan}
               </Button>
-            </OverlayTrigger>
+            </LTooltip>
           </div>
         </div>
       </div>

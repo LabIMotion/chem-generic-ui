@@ -2,9 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import { OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
+import { Radio } from 'react-bootstrap';
+import LTooltip from '../shared/LTooltip';
 
-const SamOption = props => {
+const SamOption = (props) => {
   const { sField, node, onChange } = props;
   const { data } = node;
   const fValue = (data[sField.id] && data[sField.id].value) || {};
@@ -12,7 +13,7 @@ const SamOption = props => {
   const rUUID = uuid();
   return (
     <div className="generic_sam_options">
-      <OverlayTrigger delayShow={1000} placement="right" overlay={<Tooltip id={uuid()}>associate with this sample</Tooltip>}>
+      <LTooltip idf="associate_direct" placement="right">
         <Radio
           name={`dropS_${rUUID}`}
           disabled={fValue.isAssoc}
@@ -21,8 +22,8 @@ const SamOption = props => {
         >
           Current
         </Radio>
-      </OverlayTrigger>
-      <OverlayTrigger delayShow={1000} placement="right" overlay={<Tooltip id={uuid()}>split from the sample first and then associate with it</Tooltip>}>
+      </LTooltip>
+      <LTooltip idf="associate_split" placement="right">
         <Radio
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 1}
@@ -30,8 +31,8 @@ const SamOption = props => {
         >
           Split
         </Radio>
-      </OverlayTrigger>
-      <OverlayTrigger delayShow={1000} placement="right" overlay={<Tooltip id={uuid()}>duplicate the sample first and then associate with it</Tooltip>}>
+      </LTooltip>
+      <LTooltip idf="associate_duplicate" placement="right">
         <Radio
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 2}
@@ -39,7 +40,7 @@ const SamOption = props => {
         >
           Copy
         </Radio>
-      </OverlayTrigger>
+      </LTooltip>
     </div>
   );
 };
@@ -47,7 +48,7 @@ const SamOption = props => {
 SamOption.propTypes = {
   sField: PropTypes.object.isRequired,
   node: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default SamOption;

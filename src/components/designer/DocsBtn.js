@@ -1,11 +1,9 @@
 import React from 'react';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import LTooltip from '../shared/LTooltip';
 
 const DocsButton = () => (
-  <OverlayTrigger
-    placement="top"
-    overlay={<Tooltip id="_tooltip_documentation">Docs</Tooltip>}
-  >
+  <LTooltip idf="docs">
     <Button
       className="btn-gxs"
       style={{ float: 'right' }}
@@ -15,7 +13,7 @@ const DocsButton = () => (
     >
       Docs
     </Button>
-  </OverlayTrigger>
+  </LTooltip>
 );
 
 export default DocsButton;
