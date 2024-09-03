@@ -24,26 +24,27 @@ import {
 } from '../../../utils/template/field-handler';
 import VocabularyListBtn from './VocabularyListBtn';
 import ConditionLayerBtn from './ConditionLayerBtn';
-import RemovePropBtn from './RemovePropBtn';
+// import RemovePropBtn from './RemovePropBtn';
 import NewFieldBtn from './NewFieldBtn';
 import LayerSaveBtn from './LayerSaveBtn';
+import ButtonDelField from '../../fields/ButtonDelField';
 
-const PropLayers = props => {
+const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
 
-  const onFieldAdd = _e => {
+  const onFieldAdd = (_e) => {
     const { newFieldKey, layer } = _e;
     const result = handleCreateField(newFieldKey, data, layer);
     fnUpdate(result);
   };
 
-  const onDummyAdd = _e => {
+  const onDummyAdd = (_e) => {
     const { layerKey: _layerKey, field: _field } = _e;
     const result = handleAddDummy(data, _layerKey, _field);
     fnUpdate(result);
   };
 
-  const onLayerCreate = _layer => {
+  const onLayerCreate = (_layer) => {
     const result = handleCreateLayer(_layer, data);
     fnUpdate(result);
   };
@@ -53,15 +54,15 @@ const PropLayers = props => {
     fnUpdate(result);
   };
 
-  const onLayerDelete = result => {
+  const onLayerDelete = (result) => {
     fnUpdate(result);
   };
 
-  const onLayerCondition = result => {
+  const onLayerCondition = (result) => {
     fnUpdate(result);
   };
 
-  const onPositionMove = _item => {
+  const onPositionMove = (_item) => {
     const { target, source } = _item;
     const result = handleLayerPositionChange(
       data,
@@ -149,12 +150,18 @@ const PropLayers = props => {
                 isAttrOnWF={isAttrOnWF}
                 layer={layer}
               />
-              <RemovePropBtn
+              <ButtonDelField
+                delType={FieldTypes.DEL_LAYER}
+                delKey={layerKey}
+                generic={data}
+                fnConfirm={onLayerDelete}
+              />
+              {/* <RemovePropBtn
                 delStr={FieldTypes.DEL_LAYER}
                 delKey={layerKey}
                 element={data}
                 fnDelete={onLayerDelete}
-              />
+              /> */}
               <ButtonTooltip
                 tip="Add Dummy field"
                 fnClick={onDummyAdd}

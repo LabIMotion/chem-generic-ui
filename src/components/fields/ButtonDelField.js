@@ -5,14 +5,23 @@ import { FieldTypes } from 'generic-ui-core';
 import ButtonConfirm from './ButtonConfirm';
 import { handleDelete } from '../../utils/template/action-handler';
 
-const confirmDelete = props => {
+const confirmDelete = (props) => {
   const { generic, str, key, root, fnConfirm } = props;
   const result = handleDelete(str, key, root, generic);
   fnConfirm(result);
 };
 
-const ButtonDelField = props => {
+const ButtonDelField = (props) => {
   const { generic, delType, delKey, delRoot, fnConfirm } = props;
+
+  let allowed = Object.entries(FieldTypes)
+    .filter(([key]) => key.startsWith('DEL_'))
+    .reduce((acc, [key, value]) => {
+      return { ...acc, [key]: value };
+    }, {});
+  allowed = Object.values(allowed);
+  if (!allowed.includes(delType)) return <></>;
+
   let msg = 'remove?';
   if (delType === FieldTypes.DEL_SELECT) {
     msg = `remove this select option: [${delKey}] ?`;
@@ -34,13 +43,7 @@ const ButtonDelField = props => {
   };
 
   return (
-    <ButtonConfirm
-      msg={msg}
-      fnClick={confirmDelete}
-      fnParams={fnParams}
-      bs="default"
-      place="top"
-    />
+    <ButtonConfirm msg={msg} fnClick={confirmDelete} fnParams={fnParams} />
   );
 };
 

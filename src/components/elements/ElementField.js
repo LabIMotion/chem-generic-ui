@@ -41,13 +41,14 @@ import PositionDnD from '../dnd/PositionDnD';
 import DroppablePanel from '../dnd/DroppablePanel';
 import DnDs from '../dnd/DnDs';
 import FIcons from '../icons/FIcons';
+import ButtonDelField from '../fields/ButtonDelField';
 
 class ElementField extends Component {
   constructor(props) {
     super(props);
     this.state = { panelIsExpanded: false };
     this.handleChange = this.handleChange.bind(this);
-    this.handelDelete = this.handelDelete.bind(this);
+    // this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleOntChange = this.handleOntChange.bind(this);
     this.handleUnitChange = this.handleUnitChange.bind(this);
@@ -126,10 +127,10 @@ class ElementField extends Component {
     onFieldSubFieldChange(layerKey, field, cb);
   }
 
-  handelDelete(delStr, delKey, delRoot) {
-    const { onDelete } = this.props;
-    onDelete(delStr, delKey, delRoot);
-  }
+  // handelDelete(delStr, delKey, delRoot) {
+  //   const { onDelete } = this.props;
+  //   onDelete(delStr, delKey, delRoot);
+  // }
 
   availableUnits(val) {
     const { unitsSystem } = this.props;
@@ -163,39 +164,39 @@ class ElementField extends Component {
     );
   }
 
-  renderDeleteButton(delStr, delKey, delRoot) {
-    const msg = `remove this field: [${delKey}] from layer [${delRoot}] `;
-    const popover = (
-      <Popover id="popover-positioned-scrolling-left">
-        {msg} <br />
-        <div className="btn-toolbar">
-          <Button
-            bsSize="sm"
-            bsStyle="danger"
-            onClick={() => this.handelDelete(delStr, delKey, delRoot)}
-          >
-            Yes
-          </Button>
-          <span>&nbsp;&nbsp;</span>
-          <Button bsSize="sm" bsStyle="warning" onClick={this.handleClick}>
-            No
-          </Button>
-        </div>
-      </Popover>
-    );
+  // renderDeleteButton(delStr, delKey, delRoot) {
+  //   const msg = `remove this field: [${delKey}] from layer [${delRoot}] `;
+  //   const popover = (
+  //     <Popover id="popover-positioned-scrolling-left">
+  //       {msg} <br />
+  //       <div className="btn-toolbar">
+  //         <Button
+  //           bsSize="sm"
+  //           bsStyle="danger"
+  //           onClick={() => this.handelDelete(delStr, delKey, delRoot)}
+  //         >
+  //           Yes
+  //         </Button>
+  //         <span>&nbsp;&nbsp;</span>
+  //         <Button bsSize="sm" bsStyle="warning" onClick={this.handleClick}>
+  //           No
+  //         </Button>
+  //       </div>
+  //     </Popover>
+  //   );
 
-    return (
-      <OverlayTrigger
-        animation
-        placement="top"
-        root
-        trigger="focus"
-        overlay={popover}
-      >
-        <Button className="btn-gxs">{FIcons.faTrashCan}</Button>
-      </OverlayTrigger>
-    );
-  }
+  //   return (
+  //     <OverlayTrigger
+  //       animation
+  //       placement="top"
+  //       root
+  //       trigger="focus"
+  //       overlay={popover}
+  //     >
+  //       <Button className="btn-gxs">{FIcons.faTrashCan}</Button>
+  //     </OverlayTrigger>
+  //   );
+  // }
 
   renderComponent() {
     const {
@@ -207,6 +208,8 @@ class ElementField extends Component {
       allLayers,
       select_options,
       position,
+      generic,
+      onDelete,
     } = this.props;
     const { panelIsExpanded } = this.state;
     const unitConfig = unitsSystem.map(_c => {
@@ -436,7 +439,14 @@ class ElementField extends Component {
             fa="faArrowDown"
             place="top"
           />
-          {this.renderDeleteButton('Field', f.field, layerKey)}
+          <ButtonDelField
+            delType={FieldTypes.DEL_FIELD}
+            delKey={f.field}
+            delRoot={layerKey}
+            generic={generic}
+            fnConfirm={onDelete}
+          />
+          {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
           <ButtonTooltip
             tip="Add Dummy field"
             fnClick={this.handleAddDummy}

@@ -117,8 +117,6 @@ export default class Preview extends Component {
             msg="Delete this version permanently?"
             fnClick={this.delRevision}
             fnParams={{ id: v.id, data, uuid: v.uuid }}
-            bs="default"
-            place="top"
           />
         ) : null;
       const ret = v.released_at ? (
@@ -127,8 +125,6 @@ export default class Preview extends Component {
           fnClick={this.retrieveRevision}
           fnParams={{ id: v.id }}
           fa="faReply"
-          bs="default"
-          place="top"
         />
       ) : null;
       const dl = canDL ? (

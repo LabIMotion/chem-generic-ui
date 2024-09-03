@@ -16,7 +16,7 @@ import {
   handlePositionChange,
 } from '../../../utils/template/field-handler';
 
-const PropFields = props => {
+const PropFields = (props) => {
   const { generic, genericType, fnUpdate, layer } = props;
 
   const onDummyAdd = _e => {
@@ -30,8 +30,11 @@ const PropFields = props => {
     fnUpdate(result);
   };
 
-  const onFieldRemove = (delStr, delKey, delRoot) => {
-    const result = handleDelete(delStr, delKey, delRoot, generic);
+  // const onFieldRemove = (delStr, delKey, delRoot) => {
+  //   const result = handleDelete(delStr, delKey, delRoot, generic);
+  //   fnUpdate(result);
+  // };
+  const onFieldRemove = (result) => {
     fnUpdate(result);
   };
 
@@ -78,6 +81,7 @@ const PropFields = props => {
 
   const fields = (layer?.fields || []).map((f, idx) => (
     <ElementField
+      generic={generic}
       genericType={genericType}
       key={`${genericType}_${layer.key}_${f.field}`}
       layer={layer}

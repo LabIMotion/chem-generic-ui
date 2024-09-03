@@ -1,43 +1,42 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
+import LPopover from '../shared/LPopover';
 
-const ButtonConfirm = props => {
-  const { msg, size, bs, fnClick, fnParams, place, fa, disabled } = props;
-  const popover = (
-    <Popover id="popover-button-confirm">
-      {msg} <br />
+const ButtonConfirm = (props) => {
+  const { msg, size, fnClick, fnParams, place, fa, disabled } = props;
+  const onClick = (event) => {
+    event.stopPropagation();
+    fnClick(fnParams);
+  };
+  const popoverContent = (
+    <>
+      <p>{msg || `Confirm`}</p>
       <div className="btn-toolbar">
         <Button
           bsSize="sm"
           bsStyle="danger"
           aria-hidden="true"
-          onClick={() => fnClick(fnParams)}
+          onClick={onClick}
+          data-testid="confirm-btn-yes"
         >
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>
-        <Button bsSize="sm" bsStyle="warning">
+        <Button bsSize="sm" bsStyle="warning" data-testid="confirm-btn-no">
           No
         </Button>
       </div>
-    </Popover>
+    </>
   );
-
   return (
-    <OverlayTrigger
-      animation
-      placement={place}
-      root
-      trigger="focus"
-      overlay={popover}
-    >
-      <Button bsSize={size} bsStyle={bs} disabled={disabled}>
+    <LPopover content={popoverContent} trigger={['focus']} placement={place}>
+      <Button bsSize={size} disabled={disabled} data-testid="confirm-btn">
         {FIcons[fa]}
       </Button>
-    </OverlayTrigger>
+    </LPopover>
   );
 };
 
@@ -45,7 +44,6 @@ ButtonConfirm.propTypes = {
   msg: PropTypes.string.isRequired,
   fnParams: PropTypes.object.isRequired,
   fnClick: PropTypes.func.isRequired,
-  bs: PropTypes.string,
   size: PropTypes.string,
   place: PropTypes.string,
   fa: PropTypes.string,
@@ -53,9 +51,8 @@ ButtonConfirm.propTypes = {
 };
 
 ButtonConfirm.defaultProps = {
-  bs: 'danger',
   size: 'sm',
-  place: 'right',
+  place: 'top',
   fa: 'faTrashCan',
   disabled: false,
 };

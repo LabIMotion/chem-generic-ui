@@ -85,7 +85,6 @@ const a = (
 );
 
 const b = (layer) => {
-  console.log('layer', layer);
   return (
     <Button
       key="success"
