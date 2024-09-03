@@ -424,21 +424,6 @@ class ElementField extends Component {
             layer={layer}
             sortedLayers={allLayers}
           />
-          <ButtonTooltip
-            tip="Move Up"
-            fnClick={this.handleMove}
-            element={{ l: layerKey, f: f.field, isUp: true }}
-            fa="faArrowUp"
-            place="top"
-            disabled={position === 1}
-          />
-          <ButtonTooltip
-            tip="Move Down"
-            fnClick={this.handleMove}
-            element={{ l: layerKey, f: f.field, isUp: false }}
-            fa="faArrowDown"
-            place="top"
-          />
           <ButtonDelField
             delType={FieldTypes.DEL_FIELD}
             delKey={f.field}
