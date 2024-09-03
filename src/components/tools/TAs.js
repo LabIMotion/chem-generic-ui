@@ -6,7 +6,6 @@ export default Object.freeze({
   add_entry: 'Add an entry',
   add_layer: 'Add a layer',
   add_std_layer: 'Add this layer to the Layer Standards',
-  add_vocabulary: 'Add into Vocabulary',
   associate_direct: 'Associate with this sample',
   associate_duplicate: 'Duplicate the sample first and then associate with it',
   associate_split: 'Split from the sample first and then associate with it',
@@ -38,6 +37,8 @@ export default Object.freeze({
   edit_attr: (_in) => `Edit ${capFirst(_in)} attributes`,
   edit_layer_attr: (_in) => `Edit layer [${_in}] attributes`,
   export_docx: 'Export as docx file',
+  fld_add: 'Add a new field',
+  fld_dummy_add: 'Add a dummy field',
   flow_defined: 'A workflow is defined',
   grid_large: 'Enlarge grid size',
   grid_small: 'Shrink grid size',
@@ -50,10 +51,38 @@ export default Object.freeze({
       {_in} <br /> What is this?
     </>
   ),
+  sel_add: 'Add a new selection list',
+  sel_opt_add: 'Add an option',
   preview_or_versions: 'Click to preview or view version history',
+  screen_full: 'Full screen',
+  screen_full_exit: 'Exit full screen',
+  tpl_act: 'Activate this template (currently inactive)',
+  tpl_de_act: 'De-activate this template (currently active)',
+  tpl_edit: 'Edit this template',
+  tpl_fetch: 'Fetch this template from Template Hub',
+  tpl_save_rel_major: (
+    <>
+      Save and Release template as major version
+      <br />
+      (version number X.Y, X is the major version)
+    </>
+  ),
+  tpl_save_rel_minor: (
+    <>
+      Save and Release template as minor version
+      <br />
+      (version number X.Y, Y is the minor version)
+    </>
+  ),
+  tpl_save_draft: 'Save as Draft',
   record_time: 'Record the time',
   reload_temp: 'Click to reload the template',
   remove: 'Remove',
   remove_molecule: 'Remove this molecule',
   restriction_setting: 'Restriction Setting',
+  ver_download: 'Download this version',
+  ver_retrieve: 'Retrieve this version',
+  ver_view: 'View this version',
+  voc_add: 'Add into Vocabulary',
+  voc_use: 'Use this vocabulary in the template',
 });
