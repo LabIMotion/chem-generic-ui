@@ -13,7 +13,7 @@ const RepoRenderer = params => {
   return (
     <span>
       <ButtonTooltip
-        tip="Fetch this template from hub"
+        idf="tpl_fetch"
         fa={fa[0]}
         element={data}
         fnClick={onCall}

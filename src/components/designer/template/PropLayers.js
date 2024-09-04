@@ -163,7 +163,7 @@ const PropLayers = (props) => {
                 fnDelete={onLayerDelete}
               /> */}
               <ButtonTooltip
-                tip="Add Dummy field"
+                idf="fld_dum_add"
                 fnClick={onDummyAdd}
                 element={{ layerKey, field: null }}
                 fa="faSquare"

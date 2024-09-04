@@ -35,7 +35,7 @@ export default class SelectOption extends Component {
           <FormControl
             type="text"
             name="input_newOption"
-            inputRef={ref => {
+            inputRef={(ref) => {
               this.inputNewOption = ref;
             }}
             placeholder="Input new option"
@@ -43,7 +43,7 @@ export default class SelectOption extends Component {
           />
           <InputGroup.Button>
             <ButtonTooltip
-              tip="Add new option"
+              idf="sel_opt_add"
               fnClick={() => this.handleCreate()}
               fa="faPlus"
             />

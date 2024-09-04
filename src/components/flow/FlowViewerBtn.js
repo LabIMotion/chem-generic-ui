@@ -1,12 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { v4 as uuid } from 'uuid';
-import FIcons from '../icons/FIcons';
+import ButtonTooltip from '../fields/ButtonTooltip';
 
-const FlowViewerBtn = props => {
-  const { fnClick, generic, label, text } = props;
+const FlowViewerBtn = (props) => {
+  const { fnClick, generic, label } = props;
   const propertiesRelease = generic.properties_release || {};
 
   if (Object.keys(propertiesRelease || {}).length < 1) return null;
@@ -23,19 +21,13 @@ const FlowViewerBtn = props => {
   if (!hasFlow && !hasFlowObject) return null;
 
   return (
-    <OverlayTrigger
-      delayShow={500}
-      placement="top"
-      overlay={<Tooltip id={uuid()}>{text}</Tooltip>}
-    >
-      <Button
-        onClick={() => fnClick(generic, true)}
-        bsSize="sm"
-        bsStyle="primary"
-      >
-        {FIcons.faDiagramProject}&nbsp;{label}
-      </Button>
-    </OverlayTrigger>
+    <ButtonTooltip
+      idf="fl_view"
+      fnClick={() => fnClick(generic, true)}
+      fa="faDiagramProject"
+      txt={label || 'Designed Workflow'}
+      bs="primary"
+    />
   );
 };
 
@@ -43,10 +35,6 @@ FlowViewerBtn.propTypes = {
   fnClick: PropTypes.func.isRequired,
   generic: PropTypes.object.isRequired,
   label: PropTypes.string,
-  text: PropTypes.string,
 };
-FlowViewerBtn.defaultProps = {
-  label: 'Designed Workflow',
-  text: 'click to view defined workflow',
-};
+FlowViewerBtn.defaultProps = { label: 'Designed Workflow' };
 export default FlowViewerBtn;

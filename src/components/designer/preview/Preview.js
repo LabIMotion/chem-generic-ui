@@ -129,7 +129,7 @@ export default class Preview extends Component {
       ) : null;
       const dl = canDL ? (
         <ButtonTooltip
-          tip="Download this version"
+          idf="ver_download"
           fnClick={this.dlRevision}
           element={{ id: v.id }}
           fa="faDownload"
@@ -150,7 +150,7 @@ export default class Preview extends Component {
             {dl}
             {ret}
             <ButtonTooltip
-              tip="View this version"
+              idf="ver_view"
               fnClick={this.compare}
               element={{ uuid: v.uuid }}
               fa="faEye"
@@ -205,7 +205,7 @@ export default class Preview extends Component {
     const screenFa = fullScreen
       ? 'faDownLeftAndUpRightToCenter'
       : 'faUpRightAndDownLeftFromCenter';
-    const tip = fullScreen ? 'Exit full screen' : 'Full screen';
+    const idf = fullScreen ? 'scn_full_exit' : 'scn_full';
     return (
       <div>
         {his}
@@ -213,7 +213,7 @@ export default class Preview extends Component {
           <div style={{ margin: '10px 0px' }}>
             <div style={{ float: 'right' }}>
               <ButtonTooltip
-                tip={tip}
+                idf={idf}
                 fnClick={this.setScreen}
                 element={!fullScreen}
                 fa={screenFa}

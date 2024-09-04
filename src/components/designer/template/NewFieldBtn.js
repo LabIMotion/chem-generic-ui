@@ -24,7 +24,7 @@ const NewFieldBtn = props => {
       />
       <InputGroup.Button>
         <ButtonTooltip
-          tip="Add new field"
+          idf="fld_add"
           fnClick={fnUpdate}
           element={{ layer, newFieldKey }}
           fa="faPlus"

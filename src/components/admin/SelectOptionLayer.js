@@ -12,7 +12,7 @@ import {
   handleOptionInput,
 } from '../../utils/template/action-handler';
 
-const SelectOptionLayer = props => {
+const SelectOptionLayer = (props) => {
   const { generic, fnChange } = props;
 
   const [showAddSelect, setShowAddSelect] = useState(false);
@@ -23,7 +23,7 @@ const SelectOptionLayer = props => {
     setShowAddSelect(false);
   };
 
-  const onCreate = selectName => {
+  const onCreate = (selectName) => {
     const sos = { ...generic.properties_template?.select_options };
     sos[selectName] = {};
     const result = handleAddSelect(generic, selectName, sos);
@@ -37,7 +37,7 @@ const SelectOptionLayer = props => {
     fnChange(result);
   };
 
-  const optionR = _params => {
+  const optionR = (_params) => {
     const { key, root, label } = _params;
     return (
       <FormGroup bsSize="sm" controlId={`_cgu_frmCtrlSelectOption_${key}`}>
@@ -47,7 +47,7 @@ const SelectOptionLayer = props => {
             type="text"
             name="lf_label"
             defaultValue={label}
-            onChange={event => onOptionInputChange(event, key, root)}
+            onChange={(event) => onOptionInputChange(event, key, root)}
           />
           <InputGroup.Button>
             {renderDeleteButton(generic, 'Option', key, root, fnChange)}
@@ -58,12 +58,12 @@ const SelectOptionLayer = props => {
   };
 
   const selects = [];
-  Object.keys(generic.properties_template?.select_options).forEach(root => {
+  Object.keys(generic.properties_template?.select_options).forEach((root) => {
     const selectOptions =
       (generic.properties_template?.select_options[root] &&
         generic.properties_template?.select_options[root].options) ||
       [];
-    const options = selectOptions.map(f => (
+    const options = selectOptions.map((f) => (
       <div key={`${f.key}_${root}`} style={{ marginTop: '10px' }}>
         {optionR({ key: f.key, root, label: f.label })}
       </div>
@@ -97,12 +97,12 @@ const SelectOptionLayer = props => {
       <Panel>
         <Panel.Heading>
           <Panel.Title>
-            Select Lists
+            Selection Lists
             <ButtonTooltip
-              tip="Add new select list"
+              idf="sel_add"
               fnClick={() => setShowAddSelect(true)}
               fa="faPlus"
-              txt="Add new select list"
+              txt="Add new selection list"
               btnCls="button-right btn-gxs"
             />
           </Panel.Title>

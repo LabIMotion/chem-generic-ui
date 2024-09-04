@@ -34,10 +34,7 @@ const TemplateProps = props => {
             &nbsp;
             <ButtonTooltip
               txt="Save and Release (Major)"
-              tip={[
-                'Save and Release template as major version',
-                '(version number X.Y, X is the major version)',
-              ]}
+              idf="tpl_save_rel_major"
               fnClick={fnSubmit}
               element={{ data, release: 'major' }}
               fa="faFloppyDisk"
@@ -47,10 +44,7 @@ const TemplateProps = props => {
             &nbsp;
             <ButtonTooltip
               txt="Save and Release (Minor)"
-              tip={[
-                'Save and Release template as minor version',
-                '(version number X.Y, Y is the minor version)',
-              ]}
+              idf="tpl_save_rel_minor"
               fnClick={fnSubmit}
               element={{ data, release: 'minor' }}
               fa="faFloppyDisk"
@@ -60,7 +54,7 @@ const TemplateProps = props => {
             &nbsp;
             <ButtonTooltip
               txt="Save as draft"
-              tip="Save template as draft"
+              idf="tpl_save_draft"
               fnClick={fnSubmit}
               element={{ data, release: 'draft' }}
               fa="faFloppyDisk"

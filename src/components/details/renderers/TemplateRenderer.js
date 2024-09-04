@@ -5,7 +5,7 @@ import LTooltip from '../../shared/LTooltip';
 
 const renderWFLayerMark = (props) =>
   props && (props.flow || props.flowObject) ? (
-    <LTooltip idf="flow_defined">{FIcons.faDiagramProject}</LTooltip>
+    <LTooltip idf="fl_defined">{FIcons.faDiagramProject}</LTooltip>
   ) : null;
 
 const TemplateRenderer = (params) => {
@@ -19,7 +19,7 @@ const TemplateRenderer = (params) => {
   return (
     <span>
       <ButtonTooltip
-        tip="Edit template"
+        idf="tpl_edit"
         fa="faFileLines"
         element={data}
         fnClick={onShow}

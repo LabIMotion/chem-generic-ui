@@ -3,20 +3,20 @@ import ButtonTooltip from '../../fields/ButtonTooltip';
 
 const attrs = {
   true: {
-    tip: 'Click to de-activate this template (currently active)',
+    tip: 'tpl_de_act',
     fa: 'faCheck',
     bs: 'success',
     cls: 'gu_btn_text_success',
   },
   false: {
-    tip: 'Click to activate this template (currently inactive)',
+    tip: 'tpl_act',
     fa: 'faBan',
     bs: 'danger',
     cls: 'gu_btn_text_danger',
   },
 };
 
-const ActiveRenderer = params => {
+const ActiveRenderer = (params) => {
   const { data, fnDeActivate, node, value } = params;
 
   const onActivate = e => {
@@ -26,7 +26,7 @@ const ActiveRenderer = params => {
 
   return (
     <ButtonTooltip
-      tip={attrs[value].tip}
+      idf={attrs[value].tip}
       fnClick={onActivate}
       element={data}
       fa={attrs[value].fa}

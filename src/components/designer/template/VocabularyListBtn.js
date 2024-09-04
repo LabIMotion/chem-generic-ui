@@ -41,7 +41,7 @@ const VocabularyListBtn = (props) => {
 
   return (
     <>
-      <LTooltip idf="add_vocabulary">
+      <LTooltip idf="voc_add">
         <Button bsSize="sm" onClick={onClick}>
           <i className="fa fa-book" aria-hidden="true" />
         </Button>

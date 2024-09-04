@@ -433,7 +433,7 @@ class ElementField extends Component {
           />
           {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
           <ButtonTooltip
-            tip="Add Dummy field"
+            idf="fld_dum_add"
             fnClick={this.handleAddDummy}
             element={{ layerKey, field: f.field }}
             fa="faSquare"
