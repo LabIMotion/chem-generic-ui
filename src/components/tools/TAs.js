@@ -1,5 +1,5 @@
 import React from 'react';
-import capFirst from './format-utils';
+import { capFirst } from './format-utils';
 
 export default Object.freeze({
   adjust_calculation: 'Adjust the calculation',

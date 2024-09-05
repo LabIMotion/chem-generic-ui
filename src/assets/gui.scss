@@ -1,6 +1,36 @@
+@use 'color' as *;
+
+@mixin ml-2 {
+  margin-left: 2px;
+}
+
+.gu-ml-2 {
+  @include ml-2;
+}
+
 .btn-gxs, .btn-group-gxs > .btn {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
+}
+
+.gu-no-pointer {
+  cursor: default;
+  text-decoration: none;
+}
+
+.gu-no-pointer:hover {
+  text-decoration: none;
+}
+
+.gu-ont-display {
+  @include ml-2;
+  background-color: $color-green !important;
+  color: $color-white !important;
+  border: $color-green solid 1px;
+}
+
+.gu-ont-display:hover {
+  border-color: $color-green !important;
 }

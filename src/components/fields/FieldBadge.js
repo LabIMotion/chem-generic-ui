@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge } from 'react-bootstrap';
+import LBadge from '../shared/LBadge';
 
-const FieldBadge = props => {
+const FieldBadge = (props) => {
   const { fieldObj, prop } = props;
   let badgeText = fieldObj[prop] || '';
 
+  if (prop === 'field') return <LBadge text={badgeText} />;
   if (prop === 'type' && fieldObj[prop] === 'select') {
     badgeText = `${badgeText}: ${fieldObj?.option_layers}`;
   }
@@ -14,7 +15,7 @@ const FieldBadge = props => {
     badgeText = `column width division: ${badgeText}`;
   }
 
-  return <Badge className="bg-bs-field-display">{badgeText}</Badge>;
+  return <LBadge as="!badge" text={badgeText} />;
 };
 
 FieldBadge.propTypes = {

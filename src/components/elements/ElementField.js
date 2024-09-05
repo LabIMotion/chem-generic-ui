@@ -28,6 +28,7 @@ import LayerSaveBtn from '../designer/template/LayerSaveBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
 import TermLink from '../fields/TermLink';
+import OntCmp from '../fields/OntCmp';
 import {
   // renderDatetimeRange,
   renderDummyFieldGroup,
@@ -406,15 +407,12 @@ class ElementField extends Component {
     const nodeHeader = (
       <Panel.Heading className="template_panel_heading">
         <Panel.Title toggle onClick={this.handlePanelToggle}>
-          {position}&nbsp;
+          {position}{' '}
           {[FieldTypes.F_DUMMY].includes(f.type) ? '(dummy field)' : f.label}
-          &nbsp;
           <FieldBadge fieldObj={f} prop="field" />
-          &nbsp;
+          {OntCmp(fieldObject.ontology, '!link')}
           <FieldBadge fieldObj={f} prop="type" />
-          &nbsp;
           <FieldBadge fieldObj={f} prop="cols" />
-          {TermLink(fieldObject.ontology)}
         </Panel.Title>
         <ButtonGroup bsSize="sm" style={{ display: 'inline-flex' }}>
           <LayerSaveBtn />

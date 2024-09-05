@@ -10,6 +10,12 @@
   opacity: $opacity !important;
 }
 
+@mixin lbg-outline($color) {
+  background-color: unset !important;
+  color: $color !important;
+  border: $color solid 1px;
+}
+
 .gu_can-drop {
   @include dnd-state($color-can-drop, $color-can-drop);
   cursor: copy;
@@ -75,10 +81,16 @@
   background-color: $color-bs-warning !important;
 }
 
-.bg-bs-field-display {
-  background-color: unset !important;
-  color: $color-attention-emphasis !important;
-  border: $color-attention-emphasis solid 1px;
+.lbg-outline-default {
+  @include lbg-outline($color-attention-emphasis);
+}
+
+.lbg-outline-primary {
+  @include lbg-outline($color-bs-primary);
+}
+
+.lbg-outline-warning {
+  @include lbg-outline($color-halloween);
 }
 
 .icon_generic_nav {

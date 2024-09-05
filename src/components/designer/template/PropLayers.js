@@ -2,7 +2,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, FormGroup, InputGroup, Panel } from 'react-bootstrap';
+import { FormGroup, InputGroup, Panel } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
@@ -28,6 +28,8 @@ import ConditionLayerBtn from './ConditionLayerBtn';
 import NewFieldBtn from './NewFieldBtn';
 import LayerSaveBtn from './LayerSaveBtn';
 import ButtonDelField from '../../fields/ButtonDelField';
+import LBadge from '../../shared/LBadge';
+import { pl } from '../../tools/format-utils';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
@@ -95,8 +97,11 @@ const PropLayers = (props) => {
   };
 
   const layers = [];
-  const sortedLayers = sortBy(data.properties_template.layers, l => l.position);
-  (sortedLayers || []).forEach(layer => {
+  const sortedLayers = sortBy(
+    data.properties_template.layers,
+    (l) => l.position
+  );
+  (sortedLayers || []).forEach((layer) => {
     const layerKey = `${layer.key}`;
 
     const fields = (
@@ -111,18 +116,23 @@ const PropLayers = (props) => {
     const nodeHeader = (
       <Panel.Heading className="template_panel_heading">
         <Panel.Title toggle>
-          {layer.label}&nbsp;<Badge>{layer.key}</Badge>&nbsp;
-          <Badge className="bg-bs-primary">
-            {layer.cols} column(s) per row
-          </Badge>
-          &nbsp;
-          <Badge className="bg-bs-primary">
-            {layer?.fields?.length || 0} field(s)
-          </Badge>
+          {layer.label}
+          <LBadge as="badge" text={layer.key} />
+          <LBadge
+            as="!badge"
+            text={`${layer.cols} ${pl(layer.cols, 'column')} per row`}
+            cls="primary"
+          />
+          <LBadge
+            as="!badge"
+            text={`${layer?.fields?.length || 0} ${pl(
+              layer?.fields?.length || 0,
+              'field'
+            )}`}
+            cls="primary"
+          />
           {layer?.wf ? (
-            <span>
-              &nbsp;<Badge className="bg-bs-warning">workflow</Badge>
-            </span>
+            <LBadge as="!badge" text="workflow" cls="warning" />
           ) : null}
         </Panel.Title>
         <FormGroup
