@@ -4,25 +4,25 @@ import PropTypes from 'prop-types';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 
-const NewFieldBtn = props => {
+const NewFieldBtn = (props) => {
   const { fnUpdate, layer } = props;
   const [newFieldKey, setNewFieldKey] = useState('');
 
-  const onInputNewField = _e => {
+  const onInputNewField = (_e) => {
     setNewFieldKey(_e.target.value);
   };
 
   return (
-    <>
+    <InputGroup>
       <FormControl
         type="text"
         name="field_new"
         placeholder="Input new field name"
         bsSize="sm"
-        onChange={e => onInputNewField(e)}
-        style={{ maxWidth: '140px' }}
+        onChange={(e) => onInputNewField(e)}
+        style={{ maxWidth: '140px', boxShadow: 'none' }}
       />
-      <InputGroup.Button>
+      <span className="input-group-btn">
         <ButtonTooltip
           idf="fld_add"
           fnClick={fnUpdate}
@@ -30,8 +30,8 @@ const NewFieldBtn = props => {
           fa="faPlus"
           place="top"
         />
-      </InputGroup.Button>
-    </>
+      </span>
+    </InputGroup>
   );
 };
 

@@ -2,7 +2,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, InputGroup, Panel } from 'react-bootstrap';
+import { ButtonGroup, FormGroup, InputGroup, Panel } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
@@ -135,62 +135,59 @@ const PropLayers = (props) => {
             <LBadge as="!badge" text="workflow" cls="warning" />
           ) : null}
         </Panel.Title>
-        <FormGroup
-          bsSize="sm"
-          style={{ marginBottom: 'unset', display: 'inline-table' }}
-        >
-          <InputGroup>
-            <InputGroup.Button>
-              <LayerSaveBtn layer={layer} />
-              <VocabularyListBtn
-                element={data}
-                vocabularies={vocabularies}
-                fnUpdate={onLayerCondition}
-                layer={layer}
-                sortedLayers={sortedLayers}
-              />
-              <ConditionLayerBtn
-                element={data}
-                fnUpdate={onLayerCondition}
-                layer={layer}
-                sortedLayers={sortedLayers}
-              />
-              <LayerAttrEditBtn
-                fnUpdate={onLayerUpdate}
-                isAttrOnWF={isAttrOnWF}
-                layer={layer}
-              />
-              <ButtonDelField
-                delType={FieldTypes.DEL_LAYER}
-                delKey={layerKey}
-                generic={data}
-                fnConfirm={onLayerDelete}
-              />
-              {/* <RemovePropBtn
+        <div>
+          <ButtonGroup className="gu-ml-2">
+            <LayerAttrEditBtn
+              fnUpdate={onLayerUpdate}
+              isAttrOnWF={isAttrOnWF}
+              layer={layer}
+            />
+            <ConditionLayerBtn
+              element={data}
+              fnUpdate={onLayerCondition}
+              layer={layer}
+              sortedLayers={sortedLayers}
+            />
+            <ButtonDelField
+              delType={FieldTypes.DEL_LAYER}
+              delKey={layerKey}
+              generic={data}
+              fnConfirm={onLayerDelete}
+            />
+            <LayerSaveBtn layer={layer} />
+          </ButtonGroup>
+          {/* <RemovePropBtn
                 delStr={FieldTypes.DEL_LAYER}
                 delKey={layerKey}
                 element={data}
                 fnDelete={onLayerDelete}
               /> */}
-              <ButtonTooltip
-                idf="fld_dum_add"
-                fnClick={onDummyAdd}
-                element={{ layerKey, field: null }}
-                fa="faSquare"
-                place="top"
-              />
-            </InputGroup.Button>
+          <ButtonGroup className="gu-ml-2">
+            <VocabularyListBtn
+              element={data}
+              vocabularies={vocabularies}
+              fnUpdate={onLayerCondition}
+              layer={layer}
+              sortedLayers={sortedLayers}
+            />
+            <ButtonTooltip
+              idf="fld_dum_add"
+              fnClick={onDummyAdd}
+              element={{ layerKey, field: null }}
+              fa="faSquare"
+              place="top"
+            />
             <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />
-            <InputGroup.Button>
-              <PositionDnD
-                type={DnDs.LAYER}
-                field={{ field: layerKey }}
-                rowValue={{ key: '' }}
-                isButton
-              />
-            </InputGroup.Button>
-          </InputGroup>
-        </FormGroup>
+          </ButtonGroup>
+          <ButtonGroup className="gu-ml-2">
+            <PositionDnD
+              type={DnDs.LAYER}
+              field={{ field: layerKey }}
+              rowValue={{ key: '' }}
+              isButton
+            />
+          </ButtonGroup>
+        </div>
       </Panel.Heading>
     );
     const node = (

@@ -1,11 +1,12 @@
 @use 'color' as *;
-
-@mixin ml-2 {
-  margin-left: 2px;
-}
+@import 'mixins';
 
 .gu-ml-2 {
-  @include ml-2;
+  @include gux-ml(2);
+}
+
+.gu-ml-4 {
+  @include gux-ml(4);
 }
 
 .btn-gxs, .btn-group-gxs > .btn {
@@ -25,7 +26,7 @@
 }
 
 .gu-ont-display {
-  @include ml-2;
+  @include gux-ml(2);
   background-color: $color-green !important;
   color: $color-white !important;
   border: $color-green solid 1px;
