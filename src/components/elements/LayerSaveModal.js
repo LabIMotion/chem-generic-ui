@@ -18,7 +18,7 @@ const LayerSaveModal = ({ acts, title, showProps, children }) => {
       </Modal.Header>
       <Modal.Body>{children}</Modal.Body>
       <Modal.Footer>
-        {acts.map(act => act)}
+        {acts.map((act) => act)}
         <Button onClick={() => setShow(false)}>Close</Button>
       </Modal.Footer>
     </Modal>

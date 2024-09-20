@@ -9,8 +9,9 @@ export default class ApiManager extends Api {
     return super.execApi(`${API_DS}/${path}`, method);
   };
 
-  static execApiData = (data, path, method = 'POST') =>
-    super.execApiData(data, path, method);
+  static execApiData = (data, path, method = 'POST') => {
+    return super.execApiData(data, path, method);
+  };
 
   static updateDSTemplate = (data, id) => {
     //
