@@ -1,5 +1,3 @@
-const isEnvDevelopment = process.env.NODE_ENV === 'development';
-
 module.exports = function (api) {
   api.cache(true);
 
@@ -15,9 +13,6 @@ module.exports = function (api) {
   ];
 
   plugins.push('@babel/plugin-transform-modules-commonjs');
-  if (isEnvDevelopment) {
-    plugins.push('react-refresh/babel');
-  }
 
   return {
     presets,
