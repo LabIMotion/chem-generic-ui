@@ -81,7 +81,7 @@ const LayerSaveBtn = (props) => {
           bsSize="sm"
           onClick={() => dispatch({ type: 'show', payload: true })}
         >
-          {FIcons.faFloppyDisk}
+          {FIcons.faLayerGroup}
         </Button>
       </LTooltip>
       <LayerSaveModal

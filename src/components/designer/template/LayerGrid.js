@@ -35,11 +35,11 @@ const LayersGrid = () => {
   ];
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 400, width: '100%' }}>
+    <div className="ag-theme-alpine" style={{ height: 600, width: '100%' }}>
       <AgGridReact
         columnDefs={columnDefs}
         rowData={rowData}
-        domLayout="autoHeight"
+        domLayout="normal"
       />
     </div>
   );

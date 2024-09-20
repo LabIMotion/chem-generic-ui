@@ -12,7 +12,7 @@ const LayerGridBtn = () => {
   return (
     <>
       <Button className="button-right btn-gxs" onClick={handleShow}>
-        {FIcons.faPlus}&nbsp;From Standard Layer
+        {FIcons.faLayerGroup}&nbsp;From Standard Layer
       </Button>
 
       <Modal

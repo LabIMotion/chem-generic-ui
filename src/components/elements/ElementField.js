@@ -24,10 +24,8 @@ import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
-import LayerSaveBtn from '../designer/template/LayerSaveBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
-import TermLink from '../fields/TermLink';
 import OntCmp from '../fields/OntCmp';
 import {
   // renderDatetimeRange,
@@ -415,7 +413,6 @@ class ElementField extends Component {
           <FieldBadge fieldObj={f} prop="cols" />
         </Panel.Title>
         <ButtonGroup bsSize="sm" style={{ display: 'inline-flex' }}>
-          <LayerSaveBtn />
           <ConditionFieldBtn
             field={f}
             fnUpdateSub={this.updSubField}
