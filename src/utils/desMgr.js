@@ -1,4 +1,5 @@
 import Api from './api';
+import Response from './response';
 import { mc2res } from '../components/tools/format-utils';
 
 const API_LA = 'layers';
@@ -11,7 +12,9 @@ class LayerManager {
       ? await Api.execApiData(params, fullEndpoint)
       : await Api.execApi(fullEndpoint, method);
     console.log('res=', res);
-    return mc2res(res.mc, res.msg || '');
+    // return mc2res(res.mc, res.msg || '');
+    // { mc: 'aaa', msg: 'xxx', data: JSON Object or array}
+    return new Response(mc2res(res.mc, res.msg || ''), { data: res.data });
   };
 
   static saveStandardLayer = (params = {}) =>

@@ -51,7 +51,8 @@ const LayerSaveBtn = (props) => {
       dispatch({ type: 'notify', payload: res });
     } else {
       res = await LayerManager.saveStandardLayer(state.layer);
-      dispatch({ type: 'notify', payload: res });
+      console.log('result=', res);
+      dispatch({ type: 'notify', payload: res.notify });
     }
   };
 

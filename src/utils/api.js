@@ -30,7 +30,7 @@ const fetchBody = (data, method) => {
 const handleResponse = (response) => {
   console.log('response=', response);
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.error || response.statusText);
   }
   return response.json().then((data) => {
     console.log('parsed data=', data);

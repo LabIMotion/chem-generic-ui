@@ -2,11 +2,12 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, FormGroup, InputGroup, Panel } from 'react-bootstrap';
+import { ButtonGroup, Panel } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
 import LayerAttrNewBtn from '../LayerAttrNewBtn';
+import LayerGridBtn from './LayerGridBtn';
 import Constants from '../../tools/Constants';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 import DnDs from '../../dnd/DnDs';
@@ -214,6 +215,7 @@ const PropLayers = (props) => {
           <Panel.Title>
             Layers
             <LayerAttrNewBtn fnCreate={onLayerCreate} />
+            <LayerGridBtn fnCreate={onLayerCreate} />
           </Panel.Title>
         </Panel.Heading>
         <Panel.Body>
