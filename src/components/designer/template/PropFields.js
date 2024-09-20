@@ -17,7 +17,7 @@ import {
 } from '../../../utils/template/field-handler';
 
 const PropFields = (props) => {
-  const { generic, genericType, fnUpdate, layer } = props;
+  const { generic, genericType, fnUpdate, layer, vocabularies } = props;
 
   const onDummyAdd = _e => {
     const { layerKey: _layerKey, field: _field } = _e;
@@ -96,6 +96,7 @@ const PropFields = (props) => {
       onFieldSubFieldChange={onFieldSubFieldChange}
       onDummyAdd={onDummyAdd}
       allLayers={sortedLayers}
+      vocabularies={vocabularies}
     />
   ));
 
@@ -107,6 +108,9 @@ PropFields.propTypes = {
   genericType: PropTypes.string.isRequired,
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
+  vocabularies: PropTypes.array,
 };
+
+PropFields.defaultProps = { vocabularies: [] };
 
 export default PropFields;

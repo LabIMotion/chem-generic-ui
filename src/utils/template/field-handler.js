@@ -14,10 +14,22 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
   const [element, layer, selected] = [_element, _layer, _selected];
 
   const fields = layer.fields || [];
+  // const ontology = {
+  //   id: `ncit:class:http://purl.obolibrary.org/obo/${selected.term_id}`,
+  //   iri: `http://purl.obolibrary.org/obo/${selected.term_id}`,
+  //   type: 'class',
+  //   label: selected.name,
+  //   ontology_name: 'ncit',
+  //   ontology_prefix: 'NCIT',
+  //   obo_id: selected.term_id,
+  //   short_form: selected.term_id,
+  //   description: [selected.name],
+  // };
   const newField = {
     is_vocabulary: true,
     identifier: selected.identifier,
     type: selected.field_type,
+    ontology: selected.ontology,
     field: selected.name,
     position: 100,
     label: selected.label,

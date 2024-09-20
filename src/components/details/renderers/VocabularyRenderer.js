@@ -12,7 +12,12 @@ const VocabularyRenderer = (params) => {
 
   return (
     <span>
-      <ButtonTooltip idf="voc_use" fa={fa[0]} element={data} fnClick={onCall} />
+      <ButtonTooltip
+        tip="add vocabulary to the template"
+        fa="faPlus"
+        element={data}
+        fnClick={onCall}
+      />
     </span>
   );
 };

@@ -24,6 +24,8 @@ import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import VocabularyListBtn from '../designer/template/VocabularyListBtn';
+import LayerSaveBtn from '../designer/template/LayerSaveBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
 import OntCmp from '../fields/OntCmp';
@@ -52,6 +54,7 @@ class ElementField extends Component {
     this.handleOntChange = this.handleOntChange.bind(this);
     this.handleUnitChange = this.handleUnitChange.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
+    this.handleAddVoc = this.handleAddVoc.bind(this);
     this.updSubField = this.updSubField.bind(this);
     this.handlePanelToggle = this.handlePanelToggle.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
@@ -119,6 +122,11 @@ class ElementField extends Component {
   handleAddDummy(_params) {
     const { onDummyAdd } = this.props;
     onDummyAdd(_params);
+  }
+
+  handleAddVoc(_params) {
+    console.log('handleAddVoc', _params);
+    this.handleChange(_params);
   }
 
   updSubField(layerKey, field, cb) {
@@ -209,6 +217,7 @@ class ElementField extends Component {
       position,
       generic,
       onDelete,
+      vocabularies,
     } = this.props;
     const { panelIsExpanded } = this.state;
     const unitConfig = unitsSystem.map(_c => {
@@ -427,6 +436,13 @@ class ElementField extends Component {
             fnConfirm={onDelete}
           />
           {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
+          <VocabularyListBtn
+              element={generic}
+              vocabularies={vocabularies}
+              fnUpdate={this.handleAddVoc}
+              layer={layer}
+              sortedLayers={allLayers}
+            />
           <ButtonTooltip
             idf="fld_dum_add"
             fnClick={this.handleAddDummy}
@@ -718,8 +734,9 @@ ElementField.propTypes = {
   unitsSystem: PropTypes.array,
   onFieldSubFieldChange: PropTypes.func.isRequired,
   onDummyAdd: PropTypes.func.isRequired,
+  vocabularies: PropTypes.array,
 };
 
-ElementField.defaultProps = { genericType: 'Element', unitsSystem: [] };
+ElementField.defaultProps = { genericType: 'Element', unitsSystem: [], vocabularies: [] };
 
 export default ElementField;

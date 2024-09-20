@@ -12,6 +12,7 @@ import Constants from '../tools/Constants';
 import GenGridEl from '../details/GenGridEl';
 import GenGridSg from '../details/GenGridSg';
 import GenGridDs from '../details/GenGridDs';
+import GenGridVocab  from '../details/GenGridVocab';
 import getPageSizeForTheme from '../../utils/grid';
 import Template from './template/Template';
 import AttrUploadBtn from './AttrUploadBtn';
@@ -95,6 +96,21 @@ const Designer = (_props) => {
       case Constants.GENERIC_TYPES.DATASET:
         return (
           <GenGridDs
+            fnCopyKlass={fnCopy}
+            fnDeActivateKlass={fnActive}
+            fnDownloadKlass={fnDownload}
+            fnEditKlass={fnUpdate}
+            genericType={genericType}
+            fnShowProp={onDataSelected}
+            // fnShowPropJson={() => {}}
+            gridData={gridData}
+            pageSize={getPageSizeForTheme(theme)}
+            theme={theme}
+          />
+        );
+      case Constants.GENERIC_TYPES.VOCABULARY:
+        return (
+          <GenGridVocab
             fnCopyKlass={fnCopy}
             fnDeActivateKlass={fnActive}
             fnDownloadKlass={fnDownload}

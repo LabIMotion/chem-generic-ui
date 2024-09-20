@@ -111,6 +111,7 @@ const PropLayers = (props) => {
         genericType={genericType}
         fnUpdate={fnUpdate}
         layer={layer}
+        vocabularies={vocabularies}
       />
     );
     const isAttrOnWF = genericType === Constants.GENERIC_TYPES.ELEMENT;
