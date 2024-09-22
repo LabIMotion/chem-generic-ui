@@ -11,7 +11,6 @@ class LayerManager {
     const res = params
       ? await Api.execApiData(params, fullEndpoint)
       : await Api.execApi(fullEndpoint, method);
-    console.log('res=', res);
     // return mc2res(res.mc, res.msg || '');
     // { mc: 'aaa', msg: 'xxx', data: JSON Object or array}
     return new Response(mc2res(res.mc, res.msg || ''), { data: res.data });

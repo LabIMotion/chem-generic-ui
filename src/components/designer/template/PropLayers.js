@@ -49,6 +49,7 @@ const PropLayers = (props) => {
 
   const onLayerCreate = (_layer) => {
     const result = handleCreateLayer(_layer, data);
+    console.log('onLayerCreate result=', result);
     fnUpdate(result);
   };
 

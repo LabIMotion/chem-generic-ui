@@ -3,11 +3,16 @@ import { Button, Modal } from 'react-bootstrap';
 import LayersGrid from './LayerGrid';
 import FIcons from '../../icons/FIcons';
 
-const LayerGridBtn = () => {
+const LayerGridBtn = ({ fnCreate }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+
+  const handleSelectLayer = (params) => {
+    fnCreate(params.data?.properties);
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -24,7 +29,7 @@ const LayerGridBtn = () => {
           <Modal.Title>Standard Layer List</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LayersGrid />
+          <LayersGrid onLayerSelect={handleSelectLayer} />
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={handleClose}>

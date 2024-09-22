@@ -12,11 +12,7 @@ const NotificationMessage = ({ notify, onClose }) => {
         <b>{notify.title}</b>
         {`: ${notify.msg}`}
       </span>
-      <Button
-        bsStyle={notify.isSuccess ? 'success' : 'danger'}
-        className="gu_button_right btn-gxs"
-        onClick={onClose}
-      >
+      <Button className="gu_button_right btn-gxs" onClick={onClose}>
         {FIcons.faTimes}
       </Button>
     </Alert>

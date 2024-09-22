@@ -27,18 +27,17 @@ const fetchBody = (data, method) => {
   };
 };
 
-const handleResponse = (response) => {
+const handleResponse = async (response) => {
   console.log('response=', response);
   if (!response.ok) {
-    throw new Error(response.error || response.statusText);
+    const errorData = await response.json();
+    throw new Error(errorData[0] || response.statusText);
   }
-  return response.json().then((data) => {
-    console.log('parsed data=', data);
-    if (!('mc' in data)) {
-      return { mc: 'se01' };
-    }
-    return data;
-  });
+  const data = await response.json();
+  if (!('mc' in data)) {
+    return { mc: 'se01' };
+  }
+  return data;
 };
 
 const handleError = (error) => {
