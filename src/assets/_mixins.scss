@@ -1,5 +1,25 @@
 @import 'variables';
 
 @mixin gux-ml($spacer-key) {
-  margin-left: map-get($gu-spacers, $spacer-key);
+  @if $spacer-key == auto {
+    margin-left: auto;
+  } @else {
+    margin-left: map-get($gu-spacers, $spacer-key);
+  }
+}
+
+@mixin gux-mr($spacer-key) {
+  @if $spacer-key == auto {
+    margin-right: auto;
+  } @else {
+    margin-right: map-get($gu-spacers, $spacer-key);
+  }
+}
+
+@mixin gux-mb($spacer-key) {
+  @if $spacer-key == auto {
+    margin-bottom: auto;
+  } @else {
+    margin-bottom: map-get($gu-spacers, $spacer-key);
+  }
 }

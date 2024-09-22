@@ -81,12 +81,12 @@ const LayerSaveBtn = (props) => {
           bsSize="sm"
           onClick={() => dispatch({ type: 'show', payload: true })}
         >
-          {FIcons.faLayerGroup}
+          {FIcons.faGlobe}
         </Button>
       </LTooltip>
       <LayerSaveModal
         acts={[saveButton, resetButton]}
-        title="Layer Standards"
+        title="Standard Layer"
         showProps={{
           show: state.show,
           setShow: (value) => dispatch({ type: 'show', payload: value }),

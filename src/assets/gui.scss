@@ -9,6 +9,18 @@
   @include gux-ml(4);
 }
 
+.gu-mr-1 {
+  @include gux-mr(1);
+}
+
+.gu-mr-auto {
+  @include gux-mr(auto);
+}
+
+.gu-mb-1 {
+  @include gux-mb(1);
+}
+
 .btn-gxs, .btn-group-gxs > .btn {
   padding: 1px 5px;
   font-size: 12px;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import LayersGrid from './LayerGrid';
 import FIcons from '../../icons/FIcons';
+import LTooltip from '../../shared/LTooltip';
 
 const LayerGridBtn = ({ fnCreate }) => {
   const [showModal, setShowModal] = useState(false);
@@ -16,10 +17,11 @@ const LayerGridBtn = ({ fnCreate }) => {
 
   return (
     <>
-      <Button className="button-right btn-gxs" onClick={handleShow}>
-        {FIcons.faLayerGroup}&nbsp;From Standard Layer
-      </Button>
-
+      <LTooltip idf="sel_lyr2tpl">
+        <Button className="button-right btn-gxs" onClick={handleShow}>
+          {FIcons.faGlobe}&nbsp;From Standard Layer
+        </Button>
+      </LTooltip>
       <Modal
         show={showModal}
         onHide={handleClose}

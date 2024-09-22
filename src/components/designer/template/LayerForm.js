@@ -1,87 +1,104 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
+import {
+  Radio,
+  Col,
+  ControlLabel,
+  Form,
+  FormControl,
+  FormGroup,
+  Row,
+} from 'react-bootstrap';
+import FIcons from '../../icons/FIcons';
 
 const LayerForm = ({ init, layer, onChange }) => {
   const { label: initLabel, key: initKey } = init;
   const { description, label, key } = layer;
   return (
-    <>
-      <div
-        className="alert-info"
-        style={{ borderRadius: '5px', padding: '0px 10px 0px 0px' }}
-      >
-        <b>Current Setting</b>
-      </div>
-      <Form>
-        <FormGroup className="text_generic_properties">
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={initKey}
-            placeholder="An identifier for the layer, must be unique in Standard Layers."
-            readOnly
-          />
-        </FormGroup>
-        <FormGroup className="text_generic_properties">
-          <ControlLabel>Display Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={initLabel}
-            placeholder="Give a name to display on the UI. Empty is allow."
-            readOnly
-          />
-        </FormGroup>
-      </Form>
-      <div
-        className="alert-info"
-        style={{ borderRadius: '5px', padding: '0px 10px 0px 0px' }}
-      >
-        <b>Please give the below information</b>
-      </div>
-      <Form>
-        <FormGroup>
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            required
-            type="text"
-            value={key}
-            placeholder="An identifier for the layer, must be unique in Standard Layers."
-            onChange={(e) => onChange('key', e.target.value)}
-          />
-          <div className="help">
-            An identifier for the layer, must be unique in{' '}
-            <b>Standard Layers</b>
-            <br />
-            Layer name is unique in <b>Standard Layers</b>, at least 3
-            characters
-            <br />
-            Layer name must contain only lowercase letters and underscores,
-            underscores can not be the first/last one character
-            <br />
-            Layer name should not contain special characters like $, !, %, etc.
+    <Row>
+      <Col md={6}>
+        <h4>Current Setting</h4>
+        <Form>
+          <FormGroup className="text_generic_properties">
+            <ControlLabel>Name</ControlLabel>
+            <FormControl
+              type="text"
+              value={initKey}
+              placeholder="An identifier for the layer, must be unique in Standard Layers."
+              readOnly
+            />
+          </FormGroup>
+          <FormGroup className="text_generic_properties">
+            <ControlLabel>Display Name</ControlLabel>
+            <FormControl
+              type="text"
+              value={initLabel}
+              placeholder="Give a name to display on the UI. Empty is allow."
+              readOnly
+            />
+          </FormGroup>
+          <div style={{ fontSize: '12px', display: 'flex' }}>
+            <span className="gu-mr-1">{FIcons.faCircleInfo}</span>
+            <span>
+              <b>Name:</b>
+              <p className="gu-mb-1">
+                1. The layer name is a unique identifier within{' '}
+                <b>Standard Layers</b> and must contain at least 3 characters.
+              </p>
+              <p className="gu-mb-1">
+                2. It should consist only of lowercase letters and underscores,
+                with underscores not allowed at the beginning or end.
+              </p>
+              <p className="gu-mb-1">
+                3. Special characters such as $, !, %, etc., are not allowed.
+              </p>
+            </span>
           </div>
-        </FormGroup>
-        <FormGroup className="text_generic_properties">
-          <ControlLabel>Display Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={label}
-            placeholder="Give a name to display on the UI. Empty is allow."
-            readOnly
-          />
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Description</ControlLabel>
-          <FormControl
-            componentClass="textarea"
-            value={description}
-            placeholder="Give a description to describe the usage/purpose."
-            onChange={(e) => onChange('description', e.target.value)}
-          />
-        </FormGroup>
-      </Form>
-    </>
+        </Form>
+      </Col>
+      <Col md={6}>
+        <h4>Please give the below information</h4>
+        <Form>
+          <FormGroup>
+            <ControlLabel>Name</ControlLabel>
+            <FormControl
+              required
+              type="text"
+              value={key}
+              placeholder="An identifier for the layer, must be unique in Standard Layers."
+              onChange={(e) => onChange('key', e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup className="text_generic_properties">
+            <ControlLabel>Display Name</ControlLabel>
+            <FormControl
+              type="text"
+              value={label}
+              placeholder="Give a name to display on the UI. Empty is allow."
+              readOnly
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Description</ControlLabel>
+            <FormControl
+              componentClass="textarea"
+              rows={3}
+              value={description}
+              placeholder="Give a description to describe the usage/purpose."
+              onChange={(e) => onChange('description', e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Who can use this layer?</ControlLabel>
+            <Radio checked readOnly>
+              <span className="gu-mr-1">{FIcons.faGlobe}</span>
+              <b>Standard</b>
+              <div>This can be used by any designer later in the template.</div>
+            </Radio>
+          </FormGroup>
+        </Form>
+      </Col>
+    </Row>
   );
 };
 

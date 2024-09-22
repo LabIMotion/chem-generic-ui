@@ -5,7 +5,7 @@ export default Object.freeze({
   adjust_calculation: 'Adjust the calculation',
   add_entry: 'Add an entry',
   add_layer: 'Add a layer',
-  add_std_layer: 'Add this layer to the Layer Standards',
+  add_std_layer: 'Add this layer to Standard Layer',
   add_lyr2tpl: 'Add this layer to the template',
   associate_direct: 'Associate with this sample',
   associate_duplicate: 'Duplicate the sample first and then associate with it',
@@ -54,6 +54,13 @@ export default Object.freeze({
     </>
   ),
   sel_add: 'Add a new selection list',
+  sel_lyr2tpl: (
+    <>
+      Select from the Standard Layer and
+      <br />
+      apply it in the template
+    </>
+  ),
   sel_opt_add: 'Add an option',
   preview_or_versions: 'Click to preview or view version history',
   scn_full: 'Full screen',
