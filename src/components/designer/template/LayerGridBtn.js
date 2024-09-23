@@ -4,7 +4,7 @@ import LayersGrid from './LayerGrid';
 import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
 
-const LayerGridBtn = ({ fnCreate }) => {
+const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
@@ -15,11 +15,17 @@ const LayerGridBtn = ({ fnCreate }) => {
     setShowModal(false);
   };
 
+  const handleDeleteLayer = (params) => {
+    console.log('handleDeleteLayer params=', params.data);
+    fnDelete(params.data);
+    setShowModal(false);
+  };
+
   return (
     <>
       <LTooltip idf="sel_lyr2tpl">
         <Button className="button-right btn-gxs" onClick={handleShow}>
-          {FIcons.faGlobe}&nbsp;From Standard Layer
+          {FIcons.faGlobe}&nbsp;Standard Layers
         </Button>
       </LTooltip>
       <Modal
@@ -31,7 +37,10 @@ const LayerGridBtn = ({ fnCreate }) => {
           <Modal.Title>Standard Layer List</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LayersGrid onLayerSelect={handleSelectLayer} />
+          <LayersGrid
+            onLayerSelect={handleSelectLayer}
+            onLayerDelete={handleDeleteLayer}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button bsStyle="primary" onClick={handleClose}>

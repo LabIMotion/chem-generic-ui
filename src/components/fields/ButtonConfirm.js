@@ -6,7 +6,7 @@ import FIcons from '../icons/FIcons';
 import LPopover from '../shared/LPopover';
 
 const ButtonConfirm = (props) => {
-  const { msg, size, fnClick, fnParams, place, fa, disabled } = props;
+  const { msg, cls, size, fnClick, fnParams, place, fa, disabled } = props;
   const onClick = (event) => {
     event.stopPropagation();
     fnClick(fnParams);
@@ -33,7 +33,12 @@ const ButtonConfirm = (props) => {
   );
   return (
     <LPopover content={popoverContent} trigger={['focus']} placement={place}>
-      <Button bsSize={size} disabled={disabled} data-testid="confirm-btn">
+      <Button
+        bsSize={size}
+        className={cls}
+        disabled={disabled}
+        data-testid="confirm-btn"
+      >
         {FIcons[fa]}
       </Button>
     </LPopover>
@@ -44,6 +49,7 @@ ButtonConfirm.propTypes = {
   msg: PropTypes.string.isRequired,
   fnParams: PropTypes.object.isRequired,
   fnClick: PropTypes.func.isRequired,
+  cls: PropTypes.string,
   size: PropTypes.string,
   place: PropTypes.string,
   fa: PropTypes.string,
@@ -51,6 +57,7 @@ ButtonConfirm.propTypes = {
 };
 
 ButtonConfirm.defaultProps = {
+  cls: 'btn-none',
   size: 'sm',
   place: 'top',
   fa: 'faTrashCan',

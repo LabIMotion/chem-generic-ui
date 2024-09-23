@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
-import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
 import LayerManager from '../../../utils/desMgr';
+import ButtonConfirm from '../../fields/ButtonConfirm';
 
-const LayersGrid = ({ onLayerSelect }) => {
+const LayersGrid = ({ onLayerSelect, onLayerDelete }) => {
   const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
@@ -23,15 +23,23 @@ const LayersGrid = ({ onLayerSelect }) => {
     {
       headerName: 'Action',
       cellRenderer: (params) => (
-        <LTooltip idf="add_lyr2tpl">
-          <Button className="btn-gxs" onClick={() => onLayerSelect(params)}>
-            {FIcons.faPlus}
-          </Button>
-        </LTooltip>
+        <>
+          <LTooltip idf="add_lyr2tpl">
+            <Button className="btn-gxs" onClick={() => onLayerSelect(params)}>
+              Add
+            </Button>
+          </LTooltip>
+          <ButtonConfirm
+            cls="btn-gxs gu-ml-1"
+            msg="Delete this Standard Layer permanently?"
+            fnClick={onLayerDelete}
+            fnParams={params}
+          />
+        </>
       ),
       sortable: false,
       filter: false,
-      width: 80,
+      width: 100,
     },
     {
       field: 'id',

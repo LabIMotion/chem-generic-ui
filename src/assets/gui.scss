@@ -1,6 +1,10 @@
 @use 'color' as *;
 @import 'mixins';
 
+.gu-ml-1 {
+  @include gux-ml(1);
+}
+
 .gu-ml-2 {
   @include gux-ml(2);
 }

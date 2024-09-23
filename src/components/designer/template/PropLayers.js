@@ -31,6 +31,7 @@ import LayerSaveBtn from './LayerSaveBtn';
 import ButtonDelField from '../../fields/ButtonDelField';
 import LBadge from '../../shared/LBadge';
 import { pl } from '../../tools/format-utils';
+import LayerManager from '../../../utils/desMgr';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
@@ -51,6 +52,12 @@ const PropLayers = (props) => {
     const result = handleCreateLayer(_layer, data);
     console.log('onLayerCreate result=', result);
     fnUpdate(result);
+  };
+
+  const onDeleteStandardLayer = async (_layer) => {
+    const result = await LayerManager.deleteStandardLayer(_layer.id);
+    console.log('onDeleteStandardLayer result=', result);
+    // fnUpdate(result);
   };
 
   const onLayerUpdate = (_layerKey, _updates) => {
@@ -217,7 +224,10 @@ const PropLayers = (props) => {
           <Panel.Title>
             Layers
             <LayerAttrNewBtn fnCreate={onLayerCreate} />
-            <LayerGridBtn fnCreate={onLayerCreate} />
+            <LayerGridBtn
+              fnCreate={onLayerCreate}
+              fnDelete={onDeleteStandardLayer}
+            />
           </Panel.Title>
         </Panel.Heading>
         <Panel.Body>
