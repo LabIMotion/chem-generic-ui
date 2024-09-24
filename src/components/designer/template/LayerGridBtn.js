@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import LayersGrid from './LayerGrid';
+import LayerGridView from './LayerGridView';
 import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
 
 const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   const [showModal, setShowModal] = useState(false);
+  const [viewLayer, setViewLayer] = useState(null);
+
+  useEffect(() => {
+    if (!showModal) {
+      setViewLayer(null);
+    }
+  }, [showModal]);
 
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -16,9 +24,37 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   };
 
   const handleDeleteLayer = (params) => {
-    console.log('handleDeleteLayer params=', params.data);
     fnDelete(params.data);
     setShowModal(false);
+  };
+
+  const handleViewLayer = (params) => {
+    const generic = {
+      properties: {
+        layers: {
+          [params.data.name]: {
+            ...params.data.properties,
+          },
+        },
+      },
+      properties_release: {
+        layers: {
+          [params.data.name]: {
+            ...params.data.properties,
+          },
+        },
+      },
+    };
+    const ext = {
+      description: params.data.description,
+      label: params.data.label,
+      name: params.data.name,
+    };
+    setViewLayer({ generic, ext });
+  };
+
+  const handleCloseView = () => {
+    setViewLayer(null);
   };
 
   return (
@@ -37,15 +73,29 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
           <Modal.Title>Standard Layer List</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LayersGrid
-            onLayerSelect={handleSelectLayer}
-            onLayerDelete={handleDeleteLayer}
-          />
+          {viewLayer ? (
+            <LayerGridView _layer={viewLayer} />
+          ) : (
+            <LayersGrid
+              onLayerSelect={handleSelectLayer}
+              onLayerDelete={handleDeleteLayer}
+              onLayerView={handleViewLayer}
+            />
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle="primary" onClick={handleClose}>
-            Close
-          </Button>
+          {viewLayer && (
+            <LTooltip idf="return_to_list">
+              <Button className="gu-mr-1" onClick={handleCloseView}>
+                Back to list
+              </Button>
+            </LTooltip>
+          )}
+          <LTooltip idf="close">
+            <Button bsStyle="primary" onClick={handleClose}>
+              Close
+            </Button>
+          </LTooltip>
         </Modal.Footer>
       </Modal>
     </>

@@ -9,6 +9,10 @@
   @include gux-ml(2);
 }
 
+.gu-ml-3 {
+  @include gux-ml(3);
+}
+
 .gu-ml-4 {
   @include gux-ml(4);
 }
@@ -23,6 +27,14 @@
 
 .gu-mb-1 {
   @include gux-mb(1);
+}
+
+.gu-mb-2 {
+  @include gux-mb(2);
+}
+
+.gu-mb-3 {
+  @include gux-mb(3);
 }
 
 .btn-gxs, .btn-group-gxs > .btn {

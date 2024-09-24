@@ -19,6 +19,7 @@ export default Object.freeze({
     </>
   ),
   clipboard: 'Copy to clipboard',
+  close: 'Close window',
   copy: (_in) => `Copy ${capFirst(_in)} to ...`,
   copy_to_duration: (
     <>
@@ -89,6 +90,7 @@ export default Object.freeze({
   remove: 'Remove',
   remove_molecule: 'Remove this molecule',
   restriction_setting: 'Restriction Setting',
+  return_to_list: 'Back to list',
   ver_download: 'Download this version',
   ver_retrieve: 'Retrieve this version',
   ver_view: 'View this version',

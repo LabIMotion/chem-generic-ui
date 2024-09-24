@@ -183,7 +183,7 @@ export default class Preview extends Component {
     } else {
       selected.properties = selected.properties_release;
     }
-
+    console.log('selected=', selected);
     const layersLayout = (
       <GenInterface
         generic={selected || {}}
