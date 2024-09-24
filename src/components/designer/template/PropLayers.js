@@ -164,7 +164,7 @@ const PropLayers = (props) => {
               generic={data}
               fnConfirm={onLayerDelete}
             />
-            <LayerSaveBtn layer={layer} />
+            <LayerSaveBtn layer={layer} data={data} />
           </ButtonGroup>
           {/* <RemovePropBtn
                 delStr={FieldTypes.DEL_LAYER}

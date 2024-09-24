@@ -25,7 +25,6 @@ import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
 import VocabularyListBtn from '../designer/template/VocabularyListBtn';
-import LayerSaveBtn from '../designer/template/LayerSaveBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
 import OntCmp from '../fields/OntCmp';
