@@ -29,6 +29,7 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   };
 
   const handleViewLayer = (params) => {
+    const selectOptions = params.data.properties?.select_options;
     const generic = {
       properties: {
         layers: {
@@ -36,6 +37,7 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
             ...params.data.properties,
           },
         },
+        ...(selectOptions && { select_options: selectOptions }),
       },
       properties_release: {
         layers: {
@@ -43,6 +45,7 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
             ...params.data.properties,
           },
         },
+        ...(selectOptions && { select_options: selectOptions }),
       },
     };
     const ext = {

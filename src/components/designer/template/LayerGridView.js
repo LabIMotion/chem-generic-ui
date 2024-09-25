@@ -28,10 +28,15 @@ const LayerGridView = ({ _layer }) => {
       }}
     >
       <div className="gu-mb-2">
-        <h3>
-          Standard Layer : {name} {label && `(${label})`}
-        </h3>
-        <div style={{ whiteSpace: 'pre-wrap' }}>{description}</div>
+        <h4>
+          <b>Standard Layer : </b> {name} {label && `(${label})`}
+        </h4>
+        <div style={{ display: 'flex', gap: '5px' }}>
+          <div>
+            <b>Description : </b>
+          </div>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{description}</div>
+        </div>
       </div>
       <GenInterface
         generic={layer || {}}
