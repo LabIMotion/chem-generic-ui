@@ -55,7 +55,7 @@ const PropLayers = (props) => {
   };
 
   const onAddStandardLayer = async (_layer) => {
-    const result = handleAddStandardLayer(_layer, data);
+    const result = handleAddStandardLayer(_layer, data, genericType);
     fnUpdate(result);
   };
 

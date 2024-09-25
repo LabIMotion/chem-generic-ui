@@ -67,7 +67,7 @@ export const renderNameField = ({
         name={`f_${field}`}
         defaultValue={fieldObject[field]}
         disabled={field === 'field'}
-        onChange={event =>
+        onChange={(event) =>
           fnChange(
             event,
             fieldObject[field],

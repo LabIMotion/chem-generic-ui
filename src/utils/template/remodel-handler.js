@@ -3,6 +3,11 @@ import { FieldTypes, genUnits } from 'generic-ui-core';
 import { toBool, toNum } from '../../components/tools/utils';
 import organizeSubValues from '../../components/tools/collate';
 import Constants from '../../components/tools/Constants';
+import {
+  FieldBase,
+  ElementBase,
+  SegmentBase,
+} from '../../components/elements/BaseFields';
 
 // current generic value, new klass value
 export const remodel = (generic, klass) => {
@@ -232,4 +237,30 @@ export const mergeSelections = (source, target) => {
     }
   });
   return newTarget;
+};
+
+export const updateUnsupports = (layer, genericType) => {
+  const supports = {
+    Element: ElementBase,
+    Segment: SegmentBase,
+    default: FieldBase,
+  };
+  const supportedFields = supports[genericType] || supports.default;
+  return {
+    ...layer,
+    fields: layer.fields.map((field) => {
+      if (
+        !supportedFields.some((supported) => supported.value === field.type)
+      ) {
+        const { option_layers: optionLayers, ...restField } = field;
+        return {
+          ...restField,
+          type: 'text',
+          text_sub_fields: [],
+          sub_fields: [],
+        };
+      }
+      return field;
+    }),
+  };
 };

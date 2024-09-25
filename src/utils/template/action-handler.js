@@ -9,7 +9,7 @@ import {
   validateLayerUpdate,
   validateSelectList,
 } from './input-validation';
-import { mergeSelections } from './remodel-handler';
+import { mergeSelections, updateUnsupports } from './remodel-handler';
 import Response from '../response';
 
 /**
@@ -87,10 +87,12 @@ export const handleCreateLayer = (_layer, _element) => {
   );
 };
 
-export const handleAddStandardLayer = (_layer, _element) => {
-  const [element, layer] = [_element, _layer];
-  const verify = validateLayerInput(layer);
-  if (!verify.isSuccess) return responseCreateLayer(verify, element, layer.key);
+export const handleAddStandardLayer = (_layer, _element, _genericType) => {
+  const [element, origLayer, genericType] = [_element, _layer, _genericType];
+  const verify = validateLayerInput(origLayer);
+  if (!verify.isSuccess)
+    return responseCreateLayer(verify, element, origLayer.key);
+  const layer = updateUnsupports(origLayer, genericType);
   // move "select_options" to another constant
   const selectOptions = layer.select_options || {};
   delete layer.select_options;

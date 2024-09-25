@@ -514,10 +514,10 @@ class ElementField extends Component {
                       <span style={{ width: '100%' }}>
                         <Select
                           styles={{
-                            menuPortal: base => {
+                            menuPortal: (base) => {
                               return { ...base, zIndex: 9999 };
                             },
-                            menu: base => {
+                            menu: (base) => {
                               return { ...base, zIndex: 9999 };
                             },
                           }}
@@ -525,9 +525,9 @@ class ElementField extends Component {
                           multi={false}
                           options={colOpts}
                           value={colOpts?.find(
-                            o => o.value === (f.cols || layer.cols)
+                            (o) => o.value === (f.cols || layer.cols)
                           )}
-                          onChange={event =>
+                          onChange={(event) =>
                             this.handleChange(
                               event,
                               f.type,
@@ -557,18 +557,18 @@ class ElementField extends Component {
                         <span style={{ width: '100%' }}>
                           <Select
                             styles={{
-                              menuPortal: base => {
+                              menuPortal: (base) => {
                                 return { ...base, zIndex: 9999 };
                               },
-                              menu: base => {
+                              menu: (base) => {
                                 return { ...base, zIndex: 9999 };
                               },
                             }}
                             name={f.field}
                             multi={false}
                             options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
-                            onChange={event =>
+                            value={typeOpts?.find((o) => o.value === f.type)}
+                            onChange={(event) =>
                               this.handleChange(
                                 event,
                                 f.type,
@@ -597,18 +597,18 @@ class ElementField extends Component {
                         <span style={{ width: '100%' }}>
                           <Select
                             styles={{
-                              menuPortal: base => {
+                              menuPortal: (base) => {
                                 return { ...base, zIndex: 9999 };
                               },
-                              menu: base => {
+                              menu: (base) => {
                                 return { ...base, zIndex: 9999 };
                               },
                             }}
                             name={f.field}
                             multi={false}
                             options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
-                            onChange={event =>
+                            value={typeOpts?.find((o) => o.value === f.type)}
+                            onChange={(event) =>
                               this.handleChange(
                                 event,
                                 f.type,
@@ -635,7 +635,7 @@ class ElementField extends Component {
                             name={`frmDecimal_${layer.key}_f_${fieldObject.field}`}
                             type="number"
                             value={f.decimal}
-                            onChange={event =>
+                            onChange={(event) =>
                               this.handleChange(
                                 event,
                                 f.label,
@@ -660,7 +660,7 @@ class ElementField extends Component {
                       <Checkbox
                         name={`frmChk_${layer.key}_f_${fieldObject.field}`}
                         checked={toBool(f.canAdjust)}
-                        onChange={event =>
+                        onChange={(event) =>
                           this.handleChange(
                             event,
                             toBool(f.canAdjust),
