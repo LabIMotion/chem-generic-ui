@@ -17,6 +17,7 @@ import PropFields from './PropFields';
 import {
   handleAddDummy,
   handleCreateLayer,
+  handleAddStandardLayer,
   handleUpdateLayer,
 } from '../../../utils/template/action-handler';
 import {
@@ -50,14 +51,17 @@ const PropLayers = (props) => {
 
   const onLayerCreate = (_layer) => {
     const result = handleCreateLayer(_layer, data);
-    console.log('onLayerCreate result=', result);
+    fnUpdate(result);
+  };
+
+  const onAddStandardLayer = async (_layer) => {
+    const result = handleAddStandardLayer(_layer, data);
     fnUpdate(result);
   };
 
   const onDeleteStandardLayer = async (_layer) => {
     const result = await LayerManager.deleteStandardLayer(_layer.id);
     console.log('onDeleteStandardLayer result=', result);
-    // fnUpdate(result);
   };
 
   const onLayerUpdate = (_layerKey, _updates) => {
@@ -225,7 +229,7 @@ const PropLayers = (props) => {
             Layers
             <LayerAttrNewBtn fnCreate={onLayerCreate} />
             <LayerGridBtn
-              fnCreate={onLayerCreate}
+              fnCreate={onAddStandardLayer}
               fnDelete={onDeleteStandardLayer}
             />
           </Panel.Title>

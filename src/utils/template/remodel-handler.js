@@ -17,7 +17,7 @@ export const remodel = (generic, klass) => {
   const newProps = cloneDeep(klass.properties_release);
   newProps.klass = generic.properties.klass;
   newProps.klass_uuid = klass.uuid;
-  Object.keys(newProps.layers).forEach(key => {
+  Object.keys(newProps.layers).forEach((key) => {
     const newLayer = newProps.layers[key] || {};
     newLayer.ai = generic.properties.layers[key]?.ai || []; // copy linked analyses or []
     if (generic.properties.layers[key]?.timeRecord) {
@@ -28,7 +28,7 @@ export const remodel = (generic, klass) => {
         generic.properties.layers[key].fields) ||
       [];
     (newLayer.fields || []).forEach((f, idx) => {
-      const curIdx = findIndex(curFields, o => o.field === f.field);
+      const curIdx = findIndex(curFields, (o) => o.field === f.field);
       if (curIdx >= 0) {
         const curVal = generic.properties.layers[key].fields[curIdx].value;
         const curType = typeof curVal;
@@ -85,7 +85,7 @@ export const remodel = (generic, klass) => {
             newProps.layers[key].fields[idx].option_layers
           );
           const vs = units.find(
-            u =>
+            (u) =>
               u.key ===
               generic.properties.layers[key].fields[curIdx].value_system
           );
@@ -106,8 +106,8 @@ export const remodel = (generic, klass) => {
             if (nSubs.length < 1) {
               newProps.layers[key].fields[idx].value = undefined;
             } else {
-              nSubs.forEach(nSub => {
-                const hitSub = cSubs.find(c => c.id === nSub.id) || {};
+              nSubs.forEach((nSub) => {
+                const hitSub = cSubs.find((c) => c.id === nSub.id) || {};
                 if (nSub.type === FieldTypes.F_LABEL) {
                   exSubs.push(nSub);
                 }
@@ -183,7 +183,7 @@ export const importReaction = (source, target) => {
     const srcProps = source.properties;
     const srcLayers = srcProps.layers;
 
-    const reactionLayers = Object.keys(srcLayers).filter(key =>
+    const reactionLayers = Object.keys(srcLayers).filter((key) =>
       key.startsWith(Constants.SYS_REACTION)
     );
 
@@ -191,10 +191,45 @@ export const importReaction = (source, target) => {
     if (reactionLayers.length > 0) {
       hasReaction = true;
       newTarget = cloneDeep(target);
-      reactionLayers.forEach(key => {
+      reactionLayers.forEach((key) => {
         newTarget.properties.layers[key] = srcLayers[key];
       });
     }
   }
   return [hasReaction, newTarget];
+};
+
+export const mergeSelections = (source, target) => {
+  if (!source || !target) {
+    return target;
+  }
+  const newTarget = cloneDeep(target);
+  Object.keys(source).forEach((key) => {
+    // Check if the source key exists and has options
+    if (source[key] && source[key].options) {
+      // Initialize the key in newTarget if it doesn't exist
+      if (!newTarget[key]) {
+        newTarget[key] = {};
+      }
+      // Initialize options array in newTarget[key] if it doesn't exist
+      if (!Array.isArray(newTarget[key].options)) {
+        newTarget[key].options = [];
+      }
+
+      // Merge options, ensuring no duplicates based on the key property
+      source[key].options.forEach((newOption) => {
+        if (
+          !newTarget[key].options.some(
+            (existingOption) => existingOption.key === newOption.key
+          )
+        ) {
+          newTarget[key].options.push(newOption);
+        }
+      });
+
+      // // Optionally, merge descriptions if necessary
+      newTarget[key].desc = source[key].desc || newTarget[key].desc;
+    }
+  });
+  return newTarget;
 };

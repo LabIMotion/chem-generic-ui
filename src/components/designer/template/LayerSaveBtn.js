@@ -24,6 +24,7 @@ const extractOptions = (_layer, _data) => {
       // Add the entire matching object to the result
       options.select_options[optionLayerKey] =
         data.properties_template.select_options[optionLayerKey];
+      options.select_options[optionLayerKey].desc = optionLayerKey;
     }
   });
   // Check if any options, otherwise return null

@@ -9,6 +9,7 @@ import {
   validateLayerUpdate,
   validateSelectList,
 } from './input-validation';
+import { mergeSelections } from './remodel-handler';
 import Response from '../response';
 
 /**
@@ -86,6 +87,56 @@ export const handleCreateLayer = (_layer, _element) => {
   );
 };
 
+export const handleAddStandardLayer = (_layer, _element) => {
+  const [element, layer] = [_element, _layer];
+  const verify = validateLayerInput(layer);
+  if (!verify.isSuccess) return responseCreateLayer(verify, element, layer.key);
+  // move "select_options" to another constant
+  const selectOptions = layer.select_options || {};
+  delete layer.select_options;
+  // check if the layer is already exist
+  const layerKey = layer.key;
+  if (element?.properties_template?.layers[layerKey]) {
+    return responseCreateLayer(
+      notifyError(
+        'This Layer is already exist. Please choose another one.',
+        `Layer [${layer.key}]`
+      ),
+      element,
+      layer.key
+    );
+  }
+  // set default value
+  layer.position = 1;
+  layer.timeRecord = '';
+  element.properties_template.layers[`${layer.key}`] = layer;
+  // Handle select_options in the properties_template
+  if (!element.properties_template?.select_options) {
+    element.properties_template.select_options = selectOptions;
+  } else {
+    // Merge selectOptions with existing select_options
+    element.properties_template.select_options = mergeSelections(
+      selectOptions,
+      element.properties_template.select_options
+    );
+  }
+  // Check if "select_options" is empty, if so, delete it
+  if (Object.keys(element.properties_template?.select_options).length === 0) {
+    delete element.properties_template.select_options;
+  }
+  return responseCreateLayer(
+    notifySuccess(
+      [
+        'A Standard Layer has been added into the template.',
+        "Remember to save once you've finished editing.",
+      ].join(' '),
+      `Layer [${layer.key}]`
+    ),
+    element,
+    layer.key
+  );
+};
+
 /**
  * Handles the layer creation.
  * @param {string} _layer The key of the layer within the element.
@@ -116,10 +167,10 @@ export const handleUpdateLayer = (_element, _layerKey, _updates) => {
     msg.push(
       'For a Workflow layer, the Field Restrict Setting is only applicable on its own layer.'
     );
-    (layer.fields || []).map(f => {
+    (layer.fields || []).map((f) => {
       const newF = f;
       if (newF.cond_fields && newF.cond_fields.length > 0) {
-        newF.cond_fields = f.cond_fields.filter(o => o.layer === layer.key);
+        newF.cond_fields = f.cond_fields.filter((o) => o.layer === layer.key);
         if (newF.cond_fields.length < 1) delete newF.cond_fields;
       }
       return newF;
@@ -149,7 +200,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
   if (delStr === FieldTypes.DEL_SELECT) {
     delete element.properties_template.select_options[delKey];
     selectOptions = Object.keys(element.properties_template.select_options).map(
-      key => {
+      (key) => {
         return { value: key, name: key, label: key };
       }
     );
@@ -157,7 +208,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
   if (delStr === FieldTypes.DEL_OPTION) {
     const { options } = element.properties_template.select_options[delRoot];
     if (options && options.length > 0) {
-      const idx = options.findIndex(o => o.key === delKey);
+      const idx = options.findIndex((o) => o.key === delKey);
       if (idx !== -1) {
         options.splice(idx, 1);
       }
@@ -174,7 +225,7 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
   }
   if (delStr === FieldTypes.DEL_FIELD) {
     const { fields } = element.properties_template.layers[delRoot];
-    const idx = fields.findIndex(o => o.field === delKey);
+    const idx = fields.findIndex((o) => o.field === delKey);
     if (idx !== -1) {
       fields.splice(idx, 1);
     }
@@ -189,7 +240,7 @@ export const handleAddDummy = (_element, _layerKey, _field) => {
   const layer = element?.properties_template?.layers[layerKey];
   let { fields } = layer || {};
   fields = fields || [];
-  let idx = fields.findIndex(o => o.field === field);
+  let idx = fields.findIndex((o) => o.field === field);
   if (idx === -1 && fields.length > 0) idx = fields.length - 1;
   fields.splice(idx + 1, 0, new GenericDummy());
   element.properties_template.layers[layerKey].fields = fields;
@@ -202,7 +253,7 @@ export const handleAddSelect = (_element, _name, _options) => {
   const verify = validateSelectList(element, name);
   if (verify.isSuccess) {
     element.properties_template.select_options = options;
-    const selectOptions = Object.keys(options).map(key => {
+    const selectOptions = Object.keys(options).map((key) => {
       return {
         value: key,
         name: key,
@@ -238,7 +289,7 @@ export const handleOptionInput = (_element, _optionKey, _selectKey, _input) => {
   ];
   const options =
     element?.properties_template?.select_options[selectKey]?.options || [];
-  const idx = findIndex(options, o => o.key === optionKey);
+  const idx = findIndex(options, (o) => o.key === optionKey);
   const op = {};
   op.key = optionKey;
   op.label = input;
@@ -280,7 +331,7 @@ export const handleFieldInputChange = (
   if (fields == null || fields.length === 0)
     return { notify: notifyError('Layer has no fields'), element };
 
-  const fieldObj = fields.find(e => e.field === field);
+  const fieldObj = fields.find((e) => e.field === field);
   if (!fieldObj || Object.keys(fieldObj).length === 0)
     return { notify: notifyError('Field is undefined'), element };
 
@@ -324,7 +375,7 @@ export const handleFieldInputChange = (
       fieldObj[`${fieldCheck}`] = value;
       break;
   }
-  const idx = findIndex(fields, o => o.field === field);
+  const idx = findIndex(fields, (o) => o.field === field);
   fields.splice(idx, 1, fieldObj);
   element.properties_template.layers[layerKey].fields = fields;
   return new Response(notifySuccess(), element);
