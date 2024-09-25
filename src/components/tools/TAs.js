@@ -5,8 +5,6 @@ export default Object.freeze({
   adjust_calculation: 'Adjust the calculation',
   add_entry: 'Add an entry',
   add_layer: 'Add a layer',
-  add_std_layer: 'Add this layer to Standard Layer',
-  add_lyr2tpl: 'Add this layer to the template',
   associate_direct: 'Associate with this sample',
   associate_duplicate: 'Duplicate the sample first and then associate with it',
   associate_split: 'Split from the sample first and then associate with it',
@@ -54,6 +52,9 @@ export default Object.freeze({
       {_in} <br /> What is this?
     </>
   ),
+  lyr_add2std: 'Add this layer to Standard Layer',
+  lyr_add2tpl: 'Add this layer to the template',
+  lyr_view: 'View this Layer',
   sel_add: 'Add a new selection list',
   sel_lyr2tpl: (
     <>

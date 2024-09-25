@@ -45,10 +45,6 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
     [rowData]
   );
 
-  const togglePanel = useCallback((rowIndex) => {
-    setExpandedRowIndex(rowIndex);
-  }, []);
-
   // Usage in getRowHeight
   const getRowHeight = useCallback(
     (params) => {
@@ -89,9 +85,17 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
       headerName: 'Action',
       cellRenderer: (params) => (
         <>
-          <LTooltip idf="add_lyr2tpl">
+          <LTooltip idf="lyr_add2tpl">
             <Button className="btn-gxs" onClick={() => onLayerSelect(params)}>
               Add
+            </Button>
+          </LTooltip>
+          <LTooltip idf="lyr_view">
+            <Button
+              className="btn-gxs gu-ml-1"
+              onClick={() => onLayerView(params)}
+            >
+              View
             </Button>
           </LTooltip>
           <ButtonConfirm
@@ -100,15 +104,6 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
             fnClick={onLayerDelete}
             fnParams={params}
           />
-          <LTooltip idf="add_lyr2tpl">
-            <Button
-              className="btn-gxs gu-ml-1"
-              // onClick={() => togglePanel(params.node.rowIndex)}
-              onClick={() => onLayerView(params)}
-            >
-              Show
-            </Button>
-          </LTooltip>
         </>
       ),
       sortable: false,

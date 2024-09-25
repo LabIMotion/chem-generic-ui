@@ -118,7 +118,7 @@ const LayerSaveBtn = (props) => {
   // 5. Return statement (JSX)
   return (
     <>
-      <LTooltip idf="add_std_layer">
+      <LTooltip idf="lyr_add2std">
         <Button
           bsSize="sm"
           onClick={() => dispatch({ type: 'show', payload: true })}
