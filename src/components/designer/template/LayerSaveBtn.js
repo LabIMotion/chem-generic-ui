@@ -133,6 +133,7 @@ const LayerSaveBtn = (props) => {
           show: state.show,
           setShow: (value) => dispatch({ type: 'show', payload: value }),
         }}
+        close={handleReset}
       >
         <>
           <NotificationMessage
