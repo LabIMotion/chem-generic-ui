@@ -11,7 +11,7 @@ const TemplateBar = (props) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    setShow(notify !== null && Object.keys(notify).length > 0);
+    setShow(notify !== null && Object.keys(notify || {}).length > 0);
   }, [notify]);
 
   const onClick = (event) => {

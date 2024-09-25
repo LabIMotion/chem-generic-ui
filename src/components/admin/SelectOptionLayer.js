@@ -58,39 +58,41 @@ const SelectOptionLayer = (props) => {
   };
 
   const selects = [];
-  Object.keys(generic.properties_template?.select_options).forEach((root) => {
-    const selectOptions =
-      (generic.properties_template?.select_options[root] &&
-        generic.properties_template?.select_options[root].options) ||
-      [];
-    const options = selectOptions.map((f) => (
-      <div key={`${f.key}_${root}`} style={{ marginTop: '10px' }}>
-        {optionR({ key: f.key, root, label: f.label })}
-      </div>
-    ));
+  Object.keys(generic.properties_template?.select_options || {}).forEach(
+    (root) => {
+      const selectOptions =
+        (generic.properties_template?.select_options[root] &&
+          generic.properties_template?.select_options[root].options) ||
+        [];
+      const options = selectOptions.map((f) => (
+        <div key={`${f.key}_${root}`} style={{ marginTop: '10px' }}>
+          {optionR({ key: f.key, root, label: f.label })}
+        </div>
+      ));
 
-    const selectNode = (
-      <Panel
-        className="panel_generic_properties"
-        defaultExpanded
-        key={`select_options_${root}`}
-      >
-        <Panel.Heading className="template_panel_heading">
-          <Panel.Title toggle>{root}</Panel.Title>
-          <SelectOption
-            generic={generic}
-            root={root}
-            fnAddOption={onAdd}
-            fnChange={fnChange}
-          />
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>{options}</Panel.Body>
-        </Panel.Collapse>
-      </Panel>
-    );
-    selects.push(selectNode);
-  });
+      const selectNode = (
+        <Panel
+          className="panel_generic_properties"
+          defaultExpanded
+          key={`select_options_${root}`}
+        >
+          <Panel.Heading className="template_panel_heading">
+            <Panel.Title toggle>{root}</Panel.Title>
+            <SelectOption
+              generic={generic}
+              root={root}
+              fnAddOption={onAdd}
+              fnChange={fnChange}
+            />
+          </Panel.Heading>
+          <Panel.Collapse>
+            <Panel.Body>{options}</Panel.Body>
+          </Panel.Collapse>
+        </Panel>
+      );
+      selects.push(selectNode);
+    }
+  );
 
   return (
     <div>

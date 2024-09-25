@@ -1,4 +1,4 @@
-import { findIndex, cloneDeep } from 'lodash';
+import { findIndex, cloneDeep, mergeWith, isArray } from 'lodash';
 import { FieldTypes, genUnits } from 'generic-ui-core';
 import { toBool, toNum } from '../../components/tools/utils';
 import organizeSubValues from '../../components/tools/collate';
@@ -8,6 +8,21 @@ import {
   ElementBase,
   SegmentBase,
 } from '../../components/elements/BaseFields';
+
+export const mergeOptions = (A, B) => {
+  return mergeWith({}, A, B, (objValue, srcValue) => {
+    if (isArray(objValue) && isArray(srcValue)) {
+      // Merge arrays and remove duplicates based on 'key' property
+      const combined = [...objValue, ...srcValue];
+      return combined.filter(
+        (option, index, self) =>
+          index === self.findIndex((o) => o.key === option.key)
+      );
+    }
+    // Return undefined for lodash to handle the default merging
+    return undefined;
+  });
+};
 
 // current generic value, new klass value
 export const remodel = (generic, klass) => {
@@ -204,8 +219,12 @@ export const importReaction = (source, target) => {
   return [hasReaction, newTarget];
 };
 
+// replace by mergeOptions
 export const mergeSelections = (source, target) => {
-  if (!source || !target) {
+  if (
+    Object.keys(source || {}).length < 1 ||
+    Object.keys(target || {}).length < 1
+  ) {
     return target;
   }
   const newTarget = cloneDeep(target);

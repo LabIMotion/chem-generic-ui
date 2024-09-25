@@ -57,7 +57,7 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
         <Button
           bsSize="sm"
           bsStyle="danger"
-          aria-hidden="true"
+          // aria-hidden="true"
           onClick={onClick}
           data-testid="confirm-btn-yes"
         >

@@ -74,8 +74,8 @@ const PropFields = (props) => {
   );
 
   const selectOptions = Object.keys(
-    generic.properties_template?.select_options
-  ).map(key => {
+    generic.properties_template?.select_options || {}
+  ).map((key) => {
     return { value: key, name: key, label: key };
   });
 

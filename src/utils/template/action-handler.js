@@ -9,7 +9,7 @@ import {
   validateLayerUpdate,
   validateSelectList,
 } from './input-validation';
-import { mergeSelections, updateUnsupports } from './remodel-handler';
+import { mergeOptions, updateUnsupports } from './remodel-handler';
 import Response from '../response';
 
 /**
@@ -117,13 +117,15 @@ export const handleAddStandardLayer = (_layer, _element, _genericType) => {
     element.properties_template.select_options = selectOptions;
   } else {
     // Merge selectOptions with existing select_options
-    element.properties_template.select_options = mergeSelections(
+    element.properties_template.select_options = mergeOptions(
       selectOptions,
       element.properties_template.select_options
     );
   }
   // Check if "select_options" is empty, if so, delete it
-  if (Object.keys(element.properties_template?.select_options).length === 0) {
+  if (
+    Object.keys(element.properties_template?.select_options || {}).length === 0
+  ) {
     delete element.properties_template.select_options;
   }
   return responseCreateLayer(
@@ -334,7 +336,7 @@ export const handleFieldInputChange = (
     return { notify: notifyError('Layer has no fields'), element };
 
   const fieldObj = fields.find((e) => e.field === field);
-  if (!fieldObj || Object.keys(fieldObj).length === 0)
+  if (!fieldObj || Object.keys(fieldObj || {}).length === 0)
     return { notify: notifyError('Field is undefined'), element };
 
   switch (fieldCheck) {

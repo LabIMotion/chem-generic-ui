@@ -116,7 +116,7 @@ export const validateSelectList = (_element, _name) => {
       `Select List [${selectName}]`
     );
   }
-  if (_element?.properties_template.select_options[`${selectName}`]) {
+  if (_element?.properties_template?.select_options?.[`${selectName}`]) {
     return notifyError(
       'This name of Select List is already in use. Please choose another one.',
       `Select List [${selectName}]`

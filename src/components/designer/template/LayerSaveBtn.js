@@ -2,6 +2,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
+import { FieldTypes } from 'generic-ui-core';
 import LayerForm from './LayerForm';
 import LayerSaveModal from '../../elements/LayerSaveModal';
 import FIcons from '../../icons/FIcons';
@@ -9,6 +10,37 @@ import LTooltip from '../../shared/LTooltip';
 import LayerManager from '../../../utils/desMgr';
 import NotificationMessage from './NotificationMessage';
 import { validateLayerInput } from '../../../utils/template/standard-validation';
+import { mergeOptions } from '../../../utils/template/remodel-handler';
+
+const extractOptionsFromTable = (_layer, _data) => {
+  const options = { select_options: {} };
+  const layer = cloneDeep(_layer);
+  const data = cloneDeep(_data);
+  const selectFields = layer.fields.filter(
+    (field) => field.type === FieldTypes.F_TABLE
+  );
+  selectFields.forEach((selectField) => {
+    // TODO: Implement the logic to extract options from table fields
+    // For each table field, a property "sub_fields" is an array of objects, each object has a property "type"
+    // If the type is "select", then a property "option_layers" may exist, which is a string, and we use it to search the data?.properties_template?.select_options to get the options
+    (selectField.sub_fields || []).forEach((subField) => {
+      if (subField.type === FieldTypes.F_SELECT && subField.option_layers) {
+        const optionLayerKey = subField.option_layers;
+        if (data?.properties_template?.select_options?.[optionLayerKey]) {
+          // Add the entire matching object to the result
+          options.select_options[optionLayerKey] =
+            data.properties_template.select_options[optionLayerKey];
+          options.select_options[optionLayerKey].desc = optionLayerKey;
+        }
+      }
+    });
+  });
+  // Check if any options, otherwise return null
+  if (Object.keys(options.select_options || {}).length === 0) {
+    return null;
+  }
+  return options;
+};
 
 const extractOptions = (_layer, _data) => {
   const options = { select_options: {} };
@@ -28,7 +60,7 @@ const extractOptions = (_layer, _data) => {
     }
   });
   // Check if any options, otherwise return null
-  if (Object.keys(options.select_options).length === 0) {
+  if (Object.keys(options.select_options || {}).length === 0) {
     return null;
   }
   return options;
@@ -85,11 +117,12 @@ const LayerSaveBtn = (props) => {
       dispatch({ type: 'notify', payload: res });
     } else {
       const options = extractOptions(state.layer, state.data);
+      const optionsFromTable = extractOptionsFromTable(state.layer, state.data);
+      const mergedOptions = mergeOptions(optionsFromTable || {}, options || {});
       const saveInput = {
         ...state.layer,
-        ...options,
+        ...mergedOptions,
       };
-      // console.log('saveInput', saveInput);
       res = await LayerManager.saveStandardLayer(saveInput);
       dispatch({ type: 'notify', payload: res.notify });
     }
