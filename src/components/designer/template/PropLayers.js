@@ -24,9 +24,7 @@ import {
   handleCreateField,
   handleLayerPositionChange,
 } from '../../../utils/template/field-handler';
-import VocabularyListBtn from './VocabularyListBtn';
 import ConditionLayerBtn from './ConditionLayerBtn';
-// import RemovePropBtn from './RemovePropBtn';
 import NewFieldBtn from './NewFieldBtn';
 import LayerSaveBtn from './LayerSaveBtn';
 import ButtonDelField from '../../fields/ButtonDelField';
@@ -168,7 +166,6 @@ const PropLayers = (props) => {
               generic={data}
               fnConfirm={onLayerDelete}
             />
-            <LayerSaveBtn layer={layer} data={data} />
           </ButtonGroup>
           {/* <RemovePropBtn
                 delStr={FieldTypes.DEL_LAYER}
@@ -177,21 +174,25 @@ const PropLayers = (props) => {
                 fnDelete={onLayerDelete}
               /> */}
           <ButtonGroup className="gu-ml-2">
-            <VocabularyListBtn
+            {/* <VocabularyListBtn
               element={data}
               vocabularies={vocabularies}
               fnUpdate={onLayerCondition}
               layer={layer}
               sortedLayers={sortedLayers}
-            />
-            <ButtonTooltip
-              idf="fld_dum_add"
-              fnClick={onDummyAdd}
-              element={{ layerKey, field: null }}
-              fa="faSquare"
-              place="top"
-            />
-            <NewFieldBtn fnUpdate={onFieldAdd} layer={layer} />
+            /> */}
+            <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
+              <ButtonTooltip
+                idf="fld_dum_add"
+                fnClick={onDummyAdd}
+                element={{ layerKey, field: null }}
+                fa="faSquare"
+                place="top"
+              />
+            </NewFieldBtn>
+          </ButtonGroup>
+          <ButtonGroup className="gu-ml-2">
+            <LayerSaveBtn layer={layer} data={data} />
           </ButtonGroup>
           <ButtonGroup className="gu-ml-2">
             <PositionDnD

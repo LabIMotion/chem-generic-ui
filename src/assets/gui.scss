@@ -21,6 +21,17 @@
   @include gux-mr(1);
 }
 
+.gu-mr-2 {
+  @include gux-mr(2);
+}
+
+.gu-mr-3 {
+  @include gux-mr(3);
+}
+
+.gu-mr-4 {
+  @include gux-mr(4);
+}
 .gu-mr-auto {
   @include gux-mr(auto);
 }

@@ -59,14 +59,14 @@ class ElementField extends Component {
     this.handleDrop = this.handleDrop.bind(this);
   }
 
-  handleDrop = _params => {
+  handleDrop = (_params) => {
     const { onMove } = this.props;
     const { source, target, rid } = _params;
     onMove.onPosition(rid.key, target, source.fid);
   };
 
   handlePanelToggle = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
         panelIsExpanded: !prevState.panelIsExpanded,
       };
@@ -420,46 +420,51 @@ class ElementField extends Component {
           <FieldBadge fieldObj={f} prop="type" />
           <FieldBadge fieldObj={f} prop="cols" />
         </Panel.Title>
-        <ButtonGroup bsSize="sm" style={{ display: 'inline-flex' }}>
-          <ConditionFieldBtn
-            field={f}
-            fnUpdateSub={this.updSubField}
-            layer={layer}
-            sortedLayers={allLayers}
-          />
-          <ButtonDelField
-            delType={FieldTypes.DEL_FIELD}
-            delKey={f.field}
-            delRoot={layerKey}
-            generic={generic}
-            fnConfirm={onDelete}
-          />
-          {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
-          <VocabularyListBtn
+        <div style={{ display: 'inline-flex' }}>
+          <ButtonGroup bsSize="sm" className="gu-mr-2">
+            <ConditionFieldBtn
+              field={f}
+              fnUpdateSub={this.updSubField}
+              layer={layer}
+              sortedLayers={allLayers}
+            />
+            <ButtonDelField
+              delType={FieldTypes.DEL_FIELD}
+              delKey={f.field}
+              delRoot={layerKey}
+              generic={generic}
+              fnConfirm={onDelete}
+            />
+            {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
+            <ButtonTooltip
+              idf="fld_dum_add"
+              fnClick={this.handleAddDummy}
+              element={{ layerKey, field: f.field }}
+              fa="faSquare"
+              place="top"
+              btnCls="gu-ml-2"
+            />
+          </ButtonGroup>
+          <ButtonGroup bsSize="sm" className="gu-mr-2">
+            <VocabularyListBtn
               element={generic}
               vocabularies={vocabularies}
               fnUpdate={this.handleAddVoc}
               layer={layer}
               sortedLayers={allLayers}
             />
-          <ButtonTooltip
-            idf="fld_dum_add"
-            fnClick={this.handleAddDummy}
-            element={{ layerKey, field: f.field }}
-            fa="faSquare"
-            place="top"
-          />
+          </ButtonGroup>
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}
             field={f}
             rowValue={layer}
             isButton
           />
-        </ButtonGroup>
+        </div>
       </Panel.Heading>
     );
 
-    const addArrange = _node => (
+    const addArrange = (_node) => (
       <DroppablePanel
         type={`${DnDs.LAYER_FIELD}_${layer.key}`}
         field={f}

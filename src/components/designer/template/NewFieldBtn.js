@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 
-const NewFieldBtn = (props) => {
-  const { fnUpdate, layer } = props;
+const NewFieldBtn = ({ fnUpdate, layer, children }) => {
   const [newFieldKey, setNewFieldKey] = useState('');
 
   const onInputNewField = (_e) => {
@@ -30,6 +29,7 @@ const NewFieldBtn = (props) => {
           fa="faPlus"
           place="top"
         />
+        {children}
       </span>
     </InputGroup>
   );
@@ -38,6 +38,9 @@ const NewFieldBtn = (props) => {
 NewFieldBtn.propTypes = {
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
+  children: PropTypes.node,
 };
+
+NewFieldBtn.defaultProps = { children: null };
 
 export default NewFieldBtn;
