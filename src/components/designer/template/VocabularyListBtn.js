@@ -9,6 +9,7 @@ import {
 import VocabularyListModal from '../../elements/VocabularyListModal';
 import { handleAddVocabulary } from '../../../utils/template/field-handler';
 import LTooltip from '../../shared/LTooltip';
+import FIcons from '../../icons/FIcons';
 
 const VocabularyListBtn = (props) => {
   const { element, fnUpdate, layer, sortedLayers, vocabularies } = props;
@@ -43,7 +44,7 @@ const VocabularyListBtn = (props) => {
     <>
       <LTooltip idf="voc_add">
         <Button bsSize="sm" onClick={onClick}>
-          <i className="fa fa-book" aria-hidden="true" />
+          {FIcons.faSpellCheck}
         </Button>
       </LTooltip>
       <VocabularyListModal
