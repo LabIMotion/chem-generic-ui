@@ -63,6 +63,13 @@ export default Object.freeze({
       apply it in the template
     </>
   ),
+  sel_voc2tpl: (
+    <>
+      Select from the LabIMotion Vocabulary (Lab-Vocab) and
+      <br />
+      apply it in the template
+    </>
+  ),
   sel_opt_add: 'Add an option',
   preview_or_versions: 'Click to preview or view version history',
   scn_full: 'Full screen',
@@ -96,5 +103,5 @@ export default Object.freeze({
   ver_retrieve: 'Retrieve this version',
   ver_view: 'View this version',
   voc_add: 'Add this into LabIMotion Vocabulary (Lab-Vocab)',
-  voc_use: 'Use this vocabulary in the template',
+  voc_add2tpl: 'Add this LabIMotion Vocabulary (Lab-Vocab) to the template',
 });

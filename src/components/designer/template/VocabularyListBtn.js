@@ -1,19 +1,34 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import {
   verifyConditionLayer,
   handleLayerConditionChange,
 } from '../../../utils/template/condition-handler';
-import VocabularyListModal from '../../elements/VocabularyListModal';
+// import VocabularyListModal from '../../elements/VocabularyListModal';
 import { handleAddVocabulary } from '../../../utils/template/field-handler';
 import LTooltip from '../../shared/LTooltip';
 import FIcons from '../../icons/FIcons';
+import VocabGrid from './VocabGrid';
 
 const VocabularyListBtn = (props) => {
   const { element, fnUpdate, layer, sortedLayers, vocabularies } = props;
   const [show, setShow] = useState(false);
+
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
+
+  const handleSelectVoc = (params) => {
+    console.log('params=', params);
+    // addVocabulary(params.data?.properties);
+    // setShow(false);
+  };
+
+  const handleDeleteVoc = (params) => {
+    fnDelete(params.data);
+    setShow(false);
+  };
 
   const onClick = () => {
     const result = verifyConditionLayer(element, layer.key);
@@ -25,16 +40,6 @@ const VocabularyListBtn = (props) => {
     }
   };
 
-  const onClose = () => {
-    setShow(false);
-  };
-
-  const updLayerSubField = (_layerKey, _layer) => {
-    element.properties_template.layers[`${_layerKey}`] = _layer;
-    const result = handleLayerConditionChange(element, _layerKey);
-    fnUpdate(result);
-  };
-
   const addVocabulary = (_e) => {
     const result = handleAddVocabulary(element, layer, _e);
     fnUpdate(result);
@@ -42,12 +47,30 @@ const VocabularyListBtn = (props) => {
 
   return (
     <>
-      <LTooltip idf="voc_add">
-        <Button bsSize="sm" onClick={onClick}>
+      <LTooltip idf="sel_voc2tpl">
+        <Button bsSize="sm" onClick={handleShow}>
           {FIcons.faSpellCheck}
         </Button>
       </LTooltip>
-      <VocabularyListModal
+      <Modal show={show} onHide={handleClose} dialogClassName="gu_modal-68w">
+        <Modal.Header closeButton>
+          <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <VocabGrid
+            onVocSelect={handleSelectVoc}
+            onVocDelete={handleDeleteVoc}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <LTooltip idf="close">
+            <Button bsStyle="primary" onClick={handleClose}>
+              Close
+            </Button>
+          </LTooltip>
+        </Modal.Footer>
+      </Modal>
+      {/* <VocabularyListModal
         showModal={show}
         vocabularies={vocabularies}
         layer={layer}
@@ -59,7 +82,7 @@ const VocabularyListBtn = (props) => {
         field={null} // field, for field condition
         element={element}
         fnClose={onClose}
-      />
+      /> */}
     </>
   );
 };
