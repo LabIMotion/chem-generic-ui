@@ -5,7 +5,7 @@ import { buildTS } from 'generic-ui-core';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 
-const TermLink = (_ontology) => {
+const TermLink = (_ontology, _text = '') => {
   const toUrl = buildTS(_ontology);
   if (!toUrl) return null;
   const { label } = _ontology;
@@ -17,7 +17,7 @@ const TermLink = (_ontology) => {
         target="_blank"
         onClick={(e) => e.stopPropagation()}
       >
-        {FIcons.faCircleQuestion}
+        {!_text ? FIcons.faCircleQuestion : _text}
       </Button>
     </LTooltip>
   );

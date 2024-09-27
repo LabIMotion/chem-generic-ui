@@ -24,6 +24,7 @@ import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import VocabSaveBtn from '../designer/template/VocabSaveBtn';
 import VocabularyListBtn from '../designer/template/VocabularyListBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
@@ -140,9 +141,9 @@ class ElementField extends Component {
 
   availableUnits(val) {
     const { unitsSystem } = this.props;
-    const us = unitsSystem.find(e => e.field === val);
+    const us = unitsSystem.find((e) => e.field === val);
     if (us === undefined) return null;
-    const tbl = us.units.map(e => (
+    const tbl = us.units.map((e) => (
       <div key={uuid()}>
         {genUnitSup(e.label)}
         <br />
@@ -219,7 +220,7 @@ class ElementField extends Component {
       vocabularies,
     } = this.props;
     const { panelIsExpanded } = this.state;
-    const unitConfig = unitsSystem.map(_c => {
+    const unitConfig = unitsSystem.map((_c) => {
       return {
         value: _c.field,
         name: _c.label,
@@ -258,7 +259,7 @@ class ElementField extends Component {
                   type="text"
                   name="f_label"
                   defaultValue={f.formula}
-                  onChange={event =>
+                  onChange={(event) =>
                     this.handleChange(
                       event,
                       f.label,
@@ -279,7 +280,7 @@ class ElementField extends Component {
     const selectOptionsOpts =
       f.type === FieldTypes.F_SELECT ? select_options : unitConfig;
     const selectOptionsVal =
-      selectOptionsOpts?.find(o => o.value === f.option_layers) || null;
+      selectOptionsOpts?.find((o) => o.value === f.option_layers) || null;
     const selectOptions =
       f.type === FieldTypes.F_SELECT ||
       f.type === FieldTypes.F_SYSTEM_DEFINED ? (
@@ -299,13 +300,13 @@ class ElementField extends Component {
               <span style={{ width: '100%' }}>
                 <Select
                   styles={{
-                    menuPortal: base => {
+                    menuPortal: (base) => {
                       return { ...base, zIndex: 9999 };
                     },
-                    menu: base => {
+                    menu: (base) => {
                       return { ...base, zIndex: 9999 };
                     },
-                    control: base => {
+                    control: (base) => {
                       return {
                         ...base,
                         height: 35,
@@ -317,7 +318,7 @@ class ElementField extends Component {
                   multi={false}
                   options={selectOptionsOpts}
                   value={selectOptionsVal}
-                  onChange={event =>
+                  onChange={(event) =>
                     this.handleChange(
                       event,
                       f.option_layers,
@@ -375,7 +376,7 @@ class ElementField extends Component {
               name={`frmPerRow_${layer.key}_f_${fieldObject.field}`}
               componentClass="select"
               defaultValue={f.cols || 1}
-              onChange={event =>
+              onChange={(event) =>
                 this.handleChange(
                   event,
                   f.cols,
@@ -446,13 +447,14 @@ class ElementField extends Component {
             />
           </ButtonGroup>
           <ButtonGroup bsSize="sm" className="gu-mr-2">
-            <VocabularyListBtn
+            <VocabSaveBtn field={fieldObject} data={generic} />
+            {/* <VocabularyListBtn
               element={generic}
               vocabularies={vocabularies}
               fnUpdate={this.handleAddVoc}
               layer={layer}
               sortedLayers={allLayers}
-            />
+            /> */}
           </ButtonGroup>
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}
@@ -741,6 +743,10 @@ ElementField.propTypes = {
   vocabularies: PropTypes.array,
 };
 
-ElementField.defaultProps = { genericType: 'Element', unitsSystem: [], vocabularies: [] };
+ElementField.defaultProps = {
+  genericType: 'Element',
+  unitsSystem: [],
+  vocabularies: [],
+};
 
 export default ElementField;

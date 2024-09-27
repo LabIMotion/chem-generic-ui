@@ -47,7 +47,9 @@ const extractOptions = (_layer, _data) => {
   const layer = cloneDeep(_layer);
   const data = cloneDeep(_data);
   // Extract the "select" type fields
-  const selectFields = layer.fields.filter((field) => field.type === 'select');
+  const selectFields = layer.fields.filter(
+    (field) => field.type === FieldTypes.F_SELECT
+  );
   // For each select field, use the option_layers to find the matching options
   selectFields.forEach((selectField) => {
     const optionLayerKey = selectField.option_layers;
