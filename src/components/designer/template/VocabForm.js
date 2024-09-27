@@ -52,8 +52,12 @@ const VocabForm = ({ init }) => {
             <ControlLabel>Who can use this vocabulary?</ControlLabel>
             <Radio checked readOnly>
               <span className="gu-mr-1">{FIcons.faGlobe}</span>
-              <b>Standard</b>
-              <div>This can be used by any designer later in the template.</div>
+              <b>LabIMotion Generic Module</b>
+              <div>
+                This vocabulary can be used by any designer within templates.
+                Designers can reuse fields, with references automatically
+                inheriting values from the original fields.
+              </div>
             </Radio>
           </FormGroup>
         </Form>
@@ -86,7 +90,8 @@ const VocabForm = ({ init }) => {
               <b>Please note:</b>
               <p>
                 When no terminology is linked, this field cannot be saved as a
-                vocabulary for future use in the template.
+                LabIMotion Vocabulary (Lab-Vocab) for future use in the
+                template.
               </p>
             </span>
           </div>

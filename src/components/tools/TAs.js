@@ -95,6 +95,6 @@ export default Object.freeze({
   ver_download: 'Download this version',
   ver_retrieve: 'Retrieve this version',
   ver_view: 'View this version',
-  voc_add: 'Add this into Vocabulary',
+  voc_add: 'Add this into LabIMotion Vocabulary (Lab-Vocab)',
   voc_use: 'Use this vocabulary in the template',
 });

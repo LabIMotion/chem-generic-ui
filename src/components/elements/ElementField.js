@@ -447,7 +447,12 @@ class ElementField extends Component {
             />
           </ButtonGroup>
           <ButtonGroup bsSize="sm" className="gu-mr-2">
-            <VocabSaveBtn field={fieldObject} data={generic} />
+            <VocabSaveBtn
+              field={fieldObject}
+              data={generic}
+              layer={layer}
+              genericType={genericType}
+            />
             {/* <VocabularyListBtn
               element={generic}
               vocabularies={vocabularies}

@@ -36,6 +36,7 @@ const extractOptionsFromField = (_field, _data) => {
 const initialState = {
   show: false,
   field: null,
+  layer: null,
   data: null,
   notify: null,
 };
@@ -46,6 +47,7 @@ const reducer = (state, action) => {
       return {
         ...initialState,
         field: action.payload.field,
+        layer: action.payload.layer,
         data: action.payload.data,
       };
     default: {
@@ -55,13 +57,14 @@ const reducer = (state, action) => {
 };
 
 const VocabSaveBtn = (props) => {
-  const { field: initialField, data: initialData } = props;
+  const { field: initialField, data: initialData, layer: initialLayer, genericType } = props;
 
   // 1. State declarations
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     field: initialField,
     data: initialData,
+    layer: initialLayer,
   });
 
   // 2. Side effects
@@ -73,13 +76,25 @@ const VocabSaveBtn = (props) => {
     dispatch({ type: 'data', payload: initialData });
   }, [initialData]);
 
+  useEffect(() => {
+    dispatch({ type: 'layer', payload: initialLayer });
+  }, [initialLayer]);
+
   const handleSave = async () => {
+    console.log('state.data=', state.data);
+    console.log('state.layer=', state.layer);
+    const extra = {
+      source: genericType,
+      source_id: state.data.identifier,
+      layer_id: state.layer.key,
+    };
     const options = extractOptionsFromField(state.field, state.data);
     const saveInput = {
       ...state.field,
       ...options,
+      voc: { ...extra },
     };
-    // console.log('saveInput=', saveInput);
+    console.log('saveInput=', saveInput);
     const res = await VocabManager.saveVocabulary(saveInput);
     dispatch({ type: 'notify', payload: res.notify });
   };
@@ -87,7 +102,7 @@ const VocabSaveBtn = (props) => {
   const handleReset = () => {
     dispatch({
       type: 'reset',
-      payload: { field: initialField, data: initialData },
+      payload: { field: initialField, data: initialData, layer: initialLayer },
     });
   };
 
@@ -122,7 +137,7 @@ const VocabSaveBtn = (props) => {
       </LTooltip>
       <LayerSaveModal
         acts={[saveButton, resetButton]}
-        title="Vocabulary"
+        title="LabIMotion Vocabulary (Lab-Vocab)"
         showProps={{
           show: state.show,
           setShow: (value) => dispatch({ type: 'show', payload: value }),
