@@ -92,8 +92,15 @@ const VocabSaveBtn = (props) => {
     const saveInput = {
       ...state.field,
       ...options,
+      term_id: state.field.ontology?.short_form,
+      ...extra,
       voc: { ...extra },
     };
+    // change the attribute 'field' to 'name', and 'type' to 'field_type'
+    saveInput.name = saveInput.field;
+    saveInput.field_type = saveInput.type;
+    delete saveInput.field;
+    delete saveInput.type;
     console.log('saveInput=', saveInput);
     const res = await VocabManager.saveVocabulary(saveInput);
     dispatch({ type: 'notify', payload: res.notify });

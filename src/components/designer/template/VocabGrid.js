@@ -5,6 +5,8 @@ import LTooltip from '../../shared/LTooltip';
 import VocabManager from '../../../utils/vocMgr';
 import ButtonConfirm from '../../fields/ButtonConfirm';
 
+const editableSource = ['Element', 'Segment', 'Dataset'];
+
 const VocabGrid = ({ onVocSelect, onVocDelete }) => {
   const [rowData, setRowData] = useState([]);
   const gridRef = useRef(null); // Add a reference to the grid
@@ -34,12 +36,13 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
             msg="Delete this Lab-Vocab permanently?"
             fnClick={onVocDelete}
             fnParams={params}
+            disabled={!editableSource.includes(params.data.source)}
           />
         </>
       ),
       sortable: false,
       filter: false,
-      width: 160,
+      width: 140,
     },
     {
       field: 'id',
@@ -49,11 +52,11 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       width: 70,
     },
     {
-      field: 'name',
+      field: 'name', // it is from field: 'field',
       headerName: 'Field Name',
       sortable: true,
       filter: true,
-      width: 160,
+      flex: 1,
     },
     {
       field: 'label',
@@ -63,21 +66,21 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       flex: 1,
     },
     {
-      field: 'field_type',
+      field: 'field_type', // it is from field: 'type',
       headerName: 'Type',
       sortable: true,
       filter: true,
       flex: 1,
     },
     {
-      field: 'voc.source',
+      field: 'source', // it is from field: 'voc.source',
       headerName: 'Ref. Source',
       sortable: true,
       filter: true,
       flex: 1,
     },
     {
-      field: 'voc.layer_id',
+      field: 'layer_id', // it is from field: 'voc.layer_id',
       headerName: 'Ref. Source Layer',
       sortable: true,
       filter: true,

@@ -11,9 +11,10 @@ import { handleAddVocabulary } from '../../../utils/template/field-handler';
 import LTooltip from '../../shared/LTooltip';
 import FIcons from '../../icons/FIcons';
 import VocabGrid from './VocabGrid';
+import VocabManager from '../../../utils/vocMgr';
 
 const VocabularyListBtn = (props) => {
-  const { element, fnUpdate, layer, sortedLayers, vocabularies } = props;
+  const { element, fnUpdate, layer, sortedLayers, fnDelete } = props;
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
@@ -25,8 +26,13 @@ const VocabularyListBtn = (props) => {
     // setShow(false);
   };
 
-  const handleDeleteVoc = (params) => {
-    fnDelete(params.data);
+  // const handleDeleteVoc = (params) => {
+  //   fnDelete(params.data);
+  //   setShow(false);
+  // };
+
+  const handleDeleteVoc = async (params) => {
+    await VocabManager.deleteVocabulary(params.data.id);
     setShow(false);
   };
 
