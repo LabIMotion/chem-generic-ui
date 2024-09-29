@@ -49,7 +49,7 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       width: 70,
     },
     {
-      field: 'field',
+      field: 'name',
       headerName: 'Field Name',
       sortable: true,
       filter: true,
@@ -63,7 +63,7 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       flex: 1,
     },
     {
-      field: 'type',
+      field: 'field_type',
       headerName: 'Type',
       sortable: true,
       filter: true,
