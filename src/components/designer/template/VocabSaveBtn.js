@@ -10,6 +10,7 @@ import LTooltip from '../../shared/LTooltip';
 import VocabManager from '../../../utils/vocMgr';
 import NotificationMessage from './NotificationMessage';
 import TermLink from '../../fields/TermLink';
+import { UnsVocBase } from '../../elements/BaseFields';
 
 const extractOptionsFromField = (_field, _data) => {
   const options = { select_options: {} };
@@ -57,7 +58,12 @@ const reducer = (state, action) => {
 };
 
 const VocabSaveBtn = (props) => {
-  const { field: initialField, data: initialData, layer: initialLayer, genericType } = props;
+  const {
+    field: initialField,
+    data: initialData,
+    layer: initialLayer,
+    genericType,
+  } = props;
 
   // 1. State declarations
   const [state, dispatch] = useReducer(reducer, {
@@ -81,8 +87,6 @@ const VocabSaveBtn = (props) => {
   }, [initialLayer]);
 
   const handleSave = async () => {
-    console.log('state.data=', state.data);
-    console.log('state.layer=', state.layer);
     const extra = {
       source: genericType,
       source_id: state.data.identifier,
@@ -119,7 +123,10 @@ const VocabSaveBtn = (props) => {
       key="success"
       bsStyle="success"
       onClick={handleSave}
-      disabled={!TermLink(initialField.ontology, initialField.ontology?.label)}
+      disabled={
+        !TermLink(state.field.ontology, state.field.ontology?.label) ||
+        UnsVocBase.includes(state.field.type)
+      }
     >
       Save
     </Button>
@@ -151,13 +158,13 @@ const VocabSaveBtn = (props) => {
         }}
         close={handleReset}
       >
-        <>
+        <div>
           <NotificationMessage
             notify={state.notify}
             onClose={() => dispatch({ type: 'notify', payload: null })}
           />
-          <VocabForm init={initialField} />
-        </>
+          <VocabForm init={state.field} />
+        </div>
       </LayerSaveModal>
     </>
   );

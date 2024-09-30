@@ -33,6 +33,30 @@ const ElementFieldTypes = [
 
 const SegmentFieldTypes = ElementFieldTypes;
 
+const UnsVocTypes = [
+  {
+    value: FieldTypes.F_DUMMY,
+    name: FieldTypes.F_DUMMY,
+    label: 'Dummy',
+  },
+  {
+    value: FieldTypes.F_FORMULA_FIELD,
+    name: FieldTypes.F_FORMULA_FIELD,
+    label: 'Formula-Field',
+  },
+  {
+    value: FieldTypes.F_TABLE,
+    name: FieldTypes.F_TABLE,
+    label: 'Table',
+  },
+  {
+    value: FieldTypes.F_TEXT_FORMULA,
+    name: FieldTypes.F_TEXT_FORMULA,
+    label: 'Text-Formula',
+  },
+];
+
 export const FieldBase = BaseFieldTypes;
 export const ElementBase = BaseFieldTypes.concat(ElementFieldTypes);
 export const SegmentBase = BaseFieldTypes.concat(SegmentFieldTypes);
+export const UnsVocBase = UnsVocTypes;

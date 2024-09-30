@@ -19,7 +19,7 @@ import { v4 as uuid } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonTooltip from '../fields/ButtonTooltip';
 import { genUnitSup, getFieldProps, toBool, toNullOrInt } from '../tools/utils';
-import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
+import { FieldBase, ElementBase, SegmentBase, UnsVocBase } from './BaseFields';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';

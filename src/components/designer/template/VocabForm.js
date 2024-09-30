@@ -9,6 +9,7 @@ import {
   FormGroup,
   Row,
 } from 'react-bootstrap';
+import { UnsVocBase } from '../../elements/BaseFields';
 import FIcons from '../../icons/FIcons';
 import TermLink from '../../fields/TermLink';
 
@@ -89,9 +90,16 @@ const VocabForm = ({ init }) => {
             <span>
               <b>Please note:</b>
               <p>
-                When no terminology is linked, this field cannot be saved as a
-                LabIMotion Vocabulary (Lab-Vocab) for future use in the
+                1. When no terminology is linked, this field cannot be saved as
+                a LabIMotion Vocabulary (Lab-Vocab) for future use in the
                 template.
+                <br />
+                2. The following field types are not supported:
+                <ul>
+                  {UnsVocBase.map((field) => (
+                    <li key={field.value}>{field.label}</li>
+                  ))}
+                </ul>
               </p>
             </span>
           </div>

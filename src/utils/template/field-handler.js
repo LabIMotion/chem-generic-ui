@@ -1,5 +1,6 @@
 import { filter, findIndex } from 'lodash';
 import { validateFieldName } from './input-validation';
+import { mergeOptions } from './remodel-handler';
 import { notifyFieldAdd, notifySuccess } from './designer-message';
 import Response from '../response';
 
@@ -35,6 +36,9 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
       element
     );
   }
+  // move "select_options" to another constant
+  const selectOptions = selected.properties?.select_options || {};
+  // delete selected.select_options; // TODO: need to delete later
   const newField = {
     is_voc: true,
     identifier: selected.identifier,
@@ -50,12 +54,31 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
   if (selected.source_id) newField.source_id = selected.source_id;
   if (selected.layer_id) newField.layer_id = selected.layer_id;
   if (selected.field_id) newField.field_id = selected.field_id;
-
+  if (selected.properties?.option_layers)
+    newField.option_layers = selected.properties?.option_layers;
   fields.push(newField);
   element.properties_template.layers[layer.key].fields = fields;
-
+  // Handle select_options in the properties_template
+  if (!element.properties_template?.select_options) {
+    element.properties_template.select_options = selectOptions;
+  } else {
+    // Merge selectOptions with existing select_options
+    element.properties_template.select_options = mergeOptions(
+      selectOptions,
+      element.properties_template.select_options
+    );
+  }
+  // Check if "select_options" is empty, if so, delete it
+  if (
+    Object.keys(element.properties_template?.select_options || {}).length === 0
+  ) {
+    delete element.properties_template.select_options;
+  }
   return new Response(
-    notifyFieldAdd(true, `New vocabulary has been added successfully.`),
+    notifyFieldAdd(
+      true,
+      `New field (from Lab-Voc) has been added successfully.`
+    ),
     element
   );
 };
