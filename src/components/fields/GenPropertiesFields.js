@@ -163,7 +163,7 @@ const GenPropertiesDate = opt => {
 
   let readOnly = opt.readOnly || false;
   const { f_obj: fObj } = opt;
-  if (fObj?.is_vocabulary === true && fObj?.opid >= 7) readOnly = true;
+  if (fObj?.is_voc === true && fObj?.opid >= 7) readOnly = true;
   return (
     <FormGroup className={klz[0]}>
       {FieldHeader(opt)}
@@ -466,18 +466,16 @@ const GenPropertiesText = opt => {
   const [id] = useState(uuid());
   const { f_obj: fObj, dic } = opt;
   let showVal = opt.value;
-  // if (fObj?.readonly && fObj?.is_vocabulary === true) return GenLabel(opt, fObj.value);
+  // if (fObj?.readonly && fObj?.is_voc === true) return GenLabel(opt, fObj.value);
   if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
 
   let readOnly = opt.readOnly || false;
-  if (fObj?.is_vocabulary === true && fObj?.opid >= 7) readOnly = true;
+  if (fObj?.is_voc === true && fObj?.opid >= 7) readOnly = true;
 
-  if (fObj?.is_vocabulary === true && fObj?.opid === 8) {
-    // console.log('88888888 fObj', fObj);
-    // console.log('88888888 dic', dic);
+  if (fObj?.is_voc === true && fObj?.opid === 8) {
     showVal = dic[fObj.identifier] || showVal;
   }
 
