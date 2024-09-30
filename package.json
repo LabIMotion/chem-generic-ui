@@ -1,6 +1,6 @@
 {
   "name": "chem-generic-ui",
-  "version": "1.5.0-rc2",
+  "version": "1.5.0-rc3",
   "main": "./dist/bundle.js",
   "license": "AGPL-3.0",
   "private": false,
