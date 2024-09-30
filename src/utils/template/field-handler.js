@@ -3,7 +3,7 @@ import { validateFieldName } from './input-validation';
 import { notifyFieldAdd, notifySuccess } from './designer-message';
 import Response from '../response';
 
-const resetPosition = _fields => {
+const resetPosition = (_fields) => {
   const updatedFields = _fields.map((f, idx) => {
     return { ...f, position: idx + 1 };
   });
@@ -25,8 +25,18 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
   //   short_form: selected.term_id,
   //   description: [selected.name],
   // };
+  const dupFields = filter(fields, (o) => o.field === selected.name);
+  if (dupFields && dupFields.length > 0) {
+    return new Response(
+      notifyFieldAdd(
+        false,
+        `Field (${selected.name}) ${selected.label} is already exist.`
+      ),
+      element
+    );
+  }
   const newField = {
-    is_vocabulary: true,
+    is_voc: true,
     identifier: selected.identifier,
     type: selected.field_type,
     ontology: selected.ontology,
@@ -64,7 +74,7 @@ export const handleCreateField = (_newFieldKey, _element, _layer) => {
     return new Response(verify, element);
   }
   const fields = layer.fields || [];
-  const dupFields = filter(fields, o => o.field === newFieldKey);
+  const dupFields = filter(fields, (o) => o.field === newFieldKey);
   if (dupFields && dupFields.length > 0) {
     return new Response(
       notifyFieldAdd(
@@ -93,7 +103,7 @@ export const handleFieldMove = (_element, _layerKey, _field, _isUp) => {
   const [element, layerKey, field, isUp] = [_element, _layerKey, _field, _isUp];
   const layer = element?.properties_template?.layers[layerKey];
   const { fields } = layer;
-  const idx = findIndex(fields, o => o.field === field);
+  const idx = findIndex(fields, (o) => o.field === field);
   if (idx >= 0 && isUp) {
     const curObj = fields[idx];
     curObj.position -= 1;
@@ -123,8 +133,8 @@ export const handlePositionChange = (_element, _layerKey, _target, _source) => {
   const layer = element?.properties_template?.layers[layerKey];
   if (layer) {
     const { fields } = layer;
-    const sourceIdx = findIndex(fields, o => o.field === source.field);
-    const targetIdx = findIndex(fields, o => o.field === target.field);
+    const sourceIdx = findIndex(fields, (o) => o.field === source.field);
+    const targetIdx = findIndex(fields, (o) => o.field === target.field);
     if (sourceIdx < 0 || targetIdx < 0) {
       return new Response(notifySuccess(), element);
     }

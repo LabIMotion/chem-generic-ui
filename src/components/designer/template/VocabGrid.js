@@ -42,7 +42,7 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       ),
       sortable: false,
       filter: false,
-      width: 140,
+      width: 120,
     },
     {
       field: 'id',

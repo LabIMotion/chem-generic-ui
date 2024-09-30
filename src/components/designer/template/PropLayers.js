@@ -53,6 +53,12 @@ const PropLayers = (props) => {
     fnUpdate(result);
   };
 
+  const onAddVocField = (_field) => {
+    console.log('onAddVocField=', _field);
+    // const result = handleAddVocField(_layer, data);
+    // fnUpdate(result);
+  };
+
   const onAddStandardLayer = async (_layer) => {
     const result = handleAddStandardLayer(_layer, data, genericType);
     fnUpdate(result);
@@ -178,10 +184,8 @@ const PropLayers = (props) => {
             <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
               <VocabularyListBtn
                 element={data}
-                vocabularies={vocabularies}
-                fnUpdate={onLayerCondition}
+                fnUpdate={fnUpdate}
                 layer={layer}
-                sortedLayers={sortedLayers}
               />
               <ButtonTooltip
                 idf="fld_dum_add"

@@ -1,12 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
-import {
-  verifyConditionLayer,
-  handleLayerConditionChange,
-} from '../../../utils/template/condition-handler';
-// import VocabularyListModal from '../../elements/VocabularyListModal';
 import { handleAddVocabulary } from '../../../utils/template/field-handler';
 import LTooltip from '../../shared/LTooltip';
 import FIcons from '../../icons/FIcons';
@@ -14,41 +9,21 @@ import VocabGrid from './VocabGrid';
 import VocabManager from '../../../utils/vocMgr';
 
 const VocabularyListBtn = (props) => {
-  const { element, fnUpdate, layer, sortedLayers, fnDelete } = props;
+  const { element, fnUpdate, layer } = props;
   const [show, setShow] = useState(false);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-
-  const handleSelectVoc = (params) => {
-    console.log('params=', params);
-    // addVocabulary(params.data?.properties);
-    // setShow(false);
-  };
-
-  // const handleDeleteVoc = (params) => {
-  //   fnDelete(params.data);
-  //   setShow(false);
-  // };
 
   const handleDeleteVoc = async (params) => {
     await VocabManager.deleteVocabulary(params.data.id);
     setShow(false);
   };
 
-  const onClick = () => {
-    const result = verifyConditionLayer(element, layer.key);
-    const { notify } = result;
-    if (notify.isSuccess) {
-      setShow(true);
-    } else {
-      fnUpdate(result);
-    }
-  };
-
-  const addVocabulary = (_e) => {
-    const result = handleAddVocabulary(element, layer, _e);
+  const handleSelectVoc = (params) => {
+    const result = handleAddVocabulary(element, layer, params.data);
     fnUpdate(result);
+    setShow(false);
   };
 
   return (
@@ -97,10 +72,6 @@ VocabularyListBtn.propTypes = {
   element: PropTypes.object.isRequired,
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
-  sortedLayers: PropTypes.array.isRequired,
-  vocabularies: PropTypes.array,
 };
-
-VocabularyListBtn.defaultProps = { vocabularies: [] };
 
 export default VocabularyListBtn;
