@@ -31,6 +31,7 @@ import ButtonDelField from '../../fields/ButtonDelField';
 import LBadge from '../../shared/LBadge';
 import { pl } from '../../tools/format-utils';
 import LayerManager from '../../../utils/desMgr';
+import VocabularyListBtn from './VocabularyListBtn';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
@@ -50,6 +51,12 @@ const PropLayers = (props) => {
   const onLayerCreate = (_layer) => {
     const result = handleCreateLayer(_layer, data);
     fnUpdate(result);
+  };
+
+  const onAddVocField = (_field) => {
+    console.log('onAddVocField=', _field);
+    // const result = handleAddVocField(_layer, data);
+    // fnUpdate(result);
   };
 
   const onAddStandardLayer = async (_layer) => {
@@ -174,14 +181,12 @@ const PropLayers = (props) => {
                 fnDelete={onLayerDelete}
               /> */}
           <ButtonGroup className="gu-ml-2">
-            {/* <VocabularyListBtn
-              element={data}
-              vocabularies={vocabularies}
-              fnUpdate={onLayerCondition}
-              layer={layer}
-              sortedLayers={sortedLayers}
-            /> */}
             <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
+              <VocabularyListBtn
+                element={data}
+                fnUpdate={fnUpdate}
+                layer={layer}
+              />
               <ButtonTooltip
                 idf="fld_dum_add"
                 fnClick={onDummyAdd}

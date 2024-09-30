@@ -28,10 +28,9 @@ const fetchBody = (data, method) => {
 };
 
 const handleResponse = async (response) => {
-  console.log('response=', response);
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData[0] || response.statusText);
+    throw new Error(errorData.error || response.statusText);
   }
   const data = await response.json();
   if (!('mc' in data)) {
@@ -41,10 +40,7 @@ const handleResponse = async (response) => {
 };
 
 const handleError = (error) => {
-  console.log('error instanceof Error=', error instanceof Error);
-  console.log(error);
   const errorMessage = error instanceof Error ? error.message : error;
-  console.log('errorMessage=', errorMessage);
   return { mc: 'se00', msg: errorMessage };
 };
 
@@ -53,7 +49,6 @@ export default class Api {
     const searchParams = new URLSearchParams(params);
     const queryString = searchParams.toString();
     const url = `${API_V1}/${path}${queryString ? `?${queryString}` : ''}`;
-    console.log('Api.execApi:', url);
     try {
       const res = await fetch(url, fetchOptions(method));
       return await handleResponse(res);

@@ -25,7 +25,6 @@ import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
 import VocabSaveBtn from '../designer/template/VocabSaveBtn';
-import VocabularyListBtn from '../designer/template/VocabularyListBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
 import OntCmp from '../fields/OntCmp';
@@ -453,13 +452,6 @@ class ElementField extends Component {
               layer={layer}
               genericType={genericType}
             />
-            {/* <VocabularyListBtn
-              element={generic}
-              vocabularies={vocabularies}
-              fnUpdate={this.handleAddVoc}
-              layer={layer}
-              sortedLayers={allLayers}
-            /> */}
           </ButtonGroup>
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}

@@ -48,7 +48,13 @@ export default class VocabularyListModal extends Component {
       (field == null ? layer.cond_operator : field.cond_operator) ?? 1;
     this.gridApi = e.api;
     this.gridColumnApi = e.columnApi;
-    const columnDefs = this.getColumnDefs(vocabularies, allLayers, condOperator, field, fnApi);
+    const columnDefs = this.getColumnDefs(
+      vocabularies,
+      allLayers,
+      condOperator,
+      field,
+      fnApi
+    );
     this.gridApi.setGridOption('columnDefs', columnDefs);
     this.autoSizeAll();
   }
@@ -112,8 +118,15 @@ export default class VocabularyListModal extends Component {
   }
 
   render() {
-    const { showModal, fnClose, layer, layerKey, field, allLayers, vocabularies } =
-      this.props;
+    const {
+      showModal,
+      fnClose,
+      layer,
+      layerKey,
+      field,
+      allLayers,
+      vocabularies,
+    } = this.props;
 
     const sub = vocabularies || [];
     const title =
@@ -146,8 +159,7 @@ export default class VocabularyListModal extends Component {
                 display: 'flex',
                 marginBottom: '4px',
               }}
-            >
-            </div>
+            ></div>
             <div style={{ width: '100%', height: '26vh' }}>
               <div
                 style={{ width: '100%', height: '100%' }}
