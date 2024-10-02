@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, MenuItem } from 'react-bootstrap';
 import {
   verifyConditionLayer,
   handleLayerConditionChange,
@@ -9,12 +9,14 @@ import {
 import FieldCondEditModal from '../../elements/FieldCondEditModal';
 import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
+import TAs from '../../tools/TAs';
 
 const ConditionLayerBtn = (props) => {
-  const { element, fnUpdate, layer, sortedLayers } = props;
+  const { element, fnUpdate, layer, sortedLayers, as } = props;
   const [show, setShow] = useState(false);
 
-  const onClick = () => {
+  const onClick = (e) => {
+    e.stopPropagation();
     const result = verifyConditionLayer(element, layer.key);
     const { notify } = result;
     if (notify.isSuccess) {
@@ -45,9 +47,23 @@ const ConditionLayerBtn = (props) => {
       </Button>
     );
 
+  const conditionMenu = (
+    <MenuItem
+      eventKey="_lyr_cond_menu_item"
+      onClick={onClick}
+      className={layer?.cond_fields?.length > 0 ? 'gu-menu-item-cond' : ''}
+    >
+      {FIcons.faGears}&nbsp;&nbsp;{TAs.restriction_setting}
+    </MenuItem>
+  );
+
   return (
     <>
-      <LTooltip idf="restriction_setting">{conditionBtn}</LTooltip>
+      {as === 'menu' ? (
+        conditionMenu
+      ) : (
+        <LTooltip idf="restriction_setting">{conditionBtn}</LTooltip>
+      )}
       <FieldCondEditModal
         showModal={show}
         layer={layer}
@@ -68,6 +84,9 @@ ConditionLayerBtn.propTypes = {
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
   sortedLayers: PropTypes.array.isRequired,
+  as: PropTypes.string,
 };
+
+ConditionLayerBtn.defaultProps = { as: 'menu' };
 
 export default ConditionLayerBtn;

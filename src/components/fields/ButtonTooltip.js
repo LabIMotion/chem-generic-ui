@@ -1,13 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, MenuItem } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
+import TAs from '../tools/TAs';
 
 const ButtonTooltip = (props) => {
-  const { idf, size, bs, fnClick, element, place, fa, disabled, txt, btnCls } =
-    props;
+  const {
+    idf,
+    size,
+    bs,
+    fnClick,
+    element,
+    place,
+    fa,
+    disabled,
+    txt,
+    btnCls,
+    as,
+  } = props;
   const content = txt ? <span>{txt} </span> : '';
+  const conditionMenu = (
+    <MenuItem eventKey={`${idf}_menu_item`} onClick={() => fnClick(element)}>
+      {FIcons[fa]}&nbsp;&nbsp;{TAs[idf]}
+    </MenuItem>
+  );
+  if (as === 'menu') {
+    return conditionMenu;
+  }
+
   if (bs === '') {
     return (
       <LTooltip idf={idf} placement={place}>
@@ -48,6 +69,7 @@ ButtonTooltip.propTypes = {
   disabled: PropTypes.bool,
   txt: PropTypes.string,
   btnCls: PropTypes.string,
+  as: PropTypes.string,
 };
 
 ButtonTooltip.defaultProps = {
@@ -60,6 +82,7 @@ ButtonTooltip.defaultProps = {
   txt: null,
   element: {},
   btnCls: '',
+  as: 'button',
 };
 
 export default ButtonTooltip;

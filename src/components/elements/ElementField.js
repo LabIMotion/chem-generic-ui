@@ -13,13 +13,14 @@ import {
   FormGroup,
   FormControl,
   InputGroup,
+  MenuItem,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonTooltip from '../fields/ButtonTooltip';
 import { genUnitSup, getFieldProps, toBool, toNullOrInt } from '../tools/utils';
-import { FieldBase, ElementBase, SegmentBase, UnsVocBase } from './BaseFields';
+import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
@@ -42,6 +43,7 @@ import DroppablePanel from '../dnd/DroppablePanel';
 import DnDs from '../dnd/DnDs';
 import FIcons from '../icons/FIcons';
 import ButtonDelField from '../fields/ButtonDelField';
+import ButtonEllipse from '../fields/ButtonEllipse';
 
 class ElementField extends Component {
   constructor(props) {
@@ -422,36 +424,40 @@ class ElementField extends Component {
         </Panel.Title>
         <div style={{ display: 'inline-flex' }}>
           <ButtonGroup bsSize="sm" className="gu-mr-2">
-            <ConditionFieldBtn
-              field={f}
-              fnUpdateSub={this.updSubField}
-              layer={layer}
-              sortedLayers={allLayers}
-            />
-            <ButtonDelField
-              delType={FieldTypes.DEL_FIELD}
-              delKey={f.field}
-              delRoot={layerKey}
-              generic={generic}
-              fnConfirm={onDelete}
-            />
-            {/* {this.renderDeleteButton('Field', f.field, layerKey)} */}
-            <ButtonTooltip
-              idf="fld_dum_add"
-              fnClick={this.handleAddDummy}
-              element={{ layerKey, field: f.field }}
-              fa="faSquare"
-              place="top"
-              btnCls="gu-ml-2"
-            />
-          </ButtonGroup>
-          <ButtonGroup bsSize="sm" className="gu-mr-2">
             <VocabSaveBtn
               field={fieldObject}
               data={generic}
               layer={layer}
               genericType={genericType}
             />
+          </ButtonGroup>
+          <ButtonGroup bsSize="sm" className="gu-mr-2">
+            <ButtonEllipse condSet={f?.cond_fields?.length > 0 || false}>
+              <ConditionFieldBtn
+                field={f}
+                fnUpdateSub={this.updSubField}
+                layer={layer}
+                sortedLayers={allLayers}
+              />
+              <ButtonTooltip
+                idf="fld_dum_add"
+                fnClick={this.handleAddDummy}
+                element={{ layerKey, field: f.field }}
+                fa="faSquare"
+                place="top"
+                btnCls="gu-ml-2"
+                as="menu"
+              />
+              <MenuItem divider />
+              <ButtonDelField
+                delType={FieldTypes.DEL_FIELD}
+                delKey={f.field}
+                delRoot={layerKey}
+                generic={generic}
+                fnConfirm={onDelete}
+                as="menu"
+              />
+            </ButtonEllipse>
           </ButtonGroup>
           <PositionDnD
             type={`${DnDs.LAYER_FIELD}_${layer.key}`}

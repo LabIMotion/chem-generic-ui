@@ -125,7 +125,7 @@ const VocabSaveBtn = (props) => {
       onClick={handleSave}
       disabled={
         !TermLink(state.field.ontology, state.field.ontology?.label) ||
-        UnsVocBase.includes(state.field.type)
+        UnsVocBase.some((item) => item.name === state.field.type)
       }
     >
       Save

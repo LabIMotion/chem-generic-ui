@@ -1,8 +1,8 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Panel } from 'react-bootstrap';
+import { ButtonGroup, Panel, MenuItem } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
@@ -28,6 +28,7 @@ import ConditionLayerBtn from './ConditionLayerBtn';
 import NewFieldBtn from './NewFieldBtn';
 import LayerSaveBtn from './LayerSaveBtn';
 import ButtonDelField from '../../fields/ButtonDelField';
+import ButtonEllipse from '../../fields/ButtonEllipse';
 import LBadge from '../../shared/LBadge';
 import { pl } from '../../tools/format-utils';
 import LayerManager from '../../../utils/desMgr';
@@ -51,12 +52,6 @@ const PropLayers = (props) => {
   const onLayerCreate = (_layer) => {
     const result = handleCreateLayer(_layer, data);
     fnUpdate(result);
-  };
-
-  const onAddVocField = (_field) => {
-    console.log('onAddVocField=', _field);
-    // const result = handleAddVocField(_layer, data);
-    // fnUpdate(result);
   };
 
   const onAddStandardLayer = async (_layer) => {
@@ -155,25 +150,13 @@ const PropLayers = (props) => {
           ) : null}
         </Panel.Title>
         <div>
-          <ButtonGroup className="gu-ml-2">
+          {/* <ButtonGroup className="gu-ml-2">
             <LayerAttrEditBtn
               fnUpdate={onLayerUpdate}
               isAttrOnWF={isAttrOnWF}
               layer={layer}
             />
-            <ConditionLayerBtn
-              element={data}
-              fnUpdate={onLayerCondition}
-              layer={layer}
-              sortedLayers={sortedLayers}
-            />
-            <ButtonDelField
-              delType={FieldTypes.DEL_LAYER}
-              delKey={layerKey}
-              generic={data}
-              fnConfirm={onLayerDelete}
-            />
-          </ButtonGroup>
+          </ButtonGroup> */}
           {/* <RemovePropBtn
                 delStr={FieldTypes.DEL_LAYER}
                 delKey={layerKey}
@@ -187,17 +170,41 @@ const PropLayers = (props) => {
                 fnUpdate={fnUpdate}
                 layer={layer}
               />
+            </NewFieldBtn>
+          </ButtonGroup>
+          <ButtonGroup className="gu-ml-2">
+            <LayerSaveBtn layer={layer} data={data} />
+          </ButtonGroup>
+          <ButtonGroup className="gu-ml-2">
+            <ButtonEllipse condSet={layer?.cond_fields?.length > 0 || false}>
+              <LayerAttrEditBtn
+                fnUpdate={onLayerUpdate}
+                isAttrOnWF={isAttrOnWF}
+                layer={layer}
+              />
+              <ConditionLayerBtn
+                element={data}
+                fnUpdate={onLayerCondition}
+                layer={layer}
+                sortedLayers={sortedLayers}
+              />
               <ButtonTooltip
                 idf="fld_dum_add"
                 fnClick={onDummyAdd}
                 element={{ layerKey, field: null }}
                 fa="faSquare"
                 place="top"
+                as="menu"
               />
-            </NewFieldBtn>
-          </ButtonGroup>
-          <ButtonGroup className="gu-ml-2">
-            <LayerSaveBtn layer={layer} data={data} />
+              <MenuItem divider />
+              <ButtonDelField
+                delType={FieldTypes.DEL_LAYER}
+                delKey={layerKey}
+                generic={data}
+                fnConfirm={onLayerDelete}
+                as="menu"
+              />
+            </ButtonEllipse>
           </ButtonGroup>
           <ButtonGroup className="gu-ml-2">
             <PositionDnD

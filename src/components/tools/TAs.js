@@ -55,6 +55,8 @@ export default Object.freeze({
   lyr_add2std: 'Add this layer to Standard Layer',
   lyr_add2tpl: 'Add this layer to the template',
   lyr_view: 'View this Layer',
+  more_func: 'More functions',
+  preview_or_versions: 'Click to preview or view version history',
   sel_add: 'Add a new selection list',
   sel_lyr2tpl: (
     <>
@@ -71,7 +73,6 @@ export default Object.freeze({
     </>
   ),
   sel_opt_add: 'Add an option',
-  preview_or_versions: 'Click to preview or view version history',
   scn_full: 'Full screen',
   scn_full_exit: 'Exit full screen',
   tpl_act: 'Activate this template (currently inactive)',

@@ -1,15 +1,15 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Modal, Button } from 'react-bootstrap';
+import { Form, FormGroup, Modal, Button } from 'react-bootstrap';
 import LayerAttrForm from './LayerAttrForm';
 
-const LayerAttrModal = props => {
+const LayerAttrModal = (props) => {
   const { actions, isAttrOnWF, layer, showProps } = props;
   const { show, setShow } = showProps;
   const formRef = useRef();
 
-  const handleCreate = _fnAction => {
+  const handleCreate = (_fnAction) => {
     const buildLayer = {
       key: formRef.current.lf_layerKey.value.trim(),
       label: formRef.current.lf_label.value.trim(),
@@ -26,7 +26,7 @@ const LayerAttrModal = props => {
     setShow(false);
   };
 
-  const handleUpdate = _fnAction => {
+  const handleUpdate = (_fnAction) => {
     const updates = {
       key: formRef.current.lf_layerKey.value.trim(),
       label: formRef.current.lf_label.value.trim(),
@@ -76,7 +76,7 @@ const LayerAttrModal = props => {
 
   const addActions = () => {
     const buttons = [];
-    actions.forEach(e => {
+    actions.forEach((e) => {
       buttons.push(actionBtn(e.action, e.fnAction));
       buttons.push(
         <span key={`_layer_attr_modal_span_${e.action}`}>&nbsp;</span>
@@ -88,7 +88,7 @@ const LayerAttrModal = props => {
   const addTitles = () => {
     const title = [];
     const mapping = { c: 'New Layer', u: 'Edit Layer attributes' };
-    actions.map(e => title.push(mapping[e.action]));
+    actions.map((e) => title.push(mapping[e.action]));
     return title.join('/');
   };
 
@@ -100,12 +100,14 @@ const LayerAttrModal = props => {
       <Modal.Body style={{ overflow: 'auto' }}>
         <div className="col-md-12">
           <LayerAttrForm ref={formRef} layer={layer} isAttrOnWF={isAttrOnWF} />
-          <FormGroup>
-            {addActions()}
-            <Button bsStyle="primary" onClick={() => setShow(false)}>
-              Close
-            </Button>
-          </FormGroup>
+          <Form horizontal className="input-form">
+            <FormGroup>
+              {addActions()}
+              <Button bsStyle="primary" onClick={() => setShow(false)}>
+                Close
+              </Button>
+            </FormGroup>
+          </Form>
         </div>
       </Modal.Body>
     </Modal>

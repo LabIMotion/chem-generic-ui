@@ -1,8 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MenuItem } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonConfirm from './ButtonConfirm';
+import FIcons from '../icons/FIcons';
 import { handleDelete } from '../../utils/template/action-handler';
 
 const confirmDelete = (props) => {
@@ -12,7 +14,7 @@ const confirmDelete = (props) => {
 };
 
 const ButtonDelField = (props) => {
-  const { generic, delType, delKey, delRoot, fnConfirm } = props;
+  const { generic, delType, delKey, delRoot, fnConfirm, as } = props;
 
   let allowed = Object.entries(FieldTypes)
     .filter(([key]) => key.startsWith('DEL_'))
@@ -42,8 +44,26 @@ const ButtonDelField = (props) => {
     fnConfirm,
   };
 
+  const conditionMenu = (
+    <MenuItem
+      eventKey="_del_menu_item"
+      onClick={() => {
+        confirmDelete(fnParams);
+      }}
+      className="gu-menu-item-del"
+    >
+      {FIcons.faTrashCan}&nbsp;&nbsp;{msg}
+    </MenuItem>
+  );
+
   return (
-    <ButtonConfirm msg={msg} fnClick={confirmDelete} fnParams={fnParams} />
+    <>
+      {as === 'menu' ? (
+        conditionMenu
+      ) : (
+        <ButtonConfirm msg={msg} fnClick={confirmDelete} fnParams={fnParams} />
+      )}
+    </>
   );
 };
 
@@ -53,8 +73,9 @@ ButtonDelField.propTypes = {
   delKey: PropTypes.string,
   delRoot: PropTypes.string,
   fnConfirm: PropTypes.func.isRequired,
+  as: PropTypes.string,
 };
 
-ButtonDelField.defaultProps = { delKey: '', delRoot: '' };
+ButtonDelField.defaultProps = { delKey: '', delRoot: '', as: 'button' };
 
 export default ButtonDelField;

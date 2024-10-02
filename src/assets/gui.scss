@@ -48,7 +48,8 @@
   @include gux-mb(3);
 }
 
-.btn-gxs, .btn-group-gxs > .btn {
+.btn-gxs,
+.btn-group-gxs > .btn {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
@@ -73,4 +74,22 @@
 
 .gu-ont-display:hover {
   border-color: $color-green !important;
+}
+
+.gu-menu-item-del > a {
+  color: $color-red !important; // Change color
+
+  &:hover {
+    color: $color-white !important; // Change color on hover
+    background-color: $color-red !important; // Change color on hover
+  }
+}
+
+.gu-menu-item-cond > a {
+  color: $color-halloween !important; // Change color
+
+  &:hover {
+    color: $color-white !important; // Change color on hover
+    background-color: $color-halloween !important; // Change color on hover
+  }
 }
