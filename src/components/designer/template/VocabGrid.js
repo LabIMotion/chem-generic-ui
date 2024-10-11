@@ -80,6 +80,13 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       flex: 1,
     },
     {
+      field: 'voc.source_name', // it is from field: 'voc.source_name',
+      headerName: 'Ref. Source Name',
+      sortable: true,
+      filter: true,
+      flex: 1,
+    },
+    {
       field: 'layer_id', // it is from field: 'voc.layer_id',
       headerName: 'Ref. Source Layer',
       sortable: true,
