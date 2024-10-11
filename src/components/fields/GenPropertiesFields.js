@@ -168,7 +168,11 @@ const GenPropertiesDate = opt => {
     <FormGroup className={klz[0]}>
       {FieldHeader(opt)}
       <div className={klzLayer}>
-        <ButtonDatePicker onChange={opt.onChange} val={newVal} />
+        <ButtonDatePicker
+          onChange={opt.onChange}
+          val={newVal}
+          readOnly={readOnly ?? false}
+        />
       </div>
     </FormGroup>
   );
@@ -473,7 +477,10 @@ const GenPropertiesText = opt => {
   const klz = fieldCls(opt.isSpCall);
 
   let readOnly = opt.readOnly || false;
-  if (fObj?.is_voc === true && fObj?.opid >= 7) readOnly = true;
+  if (fObj?.is_voc === true && fObj?.opid >= 7) {
+    readOnly = true;
+    className = 'readonly';
+  }
 
   if (fObj?.is_voc === true && fObj?.opid === 8) {
     showVal = dic[fObj.identifier] || showVal;

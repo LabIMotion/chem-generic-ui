@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 
-const DatePickerComponent = ({ handleChange, val }) => (
+const DatePickerComponent = ({ handleChange, val, readOnly }) => (
   <FormGroup>
     <DatePicker
       isClearable
@@ -19,11 +19,12 @@ const DatePickerComponent = ({ handleChange, val }) => (
       onSelect={handleChange}
       onChange={handleChange}
       placeholderText="DD/MM/YYYY hh:mm"
+      readOnly={readOnly}
     />
   </FormGroup>
 );
 
-const ButtonDatePicker = ({ onChange, val }) => {
+const ButtonDatePicker = ({ onChange, val, readOnly }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (date) => {
@@ -32,7 +33,13 @@ const ButtonDatePicker = ({ onChange, val }) => {
   };
 
   if (val || showDatePicker) {
-    return <DatePickerComponent handleChange={handleDateChange} val={val} />;
+    return (
+      <DatePickerComponent
+        handleChange={handleDateChange}
+        val={val}
+        readOnly={readOnly}
+      />
+    );
   }
   return (
     <LTooltip idf="record_time">
