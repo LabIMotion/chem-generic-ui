@@ -76,55 +76,72 @@ export default class GenPropertiesLayer extends Component {
     } = this.props;
     const { fields, key, sp } = layer;
     let { cols } = layer;
+
+    // TODO: review isSpCall scenarios
     if (isSpCall && !!sp) cols = 1;
+
+    // layer level settings
     let perRow = cols || 1;
-    let col = Math.floor(12 / perRow);
+    let colWidth = Math.floor(12 / perRow);
+
     const vs = [];
     let op = [];
-    let rowId = 1;
-    let ttlCols = 0;
-    (fields || []).forEach((f, i) => {
-      perRow = f.cols || cols;
-      col = Math.floor(12 / perRow);
+    let remainingWidth = 12;
+
+    (fields || []).forEach((f, idx) => {
       const [showProp, showLabel] = showProperties(f, layers);
       if (showProp) {
-        if (f.type === FieldTypes.F_DATETIME_RANGE) {
-          vs.push(<Row key={rowId}>{op}</Row>);
-          ttlCols = 0;
-          rowId += 1;
-          op = [];
-          vs.push(
-            <DateTimeRange
-              key={`grid_${f.field}`}
-              layer={layer}
-              opt={{ f_obj: f }}
-              onInputChange={this.handleDTRChange}
-            />
-          );
-          return;
+        let fieldWidth;
+
+        if (f.hasOwnRow) {
+          // If there are fields in the current row, push them to the rows array
+          if (op.length > 0) {
+            vs.push(<Row key={vs.length}>{op}</Row>);
+            op = [];
+            remainingWidth = 12;
+          }
+          fieldWidth = 12;
+
+          if (f.type === FieldTypes.F_DATETIME_RANGE) {
+            vs.push(
+              <DateTimeRange
+                key={vs.length}
+                layer={layer}
+                opt={{ f_obj: f }}
+                onInputChange={this.handleDTRChange}
+              />
+            );
+            return;
+          }
+        } else if (f.type === FieldTypes.F_TABLE) {
+          fieldWidth = 12 / (f.cols || 1);
+        } else {
+          // field level settings
+          perRow = f.cols || cols;
+          colWidth = Math.floor(12 / perRow);
+          fieldWidth = colWidth;
         }
 
-        const hasOwnRow = f.hasOwnRow || false; // f.ownLine: field has its own row
-        const unit = genUnits(f.option_layers)[0] || {};
-        const tabCol = (f.cols || 1) * 1; // f.cols: Tables per row
-        const rCol = f.type === 'table' || hasOwnRow ? 12 / (tabCol || 1) : col; // rCol: columns per row
-        if (f.type === 'table' || hasOwnRow) {
-          ttlCols = 99;
-        }
-        if (ttlCols >= 60) {
-          vs.push(<Row key={rowId}>{op}</Row>);
-          ttlCols = 0;
-          rowId += 1;
+        if (remainingWidth < fieldWidth) {
+          vs.push(<Row key={vs.length}>{op}</Row>);
           op = [];
+          remainingWidth = 12;
         }
-        ttlCols += Math.floor(60 / perRow);
-        const nCol = f.type === 'table' || hasOwnRow || perRow !== 5;
-        const eachCol = (
+
+        const unit = genUnits(f.option_layers)[0] || {};
+        const cls =
+          perRow === 5 &&
+          ![FieldTypes.F_TABLE, FieldTypes.F_DATETIME_RANGE].includes(f.type) &&
+          !f.hasOwnRow
+            ? 'g_col_w'
+            : '';
+
+        op.push(
           <Col
             key={`prop_${key}_${f.priority}_${f.field}`}
-            md={rCol}
-            lg={rCol}
-            className={nCol ? '' : 'g_col_w'}
+            md={fieldWidth}
+            lg={fieldWidth}
+            className={cls}
           >
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
@@ -165,20 +182,21 @@ export default class GenPropertiesLayer extends Component {
             />
           </Col>
         );
-        op.push(eachCol);
-        if (fields.length === i + 1) {
-          vs.push(<Row key={rowId}>{op}</Row>);
-          ttlCols = 0;
-          rowId += 1;
+
+        remainingWidth -= fieldWidth;
+
+        if (fieldWidth === 12 || idx === fields.length - 1) {
+          vs.push(<Row key={vs.length}>{op}</Row>);
           op = [];
+          remainingWidth = 12;
         }
-      } else if (fields.length === i + 1) {
-        vs.push(<Row key={rowId}>{op}</Row>);
-        ttlCols = 0;
-        rowId += 1;
-        op = [];
       }
     });
+
+    if (op.length > 0) {
+      vs.push(<Row key={vs.length}>{op}</Row>);
+    }
+
     return vs;
   }
 
