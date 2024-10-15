@@ -4243,7 +4243,7 @@ functions-have-names@^1.2.3:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
-generic-ui-core@^1.4.7:
+generic-ui-core@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/generic-ui-core/-/generic-ui-core-1.5.0.tgz#2ed2d11901f90c1df2b946de1e82e56101e27728"
   integrity sha512-MkoNSd2KompcjgfoSa+sGH2OAs2vowMJv13Pfas6nzJVDwSCmRTYFxMIKFjzJIhXd70QwAR4DcJ5T2UbwUyjmg==
