@@ -93,6 +93,23 @@ export default class GenPropertiesLayer extends Component {
       if (showProp) {
         let fieldWidth;
 
+        if (f.type === FieldTypes.F_DATETIME_RANGE) {
+          // If there are fields in the current row, push them to the rows array
+          if (op.length > 0) {
+            vs.push(<Row key={vs.length}>{op}</Row>);
+            op = [];
+            remainingWidth = 12;
+          }
+          vs.push(
+            <DateTimeRange
+              key={vs.length}
+              layer={layer}
+              opt={{ f_obj: f }}
+              onInputChange={this.handleDTRChange}
+            />
+          );
+          return;
+        }
         if (f.hasOwnRow) {
           // If there are fields in the current row, push them to the rows array
           if (op.length > 0) {
@@ -101,18 +118,6 @@ export default class GenPropertiesLayer extends Component {
             remainingWidth = 12;
           }
           fieldWidth = 12;
-
-          if (f.type === FieldTypes.F_DATETIME_RANGE) {
-            vs.push(
-              <DateTimeRange
-                key={vs.length}
-                layer={layer}
-                opt={{ f_obj: f }}
-                onInputChange={this.handleDTRChange}
-              />
-            );
-            return;
-          }
         } else if (f.type === FieldTypes.F_TABLE) {
           fieldWidth = 12 / (f.cols || 1);
         } else {
