@@ -122,7 +122,7 @@ export default class GenPropertiesLayer extends Component {
           fieldWidth = 12 / (f.cols || 1);
         } else {
           // field level settings
-          perRow = f.cols || cols;
+          perRow = f.cols || perRow;
           colWidth = Math.floor(12 / perRow);
           fieldWidth = colWidth;
         }
