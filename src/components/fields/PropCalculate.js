@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, FormControl, FormGroup, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { filter } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from './FieldHeader';
@@ -27,7 +27,7 @@ const PropCalculate = (opt) => {
   let showTxt = null;
   let newFormula = formula;
 
-  const calFields = filter(fields, o =>
+  const calFields = filter(fields, (o) =>
     [FieldTypes.F_INTEGER, FieldTypes.F_SYSTEM_DEFINED].includes(o.type)
   );
 
@@ -37,10 +37,10 @@ const PropCalculate = (opt) => {
       ? formula.match(regF).sort((a, b) => b.length - a.length)
       : [];
 
-  varFields.forEach(fi => {
+  varFields.forEach((fi) => {
     if (!isNaN(fi)) return;
 
-    const tmpField = calFields.find(e => e.field === fi);
+    const tmpField = calFields.find((e) => e.field === fi);
     if (typeof tmpField === 'undefined' || tmpField == null) {
       newFormula = newFormula?.replace(fi, 0);
     } else {
@@ -60,7 +60,7 @@ const PropCalculate = (opt) => {
   }
 
   const comp = (
-    <FormControl
+    <Form.Control
       type="text"
       value={showTxt}
       onChange={onChange}
@@ -74,13 +74,13 @@ const PropCalculate = (opt) => {
 
   const klz = fieldCls(isSpCall);
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       {!canAdjust ? (
         comp
       ) : (
         <InputGroup className={klz[1]}>
-          <FormControl
+          <Form.Control
             type="text"
             value={showTxt}
             onChange={onChange}
@@ -90,18 +90,16 @@ const PropCalculate = (opt) => {
             placeholder={placeholder}
             min={0}
           />
-          <InputGroup.Button>
-            <LTooltip idf="adjust_calculation">
-              <Button
-                active
-                className="clipboardBtn"
-                onClick={() => onChange(showTxt)}
-              >
-                {FIcons.faArrowRight}
-              </Button>
-            </LTooltip>
-          </InputGroup.Button>
-          <FormControl
+          <LTooltip idf="adjust_calculation">
+            <Button
+              variant="light"
+              className="clipboardBtn"
+              onClick={() => onChange(showTxt)}
+            >
+              {FIcons.faArrowRight}
+            </Button>
+          </LTooltip>
+          <Form.Control
             type="text"
             value={value}
             onChange={onChange}
@@ -111,7 +109,7 @@ const PropCalculate = (opt) => {
           />
         </InputGroup>
       )}
-    </FormGroup>
+    </Form.Group>
   );
 };
 

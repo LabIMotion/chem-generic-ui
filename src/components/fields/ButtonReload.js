@@ -46,7 +46,7 @@ const ButtonReload = (props) => {
 
   return (
     <LTooltip idf="reload_temp">
-      <Button bsSize="sm" bsStyle="primary" onClick={() => handleReload()}>
+      <Button size="sm" variant="primary" onClick={() => handleReload()}>
         {FIcons.faArrowsRotate} Reload
       </Button>
     </LTooltip>

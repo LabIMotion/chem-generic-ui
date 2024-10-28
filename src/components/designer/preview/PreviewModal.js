@@ -57,6 +57,7 @@ export default class PreviewModal extends React.Component {
     if (revisions.length < 1) return null;
     return (
       <Modal
+        centered
         backdrop="static"
         dialogClassName="importChemDrawModal"
         show={showModal}

@@ -20,7 +20,7 @@ import {
 } from './GenPropertiesFields';
 import PropCalculate from './PropCalculate';
 
-const GenProperties = opt => {
+const GenProperties = (opt) => {
   const fieldProps = { ...opt, dndItems: [] };
   const type = fieldProps.type.split('_');
   if (opt.isSearch && type[0] === 'drag') type[0] = 'text';

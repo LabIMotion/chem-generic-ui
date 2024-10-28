@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
 import { toBool, toNum } from '../tools/utils';
@@ -124,11 +124,11 @@ class SegmentDetails extends Component {
     if (!uiCtrl || Object.keys(segment).length === 0) return null;
     return (
       <div>
-        <Panel>
-          <Panel.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
+        <Card>
+          <Card.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
             {this.elementalPropertiesItem(segment)}
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       </div>
     );
   }
@@ -139,7 +139,7 @@ SegmentDetails.propTypes = {
   segment: PropTypes.object,
   klass: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  fnNavi: PropTypes.func
+  fnNavi: PropTypes.func,
 };
 
 SegmentDetails.defaultProps = { segment: {}, klass: {}, fnNavi: () => {} };

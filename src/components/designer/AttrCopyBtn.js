@@ -20,7 +20,7 @@ const AttrCopyBtn = (props) => {
   return (
     <>
       <LTooltip idf={`copy.${genericType.toLowerCase()}`}>
-        <Button className="btn-gxs" onClick={onSelect}>
+        <Button variant="light" className="btn-gxs" onClick={onSelect}>
           {FIcons.faClone}
         </Button>
       </LTooltip>

@@ -2,13 +2,13 @@
 import { AgGridReact } from 'ag-grid-react';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button, FormGroup, FormControl } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import GenericSubField from '../models/GenericSubField';
 import DefinedRenderer from './DefinedRenderer';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+  <Button onClick={() => addRow()} className="btn-gxs" variant="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -27,26 +27,41 @@ const DelRowBtn = ({ delRow, node }) => {
   );
 };
 
-DelRowBtn.propTypes = { delRow: PropTypes.func.isRequired, node: PropTypes.object.isRequired };
+DelRowBtn.propTypes = {
+  delRow: PropTypes.func.isRequired,
+  node: PropTypes.object.isRequired,
+};
 
 const TypeSelect = ({ selType, node }) => (
-  <FormGroup bsSize="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
-    <FormControl componentClass="select" placeholder="select the type" onChange={e => selType(e, node)} defaultValue={node.data.type}>
+  <Form.Group size="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+    <Form.Control
+      as="select"
+      placeholder="select the type"
+      onChange={(e) => selType(e, node)}
+      defaultValue={node.data.type}
+    >
       <option value="label">label</option>
       <option value="number">number</option>
       <option value="text">text</option>
       <option value="system-defined">System-Defined</option>
-    </FormControl>
-  </FormGroup>
+    </Form.Control>
+  </Form.Group>
 );
 
-TypeSelect.propTypes = { selType: PropTypes.func.isRequired, node: PropTypes.object.isRequired };
+TypeSelect.propTypes = {
+  selType: PropTypes.func.isRequired,
+  node: PropTypes.object.isRequired,
+};
 
 export default class GroupFields extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      unitConfig: props.unitsFields.map(e => ({ value: e.field, name: e.label, label: e.label }))
+      unitConfig: props.unitsFields.map((e) => ({
+        value: e.field,
+        name: e.label,
+        label: e.label,
+      })),
     };
     this.autoSizeAll = this.autoSizeAll.bind(this);
     this.onGridReady = this.onGridReady.bind(this);
@@ -76,11 +91,17 @@ export default class GroupFields extends React.Component {
       {
         headerName: 'Default Value',
         field: 'value',
-        editable: (e) => { if (e.data.type === 'system-defined') return false; return true; },
+        editable: (e) => {
+          if (e.data.type === 'system-defined') return false;
+          return true;
+        },
         minWidth: 250,
         cellRenderer: DefinedRenderer,
-        cellRendererParams: { unitConfig: this.state.unitConfig, selDefined: this.selDefined },
-        onCellValueChanged: this.onCellValueChanged
+        cellRendererParams: {
+          unitConfig: this.state.unitConfig,
+          selDefined: this.selDefined,
+        },
+        onCellValueChanged: this.onCellValueChanged,
       },
       {
         headerName: 'Option Layers(hidden)',
@@ -106,7 +127,7 @@ export default class GroupFields extends React.Component {
         minWidth: 48,
         width: 48,
         suppressSizeToFit: true,
-        pinned: 'left'
+        pinned: 'left',
       },
     ];
   }
@@ -130,7 +151,9 @@ export default class GroupFields extends React.Component {
     const { panelIsExpanded } = this.props;
     if (!panelIsExpanded) return;
     if (!this.gridApi) return;
-    setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 10);
+    setTimeout(() => {
+      this.gridApi.sizeColumnsToFit();
+    }, 10);
   }
 
   delRow() {
@@ -148,21 +171,26 @@ export default class GroupFields extends React.Component {
 
   selType(e, node) {
     const { data } = node;
-    if (e.target.value === data.type) { return; }
+    if (e.target.value === data.type) {
+      return;
+    }
     data.type = e.target.value;
     data.value = '';
     const { unitConfig } = this.state;
     if (data.type === 'system-defined') {
       data.option_layers = (unitConfig || [])[0].value;
-      data.value_system = ((this.props.unitsFields.find(u => u.field === data.option_layers) || {})
-        .units || [])[0].key;
+      data.value_system = ((
+        this.props.unitsFields.find((u) => u.field === data.option_layers) || {}
+      ).units || [])[0].key;
     } else {
       delete data.option_layers;
       delete data.value_system;
     }
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode((nd) => { rows.push(nd.data); });
+    this.gridApi.forEachNode((nd) => {
+      rows.push(nd.data);
+    });
     field.sub_fields = rows;
     this.gridApi.setGridOption('rowData', rows);
     updSub(layerKey, field, () => {});
@@ -170,17 +198,22 @@ export default class GroupFields extends React.Component {
 
   selDefined(e, node) {
     const { data } = node;
-    if (e.target.value === data.option_layers) { return; }
+    if (e.target.value === data.option_layers) {
+      return;
+    }
     data.option_layers = e.target.value;
-    data.value_system = ((this.props.unitsFields.find(u => u.field === data.option_layers) || {})
-      .units || [])[0].key;
+    data.value_system = ((
+      this.props.unitsFields.find((u) => u.field === data.option_layers) || {}
+    ).units || [])[0].key;
     this.refresh();
   }
 
   refresh() {
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode((nd) => { rows.push(nd.data); });
+    this.gridApi.forEachNode((nd) => {
+      rows.push(nd.data);
+    });
     field.sub_fields = rows;
     updSub(layerKey, field, () => {});
   }
@@ -190,7 +223,10 @@ export default class GroupFields extends React.Component {
     const sub = field.sub_fields || [];
     return (
       <div>
-        <div style={{ width: '100%', height: '100%' }} className="ag-theme-balham">
+        <div
+          className="ag-theme-alpine"
+          style={{ width: '100%', height: '100%' }}
+        >
           <AgGridReact
             enableColResize
             columnDefs={this.columnDefs}

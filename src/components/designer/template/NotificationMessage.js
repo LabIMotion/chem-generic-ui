@@ -7,12 +7,19 @@ const NotificationMessage = ({ notify, onClose }) => {
   if (notify === null) return null;
 
   return (
-    <Alert bsStyle={notify.isSuccess ? 'success' : 'danger'}>
+    <Alert variant={notify.isSuccess ? 'success' : 'danger'}>
       <span>
         <b>{notify.title}</b>
         {`: ${notify.msg}`}
       </span>
-      <Button className="gu_button_right btn-gxs" onClick={onClose}>
+      <Button
+        className="gu_button_right btn-gxs"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        variant="light"
+      >
         {FIcons.faTimes}
       </Button>
     </Alert>

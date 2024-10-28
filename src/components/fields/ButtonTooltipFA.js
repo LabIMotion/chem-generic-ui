@@ -32,7 +32,7 @@ const ButtonTooltipFA = props => {
     <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
       <Button
         className="btn-gxs"
-        bsStyle={bs}
+        variant={bs}
         onClick={() => fnClick(element)}
         disabled={disabled}
       >
@@ -55,7 +55,7 @@ ButtonTooltipFA.propTypes = {
 };
 
 ButtonTooltipFA.defaultProps = {
-  bs: '',
+  bs: 'light',
   place: 'top',
   icon: FIcons.faFileExport,
   disabled: false,

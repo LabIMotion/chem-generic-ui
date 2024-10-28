@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
-import { Radio } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import LTooltip from '../shared/LTooltip';
 
 const SamOption = (props) => {
@@ -14,32 +14,35 @@ const SamOption = (props) => {
   return (
     <div className="generic_sam_options">
       <LTooltip idf="associate_direct" placement="right">
-        <Radio
+        <Form.Check
+          type="radio"
           name={`dropS_${rUUID}`}
           disabled={fValue.isAssoc}
           checked={fValue.cr_opt === 0}
           onChange={() => onChange({ node, subField: sField, crOpt: 0 })}
         >
           Current
-        </Radio>
+        </Form.Check>
       </LTooltip>
       <LTooltip idf="associate_split" placement="right">
-        <Radio
+        <Form.Check
+          type="radio"
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 1}
           onChange={() => onChange({ node, subField: sField, crOpt: 1 })}
         >
           Split
-        </Radio>
+        </Form.Check>
       </LTooltip>
       <LTooltip idf="associate_duplicate" placement="right">
-        <Radio
+        <Form.Check
+          type="radio"
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 2}
           onChange={() => onChange({ node, subField: sField, crOpt: 2 })}
         >
           Copy
-        </Radio>
+        </Form.Check>
       </LTooltip>
     </div>
   );

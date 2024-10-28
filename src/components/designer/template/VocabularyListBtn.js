@@ -1,5 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import { handleAddVocabulary } from '../../../utils/template/field-handler';
@@ -29,41 +30,50 @@ const VocabularyListBtn = (props) => {
   return (
     <>
       <LTooltip idf="sel_voc2tpl">
-        <Button bsSize="sm" onClick={handleShow}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleShow();
+          }}
+        >
           {FIcons.faSpellCheck}
         </Button>
       </LTooltip>
-      <Modal show={show} onHide={handleClose} dialogClassName="gu_modal-68w">
-        <Modal.Header closeButton>
-          <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <VocabGrid
-            onVocSelect={handleSelectVoc}
-            onVocDelete={handleDeleteVoc}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <LTooltip idf="close">
-            <Button bsStyle="primary" onClick={handleClose}>
-              Close
-            </Button>
-          </LTooltip>
-        </Modal.Footer>
-      </Modal>
-      {/* <VocabularyListModal
-        showModal={show}
-        vocabularies={vocabularies}
-        layer={layer}
-        allLayers={sortedLayers}
-        layerKey={layer.key}
-        updSub={() => {}} // updSubField, for field condition
-        fnApi={addVocabulary} // fnApi, for field condition
-        updLayer={updLayerSubField}
-        field={null} // field, for field condition
-        element={element}
-        fnClose={onClose}
-      /> */}
+      {show &&
+        ReactDOM.createPortal(
+          <Modal
+            centered
+            show={show}
+            onHide={handleClose}
+            dialogClassName="gu_modal-68w"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <VocabGrid
+                onVocSelect={handleSelectVoc}
+                onVocDelete={handleDeleteVoc}
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <LTooltip idf="close">
+                <Button
+                  variant="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClose();
+                  }}
+                >
+                  Close
+                </Button>
+              </LTooltip>
+            </Modal.Footer>
+          </Modal>,
+          document.body // Mount the modal to the body
+        )}
     </>
   );
 };

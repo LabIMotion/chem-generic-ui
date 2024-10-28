@@ -34,6 +34,8 @@ export default Object.freeze({
   design_template: 'Click to design the template',
   docs: 'Documentation',
   draw_flow: 'Draw a workflow',
+  dtl_expand: 'Expand details',
+  dtl_collapse: 'Collapse details',
   edit_attr: (_in) => `Edit ${capFirst(_in)} attributes`,
   edit_layer_attr: (_in) => `Edit layer [${_in}] attributes`,
   export_docx: 'Export as docx file',
@@ -56,6 +58,8 @@ export default Object.freeze({
   lyr_add2tpl: 'Add this layer to the template',
   lyr_view: 'View this Layer',
   more_func: 'More functions',
+  mv_up: 'Move Up',
+  mv_down: 'Move Down',
   preview_or_versions: 'Click to preview or view version history',
   sel_add: 'Add a new selection list',
   sel_lyr2tpl: (
@@ -79,6 +83,7 @@ export default Object.freeze({
   tpl_de_act: 'De-activate this template (currently active)',
   tpl_edit: 'Edit this template',
   tpl_fetch: 'Fetch this template from Template Hub',
+  tpl_view_hub: 'View all templates in Template Hub',
   tpl_save_rel_major: (
     <>
       Save and Release template as major version

@@ -23,21 +23,15 @@ describe('render Datetime Range field', () => {
 
 describe('render Dummy Field', () => {
   it('should render dummy field', () => {
-    const layer = 'a';
     const fieldObject = { type: 'dummy' };
-    const { queryByText } = render(
-      renderDummyFieldGroup({ layer, fieldObject })
-    );
+    const { queryByText } = render(renderDummyFieldGroup({ fieldObject }));
     const dummy = queryByText('(dummy)');
     expect(dummy).toBeInTheDocument();
   });
 
   it('should not render dummy field', () => {
-    const layer = 'a';
     const fieldObject = { type: 'text' };
-    const { queryByText } = render(
-      renderDummyFieldGroup({ layer, fieldObject })
-    );
+    const { queryByText } = render(renderDummyFieldGroup({ fieldObject }));
     const dummy = queryByText('(dummy)');
     expect(dummy).not.toBeInTheDocument();
   });

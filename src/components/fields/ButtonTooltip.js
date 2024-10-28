@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, MenuItem } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 import TAs from '../tools/TAs';
@@ -8,8 +8,8 @@ import TAs from '../tools/TAs';
 const ButtonTooltip = (props) => {
   const {
     idf,
-    size,
     bs,
+    size,
     fnClick,
     element,
     place,
@@ -21,40 +21,62 @@ const ButtonTooltip = (props) => {
   } = props;
   const content = txt ? <span>{txt} </span> : '';
   const conditionMenu = (
-    <MenuItem eventKey={`${idf}_menu_item`} onClick={() => fnClick(element)}>
+    <Dropdown.Item
+      eventKey={`${idf}_menu_item`}
+      onClick={() => fnClick(element)}
+    >
       {FIcons[fa]}&nbsp;&nbsp;{TAs[idf]}
-    </MenuItem>
+    </Dropdown.Item>
   );
   if (as === 'menu') {
     return conditionMenu;
   }
-
   if (bs === '') {
     return (
       <LTooltip idf={idf} placement={place}>
         <Button
           className={btnCls}
-          bsSize={size}
-          onClick={() => fnClick(element)}
+          size={size || undefined}
+          onClick={(e) => {
+            e.stopPropagation();
+            fnClick(element);
+          }}
           disabled={disabled}
         >
-          {FIcons[fa]}&nbsp;{content}
+          {content === '' && FIcons[fa]}
+          {content !== '' && (
+            <>
+              {FIcons[fa]}&nbsp;
+              {content}
+            </>
+          )}
         </Button>
       </LTooltip>
     );
   }
   return (
+    // <span className="project-a-container">
     <LTooltip idf={idf} placement={place}>
       <Button
         className={btnCls}
-        bsSize={size}
-        bsStyle={bs}
-        onClick={() => fnClick(element)}
+        size={size || undefined}
+        variant={bs}
+        onClick={(e) => {
+          e.stopPropagation();
+          fnClick(element);
+        }}
         disabled={disabled}
       >
-        {FIcons[fa]}&nbsp;{content}
+        {content === '' && FIcons[fa]}
+        {content !== '' && (
+          <>
+            {FIcons[fa]}&nbsp;
+            {content}
+          </>
+        )}
       </Button>
     </LTooltip>
+    // </span>
   );
 };
 
@@ -74,8 +96,8 @@ ButtonTooltip.propTypes = {
 
 ButtonTooltip.defaultProps = {
   idf: 'ltt',
-  bs: '',
-  size: 'sm',
+  bs: 'light',
+  size: undefined,
   place: 'top',
   fa: 'faPencil',
   disabled: false,

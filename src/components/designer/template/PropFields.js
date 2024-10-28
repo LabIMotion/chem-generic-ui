@@ -17,9 +17,10 @@ import {
 } from '../../../utils/template/field-handler';
 
 const PropFields = (props) => {
-  const { generic, genericType, fnUpdate, layer, vocabularies } = props;
+  const { generic, genericType, fnUpdate, layer, vocabularies, parentExpand } =
+    props;
 
-  const onDummyAdd = _e => {
+  const onDummyAdd = (_e) => {
     const { layerKey: _layerKey, field: _field } = _e;
     const result = handleAddDummy(generic, _layerKey, _field);
     fnUpdate(result);
@@ -70,7 +71,7 @@ const PropFields = (props) => {
 
   const sortedLayers = sortBy(
     generic.properties_template.layers,
-    l => l.position
+    (l) => l.position
   );
 
   const selectOptions = Object.keys(
@@ -83,7 +84,7 @@ const PropFields = (props) => {
     <ElementField
       generic={generic}
       genericType={genericType}
-      key={`${genericType}_${layer.key}_${f.field}`}
+      key={`_propF_${genericType}_${layer.key}_${f.field}_${idx}`}
       layer={layer}
       layerKey={layer.key}
       position={idx + 1}
@@ -97,6 +98,7 @@ const PropFields = (props) => {
       onDummyAdd={onDummyAdd}
       allLayers={sortedLayers}
       vocabularies={vocabularies}
+      parentExpand={parentExpand}
     />
   ));
 
@@ -109,8 +111,9 @@ PropFields.propTypes = {
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
   vocabularies: PropTypes.array,
+  parentExpand: PropTypes.bool,
 };
 
-PropFields.defaultProps = { vocabularies: [] };
+PropFields.defaultProps = { vocabularies: [], parentExpand: false };
 
 export default PropFields;

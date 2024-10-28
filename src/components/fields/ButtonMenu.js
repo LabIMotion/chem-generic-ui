@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 
 const ButtonMenu = ({ children, id, fnClick, bls }) => {
   return (
-    <MenuItem eventKey={`${id}_menu_item`} onClick={fnClick} className={bls}>
+    <Dropdown.Item
+      eventKey={`${id}_menu_item`}
+      onClick={fnClick}
+      className={bls}
+    >
       <>{children}</>
-    </MenuItem>
+    </Dropdown.Item>
   );
 };
 

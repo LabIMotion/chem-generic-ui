@@ -15,8 +15,8 @@ const AttrUploadBtn = (props) => {
 
   return (
     <>
-      <LTooltip  idf={`imp_${genericType.toLowerCase()}_n_temp`}>
-        <Button onClick={() => setShow(true)}>
+      <LTooltip idf={`imp_${genericType.toLowerCase()}_n_temp`}>
+        <Button onClick={() => setShow(true)} variant="light">
           {FIcons.faFileImport}&nbsp;Import
         </Button>
       </LTooltip>

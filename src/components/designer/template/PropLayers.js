@@ -1,10 +1,19 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Panel, MenuItem } from 'react-bootstrap';
+import {
+  Accordion,
+  ButtonGroup,
+  Card,
+  Dropdown,
+  Tooltip,
+  OverlayTrigger,
+  Button,
+} from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
+import Prop from './Prop';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
 import LayerAttrNewBtn from '../LayerAttrNewBtn';
 import LayerGridBtn from './LayerGridBtn';
@@ -36,6 +45,31 @@ import VocabularyListBtn from './VocabularyListBtn';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
+  // State to track expand/collapse state for each layer
+  const [expandLayers, setExpandLayers] = useState({});
+
+  // Toggle function to handle expand/collapse
+  const toggleExpandLayer = (layerKey) => {
+    setExpandLayers((prev) => ({
+      ...prev,
+      [layerKey]: !prev[layerKey],
+    }));
+  };
+
+  // // Initialize expand states once
+  // const initialExpandStates = useMemo(() => {
+  //   const states = {};
+  //   const sortedLayers = sortBy(
+  //     data.properties_template.layers,
+  //     (l) => l.position
+  //   );
+  //   (sortedLayers || []).forEach((layer) => {
+  //     states[layer.key] = false; // Set to false for collapsed by default
+  //   });
+  //   return states;
+  // }, [data.properties_template?.layers]);
+
+  // const [expandStates, setExpandStates] = useState(initialExpandStates);
 
   const onFieldAdd = (_e) => {
     const { newFieldKey, layer } = _e;
@@ -88,14 +122,14 @@ const PropLayers = (props) => {
   };
 
   const addArrange = (node, layerKey, noButton = true) => {
-    const pBtn = (
-      <PositionDnD
-        type={DnDs.LAYER}
-        field={{ field: layerKey }}
-        rowValue={{ key: '' }}
-        isButton={false}
-      />
-    );
+    // const pBtn = (
+    //   <PositionDnD
+    //     type={DnDs.LAYER}
+    //     field={{ field: layerKey }}
+    //     rowValue={{ key: '' }}
+    //     isButton={false}
+    //   />
+    // );
     return (
       <DroppablePanel
         type={DnDs.LAYER}
@@ -103,7 +137,7 @@ const PropLayers = (props) => {
         rowValue={{ key: '' }}
         fnCb={onPositionMove}
       >
-        {noButton ? null : pBtn}
+        {/* {noButton ? null : pBtn} */}
         {node}
       </DroppablePanel>
     );
@@ -124,136 +158,147 @@ const PropLayers = (props) => {
         fnUpdate={fnUpdate}
         layer={layer}
         vocabularies={vocabularies}
+        parentExpand={expandLayers[layerKey]}
       />
     );
     const isAttrOnWF = [
       Constants.GENERIC_TYPES.ELEMENT,
       Constants.GENERIC_TYPES.SEGMENT,
     ].includes(genericType);
-    const nodeHeader = (
-      <Panel.Heading className="template_panel_heading">
-        <Panel.Title toggle>
-          {layer.label}
-          <LBadge as="badge" text={layer.key} />
-          <LBadge
-            as="!badge"
-            text={`${layer.cols} ${pl(layer.cols, 'column')} per row`}
-            cls="primary"
-          />
-          <LBadge
-            as="!badge"
-            text={`${layer?.fields?.length || 0} ${pl(
-              layer?.fields?.length || 0,
-              'field'
-            )}`}
-            cls="primary"
-          />
-          {layer?.wf ? (
-            <LBadge as="!badge" text="workflow" cls="warning" />
-          ) : null}
-        </Panel.Title>
-        <div>
-          {/* <ButtonGroup className="gu-ml-2">
+
+    const layerHeader = (
+      <span className="flex-grow-1">
+        <span className="fw-bold">{layer.label}</span>
+        <LBadge as="badge" text={layer.key} />
+        <LBadge
+          as="!badge"
+          text={`${layer.cols} ${pl(layer.cols, 'column')} per row`}
+          cls="primary"
+        />
+        <LBadge
+          as="!badge"
+          text={`${layer?.fields?.length || 0} ${pl(
+            layer?.fields?.length || 0,
+            'field'
+          )}`}
+          cls="primary"
+        />
+        {layer?.wf ? (
+          <LBadge as="!badge" text="workflow" cls="warning" />
+        ) : null}
+      </span>
+    );
+
+    const layerHeaderButtons = (
+      <div onClick={(e) => e.stopPropagation()}>
+        <ButtonGroup className="me-2">
+          <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
+            <VocabularyListBtn
+              element={data}
+              fnUpdate={fnUpdate}
+              layer={layer}
+            />
+          </NewFieldBtn>
+        </ButtonGroup>
+        <ButtonGroup className="me-2">
+          <LayerSaveBtn layer={layer} data={data} />
+        </ButtonGroup>
+        <ButtonGroup>
+          <ButtonEllipse condSet={layer?.cond_fields?.length > 0 || false}>
             <LayerAttrEditBtn
               fnUpdate={onLayerUpdate}
               isAttrOnWF={isAttrOnWF}
               layer={layer}
+              as="menu"
             />
-          </ButtonGroup> */}
-          {/* <RemovePropBtn
-                delStr={FieldTypes.DEL_LAYER}
-                delKey={layerKey}
-                element={data}
-                fnDelete={onLayerDelete}
-              /> */}
-          <ButtonGroup className="gu-ml-2">
-            <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
-              <VocabularyListBtn
-                element={data}
-                fnUpdate={fnUpdate}
-                layer={layer}
-              />
-            </NewFieldBtn>
-          </ButtonGroup>
-          <ButtonGroup className="gu-ml-2">
-            <LayerSaveBtn layer={layer} data={data} />
-          </ButtonGroup>
-          <ButtonGroup className="gu-ml-2">
-            <ButtonEllipse condSet={layer?.cond_fields?.length > 0 || false}>
-              <LayerAttrEditBtn
-                fnUpdate={onLayerUpdate}
-                isAttrOnWF={isAttrOnWF}
-                layer={layer}
-              />
-              <ConditionLayerBtn
-                element={data}
-                fnUpdate={onLayerCondition}
-                layer={layer}
-                sortedLayers={sortedLayers}
-              />
-              <ButtonTooltip
-                idf="fld_dum_add"
-                fnClick={onDummyAdd}
-                element={{ layerKey, field: null }}
-                fa="faSquare"
-                place="top"
-                as="menu"
-              />
-              <MenuItem divider />
-              <ButtonDelField
-                delType={FieldTypes.DEL_LAYER}
-                delKey={layerKey}
-                generic={data}
-                fnConfirm={onLayerDelete}
-                as="menu"
-              />
-            </ButtonEllipse>
-          </ButtonGroup>
-          <ButtonGroup className="gu-ml-2">
-            <PositionDnD
-              type={DnDs.LAYER}
-              field={{ field: layerKey }}
-              rowValue={{ key: '' }}
-              isButton
+            <ConditionLayerBtn
+              element={data}
+              fnUpdate={onLayerCondition}
+              layer={layer}
+              sortedLayers={sortedLayers}
+              as="menu"
             />
-          </ButtonGroup>
-        </div>
-      </Panel.Heading>
+            <ButtonTooltip
+              idf="fld_dum_add"
+              fnClick={onDummyAdd}
+              element={{ layerKey, field: null }}
+              fa="faSquare"
+              place="top"
+              as="menu"
+            />
+            <Dropdown.Divider />
+            <ButtonDelField
+              delType={FieldTypes.DEL_LAYER}
+              delKey={layerKey}
+              generic={data}
+              fnConfirm={onLayerDelete}
+              as="menu"
+            />
+          </ButtonEllipse>
+        </ButtonGroup>
+        {/* <ButtonGroup>
+          <PositionDnD
+            type={DnDs.LAYER}
+            field={{ field: layerKey }}
+            rowValue={{ key: '' }}
+            isButton={false}
+          />
+        </ButtonGroup> */}
+      </div>
     );
-    const node = (
-      <Panel
-        className="panel_generic_properties"
-        defaultExpanded
-        key={`idxLayer_${layerKey}`}
+
+    const dnd = (
+      <PositionDnD
+        key={`_drag_${DnDs.LAYER}_${layer.key}`}
+        type={DnDs.LAYER}
+        field={{ field: layerKey }}
+        rowValue={{ key: '' }}
+        isButton={false}
+      />
+    );
+
+    const customHeader = (
+      <>
+        {layerHeader}
+        {layerHeaderButtons}
+      </>
+    );
+
+    const newNode = (
+      <Prop
+        key={`_prop_content_${layerKey}`}
+        dnd={addArrange(dnd, layerKey)}
+        layerKey={layerKey}
+        toggleExpand={toggleExpandLayer}
+        propHeader={customHeader}
       >
-        {addArrange(nodeHeader, layerKey)}
-        <Panel.Collapse>
-          <Panel.Body style={{ padding: '15px 0px 15px 0px' }}>
-            {fields}
-          </Panel.Body>
-        </Panel.Collapse>
-      </Panel>
+        {fields}
+      </Prop>
     );
-    layers.push(node);
+    layers.push(newNode);
   });
 
   return (
     <div>
-      <Panel>
-        <Panel.Heading>
-          <Panel.Title>
-            Layers
+      {/* <Card className="border-0 border-top gu-square-corners"> */}
+      <Card className="border-0">
+        <Card.Header
+          as="h5"
+          className="d-flex justify-content-between align-items-center bg-white px-1"
+        >
+          Layers
+          <span className="button-right">
             <LayerAttrNewBtn fnCreate={onLayerCreate} />
             <LayerGridBtn
               fnCreate={onAddStandardLayer}
               fnDelete={onDeleteStandardLayer}
             />
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Body>
+          </span>
+        </Card.Header>
+        <Card.Body className="p-0">
           <div>{layers}</div>
-        </Panel.Body>
-      </Panel>
+        </Card.Body>
+      </Card>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
 import { showProperties } from '../tools/utils';
 
-const LayersLayout = props => {
+const LayersLayout = (props) => {
   const {
     dic,
     layers,
@@ -27,12 +27,12 @@ const LayersLayout = props => {
   // if call from SP, extra layer is impossible
   const buildExtLys = isSpCall
     ? []
-    : extLys.map(e => (
+    : extLys.map((e) => (
         <GenProperties
           key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
           field={e.field}
           dic={dic}
-          label={e.label || ''}
+          label="Short Label"
           classStr={classStr || ''}
           description={e.generic.description || ''}
           value={e.generic[e.field] || ''}
@@ -40,7 +40,7 @@ const LayersLayout = props => {
           isEditable={e.isEditable || true}
           readOnly={e.readOnly || false}
           isRequired={e.isRequired || false}
-          onChange={event => funcChange(event, e.field, '', e.type)}
+          onChange={(event) => funcChange(event, e.field, '', e.type)}
         />
       ));
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];

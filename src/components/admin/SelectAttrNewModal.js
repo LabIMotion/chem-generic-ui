@@ -1,39 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Form,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Modal,
-  Button,
-} from 'react-bootstrap';
+import { Form, InputGroup, Modal, Button } from 'react-bootstrap';
 
 export default class SelectAttrNewModal extends Component {
+  constructor(props) {
+    super(props);
+    this.s_selectKey = React.createRef();
+  }
+
   handleCreate() {
     const { fnCreate } = this.props;
-    fnCreate(this.s_selectKey.value.trim());
+    fnCreate(this.s_selectKey.current.value.trim());
   }
 
   render() {
     const { showModal, fnClose } = this.props;
     return (
-      <Modal backdrop="static" show={showModal} onHide={() => fnClose()}>
+      <Modal
+        centered
+        backdrop="static"
+        show={showModal}
+        onHide={() => fnClose()}
+        size="lg"
+      >
         <Modal.Header closeButton>
           <Modal.Title>New Select List</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
-            <Form horizontal className="input-form">
-              <FormGroup controlId="formControlSelectKey">
+            <Form className="row mb-3 input-form">
+              <Form.Group controlId="formControlSelectKey">
                 <InputGroup>
-                  <InputGroup.Addon>Name</InputGroup.Addon>
-                  <FormControl
-                    type="text"
-                    inputRef={ref => {
-                      this.s_selectKey = ref;
-                    }}
-                  />
+                  <InputGroup.Text>Name</InputGroup.Text>
+                  <Form.Control type="text" ref={this.s_selectKey} />
                 </InputGroup>
                 <div className="help">
                   Select List name is unique in the template.
@@ -45,17 +44,17 @@ export default class SelectAttrNewModal extends Component {
                   Select List name should not contain special characters like $,
                   !, %, etc.
                 </div>
-              </FormGroup>
+              </Form.Group>
             </Form>
-            <FormGroup>
-              <Button bsStyle="primary" onClick={() => this.handleCreate()}>
+            <Form.Group>
+              <Button variant="primary" onClick={() => this.handleCreate()}>
                 Add new select list to template workarea
               </Button>
               &nbsp;
-              <Button bsStyle="warning" onClick={() => fnClose()}>
+              <Button variant="secondary" onClick={() => fnClose()}>
                 Cancel
               </Button>
-            </FormGroup>
+            </Form.Group>
           </div>
         </Modal.Body>
       </Modal>

@@ -2,7 +2,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Col } from 'react-bootstrap';
+import { Badge, ButtonGroup, Col, Row } from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
 // import LoadingActions from 'src/stores/alt/actions/LoadingActions';
 import { downloadFile } from 'generic-ui-core';
@@ -40,7 +40,7 @@ export default class Preview extends Component {
   handleChanged(el) {
     const { compareUUID, revisions } = this.state;
     const { src } = this.props;
-    let selected = (revisions || []).find(r => r.uuid === compareUUID);
+    let selected = (revisions || []).find((r) => r.uuid === compareUUID);
     if (selected && selected[src]) {
       selected = el;
       this.setRevision(revisions);
@@ -72,7 +72,7 @@ export default class Preview extends Component {
   retrieveRevision(params) {
     const { fnRetrieve, revisions, src, data } = this.props;
     // LoadingActions.start();
-    const deep = cloneDeep(revisions.find(r => r.id === params.id));
+    const deep = cloneDeep(revisions.find((r) => r.id === params.id));
     // fnRetrive(deep[src], () => LoadingActions.stop());
     if (src === 'properties_release') {
       data.properties_template = deep[src];
@@ -84,7 +84,7 @@ export default class Preview extends Component {
 
   dlRevision(params) {
     const { data, revisions } = this.props;
-    const revision = revisions.find(r => r.id === params.id);
+    const revision = revisions.find((r) => r.id === params.id);
     const props = revision.properties_release;
     props.klass = revision.properties_release.klass;
     props.released_at = revision.released_at || '';
@@ -146,23 +146,25 @@ export default class Preview extends Component {
           </div>
           <div>
             <div style={{ width: '100%' }}>{at}</div>
-            {del}
-            {dl}
-            {ret}
-            <ButtonTooltip
-              idf="ver_view"
-              fnClick={this.compare}
-              element={{ uuid: v.uuid }}
-              fa="faEye"
-              place="top"
-              bs="default"
-            />
+            <ButtonGroup size="sm" className="gap-1">
+              {del}
+              {dl}
+              {ret}
+              <ButtonTooltip
+                idf="ver_view"
+                fnClick={this.compare}
+                element={{ uuid: v.uuid }}
+                fa="faEye"
+                place="top"
+              />
+            </ButtonGroup>
           </div>
         </div>
       );
     };
     const options = [];
-    const selected = (revisions || []).find(r => r.uuid === compareUUID) || {};
+    const selected =
+      (revisions || []).find((r) => r.uuid === compareUUID) || {};
     const selectOptions =
       (selected && selected[src] && selected[src].select_options) || {};
 
@@ -183,7 +185,7 @@ export default class Preview extends Component {
     } else {
       selected.properties = selected.properties_release;
     }
-    console.log('selected=', selected);
+
     const layersLayout = (
       <GenInterface
         generic={selected || {}}
@@ -207,7 +209,7 @@ export default class Preview extends Component {
       : 'faUpRightAndDownLeftFromCenter';
     const idf = fullScreen ? 'scn_full_exit' : 'scn_full';
     return (
-      <div>
+      <Row className="m-2">
         {his}
         <Col md={contentCol}>
           <div style={{ margin: '10px 0px' }}>
@@ -221,13 +223,13 @@ export default class Preview extends Component {
                 bs="default"
               />
             </div>
-            <Badge style={{ backgroundColor: '#ffc107', color: 'black' }}>
+            <Badge bg="warning" text="dark">
               Sketch Map: The data input here will not be saved.
             </Badge>
           </div>
           <div style={{ width: '100%', minHeight: '50vh' }}>{layersLayout}</div>
         </Col>
-      </div>
+      </Row>
     );
   }
 }

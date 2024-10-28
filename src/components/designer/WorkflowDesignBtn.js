@@ -11,7 +11,7 @@ import Response from '../../utils/response';
 import { notifySuccess } from '../../utils/template/designer-message';
 
 const WorkflowDesignBtn = (props) => {
-  const { element, fnSave, genericType } = props;
+  const { element, fnSave, genericType, btnCls } = props;
   const [show, setShow] = useState(false);
 
   if (
@@ -40,7 +40,11 @@ const WorkflowDesignBtn = (props) => {
   return (
     <>
       <LTooltip idf="design_flow">
-        <Button bsSize="sm" onClick={() => setShow(true)}>
+        <Button
+          onClick={() => setShow(true)}
+          variant="light"
+          className={btnCls}
+        >
           {FIcons.faDiagramProject}&nbsp;Workflow
         </Button>
       </LTooltip>
@@ -59,6 +63,11 @@ WorkflowDesignBtn.propTypes = {
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   fnSave: PropTypes.func.isRequired,
+  btnCls: PropTypes.string,
+};
+
+WorkflowDesignBtn.defaultProps = {
+  btnCls: '',
 };
 
 export default WorkflowDesignBtn;

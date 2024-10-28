@@ -8,12 +8,22 @@ const LayerSaveModal = ({ acts, title, showProps, close, children }) => {
   if (!show) return null;
 
   return (
-    <Modal show={show} onHide={close} dialogClassName="gu_modal-68w">
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
-      <Modal.Footer>{acts.map((act) => act)}</Modal.Footer>
+    <Modal centered show={show} onHide={close} dialogClassName="gu_modal-68w">
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        onKeyDown={(e) => e.key === 'Enter' && e.stopPropagation()}
+        role="button"
+        tabIndex={0}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{children}</Modal.Body>
+        <Modal.Footer>{acts.map((act) => act)}</Modal.Footer>
+      </div>
     </Modal>
   );
 };

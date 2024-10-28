@@ -8,13 +8,13 @@ const OntCmp = (_ontology, _sharp = 'link') => {
   const toUrl = buildTS(_ontology);
   if (!toUrl) return null;
   const { label } = _ontology;
-  const cls = _sharp === 'link' ? '' : 'badge gu-no-pointer gu-ont-display';
+  const cls = _sharp === 'link' ? '' : 'ms-1 badge rounded-pill bg-success';
   const content = _sharp === 'link' ? FIcons.faCircleQuestion : label;
 
   return (
     <LTooltip idf={`link_term.${label}`}>
       <Button
-        bsStyle="link"
+        variant="link"
         href={toUrl}
         target="_blank"
         onClick={(e) => e.stopPropagation()}

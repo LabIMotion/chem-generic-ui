@@ -97,7 +97,7 @@ module.exports = {
       commonjs: 'react-bootstrap',
       commonjs2: 'react-bootstrap',
       amd: 'react-bootstrap',
-      root: 'react-bootstrap', // indicates global variable
+      root: 'ReactBootstrap', // indicates global variable
     },
     'react-dnd': {
       commonjs: 'react-dnd',
@@ -122,6 +122,12 @@ module.exports = {
       commonjs2: 'react-draggable',
       amd: 'Draggable',
       root: 'Draggable',
+    },
+    numeral: {
+      commonjs: 'numeral',
+      commonjs2: 'numeral',
+      amd: 'numeral',
+      root: 'numeral',
     },
     moment: {
       commonjs: 'moment',
@@ -152,6 +158,12 @@ module.exports = {
       commonjs2: '@fortawesome/react-fontawesome',
       amd: '@fortawesome/react-fontawesome',
       root: '@fortawesome/react-fontawesome',
+    },
+    uuid: {
+      commonjs: 'uuid',
+      commonjs2: 'uuid',
+      amd: 'uuid',
+      root: 'uuid',
     },
   },
   module: {

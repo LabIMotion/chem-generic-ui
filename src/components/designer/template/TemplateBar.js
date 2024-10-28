@@ -1,7 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import {
+  Alert,
+  Button,
+  ButtonGroup,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import DocuConst from '../../tools/DocuConst';
 import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
@@ -39,7 +45,7 @@ const TemplateBar = (props) => {
         overlay={<Tooltip id="_designer_doc_tooltip">Learn more</Tooltip>}
       >
         <Button
-          bsStyle="link"
+          variant="link"
           href={[
             DocuConst.DOC_SITE,
             'guides',
@@ -53,12 +59,16 @@ const TemplateBar = (props) => {
         </Button>
       </OverlayTrigger>
       {show && notify !== null && (
-        <span className={notify.isSuccess ? 'alert-success' : 'alert-danger'}>
+        <span
+          className={`alert ${
+            notify.isSuccess ? 'alert-success' : 'alert-danger'
+          } mb-0 ml-2`}
+        >
           <span>
             <b>{notify.title}</b>
             {`: ${notify.msg}`}
           </span>
-          <Button bsSize="sm" onClick={onClick}>
+          <Button size="sm" onClick={onClick} variant="light">
             {FIcons.faTimes}
           </Button>
         </span>

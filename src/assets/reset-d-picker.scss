@@ -1,0 +1,25 @@
+// custom-datepicker.scss
+.gu-datepicker .react-datepicker {
+  font-size: inherit !important; // Reset font size to default
+}
+
+.gu-datepicker .react-datepicker__current-month {
+  font-size: inherit !important; // Reset current month font size
+}
+
+.gu-datepicker .react-datepicker__header {
+  padding-top: 0.8rem !important; // Reset padding
+}
+
+.gu-datepicker .react-datepicker__navigation {
+  top: 1em !important; // Reset navigation position
+  line-height: 1.7em;
+  border: 0.45em solid transparent;
+}
+
+.gu-datepicker .react-datepicker__day-name,
+.gu-datepicker .react-datepicker__day {
+  width: 1.9em;
+  line-height: 1.9em;
+  margin: 0.166em !important; // Reset margin
+}

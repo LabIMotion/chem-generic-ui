@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonConfirm from './ButtonConfirm';
 import FIcons from '../icons/FIcons';
@@ -45,7 +45,7 @@ const ButtonDelField = (props) => {
   };
 
   const conditionMenu = (
-    <MenuItem
+    <Dropdown.Item
       eventKey="_del_menu_item"
       onClick={() => {
         confirmDelete(fnParams);
@@ -53,7 +53,7 @@ const ButtonDelField = (props) => {
       className="gu-menu-item-del"
     >
       {FIcons.faTrashCan}&nbsp;&nbsp;{msg}
-    </MenuItem>
+    </Dropdown.Item>
   );
 
   return (

@@ -16,7 +16,7 @@ const AttrNewBtn = (props) => {
   return (
     <>
       <LTooltip idf={`create.${genericType.toLowerCase()}`}>
-        <Button onClick={() => setShow(true)}>
+        <Button onClick={() => setShow(true)} variant="light">
           {FIcons.faPlus}&nbsp;New {genericType}
         </Button>
       </LTooltip>

@@ -14,7 +14,7 @@ const FieldTooltip = ({ link }) => {
     >
       <Button
         style={{ padding: '0' }}
-        bsStyle="link"
+        variant="link"
         href={link}
         target="_blank"
         onClick={(e) => e.stopPropagation()}

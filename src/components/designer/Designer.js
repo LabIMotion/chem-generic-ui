@@ -12,12 +12,13 @@ import Constants from '../tools/Constants';
 import GenGridEl from '../details/GenGridEl';
 import GenGridSg from '../details/GenGridSg';
 import GenGridDs from '../details/GenGridDs';
-import GenGridVocab  from '../details/GenGridVocab';
+import GenGridVocab from '../details/GenGridVocab';
 import getPageSizeForTheme from '../../utils/grid';
 import Template from './template/Template';
 import AttrUploadBtn from './AttrUploadBtn';
 import DocuConst from '../tools/DocuConst';
 import FIcons from '../icons/FIcons';
+import SyncBtn from '../repo/SyncButton';
 
 const Designer = (_props) => {
   const {
@@ -29,12 +30,13 @@ const Designer = (_props) => {
     fnActive,
     fnDownload,
     fnUpdate,
+    fnRefresh,
     genericType,
     gridData,
     klasses,
     preview,
   } = _props;
-  const [theme, setTheme] = useState(Constants.GRID_THEME.BALHAM.VALUE);
+  const [theme, setTheme] = useState(Constants.GRID_THEME.QUARTZ.VALUE);
   const [data, setData] = useState(null);
 
   const onDataSelected = (_data) => {
@@ -129,7 +131,12 @@ const Designer = (_props) => {
 
   return (
     <>
-      <ButtonToolbar style={{ display: 'inline-block' }}>
+      <ButtonToolbar className="mb-2" style={{ display: 'inline-block' }}>
+        <SyncBtn
+          fnRefresh={fnRefresh}
+          genericType={genericType}
+          klasses={klasses || []}
+        />
         <GridToolbar
           btnNew={
             <AttrNewBtn
@@ -154,7 +161,7 @@ const Designer = (_props) => {
           overlay={<Tooltip id="_field_docsite_tooltip">Learn more</Tooltip>}
         >
           <Button
-            bsStyle="link"
+            variant="link"
             href={[DocuConst.DOC_SITE, 'guides', 'designer'].join('/')}
             target="_blank"
             onClick={(e) => e.stopPropagation()}

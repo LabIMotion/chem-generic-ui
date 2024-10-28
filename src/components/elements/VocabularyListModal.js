@@ -144,8 +144,9 @@ export default class VocabularyListModal extends Component {
     if (showModal) {
       return (
         <Modal
+          centered
           backdrop="static"
-          bsSize="large"
+          size="large"
           show={showModal}
           onHide={() => fnClose()}
         >

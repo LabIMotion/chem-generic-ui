@@ -8,7 +8,7 @@ import LTooltip from '../shared/LTooltip';
 
 const AddRowBtn = ({ addRow }) => (
   <LTooltip idf="add_entry">
-    <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+    <Button onClick={() => addRow()} className="btn-gxs" variant="primary">
       {FIcons.faPlus}
     </Button>
   </LTooltip>
@@ -20,7 +20,7 @@ const DelRowBtn = ({ delRow, node }) => {
   const { data } = node;
   return (
     <LTooltip idf="remove">
-      <Button onClick={() => delRow(data)} className="btn-gxs">
+      <Button variant="light" onClick={() => delRow(data)} className="btn-gxs">
         {FIcons.faMinus}
       </Button>
     </LTooltip>

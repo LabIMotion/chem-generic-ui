@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, MenuItem } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import LayerAttrModal from '../elements/LayerAttrModal';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
@@ -19,12 +19,12 @@ const LayerAttrEditBtn = (props) => {
   };
 
   const conditionMenu = (
-    <MenuItem
+    <Dropdown.Item
       eventKey={`edit_layer_attr.${layer.label}`}
       onClick={() => setShow(true)}
     >
       {FIcons.faPencil}&nbsp;&nbsp;{message(`edit_layer_attr.${layer.label}`)}
-    </MenuItem>
+    </Dropdown.Item>
   );
 
   return (
@@ -33,12 +33,11 @@ const LayerAttrEditBtn = (props) => {
         conditionMenu
       ) : (
         <LTooltip idf={`edit_layer_attr.${layer.label}`}>
-          <Button bsSize="sm" onClick={() => setShow(true)}>
+          <Button size="sm" onClick={() => setShow(true)}>
             {FIcons.faPencil}
           </Button>
         </LTooltip>
       )}
-
       <LayerAttrModal
         actions={[{ action: 'u', fnAction: fnUpdate }]}
         isAttrOnWF={isAttrOnWF}

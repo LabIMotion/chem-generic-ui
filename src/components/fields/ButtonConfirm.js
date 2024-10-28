@@ -6,38 +6,44 @@ import FIcons from '../icons/FIcons';
 import LPopover from '../shared/LPopover';
 
 const ButtonConfirm = (props) => {
-  const { msg, cls, size, fnClick, fnParams, place, fa, disabled } = props;
+  const { msg, cls, fnClick, size, fnParams, place, fa, disabled } = props;
   const onClick = (event) => {
-    event.stopPropagation();
     fnClick(fnParams);
+    event.stopPropagation();
   };
   const popoverContent = (
-    <>
+    <div className="p-3">
       <p>{msg || `Confirm`}</p>
       <div className="btn-toolbar">
         <Button
-          bsSize="sm"
-          bsStyle="danger"
-          // aria-hidden="true"
+          size="sm"
+          variant="danger"
           onClick={onClick}
           data-testid="confirm-btn-yes"
         >
           Yes
         </Button>
         <span>&nbsp;&nbsp;</span>
-        <Button bsSize="sm" bsStyle="warning" data-testid="confirm-btn-no">
+        <Button
+          size="sm"
+          variant="warning"
+          onClick={(e) => e.stopPropagation}
+          data-testid="confirm-btn-no"
+        >
           No
         </Button>
       </div>
-    </>
+    </div>
   );
   return (
     <LPopover content={popoverContent} trigger={['focus']} placement={place}>
       <Button
-        bsSize={size}
+        size={size || undefined}
         className={cls}
         disabled={disabled}
         data-testid="confirm-btn"
+        variant="light"
+        onClick={(e) => e.stopPropagation()}
       >
         {FIcons[fa]}
       </Button>
@@ -58,7 +64,7 @@ ButtonConfirm.propTypes = {
 
 ButtonConfirm.defaultProps = {
   cls: 'btn-none',
-  size: 'sm',
+  size: undefined,
   place: 'top',
   fa: 'faTrashCan',
   disabled: false,

@@ -8,7 +8,7 @@ export const ModalOntologySelect = props => {
   const { show, setShow } = showProps;
 
   return (
-    <Modal backdrop="static" show={show} onHide={() => setShow(false)}>
+    <Modal centered backdrop="static" show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Select Term</Modal.Title>
       </Modal.Header>
@@ -27,7 +27,7 @@ export const ButtonOntologySelect = props => {
   const [show, setShow] = useState(false);
   const popover = (
     <Popover id="popover-positioned-scrolling-left">
-      Link to ontology terminology
+      <div className="p-3">Link to ontology terminology</div>
     </Popover>
   );
   return (
@@ -39,7 +39,11 @@ export const ButtonOntologySelect = props => {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button onClick={() => setShow(true)}>
+        <Button
+          variant="light"
+          onClick={() => setShow(true)}
+          className="flex-shrink-0"
+        >
           {customClass ? (
             <span>
               <span style={{ color: 'green' }}>{FIcons.faCircleCheck}</span>

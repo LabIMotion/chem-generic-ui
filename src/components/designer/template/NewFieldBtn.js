@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 
 const NewFieldBtn = ({ fnUpdate, layer, children }) => {
@@ -12,16 +12,26 @@ const NewFieldBtn = ({ fnUpdate, layer, children }) => {
   };
 
   return (
-    <InputGroup>
-      <FormControl
-        type="text"
-        name="field_new"
-        placeholder="Input new field name"
-        bsSize="sm"
-        onChange={(e) => onInputNewField(e)}
-        style={{ maxWidth: '140px', boxShadow: 'none' }}
-      />
-      <span className="input-group-btn">
+    <div
+      onMouseDown={(e) => e.stopPropagation()} // Prevent accordion collapse on click
+      onClick={(e) => e.stopPropagation()} // Prevent accordion collapse on click
+      onKeyDown={(e) => e.stopPropagation()} // Add keyboard listener
+      role="button" // Add role for accessibility
+      tabIndex={0} // Make the div focusable
+    >
+      <InputGroup>
+        <Form.Control
+          type="text"
+          name="field_new"
+          placeholder="Input new field name"
+          size="sm"
+          onChange={(e) => onInputNewField(e)}
+          onFocus={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          style={{ maxWidth: '140px', boxShadow: 'none' }}
+        />
         <ButtonTooltip
           idf="fld_add"
           fnClick={fnUpdate}
@@ -30,8 +40,8 @@ const NewFieldBtn = ({ fnUpdate, layer, children }) => {
           place="top"
         />
         {children}
-      </span>
-    </InputGroup>
+      </InputGroup>
+    </div>
   );
 };
 

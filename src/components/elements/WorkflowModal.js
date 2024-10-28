@@ -9,9 +9,11 @@ const WorkflowModal = ({ showProps, children }) => {
 
   return (
     <Modal
+      centered
       show={show}
       onHide={() => setShow(false)}
-      dialogClassName="gu-full-modal"
+      fullscreen
+      backdrop="static"
     >
       <Modal.Header closeButton>
         <Modal.Title>Design Workflow</Modal.Title>

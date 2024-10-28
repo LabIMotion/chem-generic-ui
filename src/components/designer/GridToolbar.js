@@ -5,14 +5,18 @@ import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 
 const GridToolbar = ({ btnNew, btnUpload, fnClickLarge, fnClickSmall }) => (
-  <ButtonGroup bsSize="sm">
+  <ButtonGroup className="ms-2">
     {btnUpload}
     {btnNew}
     <LTooltip idf="grid_large">
-      <Button onClick={fnClickLarge}>{FIcons.faTableCellsLarge}</Button>
+      <Button onClick={fnClickLarge} variant="light">
+        {FIcons.faTableCellsLarge}
+      </Button>
     </LTooltip>
     <LTooltip idf="grid_small">
-      <Button onClick={fnClickSmall}>{FIcons.faTableCells}</Button>
+      <Button onClick={fnClickSmall} variant="light">
+        {FIcons.faTableCells}
+      </Button>
     </LTooltip>
   </ButtonGroup>
 );

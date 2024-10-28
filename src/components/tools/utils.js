@@ -323,8 +323,12 @@ const propDefault = {
     label: 'Required',
     doc: [docFields, '/types', '/text', '#required'].join(''),
   },
+  si: {
+    label: 'Measured Parameter',
+    doc: [docFields, '/types', '/system-defined', '#system-units'].join(''),
+  },
   supportedUnits: {
-    label: 'Default unit',
+    label: 'Set Default Unit',
     doc: [docFields, '/types', '/system-defined', '#supported-units'].join(''),
   },
   // designer
@@ -353,8 +357,47 @@ const getFieldProps = name => {
   };
 };
 
+const frmSelSty = {
+  menuPortal: (base) => ({ ...base, zIndex: 90 }),
+  menu: (base) => ({ ...base, zIndex: 90 }),
+  control: (base) => ({
+    ...base,
+    minHeight: '31px',
+    height: '31px',
+    border: '1px solid #ced4da',
+    boxShadow: 'none',
+    '&:hover': {
+      borderColor: '#80bdff',
+    },
+  }),
+  valueContainer: (base) => ({
+    ...base,
+    padding: '0 8px',
+    height: '29px',
+  }),
+  singleValue: (base) => ({
+    ...base,
+    marginTop: '0',
+    lineHeight: '29px',
+  }),
+  input: (base) => ({
+    ...base,
+    margin: '0',
+    padding: '0',
+  }),
+  indicatorsContainer: (base) => ({
+    ...base,
+    height: '29px',
+  }),
+  dropdownIndicator: (base) => ({
+    ...base,
+    padding: '4px',
+  }),
+};
+
 export {
   createEnum,
+  frmSelSty,
   GenericDummy,
   toBool,
   toNum,

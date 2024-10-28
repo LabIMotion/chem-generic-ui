@@ -240,7 +240,7 @@ export default class TableDef extends React.Component {
       <div>
         <div
           style={{ width: '100%', height: '100%' }}
-          className="ag-theme-balham"
+          className="ag-theme-alpine"
         >
           <AgGridReact
             defaultColDef={{ resizable: true }}

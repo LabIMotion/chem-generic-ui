@@ -17,7 +17,7 @@ const IconRenderer = params => {
   );
 };
 
-const GenGridEl = props => {
+const GenGridEl = (props) => {
   const {
     gridData,
     pageSize,

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findIndex, cloneDeep } from 'lodash';
-import { Panel, Button, ButtonToolbar } from 'react-bootstrap';
+import { Card, Button, ButtonToolbar } from 'react-bootstrap';
 import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
 import { toBool, toNum, absOlsTermLabel } from '../tools/utils';
@@ -99,8 +99,8 @@ class GenericDSDetails extends Component {
     const { uiCtrl, genericDS, kind } = this.props;
     if (uiCtrl && Object.keys(genericDS).length !== 0 && kind && kind !== '') {
       return (
-        <Panel className="panel-detail">
-          <Panel.Body
+        <Card className="panel-detail">
+          <Card.Body
             style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}
           >
             {this.elementalPropertiesItem(genericDS)}
@@ -111,19 +111,19 @@ class GenericDSDetails extends Component {
               <br />
               Content is designed for: {genericDS.klass_label}
             </span>
-            <ButtonToolbar className="pull-right">
+            <ButtonToolbar className="gap-2 pull-right">
               <LTooltip idf="reload_temp">
                 <Button
                   className="btn-gxs"
-                  bsStyle="danger"
+                  variant="danger"
                   onClick={() => this.handleReload()}
                 >
                   Reload
                 </Button>
               </LTooltip>
             </ButtonToolbar>
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       );
     }
     return null;

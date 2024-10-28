@@ -23,7 +23,7 @@ const UploadKlassModal = props => {
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
+    <Modal centered show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>{`Import ${genericType} and its template`}</Modal.Title>
       </Modal.Header>

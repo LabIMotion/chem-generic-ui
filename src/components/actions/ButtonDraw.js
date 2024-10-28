@@ -44,7 +44,7 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
   return (
     <>
       <LTooltip idf="draw_flow">
-        <Button bsSize="sm" bsStyle="primary" onClick={() => setShow(true)}>
+        <Button size="sm" variant="primary" onClick={() => setShow(true)}>
           {FIcons.faPencil} Draw Flow
         </Button>
       </LTooltip>

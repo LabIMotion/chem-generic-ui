@@ -14,7 +14,7 @@ const block = (layer, fnAdd) => (
         <br />({layer.key})
       </div>
       <LTooltip idf="add_layer">
-        <Button bsStyle="primary" onClick={(event) => fnAdd(event, layer)}>
+        <Button variant="primary" onClick={(event) => fnAdd(event, layer)}>
           {FIcons.faPlus}
         </Button>
       </LTooltip>
@@ -37,7 +37,7 @@ const LayerModal = (props) => {
   if (sortedLayers.length < 1) return null;
   const layout = drawLayout(sortedLayers, fnAdd);
   return (
-    <Modal show={show} onHide={fnClose}>
+    <Modal centered show={show} onHide={fnClose}>
       <Modal.Header closeButton>
         <Modal.Title>Choose Layer</Modal.Title>
       </Modal.Header>

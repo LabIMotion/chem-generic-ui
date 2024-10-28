@@ -39,7 +39,7 @@ const reducer = (state, action) => {
   return { ...state, ...action };
 };
 
-const GenInterface = props => {
+const GenInterface = (props) => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
     generic,

@@ -12,9 +12,8 @@ const UConverterRenderer = props => {
   return (
     <Button
       key={`ucr_${data.id}`}
-      active
       onClick={() => onChange(sField, node)}
-      bsStyle="success"
+      variant="success"
     >
       {genUnitSup(
         genUnit(sField.option_layers, data[sField.id].value_system).label

@@ -3,13 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import TemplateBar from './TemplateBar';
-import Constants from '../../tools/Constants';
 import TemplateProps from './TemplateProps';
+import Constants from '../../tools/Constants';
 import Preview from '../preview/Preview';
 import { handleSaveSorting } from '../../../utils/template/sorting-handler';
 
-const Template = props => {
-  const { data: inputData, vocabularies, fnUpdate, fnSubmit, genericType, preview } = props;
+const Template = (props) => {
+  const {
+    data: inputData,
+    vocabularies,
+    fnUpdate,
+    fnSubmit,
+    genericType,
+    preview,
+  } = props;
 
   const [opData, setOpData] = useState({
     data: inputData,
@@ -18,7 +25,7 @@ const Template = props => {
   });
 
   useEffect(() => {
-    setOpData(prevOpData => {
+    setOpData((prevOpData) => {
       return {
         ...prevOpData,
         data: inputData,
@@ -28,10 +35,10 @@ const Template = props => {
     });
   }, [inputData]);
 
-  const innerAction = _result => {
+  const innerAction = (_result) => {
     const { element: newElement, notify: newNotify, additional } = _result;
     if (newNotify.isSuccess) {
-      setOpData(prevState => {
+      setOpData((prevState) => {
         return {
           ...prevState,
           data: newElement,
@@ -40,7 +47,7 @@ const Template = props => {
         };
       });
     } else {
-      setOpData(prevState => {
+      setOpData((prevState) => {
         return {
           ...prevState,
           notify: newNotify,
@@ -49,11 +56,11 @@ const Template = props => {
     }
   };
 
-  const onSwitch = _page => {
+  const onSwitch = (_page) => {
     if (_page === 'p') {
       preview.fnRevisions(opData.data);
     }
-    setOpData(prevState => {
+    setOpData((prevState) => {
       return {
         ...prevState,
         active: _page,
@@ -61,7 +68,7 @@ const Template = props => {
     });
   };
 
-  const handleSubmit = _e => {
+  const handleSubmit = (_e) => {
     const { data, release } = _e;
     const sortedData = handleSaveSorting(data);
     fnSubmit(sortedData, release);
@@ -78,7 +85,7 @@ const Template = props => {
         <TemplateProps
           data={opData.data}
           vocabularies={vocabularies}
-          fnUpdate={fnUpdate}
+          // fnUpdate={fnUpdate}
           genericType={genericType}
           innerAction={innerAction}
           fnSubmit={handleSubmit}

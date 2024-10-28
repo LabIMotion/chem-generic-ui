@@ -5,13 +5,13 @@ const attrs = {
   true: {
     tip: 'tpl_de_act',
     fa: 'faCheck',
-    bs: 'success',
+    bs: 'light',
     cls: 'gu_btn_text_success',
   },
   false: {
     tip: 'tpl_act',
     fa: 'faBan',
-    bs: 'danger',
+    bs: 'light',
     cls: 'gu_btn_text_danger',
   },
 };
@@ -19,7 +19,7 @@ const attrs = {
 const ActiveRenderer = (params) => {
   const { data, fnDeActivate, node, value } = params;
 
-  const onActivate = e => {
+  const onActivate = (e) => {
     node.setSelected(true, true);
     fnDeActivate(e);
   };
@@ -31,6 +31,7 @@ const ActiveRenderer = (params) => {
       element={data}
       fa={attrs[value].fa}
       btnCls={`${attrs[value].cls} btn-gxs`}
+      bs={attrs[value].bs}
     />
   );
 };

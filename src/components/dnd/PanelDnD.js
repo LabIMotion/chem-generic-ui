@@ -1,17 +1,9 @@
 import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import {
-  Panel,
-  ButtonGroup,
-  OverlayTrigger,
-  Tooltip,
-  Button,
-} from 'react-bootstrap';
-import { v4 as uuid } from 'uuid';
+import { ButtonGroup, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
 
 const orderSource = {
   canDrag(props) {
@@ -22,7 +14,7 @@ const orderSource = {
   },
 };
 
-const PanelDnD = props => {
+const PanelDnD = (props) => {
   const {
     type,
     layer,
@@ -31,7 +23,7 @@ const PanelDnD = props => {
     id,
     handleChange,
     onAttrChange,
-    bs,
+    // bs,
     hasAi,
   } = props;
 
@@ -40,7 +32,7 @@ const PanelDnD = props => {
       type,
       canDrag: () => orderSource.canDrag(props),
       item: () => orderSource.beginDrag(props),
-      collect: monitor => {
+      collect: (monitor) => {
         return {
           isDraggingSource: monitor.isDragging(),
         };
@@ -51,12 +43,12 @@ const PanelDnD = props => {
   const [{ isOver, isOverValidTarget }, drop] = useDrop(() => {
     return {
       accept: type,
-      canDrop: item => !layer.wf || !item.layer.wf,
-      drop: item => {
+      canDrop: (item) => !layer.wf || !item.layer.wf,
+      drop: (item) => {
         if (field === item.field && layer.key !== item.layer.key)
           handleMove(item.layer.key, layer.key);
       },
-      collect: monitor => {
+      collect: (monitor) => {
         return {
           isOver: monitor.isOver(),
           isOverValidTarget: monitor.canDrop(),
@@ -70,11 +62,9 @@ const PanelDnD = props => {
   }${isDraggingSource ? ' is-dragging' : ''}`;
 
   const { style, label, wf, key, timeRecord } = layer;
+  const dndKlz = wf ? `dnd-none` : `dnd`;
 
-  const klz = (style || 'panel_generic_heading').replace(
-    'panel_generic_heading',
-    'panel_generic_heading_slim'
-  );
+  const klz = style || 'panel_generic_heading';
 
   const createButton = (icon, tooltip, tooltipId, handleClick) => (
     <OverlayTrigger
@@ -82,7 +72,7 @@ const PanelDnD = props => {
       placement="top"
       overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
     >
-      <Button className="btn-gxs" onClick={handleClick}>
+      <Button variant="light" size="sm" onClick={handleClick}>
         {icon}
       </Button>
     </OverlayTrigger>
@@ -93,7 +83,7 @@ const PanelDnD = props => {
         FIcons.faPaperclip,
         'link analysis',
         '_tooltip_link_ana',
-        event => handleChange(event, id, layer, 'ana-modal')
+        (event) => handleChange(event, id, layer, 'ana-modal')
       )
     : null;
 
@@ -101,31 +91,31 @@ const PanelDnD = props => {
     FIcons.faFlask,
     'Add reaction',
     '_tooltip_layer_add_reaction',
-    event => handleChange(event, id, layer, 'layer-add-reaction')
+    (event) => handleChange(event, id, layer, 'layer-add-reaction')
   );
 
   const btnAdd = createButton(
     FIcons.faPlus,
     'Add layer',
     '_tooltip_add_layer',
-    event => handleChange(event, id, layer, 'layer-modal')
+    (event) => handleChange(event, id, layer, 'layer-modal')
   );
 
   const btnRemove = createButton(
     FIcons.faMinus,
     'Remove layer',
     '_tooltip_remove_layer',
-    event => handleChange(event, id, layer, 'layer-remove')
+    (event) => handleChange(event, id, layer, 'layer-remove')
   );
 
   const wfIcon = wf ? <span>{FIcons.faDiagramProject}</span> : null;
 
   const moveIcon = (
-    <LTooltip idf="change_position">
-      <Button onClick={() => {}} bsSize="xsmall">
-        {FIcons.faArrowsUpDownLeftRight}
-      </Button>
-    </LTooltip>
+    <div className={dndKlz}>
+      <div className="dnd-btn text-black">
+        <span>{FIcons.faArrowsUpDownLeftRight}</span>
+      </div>
+    </div>
   );
 
   const splitKey = key.split('.');
@@ -141,62 +131,61 @@ const PanelDnD = props => {
     ) : null;
 
   const btnLayer = wf ? (
-    <ButtonGroup className="pull-right gu_btn_broup_layer">
-      {isSys
-        ? null
-        : GenPropertiesDate({
+    <>
+      {isSys ? null : (
+        <ButtonGroup>
+          {GenPropertiesDate({
             isSpCall: false,
             isAtLayer: true,
-            label: '',
+            label: undefined,
             value: timeRecord || '',
             onChange: onAttrChange,
           })}
-      {btnReaction}
-      {btnLinkAna}
-      {isSys ? null : btnAdd}
-    </ButtonGroup>
+        </ButtonGroup>
+      )}
+      <ButtonGroup className="me-2">
+        {btnReaction}
+        {btnLinkAna}
+        {isSys ? null : btnAdd}
+      </ButtonGroup>
+    </>
   ) : (
-    <ButtonGroup className="pull-right gu_btn_broup_layer">
-      <div className="pull-right btn-group">
-        {isSys
-          ? null
-          : GenPropertiesDate({
-              isSpCall: false,
-              isAtLayer: true,
-              label: '',
-              value: timeRecord || '',
-              onChange: onAttrChange,
-            })}
+    <>
+      {isSys ? null : (
+        <ButtonGroup>
+          {GenPropertiesDate({
+            isSpCall: false,
+            isAtLayer: true,
+            label: undefined,
+            value: timeRecord || '',
+            onChange: onAttrChange,
+          })}
+        </ButtonGroup>
+      )}
+      <ButtonGroup className="me-1">
         {btnReaction}
         {btnLinkAna}
         {isSys ? null : btnAdd}
         {btnRemove}
-        {moveIcon}
-      </div>
-    </ButtonGroup>
+      </ButtonGroup>
+      <ButtonGroup className={className}>{moveIcon}</ButtonGroup>
+    </>
   );
 
-  const panelHeader = (
-    <Panel.Heading
-      className={klz}
-      style={{ display: 'flow', verticalAlign: 'middle' }}
-    >
-      <Panel.Title toggle style={{ float: 'left' }}>
-        {label}&nbsp;
-      </Panel.Title>
-      {btnLayer}
+  const accordionDiv = (
+    <div>
       {extHead}
-      <div className="clearfix" />
-    </Panel.Heading>
+      {btnLayer}
+    </div>
   );
-
-  const panelHColor = bs !== 'none' ? `panel-${bs}` : '';
-  const dndKlz = wf ? `dnd-none ${panelHColor}` : `dnd ${panelHColor}`;
 
   return (
-    <div className={className}>
-      <div className={dndKlz} ref={node => drag(drop(node))}>
-        {panelHeader}
+    <div>
+      <div
+        ref={(node) => drag(drop(node))}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        {accordionDiv}
       </div>
     </div>
   );

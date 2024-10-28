@@ -7,3 +7,12 @@ $gu-spacers: (
   4: $gu-spacer * 1.5,
   5: $gu-spacer * 3,
 );
+
+:root {
+  // Define the keys and margin types
+  @each $spacer-key, $value in $gu-spacers {
+    --gu-ml-#{$spacer-key}: #{$value};
+    --gu-mr-#{$spacer-key}: #{$value};
+    --gu-mb-#{$spacer-key}: #{$value};
+  }
+}

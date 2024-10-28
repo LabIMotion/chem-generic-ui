@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import {
-  Panel,
+  Panel as FlowPanel,
   useReactFlow,
   getRectOfNodes,
   getTransformForBounds,
@@ -42,13 +42,13 @@ function FlowImageButton() {
       },
     })
       .then(downloadImage)
-      .catch(error => console.log('oops, something went wrong!', error));
+      .catch((error) => console.log('oops, something went wrong!', error));
   };
 
   return (
-    <Panel position="top-right">
+    <FlowPanel position="top-right">
       <Button onClick={onClick}>Download Image</Button>
-    </Panel>
+    </FlowPanel>
   );
 }
 

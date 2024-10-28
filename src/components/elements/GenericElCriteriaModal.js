@@ -7,6 +7,7 @@ function GenericElCriteriaModal(props) {
   if (!props.show) return (<span />);
   return (
     <Modal
+      centered
       dialogClassName="generic_criteria_modal"
       animation={false}
       show={props.show}

@@ -3,6 +3,9 @@
 @use 'flow';
 @use 'modal';
 @use 'gui';
+@use 'reset-d-picker';
+@use 'upgrade';
+// @use 'lib';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
   border: 2px dashed $borderColor !important;
@@ -143,7 +146,7 @@
 
 @mixin generic_panel_header {
   font-weight: bold;
-  padding: 10px 0px !important;
+  padding: unset !important;
 }
 
 .panel_generic_heading_slim {
@@ -182,6 +185,11 @@
   }
   input:invalid {
     border: 1px solid $color-invalid;
+  }
+  .form-control {
+    &.readonly {
+      background-color: $color-readonly !important;
+    }
   }
 }
 
@@ -287,8 +295,9 @@
   }
   .help {
     font-size: 80%;
-    margin: 6px;
     font-style: italic;
+    margin-left: var(--gu-ml-2) !important;
+    margin-right: var(--gu-mr-2) !important;
   }
 }
 
@@ -496,10 +505,10 @@
 
 .generic_grid_dnd {
   > div {
-    display: table;
+    // display: table;
     width: 100%;
     > div {
-      display: table-cell;
+      // display: table-cell;
       vertical-align: middle;
     }
   }
@@ -520,6 +529,13 @@
   }
   &.is-dragging {
     @extend .gu_is-dragging;
+  }
+}
+
+.dnd-btn {
+  font-size: large;
+  span {
+    cursor: move;
   }
 }
 

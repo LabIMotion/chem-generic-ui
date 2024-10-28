@@ -141,7 +141,7 @@ const DnDFlow = props => {
               fitView
             >
               <div className="save__controls">
-                <Button bsSize="sm" onClick={onSave}>
+                <Button size="sm" onClick={onSave}>
                   {FIcons.faFloppyDisk}&nbsp;Save to draft
                 </Button>
               </div>

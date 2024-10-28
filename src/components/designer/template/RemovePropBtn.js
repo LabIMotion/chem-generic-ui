@@ -42,8 +42,8 @@ const RemovePropBtn = (props) => {
       <p>{msg}</p>
       <div className="btn-toolbar">
         <Button
-          bsSize="sm"
-          bsStyle="danger"
+          size="sm"
+          variant="danger"
           aria-hidden="true"
           onClick={onClick}
           data-testid="template-remove-yes-btn"
@@ -52,8 +52,8 @@ const RemovePropBtn = (props) => {
         </Button>
         <span>&nbsp;&nbsp;</span>
         <Button
-          bsSize="sm"
-          bsStyle="warning"
+          size="sm"
+          variant="warning"
           data-testid="template-remove-no-btn"
         >
           No
@@ -64,7 +64,7 @@ const RemovePropBtn = (props) => {
 
   return (
     <LPopover content={popoverContent} trigger={['focus']}>
-      <Button bsSize="sm" data-testid="template-remove-btn">
+      <Button size="sm" data-testid="template-remove-btn">
         {FIcons.faTrashCan}
       </Button>
     </LPopover>

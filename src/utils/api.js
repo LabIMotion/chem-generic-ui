@@ -1,5 +1,3 @@
-import 'whatwg-fetch';
-
 const API_V1 = '/api/v1';
 const baseOptions = {
   credentials: 'same-origin',
@@ -61,6 +59,28 @@ export default class Api {
     try {
       const res = await fetch(`${API_V1}/${path}`, fetchBody(data, method));
       return await handleResponse(res);
+    } catch (error) {
+      return handleError(error);
+    }
+  };
+
+  // deprecated
+  static execApiDepr = async (path, method = 'GET', params = {}) => {
+    const searchParams = new URLSearchParams(params || {});
+    const queryString = searchParams.toString();
+    const url = `${API_V1}/${path}${queryString ? `?${queryString}` : ''}`;
+    try {
+      const res = await fetch(url, fetchOptions(method));
+      return await res.json();
+    } catch (error) {
+      return handleError(error);
+    }
+  };
+
+  static execApiDataDepr = async (data, path, method = 'POST') => {
+    try {
+      const res = await fetch(`${API_V1}/${path}`, fetchBody(data, method));
+      return await res.json();
     } catch (error) {
       return handleError(error);
     }

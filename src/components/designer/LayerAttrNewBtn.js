@@ -13,7 +13,11 @@ const LayerAttrNewBtn = (props) => {
   return (
     <>
       <LTooltip idf="add_layer">
-        <Button className="button-right btn-gxs" onClick={() => setShow(true)}>
+        <Button
+          className="gu-mr-2"
+          variant="light"
+          onClick={() => setShow(true)}
+        >
           {FIcons.faPlus}&nbsp;Add new layer
         </Button>
       </LTooltip>

@@ -121,7 +121,7 @@ const VocabSaveBtn = (props) => {
   const saveButton = (
     <Button
       key="success"
-      bsStyle="success"
+      variant="success"
       onClick={handleSave}
       disabled={
         !TermLink(state.field.ontology, state.field.ontology?.label) ||
@@ -133,7 +133,7 @@ const VocabSaveBtn = (props) => {
   );
 
   const resetButton = (
-    <Button key="primary" bsStyle="primary" onClick={handleReset}>
+    <Button key="secondary" variant="secondary" onClick={handleReset}>
       Close
     </Button>
   );
@@ -143,7 +143,7 @@ const VocabSaveBtn = (props) => {
     <>
       <LTooltip idf="voc_add">
         <Button
-          bsSize="sm"
+          variant="light"
           onClick={() => dispatch({ type: 'show', payload: true })}
         >
           {FIcons.faSpellCheck}

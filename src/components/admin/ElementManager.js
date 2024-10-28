@@ -11,7 +11,7 @@ const ElementManager = () => {
         {' '}
         times
       </p>
-      <Button bsStyle="primary" onClick={() => setCount(count + 1)}>
+      <Button variant="primary" onClick={() => setCount(count + 1)}>
         Click me
       </Button>
     </div>

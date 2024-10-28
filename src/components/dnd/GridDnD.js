@@ -37,7 +37,7 @@ const GridDnD = ({ field, rowValue, handleMove }) => {
     <div ref={drop}>
       <div ref={drag} className={className}>
         <div className="dnd-btn">
-          <span className="text-info">{FIcons.faArrowsUpDownLeftRight}</span>
+          <span className="text-primary">{FIcons.faArrowsUpDownLeftRight}</span>
         </div>
       </div>
     </div>

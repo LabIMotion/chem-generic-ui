@@ -20,7 +20,7 @@ const AttrEditBtn = (props) => {
   return (
     <>
       <LTooltip idf={`edit_attr.${genericType.toLowerCase()}`}>
-        <Button className="btn-gxs" onClick={onSelect}>
+        <Button variant="light" className="btn-gxs" onClick={onSelect}>
           {FIcons.faPencil}
         </Button>
       </LTooltip>

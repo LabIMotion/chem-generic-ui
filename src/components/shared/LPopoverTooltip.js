@@ -55,8 +55,8 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
       <p>{msg || `Confirm?`}</p>
       <div className="btn-toolbar">
         <Button
-          bsSize="sm"
-          bsStyle="danger"
+          size="sm"
+          variant="danger"
           // aria-hidden="true"
           onClick={onClick}
           data-testid="confirm-btn-yes"
@@ -65,8 +65,8 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
         </Button>
         <span>&nbsp;&nbsp;</span>
         <Button
-          bsSize="sm"
-          bsStyle="warning"
+          size="sm"
+          variant="warning"
           onClick={() => setShowPopover(false)}
           data-testid="confirm-btn-no"
         >
@@ -89,8 +89,8 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
         overlay={tooltip}
       >
         <Button
-          bsStyle="danger"
-          bsSize="sm"
+          variant="danger"
+          size="sm"
           onClick={togglePopover}
           ref={buttonRef}
           data-testid="confirm-btn"

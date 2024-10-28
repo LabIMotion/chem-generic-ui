@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Modal, Button, ButtonGroup } from 'react-bootstrap';
+import { Form, Modal, Button, ButtonGroup } from 'react-bootstrap';
 import { Content } from './AttrForm';
 import Constants from '../tools/Constants';
 import Response from '../../utils/response';
@@ -10,12 +10,12 @@ import {
   validateSegmentKlassInput,
 } from '../../utils/template/input-validation';
 
-const AttrModal = props => {
+const AttrModal = (props) => {
   const { actions, data, editable, genericType, klasses, showProps } = props;
   const { show, setShow } = showProps;
   const formRef = useRef();
 
-  const handleCreate = _fnAction => {
+  const handleCreate = (_fnAction) => {
     switch (genericType) {
       case Constants.GENERIC_TYPES.SEGMENT: {
         const inputs = {
@@ -46,7 +46,7 @@ const AttrModal = props => {
     }
   };
 
-  const handleCopy = _fnAction => {
+  const handleCopy = (_fnAction) => {
     switch (genericType) {
       case Constants.GENERIC_TYPES.SEGMENT: {
         const updates = {
@@ -79,17 +79,17 @@ const AttrModal = props => {
     }
   };
 
-  const handleDelete = _fnAction => {
+  const handleDelete = (_fnAction) => {
     _fnAction(data);
     setShow(false);
   };
 
-  const handleUpdate = _fnAction => {
+  const handleUpdate = (_fnAction) => {
     switch (genericType) {
       case Constants.GENERIC_TYPES.SEGMENT: {
         const updates = {
           label: formRef.current.k_label.value.trim(),
-          desc: formRef.current.k_desc.value.trim()
+          desc: formRef.current.k_desc.value.trim(),
         };
         const inputs = { ...data, ...updates };
         const verify = validateSegmentKlassInput(inputs);
@@ -122,7 +122,7 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="warning"
+            variant="warning"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
             Create
@@ -133,7 +133,7 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="warning"
+            variant="warning"
             onClick={_fnAction ? () => handleCopy(_fnAction) : () => {}}
           >
             Copy
@@ -144,7 +144,7 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="warning"
+            variant="warning"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
             Update
@@ -155,7 +155,7 @@ const AttrModal = props => {
         button = (
           <Button
             key={`_attr_modal_btn_${_action}`}
-            bsStyle="danger"
+            variant="danger"
             onClick={_fnAction ? () => handleDelete(_fnAction) : () => {}}
           >
             Delete
@@ -170,7 +170,7 @@ const AttrModal = props => {
 
   const addActions = () => {
     const buttons = [];
-    actions.forEach(e => {
+    actions.forEach((e) => {
       buttons.push(actionBtn(e.action, e.fnAction));
       buttons.push(<span key={`_attr_modal_span_${e.action}`}>&nbsp;</span>);
     });
@@ -180,13 +180,19 @@ const AttrModal = props => {
   const addTitles = () => {
     const title = [];
     const mapping = { c: 'New', cc: 'Copy', u: 'Edit', d: 'Delete' };
-    actions.map(e => title.push(mapping[e.action]));
+    actions.map((e) => title.push(mapping[e.action]));
     return title.join('/').concat(' ').concat(genericType);
   };
 
   return (
     <>
-      <Modal backdrop="static" show={show} onHide={() => setShow(false)}>
+      <Modal
+        centered
+        size="lg"
+        backdrop="static"
+        show={show}
+        onHide={() => setShow(false)}
+      >
         <Modal.Header closeButton>
           <Modal.Title>{addTitles()}</Modal.Title>
         </Modal.Header>
@@ -199,15 +205,15 @@ const AttrModal = props => {
               element={data}
               editable={editable}
             />
-            <Form horizontal>
-              <FormGroup>
+            <Form className="row mb-3">
+              <Form.Group>
                 {addActions()}
                 <ButtonGroup>
-                  <Button bsStyle="primary" onClick={() => setShow(false)}>
+                  <Button variant="primary" onClick={() => setShow(false)}>
                     Close
                   </Button>
                 </ButtonGroup>
-              </FormGroup>
+              </Form.Group>
             </Form>
           </div>
         </Modal.Body>

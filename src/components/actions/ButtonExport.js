@@ -15,7 +15,7 @@ const ButtonExport = (props) => {
 
   return (
     <LTooltip idf="export_docx">
-      <Button bsSize="sm" bsStyle="primary" onClick={() => handleExport()}>
+      <Button size="sm" variant="primary" onClick={() => handleExport()}>
         {FIcons.faFileWord} Export
       </Button>
     </LTooltip>

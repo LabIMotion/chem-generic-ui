@@ -8,13 +8,10 @@
 import React, { useState } from 'react';
 import {
   Button,
-  Checkbox,
-  FormGroup,
-  FormControl,
+  Form,
   InputGroup,
   ListGroup,
   ListGroupItem,
-  Radio,
 } from 'react-bootstrap';
 // import DatePicker, { registerLocale } from 'react-datepicker';
 // import ptBR from 'date-fns/locale/pt-BR';
@@ -27,7 +24,7 @@ import moment from 'moment';
 import { downloadFile, genUnit, unitConvToBase } from 'generic-ui-core';
 import DateTimeRange from './DateTimeRange';
 import FieldHeader from './FieldHeader';
-import { fieldCls, genUnitSup } from '../tools/utils';
+import { fieldCls, frmSelSty, genUnitSup } from '../tools/utils';
 import GenericElDropTarget from '../dnd/GenericElDropTarget';
 import TableRecord from '../table/TableRecord';
 import FieldUploadItem from './FieldUploadItem';
@@ -39,14 +36,14 @@ import LTooltip from '../shared/LTooltip';
 // registerLocale('ptBR', ptBR);
 // import 'react-datepicker/dist/react-datepicker.css';
 
-const GenPropertiesCalculate = opt => {
+const GenPropertiesCalculate = (opt) => {
   const fields = (opt.layer && opt.layer.fields) || [];
   let showVal = 0;
   let showTxt = null;
   let newFormula = opt.formula;
   const calFields = filter(
     fields,
-    o => o.type === 'integer' || o.type === 'system-defined'
+    (o) => o.type === 'integer' || o.type === 'system-defined'
   );
   const regF = /[a-zA-Z0-9_]+/gm;
   // eslint-disable-next-line max-len
@@ -54,9 +51,9 @@ const GenPropertiesCalculate = opt => {
     opt.formula && opt.formula.match(regF)
       ? opt.formula.match(regF).sort((a, b) => b.length - a.length)
       : [];
-  varFields.forEach(fi => {
+  varFields.forEach((fi) => {
     if (!isNaN(fi)) return;
-    const tmpField = calFields.find(e => e.field === fi);
+    const tmpField = calFields.find((e) => e.field === fi);
     if (typeof tmpField === 'undefined' || tmpField == null) {
       newFormula = newFormula?.replace(fi, 0);
     } else {
@@ -82,10 +79,10 @@ const GenPropertiesCalculate = opt => {
   }
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <InputGroup className={klz[1]}>
-        <FormControl
+        <Form.Control
           type="text"
           value={showTxt}
           onChange={opt.onChange}
@@ -95,18 +92,16 @@ const GenPropertiesCalculate = opt => {
           placeholder={opt.placeholder}
           min={0}
         />
-        <InputGroup.Button>
-          <LTooltip idf="adjust_calculation_field">
-            <Button
-              active
-              className="clipboardBtn"
-              onClick={() => opt.onChange(showTxt)}
-            >
-              {FIcons.faArrowRight}
-            </Button>
-          </LTooltip>
-        </InputGroup.Button>
-        <FormControl
+        <LTooltip idf="adjust_calculation_field">
+          <Button
+            variant="light"
+            className="clipboardBtn"
+            onClick={() => opt.onChange(showTxt)}
+          >
+            {FIcons.faArrowRight}
+          </Button>
+        </LTooltip>
+        <Form.Control
           type="text"
           value={opt.value}
           onChange={opt.onChange}
@@ -115,42 +110,53 @@ const GenPropertiesCalculate = opt => {
           min={0}
         />
       </InputGroup>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesCheckbox = opt => {
+const GenPropertiesCheckbox = (opt) => {
   if (opt.isSpCall) {
     return (
-      <FormGroup className="text_generic_properties gu_sp_form">
+      <Form.Group className="text_generic_properties gu_sp_form">
         {FieldHeader(opt)}
-        <Checkbox
+        <Form.Check
+          type="checkbox"
           name={opt.field}
           checked={opt.value}
           onChange={opt.onChange}
           disabled={opt.readOnly}
           className="gu_sp_column"
         />
-      </FormGroup>
+      </Form.Group>
     );
   }
   return (
-    <FormGroup>
+    <Form.Group>
       {FieldHeader({ label: '', description: '' })}
-      <Checkbox
-        name={opt.field}
+      <Form.Check
+        type="checkbox"
+        id={opt.field}
         checked={opt.value}
         onChange={opt.onChange}
         disabled={opt.readOnly}
-        style={{ marginTop: '5px' }}
+        // style={{ marginTop: '5px' }}
       >
-        <div style={{ marginTop: '-2px' }}>{FieldHeader(opt)}</div>
-      </Checkbox>
-    </FormGroup>
+        <Form.Check.Input
+          className="mt-2"
+          type="checkbox"
+          name={opt.field}
+          checked={opt.value}
+          onChange={opt.onChange}
+          disabled={opt.readOnly}
+        />
+        <Form.Check.Label>{FieldHeader(opt)}</Form.Check.Label>
+        {/* <div style={{ marginTop: '-2px' }}>{FieldHeader(opt)}</div> */}
+      </Form.Check>
+    </Form.Group>
   );
 };
 
-const GenPropertiesDate = opt => {
+const GenPropertiesDate = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   const klzLayer =
     opt.isAtLayer || false
@@ -165,7 +171,7 @@ const GenPropertiesDate = opt => {
   const { f_obj: fObj } = opt;
   if (fObj?.is_voc === true && fObj?.opid >= 7) readOnly = true;
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <div className={klzLayer}>
         <ButtonDatePicker
@@ -174,17 +180,17 @@ const GenPropertiesDate = opt => {
           readOnly={readOnly ?? false}
         />
       </div>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesDateTimeRange = opt => {
+const GenPropertiesDateTimeRange = (opt) => {
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={`${klz[0]}`}>
+    <Form.Group className={`${klz[0]}`}>
       {FieldHeader(opt)}
       <DateTimeRange key={`grid_${opt.f_obj.field}`} opt={opt} />
-    </FormGroup>
+    </Form.Group>
   );
 };
 
@@ -198,7 +204,8 @@ const GenPropertiesDrop = (opt) => {
     createOpt = (
       <div className="sample_radios">
         <LTooltip idf="associate_direct">
-          <Radio
+          <Form.Check
+            type="radio"
             name={`dropS_${opt.value.el_id}`}
             disabled={opt.value.isAssoc === true}
             checked={opt.value.cr_opt === 0}
@@ -206,27 +213,29 @@ const GenPropertiesDrop = (opt) => {
             inline
           >
             Current
-          </Radio>
+          </Form.Check>
         </LTooltip>
         <LTooltip idf="associate_split">
-          <Radio
+          <Form.Check
+            type="radio"
             name={`dropS_${opt.value.el_id}`}
             checked={opt.value.cr_opt === 1}
             onChange={() => opt.onChange({ ...opt.value, cr_opt: 1 })}
             inline
           >
             Split
-          </Radio>
+          </Form.Check>
         </LTooltip>
         <LTooltip idf="associate_duplicate">
-          <Radio
+          <Form.Check
+            type="radio"
             name={`dropS_${opt.value.el_id}`}
             checked={opt.value.cr_opt === 2}
             onChange={() => opt.onChange({ ...opt.value, cr_opt: 2 })}
             inline
           >
             Copy
-          </Radio>
+          </Form.Check>
         </LTooltip>
       </div>
     );
@@ -245,7 +254,7 @@ const GenPropertiesDrop = (opt) => {
     );
 
   return (
-    <FormGroup>
+    <Form.Group>
       {FieldHeader(opt)}
       <div style={{ paddingBottom: '0px' }}>
         <div className={className}>
@@ -255,7 +264,7 @@ const GenPropertiesDrop = (opt) => {
             <LTooltip idf="remove">
               <Button
                 className="btn_del btn-gxs"
-                bsStyle="danger"
+                variant="danger"
                 onClick={() => opt.onChange({})}
               >
                 {FIcons.faTrashCan}
@@ -264,72 +273,69 @@ const GenPropertiesDrop = (opt) => {
           </div>
         </div>
       </div>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
 const GenDummy = () => (
-  <FormGroup className="text_generic_properties">
-    <FormControl type="text" className="dummy" readOnly />
-  </FormGroup>
+  <Form.Group className="text_generic_properties">
+    <Form.Control type="text" className="dummy" readOnly />
+  </Form.Group>
 );
 
-const GenDropReaction = opt => (
+const GenDropReaction = (opt) => (
   <DropReaction field={opt.f_obj} onNavi={opt.onNavi} onChange={opt.onChange} />
 );
 
 const GenLabel = (opt, value) => (
-  <FormGroup className="text_generic_properties">
+  <Form.Group className="text_generic_properties">
     {FieldHeader(opt)}
     <div>{value}</div>
-  </FormGroup>
+  </Form.Group>
 );
 
-const GenPropertiesInputGroup = opt => {
-  const fLab = e => (
+const GenPropertiesInputGroup = (opt) => {
+  const fLab = (e) => (
     <div key={uuid()} className="form-control g_input_group_label">
       {e.value}
     </div>
   );
-  const fTxt = e => (
-    <FormControl
+  const fTxt = (e) => (
+    <Form.Control
       className="g_input_group"
       key={e.id}
       type={e.type}
       name={e.id}
       value={e.value || ''}
-      onChange={o => opt.onSubChange(o, e.id, opt.f_obj)}
+      onChange={(o) => opt.onSubChange(o, e.id, opt.f_obj)}
     />
   );
-  const fUnit = e => (
+  const fUnit = (e) => (
     <span
       key={`${e.id}_GenPropertiesInputGroup`}
       className="input-group"
       style={{ width: '100%' }}
     >
-      <FormControl
+      <Form.Control
         key={e.id}
         type="number"
         name={e.id}
         value={e.value}
-        onChange={o => opt.onSubChange(o, e.id, opt.f_obj)}
+        onChange={(o) => opt.onSubChange(o, e.id, opt.f_obj)}
         min={1}
       />
-      <InputGroup.Button>
-        <Button
-          active
-          onClick={() => opt.onSubChange(e, e.id, opt.f_obj)}
-          bsStyle="success"
-        >
-          {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
-        </Button>
-      </InputGroup.Button>
+      <Button
+        onClick={() => opt.onSubChange(e, e.id, opt.f_obj)}
+        variant="success"
+      >
+        {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
+      </Button>
     </span>
   );
   const subs =
     opt.f_obj &&
     opt.f_obj.sub_fields &&
-    opt.f_obj.sub_fields.map(e => {
+    opt.f_obj.sub_fields.map((e) => {
       if (e.type === 'label') {
         return fLab(e);
       }
@@ -340,21 +346,21 @@ const GenPropertiesInputGroup = opt => {
     });
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <InputGroup style={{ display: 'flex' }}>{subs}</InputGroup>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesNumber = opt => {
+const GenPropertiesNumber = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
-      <FormControl
+      <Form.Control
         type="number"
         value={opt.value}
         onChange={opt.onChange}
@@ -364,12 +370,12 @@ const GenPropertiesNumber = opt => {
         placeholder={opt.placeholder}
         min={1}
       />
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesSelect = opt => {
-  const options = opt.options.map(op => {
+const GenPropertiesSelect = (opt) => {
+  const options = opt.options.map((op) => {
     return {
       value: op.key,
       name: op.key,
@@ -383,26 +389,26 @@ const GenPropertiesSelect = opt => {
     opt.isRequired && opt.isEditable
       ? 'select_generic_properties_required'
       : className;
-  className = `${className} status-select`;
-  const val = options.find(o => o.value === opt.value) || null;
+  // className = `${className} status-select`;
+  const val = options.find((o) => o.value === opt.value) || null;
   const klz = fieldCls(opt.isSpCall);
-  const selectStyles = {
-    menuPortal: base => {
-      return { ...base, zIndex: 9999 };
-    },
-    menu: base => {
-      return { ...base, zIndex: 9999 };
-    },
-    control: base => {
-      return {
-        ...base,
-        height: 35,
-        minHeight: 35,
-      };
-    },
-  };
+  // const selectStyles = {
+  //   menuPortal: (base) => {
+  //     return { ...base, zIndex: 9999 };
+  //   },
+  //   menu: (base) => {
+  //     return { ...base, zIndex: 9999 };
+  //   },
+  //   control: (base) => {
+  //     return {
+  //       ...base,
+  //       height: 35,
+  //       minHeight: 35,
+  //     };
+  //   },
+  // };
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <span className={klz[1]}>
         <Select
@@ -415,22 +421,22 @@ const GenPropertiesSelect = opt => {
           className={className}
           isDisabled={opt.readOnly}
           menuPortalTarget={document.body}
-          styles={selectStyles}
+          styles={frmSelSty}
         />
       </span>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesSystemDefined = opt => {
+const GenPropertiesSystemDefined = (opt) => {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={klz[0]}>
+    <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <InputGroup className={klz[1]}>
-        <FormControl
+        <Form.Control
           type="number"
           value={
             opt.f_obj.value !== undefined && opt.f_obj.value !== null
@@ -443,30 +449,22 @@ const GenPropertiesSystemDefined = opt => {
           required={opt.isRequired}
           placeholder={opt.placeholder}
         />
-        <InputGroup.Button>
-          <Button
-            disabled={opt.readOnly}
-            active
-            onClick={opt.onClick}
-            bsStyle="success"
-          >
-            {genUnitSup(genUnit(opt.option_layers, opt.value_system).label) ||
-              ''}
-          </Button>
-        </InputGroup.Button>
+        <Button disabled={opt.readOnly} onClick={opt.onClick} variant="success">
+          {genUnitSup(genUnit(opt.option_layers, opt.value_system).label) || ''}
+        </Button>
       </InputGroup>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesTable = opt => (
-  <FormGroup>
+const GenPropertiesTable = (opt) => (
+  <Form.Group>
     {FieldHeader(opt)}
     <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
-  </FormGroup>
+  </Form.Group>
 );
 
-const GenPropertiesText = opt => {
+const GenPropertiesText = (opt) => {
   const [id] = useState(uuid());
   const { f_obj: fObj, dic } = opt;
   let showVal = opt.value;
@@ -487,9 +485,9 @@ const GenPropertiesText = opt => {
   }
 
   return (
-    <FormGroup className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
-      <FormControl
+      <Form.Control
         id={id}
         type="text"
         value={showVal}
@@ -499,21 +497,21 @@ const GenPropertiesText = opt => {
         required={opt.isRequired}
         placeholder={opt.placeholder}
       />
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenPropertiesTextArea = opt => {
+const GenPropertiesTextArea = (opt) => {
   const [id] = useState(uuid());
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
-      <FormControl
+      <Form.Control
         id={id}
-        componentClass="textarea"
+        as="textarea"
         value={opt.value}
         onChange={opt.onChange}
         className={className}
@@ -521,24 +519,24 @@ const GenPropertiesTextArea = opt => {
         required={opt.isRequired}
         placeholder={opt.placeholder}
       />
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenTextFormula = opt => {
+const GenTextFormula = (opt) => {
   const [id] = useState(uuid());
   const { layers } = opt;
   const subs = [];
-  (opt.f_obj?.text_sub_fields || []).map(e => {
+  (opt.f_obj?.text_sub_fields || []).map((e) => {
     const { layer, field, separator } = e;
     if (field && field !== '') {
       if (field.includes('[@@]')) {
         const fds = field.split('[@@]');
         if (fds && fds.length === 2) {
           const fdt = ((layers[layer] || {}).fields || []).find(
-            f => f.field === fds[0] && f.type === 'table'
+            (f) => f.field === fds[0] && f.type === 'table'
           );
-          ((fdt && fdt.sub_values) || []).forEach(svv => {
+          ((fdt && fdt.sub_values) || []).forEach((svv) => {
             if (svv && svv[fds[1]] && svv[fds[1]] !== '') {
               subs.push(svv[fds[1]]);
               subs.push(separator);
@@ -547,7 +545,7 @@ const GenTextFormula = opt => {
         }
       } else {
         const fd = ((layers[layer] || {}).fields || []).find(
-          f => f.field === field
+          (f) => f.field === field
         );
         if (fd && fd.value && fd.value !== '') {
           subs.push(fd.value);
@@ -559,9 +557,9 @@ const GenTextFormula = opt => {
   });
   const klz = fieldCls(opt.isSpCall);
   return (
-    <FormGroup className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`text_generic_properties ${klz[0]}`}>
       {FieldHeader(opt)}
-      <FormControl
+      <Form.Control
         id={id}
         type="text"
         value={subs.join('')}
@@ -569,7 +567,7 @@ const GenTextFormula = opt => {
         readOnly
         required={false}
       />
-    </FormGroup>
+    </Form.Group>
   );
 };
 
@@ -614,11 +612,11 @@ const renderListGroupItem = (opt, attachment) => {
         <div>{delBtn}</div>
         <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
-          <FormGroup bsSize="sm">
-            <FormControl
+          <Form.Group size="sm">
+            <Form.Control
               type="text"
               value={attachment.label || ''}
-              onChange={e =>
+              onChange={(e) =>
                 opt.onChange({
                   ...opt.value,
                   action: 'l',
@@ -627,23 +625,23 @@ const renderListGroupItem = (opt, attachment) => {
                 })
               }
             />
-          </FormGroup>
+          </Form.Group>
         </div>
       </div>
     </div>
   );
 };
 
-const GenPropertiesUpload = opt => {
+const GenPropertiesUpload = (opt) => {
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return <div>(This is an upload)</div>;
   return (
-    <FormGroup className="text_generic_properties">
+    <Form.Group className="text_generic_properties">
       {FieldHeader(opt)}
       <div style={{ paddingBottom: '0px', paddingTop: '0px' }}>
         <Dropzone
           id="dropzone"
-          onDrop={e =>
+          onDrop={(e) =>
             opt.onChange({
               ...opt.value,
               action: 'f',
@@ -665,19 +663,19 @@ const GenPropertiesUpload = opt => {
         </Dropzone>
       </div>
       <ListGroup>
-        {attachments.map(attachment => (
+        {attachments.map((attachment) => (
           <ListGroupItem key={attachment.uid} className="generic_files">
             {/* {renderListGroupItem(opt, attachment)} */}
             <FieldUploadItem opt={opt} attachment={attachment} />
           </ListGroupItem>
         ))}
       </ListGroup>
-    </FormGroup>
+    </Form.Group>
   );
 };
 
-const GenWFNext = opt => {
-  const options = (opt.f_obj.wf_options || []).map(op => {
+const GenWFNext = (opt) => {
+  const options = (opt.f_obj.wf_options || []).map((op) => {
     const label = op.label.match(/(.*)\(.*\)/);
     return {
       value: op.key,
@@ -692,10 +690,10 @@ const GenWFNext = opt => {
     opt.isRequired && opt.isEditable
       ? 'select_generic_properties_required'
       : className;
-  className = `${className} status-select`;
-  const val = options.find(o => o.value === opt.value) || null;
+  // className = `${className} status-select`;
+  const val = options.find((o) => o.value === opt.value) || null;
   return (
-    <FormGroup>
+    <Form.Group>
       {FieldHeader(opt)}
       <Select
         menuContainerStyle={{ position: 'absolute' }}
@@ -706,8 +704,9 @@ const GenWFNext = opt => {
         onChange={opt.onChange}
         className={className}
         disabled={opt.readOnly}
+        styles={frmSelSty}
       />
-    </FormGroup>
+    </Form.Group>
   );
 };
 

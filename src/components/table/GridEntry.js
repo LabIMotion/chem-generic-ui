@@ -1,13 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 
 const setCell = (columnDef, rowValue) => {
   const { type, field, onCellChange, cellRenderer, cellParams } = columnDef;
   switch (type) {
     case 'text':
       return (
-        <FormControl
+        <Form.Control
           type="text"
           value={rowValue[field] || ''}
           onChange={e => onCellChange({ e, columnDef, rowValue })}
@@ -16,14 +16,12 @@ const setCell = (columnDef, rowValue) => {
     case 'system-defined':
       return (
         <InputGroup>
-          <FormControl
+          <Form.Control
             type="number"
             value={rowValue[field].value || ''}
-            onChange={e => onCellChange({ e, columnDef, rowValue })}
+            onChange={(e) => onCellChange({ e, columnDef, rowValue })}
           />
-          <InputGroup.Button>
-            {cellRenderer({ ...cellParams, node: { data: rowValue } })}
-          </InputGroup.Button>
+          {cellRenderer({ ...cellParams, node: { data: rowValue } })}
         </InputGroup>
       );
     case 'select':
@@ -98,7 +96,7 @@ const ColumnRow = (_columnDefs, _rowValue) => {
   );
 };
 
-const NoRow = rows => {
+const NoRow = (rows) => {
   const values = rows;
   if (values && values.length > 0) return null;
   return (

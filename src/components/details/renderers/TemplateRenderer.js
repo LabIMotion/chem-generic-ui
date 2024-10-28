@@ -11,7 +11,7 @@ const renderWFLayerMark = (props) =>
 const TemplateRenderer = (params) => {
   const { data, fnShow, node } = params;
 
-  const onShow = e => {
+  const onShow = (e) => {
     node.setSelected(true, true);
     fnShow(e);
   };
@@ -24,6 +24,7 @@ const TemplateRenderer = (params) => {
         element={data}
         fnClick={onShow}
         btnCls="btn-gxs"
+        bs="light"
       />
       &nbsp;
       {renderWFLayerMark(data.properties_template)}

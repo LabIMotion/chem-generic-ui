@@ -2,36 +2,58 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col, Panel, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import PropLayers from './PropLayers';
 import SelectOptionLayer from '../../admin/SelectOptionLayer';
 import ButtonTooltip from '../../fields/ButtonTooltip';
-import Constants from '../../tools/Constants';
 import WorkflowDesignBtn from '../WorkflowDesignBtn';
 import UploadTemplateBtn from '../UploadTemplateBtn';
+import Constants from '../../tools/Constants';
 
-const TemplateProps = props => {
-  const { data, vocabularies, fnUpdate, fnSubmit, genericType, innerAction } = props;
+const headerText = (genericType, data) => {
+  const { name, label, desc } = data;
+  let txt = '';
+  switch (genericType) {
+    case Constants.GENERIC_TYPES.ELEMENT:
+      txt = `${genericType} Template: ${label} (${name})`;
+      break;
+    case Constants.GENERIC_TYPES.SEGMENT:
+      txt = `${genericType} Template: ${desc} (${label})`;
+      break;
+    case Constants.GENERIC_TYPES.DATASET:
+      txt = `${genericType} Template: ${label}`;
+      break;
+    default:
+      break;
+  }
+  return txt;
+};
+
+const TemplateProps = (props) => {
+  // const { data, vocabularies, fnUpdate, fnSubmit, genericType, innerAction } = props;
+  const { data, vocabularies, fnSubmit, genericType, innerAction } = props;
 
   return (
     <div>
-      <Panel>
-        <Panel.Heading>
-          <b>{`Template of ${genericType} [${data.name || data.label}]`}</b>
-          &nbsp;
+      <Card>
+        <Card.Header
+          as="h5"
+          className="d-flex justify-content-between align-items-center"
+        >
+          {headerText(genericType, data)}
           <span className="button-right">
             <UploadTemplateBtn
               data={data}
               fnUpload={innerAction}
               genericType={genericType}
+              btnCls="me-2"
             />
-            &nbsp;
             <WorkflowDesignBtn
               element={data}
               fnSave={innerAction}
               genericType={genericType}
+              btnCls="me-2"
             />
-            &nbsp;
             <ButtonTooltip
               txt="Save and Release (Major)"
               idf="tpl_save_rel_major"
@@ -40,8 +62,8 @@ const TemplateProps = props => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
+              btnCls="me-2"
             />
-            &nbsp;
             <ButtonTooltip
               txt="Save and Release (Minor)"
               idf="tpl_save_rel_minor"
@@ -50,8 +72,8 @@ const TemplateProps = props => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
+              btnCls="me-2"
             />
-            &nbsp;
             <ButtonTooltip
               txt="Save as draft"
               idf="tpl_save_draft"
@@ -62,11 +84,10 @@ const TemplateProps = props => {
               bs="primary"
             />
           </span>
-          <div className="clearfix" />
-        </Panel.Heading>
-        <Panel.Body>
+        </Card.Header>
+        <Card.Body>
           <Row style={{ maxWidth: '2000px', margin: 'auto' }}>
-            <Col sm={8}>
+            <Col xs={8} className="ps-0">
               <PropLayers
                 data={data}
                 vocabularies={vocabularies}
@@ -75,12 +96,12 @@ const TemplateProps = props => {
                 genericType={genericType}
               />
             </Col>
-            <Col sm={4}>
+            <Col xs={4} className="border-start pe-0">
               <SelectOptionLayer generic={data} fnChange={innerAction} />
             </Col>
           </Row>
-        </Panel.Body>
-      </Panel>
+        </Card.Body>
+      </Card>
     </div>
   );
 };
@@ -89,7 +110,7 @@ TemplateProps.propTypes = {
   data: PropTypes.object,
   vocabularies: PropTypes.array,
   fnSubmit: PropTypes.func.isRequired,
-  fnUpdate: PropTypes.func.isRequired, // update element with new element
+  // fnUpdate: PropTypes.func.isRequired, // update element with new element
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,

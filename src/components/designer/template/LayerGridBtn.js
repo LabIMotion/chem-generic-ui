@@ -63,11 +63,12 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   return (
     <>
       <LTooltip idf="sel_lyr2tpl">
-        <Button className="button-right btn-gxs" onClick={handleShow}>
+        <Button className="ms-auto" variant="light" onClick={handleShow}>
           {FIcons.faGlobe}&nbsp;Standard Layers
         </Button>
       </LTooltip>
       <Modal
+        centered
         show={showModal}
         onHide={handleClose}
         dialogClassName="gu_modal-68w"
@@ -95,7 +96,7 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
             </LTooltip>
           )}
           <LTooltip idf="close">
-            <Button bsStyle="primary" onClick={handleClose}>
+            <Button variant="primary" onClick={handleClose}>
               Close
             </Button>
           </LTooltip>

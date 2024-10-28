@@ -8,13 +8,17 @@ import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 
 const UploadTemplateBtn = (props) => {
-  const { data, fnUpload, genericType } = props;
+  const { data, fnUpload, genericType, btnCls } = props;
   const [show, setShow] = useState(false);
 
   return (
     <>
       <LTooltip idf="imp_temp_to_area">
-        <Button bsSize="sm" onClick={() => setShow(true)}>
+        <Button
+          onClick={() => setShow(true)}
+          variant="light"
+          className={btnCls}
+        >
           {FIcons.faArrowRightToBracket}&nbsp;Import template into Work Area
         </Button>
       </LTooltip>
@@ -36,6 +40,11 @@ UploadTemplateBtn.propTypes = {
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   fnUpload: PropTypes.func.isRequired,
+  btnCls: PropTypes.string,
+};
+
+UploadTemplateBtn.defaultProps = {
+  btnCls: '',
 };
 
 export default UploadTemplateBtn;

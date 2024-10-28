@@ -12,7 +12,8 @@ const TermLink = (_ontology, _text = '') => {
   return (
     <LTooltip idf={`link_term.${label}`}>
       <Button
-        bsStyle="link"
+        className="p-0"
+        variant="link"
         href={toUrl}
         target="_blank"
         onClick={(e) => e.stopPropagation()}

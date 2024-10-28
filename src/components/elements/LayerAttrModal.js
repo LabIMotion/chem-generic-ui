@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, Modal, Button } from 'react-bootstrap';
+import { Form, Modal, Button } from 'react-bootstrap';
 import LayerAttrForm from './LayerAttrForm';
 
 const LayerAttrModal = (props) => {
@@ -11,15 +11,15 @@ const LayerAttrModal = (props) => {
 
   const handleCreate = (_fnAction) => {
     const buildLayer = {
-      key: formRef.current.lf_layerKey.value.trim(),
-      label: formRef.current.lf_label.value.trim(),
-      color: formRef.current.lf_color.value.trim(),
-      style: formRef.current.lf_style.value.trim(),
-      cols: parseInt(formRef.current.lf_cols.value.trim() || 1, 10),
-      position: parseInt(formRef.current.lf_position.value.trim() || 1, 10),
+      key: formRef.current.attLayerKey.value.trim(),
+      label: formRef.current.attLabel.value.trim(),
+      color: formRef.current.attColor.value.trim(),
+      style: formRef.current.attStyle.value.trim(),
+      cols: parseInt(formRef.current.attCols.value.trim() || 1, 10),
+      position: parseInt(formRef.current.attPosition.value.trim() || 1, 10),
       wf:
-        formRef.current.lf_wf.value === 'true' ||
-        formRef.current.lf_wf.value === true ||
+        formRef.current.attWf.value === 'true' ||
+        formRef.current.attWf.value === true ||
         false,
     };
     _fnAction(buildLayer);
@@ -28,15 +28,15 @@ const LayerAttrModal = (props) => {
 
   const handleUpdate = (_fnAction) => {
     const updates = {
-      key: formRef.current.lf_layerKey.value.trim(),
-      label: formRef.current.lf_label.value.trim(),
-      color: formRef.current.lf_color.value.trim(),
-      style: formRef.current.lf_style.value.trim(),
-      cols: parseInt(formRef.current.lf_cols.value.trim() || 1, 10),
-      position: parseInt(formRef.current.lf_position.value.trim() || 1, 10),
+      key: formRef.current.attLayerKey.value.trim(),
+      label: formRef.current.attLabel.value.trim(),
+      color: formRef.current.attColor.value.trim(),
+      style: formRef.current.attStyle.value.trim(),
+      cols: parseInt(formRef.current.attCols.value.trim() || 1, 10),
+      position: parseInt(formRef.current.attPosition.value.trim() || 1, 10),
       wf:
-        formRef.current.lf_wf.value === 'true' ||
-        formRef.current.lf_wf.value === true ||
+        formRef.current.attWf.value === 'true' ||
+        formRef.current.attWf.value === true ||
         false,
     };
     _fnAction(layer.key, updates);
@@ -50,7 +50,7 @@ const LayerAttrModal = (props) => {
         button = (
           <Button
             key={`_layer_attr_modal_btn_${_action}`}
-            bsStyle="warning"
+            variant="warning"
             onClick={_fnAction ? () => handleCreate(_fnAction) : () => {}}
           >
             Create
@@ -61,7 +61,7 @@ const LayerAttrModal = (props) => {
         button = (
           <Button
             key={`_layer_attr_modal_btn_${_action}`}
-            bsStyle="warning"
+            variant="warning"
             onClick={_fnAction ? () => handleUpdate(_fnAction) : () => {}}
           >
             Update
@@ -93,20 +93,26 @@ const LayerAttrModal = (props) => {
   };
 
   return (
-    <Modal backdrop="static" show={show} onHide={() => setShow(false)}>
+    <Modal
+      centered
+      size="lg"
+      backdrop="static"
+      show={show}
+      onHide={() => setShow(false)}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{addTitles()}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <div className="col-md-12">
           <LayerAttrForm ref={formRef} layer={layer} isAttrOnWF={isAttrOnWF} />
-          <Form horizontal className="input-form">
-            <FormGroup>
+          <Form className="row mb-3">
+            <Form.Group>
               {addActions()}
-              <Button bsStyle="primary" onClick={() => setShow(false)}>
+              <Button variant="primary" onClick={() => setShow(false)}>
                 Close
               </Button>
-            </FormGroup>
+            </Form.Group>
           </Form>
         </div>
       </Modal.Body>

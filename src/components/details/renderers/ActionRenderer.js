@@ -47,6 +47,7 @@ const ActionRenderer = params => {
         tip={`Export ${genericType} and its template`}
         fnClick={onDownload}
         element={data}
+        bs="light"
       />
     </span>
   );

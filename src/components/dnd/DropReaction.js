@@ -64,7 +64,7 @@ const DropReaction = props => {
     }
     const reactionLink = (
       <Button
-        bsStyle="link"
+        variant="link"
         style={{
           border: '1px solid #003366',
           borderRadius: '4px',

@@ -1,9 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { AgGridReact } from 'ag-grid-react';
 import RepoRenderer from '../details/renderers/RepoRenderer';
-import GenGrid from '../details/GenGrid';
 import Constants from '../tools/Constants';
+import ExternalManager from '../../utils/extMgr';
 
 const BelongsToRenderer = (params) => {
   const { data } = params;
@@ -16,13 +17,31 @@ const BelongsToRenderer = (params) => {
   );
 };
 
-const RepoGridSg = props => {
-  const { fnApi, gridData } = props;
+const RepoGridSg = ({ fnApi }) => {
+  const [rowData, setRowData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const onGridReady = useCallback(() => {
+    const fetchTemplates = async () => {
+      setLoading(true);
+      const res = await ExternalManager.getAllTemplates(
+        Constants.GENERIC_TYPES.SEGMENT
+      );
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        setRowData(res.element.data || []);
+      }
+      setLoading(false);
+    };
+    fetchTemplates();
+  }, []);
+
   const columnDefs = [
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
+      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     {
@@ -49,18 +68,24 @@ const RepoGridSg = props => {
   ];
 
   return (
-    <GenGrid
-      columnDefs={columnDefs}
-      gridData={gridData}
-      pageSize={Constants.GRID_THEME.BALHAM.PAGE_SIZE}
-      theme={Constants.GRID_THEME.BALHAM.VALUE}
-    />
+    <div
+      className={Constants.GRID_THEME.BALHAM.VALUE}
+      style={{ height: '600px', width: '100%', overflow: 'auto' }}
+    >
+      <AgGridReact
+        loading={loading}
+        onGridReady={onGridReady}
+        columnDefs={columnDefs}
+        rowData={rowData}
+        domLayout="normal"
+        suppressAutoSize
+      />
+    </div>
   );
 };
 
 RepoGridSg.propTypes = {
   fnApi: PropTypes.func.isRequired,
-  gridData: PropTypes.array.isRequired,
 };
 
 export default RepoGridSg;

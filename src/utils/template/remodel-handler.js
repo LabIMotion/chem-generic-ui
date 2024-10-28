@@ -73,7 +73,7 @@ export const remodel = (generic, klass) => {
           ].includes(newFieldType)
         ) {
           newProps.layers[key].fields[idx].value =
-            curType !== FieldTypes.V_UNDEFINED ? curVal.toString() : '';
+            curType !== FieldTypes.V_UNDEFINED ? (curVal || '').toString() : '';
         }
         if (newFieldType === FieldTypes.F_INTEGER) {
           const notInteger =

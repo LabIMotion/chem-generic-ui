@@ -1,5 +1,8 @@
 import MC from './MC';
-import { notifyError, notifySuccess } from '../../utils/template/designer-message';
+import {
+  notifyError,
+  notifySuccess,
+} from '../../utils/template/designer-message';
 
 const capFirst = (str) => {
   if (typeof str !== 'string') {

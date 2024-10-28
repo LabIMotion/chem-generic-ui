@@ -3,20 +3,23 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Col, PanelGroup, Row } from 'react-bootstrap';
+import { Accordion, Col, Row } from 'react-bootstrap';
 import { genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
 import GenProperties from '../fields/GenProperties';
 import { showProperties } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
 import DateTimeRange from '../fields/DateTimeRange';
+import Prop from '../designer/template/Prop';
 
 export default class GenPropertiesLayer extends Component {
   constructor(props) {
     super(props);
+    this.state = { expandLayers: {} };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubChange = this.handleSubChange.bind(this);
     this.handleDTRChange = this.handleDTRChange.bind(this);
     this.moveLayer = this.moveLayer.bind(this);
+    this.toggleExpandLayer = this.toggleExpandLayer.bind(this);
   }
 
   handleChange(e, f, k, t) {
@@ -26,11 +29,11 @@ export default class GenPropertiesLayer extends Component {
 
   handleSubChange(e, id, f, valueOnly = false) {
     const { onSubChange } = this.props;
-    const sub = f.sub_fields.find(m => m.id === id);
+    const sub = f.sub_fields.find((m) => m.id === id);
     if (!valueOnly) {
       if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
         const units = genUnits(e.option_layers);
-        let uIdx = units.findIndex(u => u.key === e.value_system);
+        let uIdx = units.findIndex((u) => u.key === e.value_system);
         if (uIdx < units.length - 1) uIdx += 1;
         else uIdx = 0;
         sub.value_system = units.length > 0 ? units[uIdx].key : '';
@@ -53,13 +56,23 @@ export default class GenPropertiesLayer extends Component {
   handleClick(keyLayer, obj, val) {
     const { onClick } = this.props;
     const units = genUnits(obj.option_layers);
-    let uIdx = units.findIndex(e => e.key === val);
+    let uIdx = units.findIndex((e) => e.key === val);
     if (uIdx < units.length - 1) uIdx += 1;
     else uIdx = 0;
     const update = obj;
     update.value_system = units.length > 0 ? units[uIdx].key : '';
     onClick(keyLayer, update);
   }
+
+  // Toggle function to handle expand/collapse
+  toggleExpandLayer = (layerKey) => {
+    this.setState((prev) => ({
+      expandLayers: {
+        ...prev.expandLayers,
+        [layerKey]: !prev.expandLayers[layerKey],
+      },
+    }));
+  };
 
   views() {
     const {
@@ -168,7 +181,9 @@ export default class GenPropertiesLayer extends Component {
                   selectOptions[f.option_layers].options) ||
                 []
               }
-              onChange={event => this.handleChange(event, f.field, key, f.type)}
+              onChange={(event) =>
+                this.handleChange(event, f.field, key, f.type)
+              }
               onSubChange={this.handleSubChange}
               isEditable
               isPreview={isPreview}
@@ -211,13 +226,18 @@ export default class GenPropertiesLayer extends Component {
 
   render() {
     const { id, layer, activeWF, hasAi, aiComp } = this.props;
-    const { color, style, label } = layer;
+    const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
-    let bs = color || 'default';
-    const cl = (style || 'panel_generic_heading')?.replace(
-      'panel_generic_heading',
-      'panel_generic_heading_slim'
-    );
+    let bgColorClass;
+    switch (color) {
+      case 'default':
+        bgColorClass = 'bg-light';
+        break;
+      default:
+        bgColorClass = `bg-${color}`;
+        break;
+    }
+    const klz = style || 'panel_generic_heading';
     // panel header color is based on input bs value
     const panelDnD = (
       <PanelDnD
@@ -228,45 +248,43 @@ export default class GenPropertiesLayer extends Component {
         handleMove={this.moveLayer}
         id={id}
         handleChange={this.handleChange}
-        onAttrChange={event =>
+        onAttrChange={(event) =>
           this.handleChange(event, 'timeRecord', layer, 'layer-data-change')
         }
-        bs={bs}
         hasAi={hasAi}
       />
     );
-    const panelHeader =
-      label === '' ? (
-        <span />
-      ) : (
-        <Panel.Heading className={cl}>
-          <Panel.Title toggle>{label}</Panel.Title>
-        </Panel.Heading>
-      );
-    const noneKlass = bs === 'none' ? 'generic_panel_none' : '';
-    if (bs === 'none') bs = 'default';
-    return (
-      <PanelGroup
-        accordion
-        id="accordion_generic_layer"
-        defaultActiveKey="1"
-        style={{ marginBottom: '0px' }}
+    const panelHeader = (
+      <Accordion.Header
+        as="div"
+        className={`custom-accordion-header ${bgColorClass} flex-grow-1`}
       >
-        <Panel
-          bsStyle={bs}
-          className={`panel_generic_properties ${noneKlass}`}
-          eventKey="1"
-        >
-          {activeWF ? panelDnD : panelHeader}
-          <Panel.Collapse>
-            <Panel.Body className="panel_generic_properties_body">
-              {this.views()}
-              {aiComp && aiComp[layer.key]}
-            </Panel.Body>
-          </Panel.Collapse>
-        </Panel>
-      </PanelGroup>
+        {label === '' ? <span /> : <span className={klz}>{label}</span>}
+      </Accordion.Header>
     );
+    // const panelDiv = (
+    //   <div className="flex-grow-1">
+    //     {label === '' ? <span /> : <span className={klz}>{label}</span>}
+    //   </div>
+    // );
+
+    if (bgColorClass === 'bg-none') bgColorClass = 'bg-white';
+
+    const newPanel = (
+      <Prop
+        key={`_usr_prop_content_${layer.key}`}
+        dnd={activeWF ? panelDnD : undefined}
+        layerKey={layer.key}
+        toggleExpand={this.toggleExpandLayer}
+        propHeader={panelHeader}
+        extClass={bgColorClass}
+      >
+        {this.views()}
+        {aiComp && aiComp[layer.key]}
+      </Prop>
+    );
+
+    return newPanel;
   }
 }
 

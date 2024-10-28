@@ -1,15 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Col,
-  ControlLabel,
-  FormControl,
-  FormGroup,
-  InputGroup,
-  Row,
-} from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { round } from 'lodash';
 import moment from 'moment';
 import 'moment-precise-range-plugin';
@@ -131,113 +123,104 @@ const DateTimeRange = props => {
   return (
     <Row>
       <Col sm={12} md={3} lg={3}>
-        <FormGroup>
-          <ControlLabel>Start</ControlLabel>
+        <Form.Group>
+          <Form.Label>Start</Form.Label>
           <InputGroup>
-            <FormControl
+            <Form.Control
               type="text"
               value={timeStart.value}
               placeholder={timePlaceholder}
-              onChange={event => dataChange({ field: 'timeStart', event })}
+              onChange={(event) => dataChange({ field: 'timeStart', event })}
             />
-            <InputGroup.Button>
-              <Button
-                active
-                style={{ padding: '6px' }}
-                onClick={() =>
-                  dataChange({ field: 'timeStart', event: 'setCurrent' })
-                }
-              >
-                {FIcons.faClock}
-              </Button>
-            </InputGroup.Button>
+            <Button
+              variant="light"
+              style={{ padding: '6px' }}
+              onClick={() =>
+                dataChange({ field: 'timeStart', event: 'setCurrent' })
+              }
+            >
+              {FIcons.faClock}
+            </Button>
           </InputGroup>
-        </FormGroup>
+        </Form.Group>
       </Col>
       <Col sm={12} md={3} lg={3}>
-        <FormGroup>
-          <ControlLabel>Stop</ControlLabel>
+        <Form.Group>
+          <Form.Label>Stop</Form.Label>
           <InputGroup>
-            <FormControl
+            <Form.Control
               type="text"
               value={timeStop.value}
               placeholder={timePlaceholder}
-              onChange={event => dataChange({ field: 'timeStop', event })}
+              onChange={(event) => dataChange({ field: 'timeStop', event })}
             />
-            <InputGroup.Button>
-              <Button
-                active
-                style={{ padding: '6px' }}
-                onClick={() =>
-                  dataChange({ field: 'timeStop', event: 'setCurrent' })
-                }
-              >
-                {FIcons.faClock}
-              </Button>
-            </InputGroup.Button>
+            <Button
+              variant="light"
+              style={{ padding: '6px' }}
+              onClick={() =>
+                dataChange({ field: 'timeStop', event: 'setCurrent' })
+              }
+            >
+              {FIcons.faClock}
+            </Button>
           </InputGroup>
-        </FormGroup>
+        </Form.Group>
       </Col>
       <Col sm={12} md={3} lg={3}>
-        <FormGroup>
-          <ControlLabel>Duration</ControlLabel>
+        <Form.Group>
+          <Form.Label>Duration</Form.Label>
           <InputGroup>
-            <FormControl
+            <Form.Control
               type="text"
               value={calc}
               disabled
               placeholder="Duration"
             />
-            <InputGroup.Button>
-              <LTooltip idf="clipboard">
-                <Button
-                  active
-                  onClick={() => {
-                    navigator.clipboard.writeText(calc);
-                  }}
-                >
-                  {FIcons.faPaste}
-                </Button>
-              </LTooltip>
-              <LTooltip idf="copy_to_duration">
-                <Button
-                  active
-                  className="clipboardBtn"
-                  onClick={() =>
-                    dataChange({ field: 'duration', event: 'copyTo' })
-                  }
-                >
-                  {FIcons.faArrowRight}
-                </Button>
-              </LTooltip>
-            </InputGroup.Button>
+            <LTooltip idf="clipboard">
+              <Button
+                variant="light"
+                onClick={() => {
+                  navigator.clipboard.writeText(calc);
+                }}
+              >
+                {FIcons.faPaste}
+              </Button>
+            </LTooltip>
+            <LTooltip idf="copy_to_duration">
+              <Button
+                variant="light"
+                className="clipboardBtn"
+                onClick={() =>
+                  dataChange({ field: 'duration', event: 'copyTo' })
+                }
+              >
+                {FIcons.faArrowRight}
+              </Button>
+            </LTooltip>
           </InputGroup>
-        </FormGroup>
+        </Form.Group>
       </Col>
       <Col sm={12} md={3} lg={3}>
-        <FormGroup>
-          <ControlLabel>&nbsp;</ControlLabel>
+        <Form.Group>
+          <Form.Label>&nbsp;</Form.Label>
           <InputGroup>
-            <FormControl
+            <Form.Control
               type="text"
               value={duration.value || ''}
               placeholder="Input Duration..."
               onChange={(event) => dataChange({ field: 'duration', event })}
             />
-            <InputGroup.Button>
-              <Button
-                bsStyle="success"
-                onClick={() =>
-                  dataChange({ field: 'duration', event: 'changeUnit' })
-                }
-              >
-                {DurationLabel[
-                  genUnit('duration', duration.value_system).key
-                ] || ''}
-              </Button>
-            </InputGroup.Button>
+            <Button
+              variant="success"
+              onClick={() =>
+                dataChange({ field: 'duration', event: 'changeUnit' })
+              }
+            >
+              {DurationLabel[genUnit('duration', duration.value_system).key] ||
+                ''}
+            </Button>
           </InputGroup>
-        </FormGroup>
+        </Form.Group>
       </Col>
     </Row>
   );

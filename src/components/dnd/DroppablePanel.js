@@ -13,7 +13,7 @@ const DroppablePanel = ({
 }) => {
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: type,
-    canDrop: item => {
+    canDrop: (item) => {
       if (type === 'element') {
         // only allow drop reaction to sys-reaction field
         return (
@@ -23,28 +23,25 @@ const DroppablePanel = ({
       }
       return item.fid.field !== fid.field && item.rid.key === rid.key;
     },
-    drop: item => {
-      fnCb({ source: item, target: fid, rid });
-    },
-    collect: monitor => {
-      return {
-        isOver: !!monitor.isOver(),
-        isOverValidTarget: !!monitor.canDrop(),
-      };
-    },
+    drop: (item) => fnCb({ source: item, target: fid, rid }),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      isOverValidTarget: !!monitor.canDrop(),
+    }),
   });
 
-  const dropClass = `panel-heading template_panel_heading_reset ${
-    isOver ? ' gu_is-over' : ''
-  }${isOverValidTarget ? ' gu_can-drop' : ''}`;
+  const dropClass = [
+    // 'panel-heading',
+    // 'template_panel_heading_reset',
+    // 'd-flex justify-content-between align-items-center',
+    isOver && 'gu_is-over',
+    isOverValidTarget && 'gu_can-drop',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div
-      ref={drop}
-      className={dropClass}
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div ref={drop} className={dropClass}>
       {children}
     </div>
   );

@@ -9,7 +9,7 @@ import FieldSelect from './FieldSelect';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+  <Button onClick={() => addRow()} className="btn-gxs" variant="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -220,7 +220,7 @@ export default class TextFormula extends React.Component {
       <div>
         <div
           style={{ width: '100%', height: '100%' }}
-          className="ag-theme-balham"
+          className="ag-theme-alpine"
         >
           <AgGridReact
             enableColResize

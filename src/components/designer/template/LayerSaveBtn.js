@@ -130,7 +130,10 @@ const LayerSaveBtn = (props) => {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = (e) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
     dispatch({
       type: 'reset',
       payload: { layer: initialLayer, data: initialData },
@@ -139,13 +142,20 @@ const LayerSaveBtn = (props) => {
 
   // 4. Render-related variables
   const saveButton = (
-    <Button key="success" bsStyle="success" onClick={handleSave}>
+    <Button
+      key="success"
+      variant="success"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleSave();
+      }}
+    >
       Save
     </Button>
   );
 
   const resetButton = (
-    <Button key="primary" bsStyle="primary" onClick={handleReset}>
+    <Button key="primary" variant="secondary" onClick={(e) => handleReset(e)}>
       Close
     </Button>
   );
@@ -155,8 +165,11 @@ const LayerSaveBtn = (props) => {
     <>
       <LTooltip idf="lyr_add2std">
         <Button
-          bsSize="sm"
-          onClick={() => dispatch({ type: 'show', payload: true })}
+          variant="light"
+          onClick={(e) => {
+            e.stopPropagation();
+            dispatch({ type: 'show', payload: true });
+          }}
         >
           {FIcons.faGlobe}
         </Button>
