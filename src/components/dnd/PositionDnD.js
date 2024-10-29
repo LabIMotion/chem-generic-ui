@@ -10,23 +10,12 @@ import FIcons from '../icons/FIcons';
 // If isButton is false, it renders a simple div with the icon.
 const PositionDnD = React.memo(
   ({ type, field: fid, rowValue: rid, isButton = false }) => {
-    console.log('PositionDnD render:', { fid, rid });
 
     const [{ isDragging }, drag] = useDrag({
       type,
       item: { fid, rid },
       collect: (monitor) => {
         const dragging = monitor.isDragging();
-        const canDrag = monitor.canDrag();
-        const handlerId = monitor.getHandlerId();
-        // Debug logs to track state
-        console.log('Drag state:', {
-          componentId: `${fid?.field}_${rid?.key}`,
-          isDragging: dragging,
-          canDrag,
-          handlerId,
-          timestamp: new Date().getTime(),
-        });
         return {
           isDragging: dragging,
         };
