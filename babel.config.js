@@ -8,7 +8,6 @@ module.exports = function (api) {
         modules: false,
         targets: '> 0.25%, not dead',
         useBuiltIns: false,
-        corejs: 3,
       },
     ],
     '@babel/preset-react',

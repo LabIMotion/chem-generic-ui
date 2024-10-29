@@ -1,8 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Accordion from 'react-bootstrap/Accordion';
-import { useAccordionButton } from 'react-bootstrap/AccordionButton';
+import { Accordion, useAccordionButton } from 'react-bootstrap';
 import Constants from '../../tools/Constants';
 
 const customToggleClass =

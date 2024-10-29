@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-bootstrap/Form';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const LLabel = ({ children, tooltip, isCheckLabel }) => {
   const LabelComponent = isCheckLabel ? Form.Check.Label : Form.Label;

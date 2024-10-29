@@ -135,6 +135,12 @@ module.exports = {
       amd: 'moment',
       root: 'moment',
     },
+    'prop-types': {
+      commonjs: 'prop-types',
+      commonjs2: 'prop-types',
+      amd: 'prop-types',
+      root: 'PropTypes',
+    },
     '@fortawesome/fontawesome-svg-core': {
       commonjs: '@fortawesome/fontawesome-svg-core',
       commonjs2: '@fortawesome/fontawesome-svg-core',
