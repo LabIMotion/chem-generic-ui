@@ -42,7 +42,7 @@ const show = (opt, iconClass, onNavi) => {
       path === Constants.IMG_NOT_AVAILABLE_SVG ? null : (
         <OverlayTrigger
           delayShow={1000}
-          trigger={['hover']}
+          trigger={['hover', 'focus']}
           placement="top"
           rootClose
           onHide={null}

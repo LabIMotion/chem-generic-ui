@@ -36,7 +36,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
       ) : (
         <OverlayTrigger
           delayShow={1000}
-          trigger={['hover']}
+          trigger={['hover', 'focus']}
           placement="top"
           rootClose
           onHide={null}
