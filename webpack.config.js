@@ -123,6 +123,12 @@ module.exports = {
       amd: 'Draggable',
       root: 'Draggable',
     },
+    humps: {
+      commonjs: 'humps',
+      commonjs2: 'humps',
+      amd: 'humps',
+      root: 'humps', // indicates global variable
+    },
     numeral: {
       commonjs: 'numeral',
       commonjs2: 'numeral',
