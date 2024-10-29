@@ -32,6 +32,5 @@ export { default as RepoNewModal } from './components/repo/RepoNewModal';
 // is ready to replace PreviewModal and RevisionViewerBtn in REPO
 export { default as GenVersionsBtn } from './components/designer/preview/VersionListBtn';
 // is used in REPO
-export { default as GenGridBase } from './components/details/GenGridBase';
 export { default as PreviewModal } from './components/designer/preview/PreviewModal';
 export { default as Constants } from './components/tools/Constants';
