@@ -51,11 +51,7 @@ const Prop = ({
       id={`accordion_design_props_${layerKey}`}
       defaultActiveKey={isSys ? '1' : undefined}
     >
-      <Accordion.Item
-        className="panel_generic_properties"
-        eventKey="1"
-        style={{ '--bs-accordion-btn-icon': 'none' }}
-      >
+      <Accordion.Item className="panel_generic_properties" eventKey="1">
         <CustomToggleContent
           dnd={dnd}
           eventKey="1"

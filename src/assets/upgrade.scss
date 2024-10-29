@@ -25,6 +25,18 @@
         border: none; // Remove button border
         box-shadow: none; // Remove button shadow
       }
+      // Remove shadow when expanded
+      &:not(.collapsed) {
+        box-shadow: none;
+        // If you also want to remove the background color change
+        background-color: transparent;
+        // If you want to remove the color change
+        color: inherit;
+      }
+      // Add this to remove the caret in both states
+      &::after {
+        display: none !important;
+      }
     }
 
     // Optional: To remove hover styles as well
