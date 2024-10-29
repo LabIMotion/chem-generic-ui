@@ -1,10 +1,11 @@
-@import 'variables';
+@use 'sass:map';
+@use 'variables' as *;
 
 @mixin gux-ml($spacer-key) {
   @if $spacer-key == auto {
     margin-left: auto;
   } @else {
-    margin-left: map-get($gu-spacers, $spacer-key);
+    margin-left: map.get($gu-spacers, $spacer-key);
   }
 }
 
@@ -12,7 +13,7 @@
   @if $spacer-key == auto {
     margin-right: auto;
   } @else {
-    margin-right: map-get($gu-spacers, $spacer-key);
+    margin-right: map.get($gu-spacers, $spacer-key);
   }
 }
 
@@ -20,6 +21,6 @@
   @if $spacer-key == auto {
     margin-bottom: auto;
   } @else {
-    margin-bottom: map-get($gu-spacers, $spacer-key);
+    margin-bottom: map.get($gu-spacers, $spacer-key);
   }
 }

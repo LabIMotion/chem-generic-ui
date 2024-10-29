@@ -1,5 +1,5 @@
 @use 'color' as *;
-@import 'mixins';
+@use 'mixins' as *;
 
 .gu-ml-0 {
   @include gux-ml(0);

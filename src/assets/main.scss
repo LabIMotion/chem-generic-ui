@@ -1,10 +1,10 @@
 @use 'color' as *;
-@use 'flow-default';
-@use 'flow';
-@use 'modal';
-@use 'gui';
-@use 'reset-d-picker';
-@use 'upgrade';
+@use 'flow-default' as *;
+@use 'flow' as *;
+@use 'modal' as *;
+@use 'gui' as *;
+@use 'reset-d-picker' as *;
+@use 'upgrade' as *;
 // @use 'lib';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
