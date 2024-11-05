@@ -1,8 +1,8 @@
 import React from 'react';
 import { sortBy } from 'lodash';
+import { showProperties } from 'generic-ui-core';
 import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
-import { showProperties } from '../tools/utils';
 
 const LayersLayout = (props) => {
   const {

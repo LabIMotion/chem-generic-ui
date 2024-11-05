@@ -1,8 +1,0 @@
-{
-  "baseUrl": "https://service.tib.eu/ts4tib/ontologies",
-  "map": {
-    "class": "terms",
-    "property": "props",
-    "individual": "individuals"
-  }
-}

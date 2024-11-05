@@ -1,6 +1,5 @@
 import { sortBy } from 'lodash';
-import { reUnit, FieldTypes } from 'generic-ui-core';
-import { orgLayerObject } from '../../components/tools/orten';
+import { reUnit, FieldTypes, orgLayerObject } from 'generic-ui-core';
 
 export const handleSaveSorting = _element => {
   const element = _element;

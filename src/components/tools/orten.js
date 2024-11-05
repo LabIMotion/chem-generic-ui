@@ -1,7 +1,7 @@
 import { cloneDeep, sortBy } from 'lodash';
 import { v4 as uuid } from 'uuid';
+import { orgLayerObject } from 'generic-ui-core';
 import splitFlowElements from '../../utils/flow/split-flow-elements';
-
 
 const getWFNode = (_flow, nodeId) => _flow.nodes?.filter(e => e.id === nodeId)[0];
 
@@ -26,23 +26,6 @@ const getFlowLayer = (templateFlow, nodeId, sourceLayer, sIdx) => {
   layer.wf_info = { node_id: nodeId, source_layer: sourceLayer };
   layer.wf_position = sIdx + 1;
   return layer;
-};
-
-const orgLayerObject = (_layers = []) => {
-  const layers = _layers;
-  return layers.reduce((alles, name) => {
-    const all = alles;
-    const ok = Object.keys(all);
-    if (ok.includes(name.key)) {
-      const cnt = ok.filter(e => e === name.key || e.startsWith(`${name.key}.`)).length;
-      const nName = `${name.key}.${cnt}`;
-      name.key = nName;
-      all[nName] = name;
-    } else {
-      all[name.key] = name;
-    }
-    return all;
-  }, {});
 };
 
 const reformCondFields = (_layer, _oKey) => {
@@ -174,6 +157,10 @@ const buildInitWF = (template) => {
 };
 
 export {
-  getWFNode, getFlowLayer, orgLayerObject,
-  addToObject, removeFromObject, reformCondFields, buildInitWF
+  getWFNode,
+  getFlowLayer,
+  addToObject,
+  removeFromObject,
+  reformCondFields,
+  buildInitWF,
 };

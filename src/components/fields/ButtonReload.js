@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { cloneDeep, sortBy } from 'lodash';
+import { orgLayerObject } from 'generic-ui-core';
 import { importReaction, remodel } from '../../utils/template/remodel-handler';
-import { orgLayerObject } from '../tools/orten';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
 

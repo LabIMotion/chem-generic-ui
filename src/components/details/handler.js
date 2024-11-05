@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash';
+import { orgLayerObject } from 'generic-ui-core';
 import Layer from '../layers/Layer';
-import { orgLayerObject } from '../tools/orten';
 
 export const addLayer = (_generic, _source, _key) => {
   const [generic, source, key] = [_generic, _source, _key];

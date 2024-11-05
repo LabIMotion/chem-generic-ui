@@ -26,6 +26,29 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - run: yarn install --frozen-lockfile
-    - run: yarn run build
-    - run: yarn test
+        cache-dependency-path: '**/yarn.lock'
+    - name: Configure Git and NPM
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        # Set new configs
+        git config --global url."https:///cllde8:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+        # Configure yarn
+        {
+          echo "registry=https://registry.npmjs.org/"
+          echo "always-auth=true"
+          echo "@cllde8:registry=https://npm.pkg.github.com"
+          echo "//npm.pkg.github.com/:_authToken=${GH_TOKEN}"
+        } > ~/.npmrc
+
+    - name: Install dependencies
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: yarn install --frozen-lockfile --network-timeout 300000
+
+    - name: Build
+      run: yarn run build
+
+    - name: Test
+      run: yarn test

@@ -9,6 +9,7 @@ import { cloneDeep, findIndex, sortBy } from 'lodash';
 import {
   FieldTypes,
   genUnits,
+  orgLayerObject,
   swapAryEls,
   unitConversion,
 } from 'generic-ui-core';
@@ -21,7 +22,6 @@ import {
   getFlowLayer,
   addToObject,
   removeFromObject,
-  orgLayerObject,
   reformCondFields,
 } from '../tools/orten';
 import { uploadFiles } from '../tools/utils';

@@ -57,66 +57,6 @@ const uploadFiles = (properties, event, field, layer) => {
   return [value, files];
 };
 
-// fd: from layer; value: from cond;
-const isCheckboxMatch = (fd, value) => {
-  const falseValues = ['false', 'no', 'f', '0'];
-  const trueValues = ['true', 'yes', 't', '1'];
-  const normalizedValue = (value || 'false').trim().toLowerCase();
-
-  const isFalseMatch =
-    falseValues.includes(normalizedValue) && (fd.value || false) === false;
-  const isTrueMatch =
-    trueValues.includes(normalizedValue) && (fd.value || false) === true;
-
-  return fd.type === FieldTypes.F_CHECKBOX && (isFalseMatch || isTrueMatch);
-};
-
-const isSelectMatch = (fd, value) =>
-  fd.type === FieldTypes.F_SELECT &&
-  (fd.value || '').trim() === (value || '').trim();
-
-const isTextMatch = (fd, value) =>
-  fd.type === FieldTypes.F_TEXT &&
-  (fd.value || '').trim() === (value || '').trim();
-
-// ConditionOperator = 1 (ANY), 9 (ALL), 0 (NONE)
-const showProperties = (dataObj, layers) => {
-  // always show because no restriction
-  if (!dataObj?.cond_fields?.length) return [true, ''];
-
-  // default operator is ANY(1)
-  const matchOp = dataObj.cond_operator ?? 1;
-  let matchCount = 0;
-
-  for (let i = 0; i < dataObj.cond_fields.length; i += 1) {
-    const { layer, field, value, label } = dataObj.cond_fields[i] || {};
-
-    if (!field) return [true, ''];
-
-    const fd = layers[layer]?.fields?.find(f => f.field === field) || {};
-
-    if (
-      isCheckboxMatch(fd, value) ||
-      isSelectMatch(fd, value) ||
-      isTextMatch(fd, value)
-    ) {
-      matchCount += 1;
-
-      // if match ANY, return true immediately if any condition is met
-      if (matchOp === 1) {
-        return [true, label];
-      }
-    }
-  }
-
-  // if match NONE, return true only if no condition is met
-  // if match ALL, return true only if all conditions are met
-  if (matchOp === 0) return [matchCount === 0, ''];
-  if (matchOp === 9) return [matchCount === dataObj.cond_fields.length, ''];
-
-  return [false, ''];
-};
-
 class GenericDummy {
   constructor() {
     this.type = FieldTypes.F_DUMMY;
@@ -147,9 +87,6 @@ const inputEventVal = (event, type) => {
   return event.target && event.target.value;
 };
 
-const absOlsTermId = val => (val || '').split('|')[0].trim() || '';
-const absOlsTermLabel = val =>
-  val?.replace(absOlsTermId(val), '')?.replace('|', '').trim();
 const toNum = val => {
   const parse = Number(val || '');
   return Number.isNaN(parse) ? 0 : parse;
@@ -183,26 +120,6 @@ const toBool = val => {
   return !(!valLower || valLower === 'false' || valLower === '0');
 };
 
-const clsInputGroup = el => {
-  if (!el) return el;
-  const genericEl = el;
-  const { layers } = genericEl.properties_template;
-  const keys = Object.keys(layers);
-  keys.forEach(key => {
-    const layer = layers[key];
-    layer.fields
-      .filter(e => e.type === FieldTypes.F_INPUT_GROUP)
-      .forEach(e => {
-        e.sub_fields.forEach(s => {
-          const ff = s;
-          if (ff.type === FieldTypes.F_TEXT) {
-            ff.value = '';
-          }
-        });
-      });
-  });
-  return genericEl;
-};
 
 const molOptions = [
   { label: 'InChiKey', value: 'inchikey' },
@@ -235,31 +152,6 @@ const fieldCls = (isSpCall = false) => {
   return [clsFrm, clsCol];
 };
 
-export const resetProperties = _props => {
-  if (!_props || typeof _props === 'undefined') return _props;
-
-  Object.keys(_props.layers).forEach(key => {
-    const newLayer = _props.layers[key] || {};
-    newLayer.ai = [];
-    (newLayer.fields || []).forEach((f, idx) => {
-      if (
-        f &&
-        [
-          FieldTypes.F_DRAG_SAMPLE,
-          FieldTypes.F_DRAG_ELEMENT,
-          FieldTypes.F_SYS_REACTION,
-          FieldTypes.F_UPLOAD,
-        ].includes(f.type)
-      ) {
-        newLayer.fields[idx].value = undefined;
-      }
-      if (f && f.type === FieldTypes.F_TABLE) {
-        newLayer.fields[idx].sub_values = [];
-      }
-    });
-  });
-  return _props;
-};
 
 const docFields = [
   DocuConst.DOC_SITE,
@@ -402,14 +294,10 @@ export {
   toBool,
   toNum,
   genUnitSup,
-  absOlsTermId,
-  absOlsTermLabel,
-  clsInputGroup,
   inputEventVal,
   molOptions,
   samOptions,
   storeFlow,
-  showProperties,
   uploadFiles,
   KlzIcon,
   fieldCls,

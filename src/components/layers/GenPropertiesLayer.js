@@ -4,9 +4,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Col, Row } from 'react-bootstrap';
-import { genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
+import {
+  genUnits,
+  unitConversion,
+  FieldTypes,
+  showProperties,
+} from 'generic-ui-core';
 import GenProperties from '../fields/GenProperties';
-import { showProperties } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
 import DateTimeRange from '../fields/DateTimeRange';
 import Prop from '../designer/template/Prop';
