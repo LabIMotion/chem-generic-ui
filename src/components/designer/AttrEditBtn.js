@@ -2,12 +2,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import AttrModal from '../elements/AttrModal';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const AttrEditBtn = props => {
+const AttrEditBtn = (props) => {
   const { data, fnSelect, fnDelete, fnEdit, genericType, klasses } = props;
   const [show, setShow] = useState(false);
 
@@ -18,18 +19,11 @@ const AttrEditBtn = props => {
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_element_new">
-            Edit {genericType} attributes
-          </Tooltip>
-        }
-      >
-        <Button className="btn-gxs" onClick={onSelect}>
+      <LTooltip idf={`edit_attr.${genericType.toLowerCase()}`}>
+        <Button variant="light" className="btn-sm" onClick={onSelect}>
           {FIcons.faPencil}
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <AttrModal
         actions={[
           { action: 'u', fnAction: fnEdit },

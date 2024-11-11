@@ -1,12 +1,16 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findIndex, cloneDeep } from 'lodash';
-import { Panel } from 'react-bootstrap';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
+import { Card } from 'react-bootstrap';
 import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';
 import { toBool, toNum } from '../tools/utils';
 import organizeSubValues from '../tools/collate';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 class SegmentDetails extends Component {
   constructor(props) {
@@ -37,7 +41,7 @@ class SegmentDetails extends Component {
             newProps.layers[key].fields[idx].value = curType !== 'undefined' ? toBool(curVal) : false;
           }
           if (newProps.layers[key].fields[idx].type === 'system-defined') {
-            const units = genUnits(newProps.layers[key].fields[idx].option_layers);
+            const units = genUnits(newProps.layers[key].fields[idx].option_layers, ext);
             const vs = units.find(u => u.key === segment.properties.layers[key].fields[curIdx].value_system);
             newProps.layers[key].fields[idx].value_system = (vs && vs.key) || units[0].key;
             newProps.layers[key].fields[idx].value = toNum(curVal);
@@ -124,11 +128,11 @@ class SegmentDetails extends Component {
     if (!uiCtrl || Object.keys(segment).length === 0) return null;
     return (
       <div>
-        <Panel>
-          <Panel.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
+        <Card>
+          <Card.Body style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}>
             {this.elementalPropertiesItem(segment)}
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       </div>
     );
   }
@@ -139,7 +143,7 @@ SegmentDetails.propTypes = {
   segment: PropTypes.object,
   klass: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  fnNavi: PropTypes.func
+  fnNavi: PropTypes.func,
 };
 
 SegmentDetails.defaultProps = { segment: {}, klass: {}, fnNavi: () => {} };

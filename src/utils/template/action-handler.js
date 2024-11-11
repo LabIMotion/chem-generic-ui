@@ -1,4 +1,5 @@
-import { findIndex, sortBy } from 'lodash';
+import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 import { FieldTypes, genUnits, reUnit } from 'generic-ui-core';
 import { GenericDummy } from '../../components/tools/utils';
 import { notifyDummyAdd, notifyError, notifySuccess } from './designer-message';
@@ -10,6 +11,9 @@ import {
   validateSelectList,
 } from './input-validation';
 import Response from '../response';
+import mergeExt from '../ext-utils';
+
+const ext = mergeExt();
 
 /**
  * The response object for condition creation.
@@ -265,7 +269,11 @@ export const handleFieldInputChange = (
     _type,
   ];
   let value = '';
-  if (type === FieldTypes.F_SELECT || type === FieldTypes.F_SYSTEM_DEFINED) {
+  if (
+    [FieldTypes.F_SELECT, FieldTypes.F_SYSTEM_DEFINED, 'select-multi'].includes(
+      type
+    )
+  ) {
     ({ value } = event);
   } else if (type?.startsWith('drag')) {
     value = event;
@@ -298,9 +306,9 @@ export const handleFieldInputChange = (
     case 'option_layers':
       fieldObj[`${fieldCheck}`] = value;
       if (type === FieldTypes.F_SYSTEM_DEFINED) {
-        const defaultSI = reUnit(value);
+        const defaultSI = reUnit(value, ext);
         fieldObj[`${fieldCheck}`] = defaultSI;
-        const defaultUnit = genUnits(defaultSI)[0]?.key;
+        const defaultUnit = genUnits(defaultSI, ext)[0]?.key;
         fieldObj.value_system = defaultUnit;
       }
       break;
@@ -308,9 +316,9 @@ export const handleFieldInputChange = (
       fieldObj[`${fieldCheck}`] = value;
       // give default unit if select system-defined
       if (value === FieldTypes.F_SYSTEM_DEFINED) {
-        const defaultSI = reUnit('');
+        const defaultSI = reUnit('', ext);
         fieldObj.option_layers = defaultSI;
-        fieldObj.value_system = genUnits(defaultSI)[0]?.key;
+        fieldObj.value_system = genUnits(defaultSI, ext)[0]?.key;
       } else {
         fieldObj.option_layers = undefined;
         fieldObj.value_system = undefined;

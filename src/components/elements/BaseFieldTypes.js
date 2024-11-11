@@ -19,6 +19,7 @@ const BaseFieldTypes = [
     label: 'Text area',
   },
   { value: FieldTypes.F_SELECT, name: FieldTypes.F_SELECT, label: 'Select' },
+  { value: 'select-multi', name: 'select-multi', label: 'Select (Multiple)' },
   {
     value: FieldTypes.F_CHECKBOX,
     name: FieldTypes.F_CHECKBOX,

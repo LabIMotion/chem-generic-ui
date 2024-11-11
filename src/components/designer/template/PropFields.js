@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { getUnitSystem } from 'generic-ui-core';
 import ElementField from '../../elements/ElementField';
 import {
@@ -15,6 +15,9 @@ import {
   handleFieldMove,
   handlePositionChange,
 } from '../../../utils/template/field-handler';
+import mergeExt from '../../../utils/ext-utils';
+
+const ext = mergeExt(false);
 
 const PropFields = props => {
   const { generic, genericType, fnUpdate, layer } = props;
@@ -88,7 +91,7 @@ const PropFields = props => {
       onMove={{ onField: onFieldMove, onPosition: onPositionMove }}
       onDelete={onFieldRemove}
       onChange={onFieldInputChange}
-      unitsSystem={getUnitSystem()}
+      unitsSystem={getUnitSystem(ext)}
       onFieldSubFieldChange={onFieldSubFieldChange}
       onDummyAdd={onDummyAdd}
       allLayers={sortedLayers}

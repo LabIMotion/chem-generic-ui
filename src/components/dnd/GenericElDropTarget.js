@@ -77,7 +77,7 @@ const show = (opt, iconClass, onNavi) => {
           <a
             role="link"
             onClick={() => onNavi(opt.value.el_type, opt.value.el_id)}
-            style={{ cursor: 'pointer' }}
+            className="gu-link"
           >
             <span className="reaction-material-link">{label}</span>
           </a>
@@ -89,7 +89,7 @@ const show = (opt, iconClass, onNavi) => {
         <a
           role="link"
           onClick={() => onNavi(opt.value.el_klass, opt.value.el_id)}
-          style={{ cursor: 'pointer' }}
+          className="gu-link"
         >
           <i className={opt.value.icon_name} />{' '}
           <span className="reaction-material-link">{label}</span>
@@ -116,7 +116,6 @@ const source = (type, props, id, classStr) => {
       taggable.element
     );
   }
-
   switch (type) {
     case 'molecule':
       return {
@@ -129,7 +128,7 @@ const source = (type, props, id, classStr) => {
       return {
         el_id: props.id,
         is_new: true,
-        cr_opt: classStr === 'GenericEl' && isAssoc === true ? 1 : 0,
+        cr_opt: classStr && isAssoc === true ? 1 : 0,
         isAssoc,
         el_type: 'sample',
         el_label: props.short_label,
@@ -158,11 +157,9 @@ const source = (type, props, id, classStr) => {
 const GenericElDropTarget = (props) => {
   const { opt, onDrop } = props;
   const { onNavi } = opt;
-
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: opt.dndItems,
     drop: item => {
-      // Handle the drop event here...
       const sourceProps = item.element;
       const sourceTag = source(opt.type.split('_')[1], sourceProps, opt.id, opt.classStr);
       onDrop(sourceTag);

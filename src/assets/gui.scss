@@ -1,6 +1,196 @@
-.btn-gxs, .btn-group-gxs > .btn {
+@use 'color' as *;
+@use 'mixins' as *;
+
+.gu-ml-0 {
+  @include gux-ml(0);
+}
+
+.gu-ml-1 {
+  @include gux-ml(1);
+}
+
+.gu-ml-2 {
+  @include gux-ml(2);
+}
+
+.gu-ml-3 {
+  @include gux-ml(3);
+}
+
+.gu-ml-4 {
+  @include gux-ml(4);
+}
+
+.gu-mr-0 {
+  @include gux-mr(0);
+}
+
+.gu-mr-1 {
+  @include gux-mr(1);
+}
+
+.gu-mr-2 {
+  @include gux-mr(2);
+}
+
+.gu-mr-3 {
+  @include gux-mr(3);
+}
+
+.gu-mr-4 {
+  @include gux-mr(4);
+}
+.gu-mr-auto {
+  @include gux-mr(auto);
+}
+
+.gu-mb-0 {
+  @include gux-mb(0);
+}
+
+.gu-mb-1 {
+  @include gux-mb(1);
+}
+
+.gu-mb-2 {
+  @include gux-mb(2);
+}
+
+.gu-mb-3 {
+  @include gux-mb(3);
+}
+
+.gu-mb-4 {
+  @include gux-mb(4);
+}
+
+.btn-gxs,
+.btn-group-gxs > .btn {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
+}
+
+.gu-no-pointer {
+  cursor: default;
+  text-decoration: none;
+}
+
+.gu-no-pointer:hover {
+  text-decoration: none;
+}
+
+.gu-ont-display {
+  @include gux-ml(2);
+  background-color: $color-green !important;
+  color: $color-white !important;
+  border: $color-green solid 1px;
+}
+
+.gu-ont-display:hover {
+  border-color: $color-green !important;
+}
+
+// after upgrade to react-bootstrap 2.10
+.gu-menu-item-del {
+  color: $color-red !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $color-white !important;
+    background-color: $color-red !important;
+  }
+}
+
+.gu-menu-item-cond {
+  color: $color-halloween !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: $color-white !important;
+    background-color: $color-halloween !important;
+  }
+}
+
+// before upgrade to react-bootstrap 2.10
+// .gu-menu-item-del > a {
+//   color: $color-red !important; // Change color
+
+//   &:hover {
+//     color: $color-white !important; // Change color on hover
+//     background-color: $color-red !important; // Change color on hover
+//   }
+// }
+
+// .gu-menu-item-cond > a {
+//   color: $color-halloween !important; // Change color
+
+//   &:hover {
+//     color: $color-white !important; // Change color on hover
+//     background-color: $color-halloween !important; // Change color on hover
+//   }
+// }
+
+.gu-square-corners {
+  border-radius: 0 !important;
+}
+
+.accordion {
+  .accordion-item {
+    .accordion-header {
+      &.custom-accordion-header {
+        // background-color: inherit;
+
+        .accordion-button {
+          padding: 0rem 1rem !important;
+          background-color: inherit;
+        }
+
+        // .accordion-button {
+        //   padding: 0rem 1rem !important;
+        //   background-color: inherit;
+        //   // border-top-left-radius: inherit;
+        //   // border-top-right-radius: inherit;
+        //   border-top-left-radius: var(--bs-accordion-inner-border-radius);
+        //   border-top-right-radius: var(--bs-accordion-inner-border-radius);
+
+        //   &.collapsed {
+        //     border-bottom-left-radius: var(--bs-accordion-inner-border-radius);
+        //     border-bottom-right-radius: var(--bs-accordion-inner-border-radius);
+        //   }
+
+        //   &:not(.collapsed) {
+        //     background-color: inherit;
+        //     // border-bottom-left-radius: inherit;
+        //     // border-bottom-right-radius: inherit;
+        //   }
+
+          // Ensure background color is applied correctly
+          // &.bg-primary { background-color: var(--bs-primary) !important; }
+          // &.bg-secondary { background-color: var(--bs-secondary) !important; }
+          // &.bg-success { background-color: var(--bs-success) !important; }
+          // &.bg-danger { background-color: var(--bs-danger) !important; }
+          // &.bg-warning { background-color: var(--bs-warning) !important; }
+          // &.bg-info { background-color: var(--bs-info) !important; }
+          // &.bg-light { background-color: var(--bs-light) !important; }
+          // &.bg-dark { background-color: var(--bs-dark) !important; }
+          // &.bg-white { background-color: var(--bs-white) !important; }
+        // }
+      }
+    }
+  }
+}
+
+.gu-link {
+  color: $color-bs-link !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gu-link:hover {
+  color: $color-bs-link-hover !important;
+  text-decoration: underline;
 }

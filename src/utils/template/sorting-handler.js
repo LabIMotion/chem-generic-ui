@@ -1,17 +1,19 @@
-import { sortBy } from 'lodash';
-import { reUnit, FieldTypes } from 'generic-ui-core';
-import { orgLayerObject } from '../../components/tools/orten';
+import sortBy from 'lodash/sortBy';
+import { reUnit, FieldTypes, orgLayerObject } from 'generic-ui-core';
+import mergeExt from '../ext-utils';
 
-export const handleSaveSorting = _element => {
+const ext = mergeExt();
+
+export const handleSaveSorting = (_element) => {
   const element = _element;
-  Object.keys(element.properties_template.layers).forEach(key => {
+  Object.keys(element.properties_template.layers).forEach((key) => {
     const layer = element.properties_template.layers[key];
     let sortedFields = layer?.fields || [];
     (sortedFields || []).forEach((f, idx) => {
       const fd = f;
       fd.position = idx + 1;
       if (fd.type === FieldTypes.F_SYSTEM_DEFINED) {
-        fd.option_layers = reUnit(fd.option_layers);
+        fd.option_layers = reUnit(fd.option_layers, ext);
       }
       fd.required = [FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(fd.type)
         ? fd.required

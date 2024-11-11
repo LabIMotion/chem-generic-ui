@@ -56,6 +56,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
               overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
             >
               <Button
+                variant="danger"
                 className="btn_del btn-gxs"
                 onClick={() => onDrop({}, params)}
               >

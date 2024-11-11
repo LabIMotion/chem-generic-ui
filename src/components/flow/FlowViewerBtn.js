@@ -1,14 +1,18 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { v4 as uuid } from 'uuid';
-import FIcons from '../icons/FIcons';
+import Button from 'react-bootstrap/Button';
+import { LWf } from '../shared/LCom';
+import LTooltip from '../shared/LTooltip';
+import WorkflowModal from '../elements/WorkflowModal';
+import FlowView from './FlowView';
 
-const FlowViewerBtn = props => {
-  const { fnClick, generic, label, text } = props;
+const FlowViewerBtn = ({ generic }) => {
+  const [show, setShow] = useState(false);
+  const properties = generic.properties || {};
   const propertiesRelease = generic.properties_release || {};
 
+  if (generic?.is_new) return null;
   if (Object.keys(propertiesRelease || {}).length < 1) return null;
 
   const hasFlow =
@@ -23,30 +27,24 @@ const FlowViewerBtn = props => {
   if (!hasFlow && !hasFlowObject) return null;
 
   return (
-    <OverlayTrigger
-      delayShow={500}
-      placement="top"
-      overlay={<Tooltip id={uuid()}>{text}</Tooltip>}
-    >
-      <Button
-        onClick={() => fnClick(generic, true)}
-        bsSize="sm"
-        bsStyle="primary"
-      >
-        {FIcons.faDiagramProject}&nbsp;{label}
-      </Button>
-    </OverlayTrigger>
+    <>
+      <LTooltip idf="fl_view">
+        <Button size="sm" variant="primary" onClick={() => setShow(true)}>
+          <LWf wf /> Workflow (Predefined)
+        </Button>
+      </LTooltip>
+      <WorkflowModal showProps={{ show, setShow }}>
+        <FlowView
+          properties={properties}
+          propertiesRelease={propertiesRelease}
+        />
+      </WorkflowModal>
+    </>
   );
 };
 
 FlowViewerBtn.propTypes = {
-  fnClick: PropTypes.func.isRequired,
   generic: PropTypes.object.isRequired,
-  label: PropTypes.string,
-  text: PropTypes.string,
 };
-FlowViewerBtn.defaultProps = {
-  label: 'Designed Workflow',
-  text: 'click to view defined workflow',
-};
+
 export default FlowViewerBtn;

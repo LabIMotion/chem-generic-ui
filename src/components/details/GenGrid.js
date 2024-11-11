@@ -1,83 +1,82 @@
 /* eslint-disable react/forbid-prop-types */
-import React, { Component } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { differenceWith, toPairs, isEqual } from 'lodash';
+import { Form } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 
 const defaultColDef = {
-  editable: false,
+  minWidth: 50,
+  width: 150,
+  filter: false,
   sortable: true,
-  resizable: true,
-  filter: true,
-  flex: 1,
-  minWidth: 100,
 };
 
-class GenGrid extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columnDefs: props.columnDefs,
-    };
-  }
+const GenGrid = ({ columnDefs, gridData, pageSize, theme }) => {
+  const [columns] = useState(columnDefs);
+  const qfRef = useRef();
+  const gridRef = useRef();
+  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
+  const [rowData, setRowData] = useState(gridData || []);
+  const selectedIdRef = useRef(null);
 
-  componentDidUpdate(prevProps) {
-    const { gridData, pageSize, theme } = this.props;
-    const updated =
-      theme !== prevProps.theme ||
-      pageSize !== prevProps.pageSize ||
-      gridData?.length !== prevProps.gridData?.length;
-    if (gridData !== prevProps.gridData || updated) {
-      if (this.gridApi) {
-        const selectedRows = this.gridApi.getSelectedRows();
-        const selected = selectedRows[0];
-        const changes = differenceWith(
-          toPairs(gridData),
-          toPairs(prevProps.gridData),
-          isEqual
-        );
-        if (changes.length > 0 || updated) {
-          this.gridApi.setGridOption('rowData', gridData);
-          if (selected) {
-            this.gridApi.forEachNode(node => {
-              node.setSelected(node.data.id === selected.id);
-            });
-          }
-        }
-      }
+  useEffect(() => {
+    const currentSelected = gridRef?.current?.api?.getSelectedRows()?.[0];
+    if (currentSelected?.id) {
+      selectedIdRef.current = currentSelected.id;
     }
-  }
+    setRowData(gridData);
+    requestAnimationFrame(() => {
+      if (selectedIdRef.current && gridRef?.current?.api) {
+        gridRef.current.api.forEachNode((node) => {
+          if (node.data.id === selectedIdRef.current) {
+            node.setSelected(true);
+          }
+        });
+      }
+    });
+  }, [gridData]);
 
-  onGridReady = params => {
-    const { gridData } = this.props;
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    this.gridApi.setGridOption('rowData', gridData);
-  };
+  const onFilterTextBoxChanged = useCallback(() => {
+    gridRef.current.api.setGridOption('quickFilterText', qfRef.current.value);
+  }, []);
 
-  render() {
-    const { pageSize, theme } = this.props;
-    const { columnDefs } = this.state;
-    return (
+  return (
+    <>
+      <div className="mb-2">
+        <Form>
+          <Form.Control
+            ref={qfRef}
+            placeholder="Enter text to filter..."
+            onChange={onFilterTextBoxChanged}
+          />
+        </Form>
+      </div>
       <div style={{ height: '33vh', width: '100%' }}>
-        <div style={{ height: '100%', width: '100%' }} className={theme}>
+        <div style={gridStyle} className={theme}>
           <AgGridReact
-            columnDefs={columnDefs}
+            ref={gridRef}
+            columnDefs={columns}
             defaultColDef={defaultColDef}
-            suppressRowClickSelection // https://www.ag-grid.com/react-data-grid/row-selection/
-            suppressCellFocus // https://www.ag-grid.com/react-data-grid/grid-options/#reference-selection
-            rowSelection="single"
-            pagination={false} // disabled pagination & do not set domLayout="autoHeight"
+            rowSelection={{
+              mode: 'singleRow',
+              checkboxes: false,
+              enableClickSelection: true,
+            }}
             paginationPageSize={pageSize}
-            onGridReady={this.onGridReady}
-            rowData={null}
+            rowData={rowData}
           />
         </div>
       </div>
-    );
-  }
-}
+    </>
+  );
+};
 
 GenGrid.propTypes = {
   columnDefs: PropTypes.array.isRequired,
@@ -86,6 +85,9 @@ GenGrid.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGrid.defaultProps = { pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE, theme: Constants.GRID_THEME.BALHAM.VALUE };
+GenGrid.defaultProps = {
+  pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGrid;

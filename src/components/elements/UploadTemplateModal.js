@@ -6,11 +6,10 @@ import { Modal } from 'react-bootstrap';
 import Constants from '../tools/Constants';
 import { handleTemplateUploading } from '../../utils/template/action-handler';
 
-const UploadTemplateModal = props => {
+const UploadTemplateModal = (props) => {
   const { data, genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
-
-  const handleReaderLoaded = e => {
+  const handleReaderLoaded = (e) => {
     const verify = handleTemplateUploading(e, genericType);
     if (verify.notify.isSuccess) {
       const newData = data;
@@ -21,20 +20,20 @@ const UploadTemplateModal = props => {
     setShow(false);
   };
 
-  const handleUploadTemplate = file => {
+  const handleUploadTemplate = (file) => {
     const reader = new FileReader();
     reader.onload = handleReaderLoaded;
     reader.readAsText(file[0]);
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
+    <Modal centered show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Upload template to Work Area</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone
-          onDrop={attach => handleUploadTemplate(attach)}
+          onDrop={(attach) => handleUploadTemplate(attach)}
           className="gu-drop-zone"
           style={{ height: 50 }}
         >

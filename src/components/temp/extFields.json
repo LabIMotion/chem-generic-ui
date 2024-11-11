@@ -1,0 +1,190 @@
+[
+  {
+    "type": "numeric",
+    "field": "c_rate",
+    "label": "C-rate",
+    "default": "",
+    "position": 69,
+    "placeholder": "C-rate",
+    "units": [
+      {
+        "key": "c_h",
+        "label": "1/h",
+        "nm": 1
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "dimensionless_concentration",
+    "label": "Dimensionless concentration",
+    "default": "",
+    "position": 79,
+    "placeholder": "dimensionless concentration",
+    "units": [
+      {
+        "key": "ppm",
+        "label": "ppm",
+        "nm": 1
+      },
+      {
+        "key": "ppb",
+        "label": "ppb",
+        "nm": 1000
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "electrical_capacity",
+    "label": "Electrical capacity",
+    "default": "",
+    "position": 85,
+    "placeholder": "Electrical capacity",
+    "units": [
+      {
+        "key": "mah",
+        "label": "mAh",
+        "nm": 1000
+      },
+      {
+        "key": "ah",
+        "label": "Ah",
+        "nm": 1
+      },
+      {
+        "key": "as",
+        "label": "As",
+        "nm": 3600
+      },
+      {
+        "key": "c",
+        "label": "C",
+        "nm": 3600
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "electrical_potential",
+    "label": "Electrical potential",
+    "default": "",
+    "position": 86,
+    "placeholder": "electrical potential",
+    "units": [
+      {
+        "key": "v_re",
+        "label": "V vs. RE",
+        "nm": 1,
+        "unit_type": "re"
+      },
+      {
+        "key": "mv_re",
+        "label": "mV vs. RE",
+        "nm": 1000,
+        "unit_type": "re"
+      },
+      {
+        "key": "mv_ce",
+        "label": "mV vs. CE",
+        "nm": 1000,
+        "unit_type": "ce"
+      },
+      {
+        "key": "v_ce",
+        "label": "V vs. CE",
+        "nm": 1,
+        "unit_type": "ce"
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "scan_rate",
+    "label": "Scan rate",
+    "default": "",
+    "position": 155,
+    "placeholder": "Scan rate",
+    "units": [
+      {
+        "key": "mv_s",
+        "label": "mV/s",
+        "nm": 1000
+      },
+      {
+        "key": "v_s",
+        "label": "V/s",
+        "nm": 1
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "specific_current",
+    "label": "Specific current",
+    "default": "",
+    "position": 156,
+    "placeholder": "Specific current",
+    "units": [
+      {
+        "key": "ma_g",
+        "label": "mA/g",
+        "nm": 1000,
+        "unit_type": "mass"
+      },
+      {
+        "key": "a_g",
+        "label": "A/g",
+        "nm": 1,
+        "unit_type": "mass"
+      },
+      {
+        "key": "a_cm2",
+        "label": "A/cm<sup>2</sup>",
+        "nm": 1,
+        "unit_type": "area"
+      },
+      {
+        "key": "ma_cm2",
+        "label": "mA/cm<sup>2</sup>",
+        "nm": 1000,
+        "unit_type": "area"
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "specific_electrical_capacity",
+    "label": "Specific electrical capacity",
+    "default": "",
+    "position": 157,
+    "placeholder": "Specific electrical capacity",
+    "units": [
+      {
+        "key": "mah_g",
+        "label": "mAh/g",
+        "nm": 1000
+      },
+      {
+        "key": "ah_g",
+        "label": "Ah/g",
+        "nm": 1
+      }
+    ]
+  },
+  {
+    "type": "numeric",
+    "field": "specific_surface_area",
+    "label": "Specific surface area",
+    "default": "",
+    "position": 158,
+    "placeholder": "Specific surface area",
+    "units": [
+      {
+        "key": "m2_g",
+        "label": "m<sup>2</sup>/g",
+        "nm": 1
+      }
+    ]
+  }
+]

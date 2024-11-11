@@ -1,24 +1,27 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import LayerAttrModal from '../elements/LayerAttrModal';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const LayerAttrNewBtn = props => {
+const LayerAttrNewBtn = (props) => {
   const { fnCreate, isAttrOnWF } = props;
   const [show, setShow] = useState(false);
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={<Tooltip id="_tooltip_layer_new">add new layer</Tooltip>}
-      >
-        <Button className="button-right btn-gxs" onClick={() => setShow(true)}>
+      <LTooltip idf="add_layer">
+        <Button
+          className="fw-medium"
+          size="sm"
+          variant="primary"
+          onClick={() => setShow(true)}
+        >
           {FIcons.faPlus}&nbsp;Add new layer
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <LayerAttrModal
         actions={[{ action: 'c', fnAction: fnCreate }]}
         isAttrOnWF={isAttrOnWF}

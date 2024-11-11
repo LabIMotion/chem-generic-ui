@@ -6,7 +6,7 @@ import Draggable from 'react-draggable';
 import FlowView from './FlowView';
 import FIcons from '../icons/FIcons';
 
-const FlowViewerModal = props => {
+const FlowViewerModal = (props) => {
   const { show, data, fnHide } = props;
   if (!show) return null;
   const {

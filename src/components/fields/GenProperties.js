@@ -1,7 +1,6 @@
 import { FieldTypes } from 'generic-ui-core';
 import {
   GenPropertiesCheckbox,
-  GenPropertiesCalculate,
   GenPropertiesDate,
   GenPropertiesDateTimeRange,
   GenPropertiesSelect,
@@ -19,6 +18,7 @@ import {
   GenDropReaction,
 } from './GenPropertiesFields';
 import PropCalculate from './PropCalculate';
+import GenPropSelectMulti from './GenPropSelectMulti';
 
 const GenProperties = opt => {
   const fieldProps = { ...opt, dndItems: [] };
@@ -36,6 +36,8 @@ const GenProperties = opt => {
       return PropCalculate(fieldProps);
     case 'select':
       return GenPropertiesSelect(fieldProps);
+    case 'select-multi':
+      return GenPropSelectMulti(fieldProps);
     case 'drag':
       fieldProps.dndItems = [...fieldProps.dndItems, type[1]];
       return GenPropertiesDrop(fieldProps);

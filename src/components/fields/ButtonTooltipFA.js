@@ -4,7 +4,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import FIcons from '../icons/FIcons';
 
-const ButtonTooltipFA = props => {
+const ButtonTooltipFA = (props) => {
   const { tip } = props;
   const tt = typeof tip === 'string' ? [tip] : tip;
   const tooltip = (
@@ -18,7 +18,7 @@ const ButtonTooltipFA = props => {
     return (
       <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
         <Button
-          className="btn-gxs"
+          className="btn-sm"
           onClick={() => fnClick(element)}
           disabled={disabled}
         >
@@ -31,8 +31,8 @@ const ButtonTooltipFA = props => {
   return (
     <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
       <Button
-        className="btn-gxs"
-        bsStyle={bs}
+        className="btn-sm"
+        variant={bs}
         onClick={() => fnClick(element)}
         disabled={disabled}
       >
@@ -55,7 +55,7 @@ ButtonTooltipFA.propTypes = {
 };
 
 ButtonTooltipFA.defaultProps = {
-  bs: '',
+  bs: 'light',
   place: 'top',
   icon: FIcons.faFileExport,
   disabled: false,

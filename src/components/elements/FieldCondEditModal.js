@@ -2,20 +2,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import {
-  Modal,
-  Button,
-  ToggleButtonGroup,
-  ToggleButton,
-} from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import { Button, ButtonGroup, Modal, ToggleButton } from 'react-bootstrap';
+import cloneDeep from 'lodash/cloneDeep';
+import { condOperatorOptions } from 'generic-ui-core';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
 import GenericSubField from '../models/GenericSubField';
 import FIcons from '../icons/FIcons';
 
 const AddRowBtn = ({ addRow }) => (
-  <Button active onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
+  <Button onClick={() => addRow()} className="btn-gxs" variant="primary">
     {FIcons.faPlus}
   </Button>
 );
@@ -28,7 +24,7 @@ const DelRowBtn = ({ delRow, node }) => {
     delRow(data);
   };
   return (
-    <Button active onClick={btnClick} className="btn-gxs" bsStyle="danger">
+    <Button onClick={btnClick} className="btn-gxs" variant="danger">
       {FIcons.faTrashCan}
     </Button>
   );
@@ -170,8 +166,8 @@ export default class FieldCondEditModal extends Component {
   addRow() {
     const { allLayers } = this.props;
     const lys = allLayers.filter(
-      e =>
-        (e.fields || []).filter(f =>
+      (e) =>
+        (e.fields || []).filter((f) =>
           ['text', 'select', 'checkbox'].includes(f.type)
         ).length > 0
     );
@@ -179,8 +175,8 @@ export default class FieldCondEditModal extends Component {
     const fd =
       ly === ''
         ? ''
-        : ((allLayers.find(e => e.key === ly) || {}).fields || []).filter(e =>
-            ['text', 'select', 'checkbox'].includes(e.type)
+        : ((allLayers.find((e) => e.key === ly) || {}).fields || []).filter(
+            (e) => ['text', 'select', 'checkbox'].includes(e.type)
           )[0].field;
     const newSub = new GenericSubField({
       layer: ly,
@@ -209,14 +205,14 @@ export default class FieldCondEditModal extends Component {
     const { allLayers } = this.props;
     const ly = data.layer;
     const fdf =
-      ((allLayers.find(l => l.key === ly) || {}).fields || []).filter(l =>
+      ((allLayers.find((l) => l.key === ly) || {}).fields || []).filter((l) =>
         ['text', 'select', 'checkbox'].includes(l.type)
       ) || [];
     const fd = (fdf.length > 0 && fdf[0].field) || '';
     data.field = fd;
     const { updSub, updLayer, layer, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     this.gridApi.setGridOption('rowData', rows);
@@ -241,7 +237,7 @@ export default class FieldCondEditModal extends Component {
   refresh() {
     const { updSub, updLayer, layer, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
 
@@ -293,8 +289,9 @@ export default class FieldCondEditModal extends Component {
     if (showModal) {
       return (
         <Modal
+          centered
           backdrop="static"
-          bsSize="large"
+          dialogClassName="gu_modal-68w"
           show={showModal}
           onHide={() => fnClose()}
         >
@@ -324,31 +321,29 @@ export default class FieldCondEditModal extends Component {
                 Checkbox (true/false), Select, Text
               </div>
               <div>
-                <ToggleButtonGroup
-                  type="radio"
-                  name="cond_operator"
-                  defaultValue={defaultCondOperator}
-                  onChange={this.onOpChanged}
-                >
-                  <ToggleButton
-                    value={1}
-                    bsStyle={defaultCondOperator === 1 ? 'success' : 'default'}
-                  >
-                    Match One
-                  </ToggleButton>
-                  <ToggleButton
-                    value={9}
-                    bsStyle={defaultCondOperator === 9 ? 'success' : 'default'}
-                  >
-                    Match All
-                  </ToggleButton>
-                  <ToggleButton
-                    value={0}
-                    bsStyle={defaultCondOperator === 0 ? 'success' : 'default'}
-                  >
-                    Match None
-                  </ToggleButton>
-                </ToggleButtonGroup>
+                <ButtonGroup>
+                  {condOperatorOptions.map((radio, idx) => (
+                    <ToggleButton
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={idx}
+                      id={`radio-${idx}`}
+                      type="radio"
+                      variant={
+                        defaultCondOperator === radio.value
+                          ? 'success'
+                          : 'light'
+                      }
+                      name="radio"
+                      value={radio.value}
+                      checked={defaultCondOperator === radio.value}
+                      onChange={(e) =>
+                        this.onOpChanged(parseInt(e.currentTarget.value, 10))
+                      }
+                    >
+                      {radio.label}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
               </div>
             </div>
             <div style={{ width: '100%', height: '26vh' }}>
@@ -358,7 +353,11 @@ export default class FieldCondEditModal extends Component {
               >
                 <AgGridReact
                   defaultColDef={{ suppressMovable: true, resizable: true }}
-                  rowSelection="single"
+                  rowSelection={{
+                    mode: 'singleRow',
+                    checkboxes: false,
+                    enableClickSelection: true,
+                  }}
                   onGridReady={this.onGridReady}
                   rowData={sub}
                   singleClickEdit

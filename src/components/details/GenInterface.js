@@ -3,7 +3,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cloneDeep, findIndex, sortBy } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 // import { DndProvider } from 'react-dnd';
 // import { HTML5Backend } from 'react-dnd-html5-backend';
 import {
@@ -24,10 +26,13 @@ import {
   orgLayerObject,
   reformCondFields,
 } from '../tools/orten';
-import { uploadFiles } from '../tools/utils';
+import { storeOptions, uploadFiles } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
 import splitFlowElements from '../../utils/flow/split-flow-elements';
 import { addLayer, layerDropReaction } from './handler';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 const initialState = {
   showViewLayer: false,
@@ -52,6 +57,7 @@ const GenInterface = props => {
     fnNavi,
     isSpCall,
     aiComp,
+    expandAll,
   } = props;
 
   if (Object.keys(generic).length === 0) return null;
@@ -315,6 +321,9 @@ const GenInterface = props => {
       case FieldTypes.F_SELECT:
         value = event ? event.value : null;
         break;
+      case 'select-multi':
+        value = storeOptions(event || []);
+        break;
       case FieldTypes.F_DRAG_MOLECULE:
       case FieldTypes.F_DRAG_SAMPLE:
       case FieldTypes.F_DRAG_ELEMENT:
@@ -354,6 +363,12 @@ const GenInterface = props => {
             e => e.field === field
           ).value;
         }
+      } else if (type === 'select-multi') {
+        properties.layers[layer].fields.find(
+          (e) => e.field === field
+        ).sub_fields = value;
+        generic.properties = properties;
+        if (isSearch) generic.search_properties = properties;
       } else if (type === FieldTypes.F_DATETIME_RANGE) {
         properties.layers[layer].fields.find(
           e => e.field === field
@@ -381,7 +396,7 @@ const GenInterface = props => {
           ).option_layers;
           properties.layers[`${layer}`].fields.find(
             e => e.field === field
-          ).value_system = genUnits(opt)[0].key;
+          ).value_system = genUnits(opt, ext)[0].key;
         }
         generic.properties = properties;
         if (isSearch) generic.search_properties = properties;
@@ -416,7 +431,8 @@ const GenInterface = props => {
     const newVal = unitConversion(
       obj.option_layers,
       obj.value_system,
-      obj.value
+      obj.value,
+      ext
     );
     properties.layers[`${layer}`].fields.find(
       e => e.field === obj.field
@@ -449,6 +465,7 @@ const GenInterface = props => {
     isSpCall,
     hasAi: ai.length > 0,
     aiComp,
+    expandAll,
   };
 
   const layersLayout = LayersLayout(paramsLayersLayout);
@@ -492,6 +509,7 @@ GenInterface.propTypes = {
   fnNavi: PropTypes.func,
   isSpCall: PropTypes.bool,
   aiComp: PropTypes.any,
+  expandAll: PropTypes.bool,
 };
 
 GenInterface.defaultProps = {
@@ -501,6 +519,7 @@ GenInterface.defaultProps = {
   fnNavi: () => {},
   isSpCall: false,
   aiComp: null,
+  expandAll: undefined,
 };
 
 export default GenInterface;

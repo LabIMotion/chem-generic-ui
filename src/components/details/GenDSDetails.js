@@ -1,17 +1,16 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findIndex, cloneDeep } from 'lodash';
-import {
-  Panel,
-  Button,
-  ButtonToolbar,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
-import { genUnits } from 'generic-ui-core';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
+import { Card, Button, ButtonToolbar } from 'react-bootstrap';
+import { genUnits, absOlsTermLabel } from 'generic-ui-core';
 import GenInterface from './GenInterface';
-import { toBool, toNum, absOlsTermLabel } from '../tools/utils';
+import { toBool, toNum } from '../tools/utils';
+import LTooltip from '../shared/LTooltip';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 class GenericDSDetails extends Component {
   constructor(props) {
@@ -59,7 +58,8 @@ class GenericDSDetails extends Component {
             }
             if (newProps.layers[key].fields[idx].type === 'system-defined') {
               const units = genUnits(
-                newProps.layers[key].fields[idx].option_layers
+                newProps.layers[key].fields[idx].option_layers,
+                ext
               );
               const vs = units.find(
                 u =>
@@ -104,8 +104,8 @@ class GenericDSDetails extends Component {
     const { uiCtrl, genericDS, kind } = this.props;
     if (uiCtrl && Object.keys(genericDS).length !== 0 && kind && kind !== '') {
       return (
-        <Panel className="panel-detail">
-          <Panel.Body
+        <Card className="panel-detail">
+          <Card.Body
             style={{ position: 'relative', minHeight: 260, overflowY: 'unset' }}
           >
             {this.elementalPropertiesItem(genericDS)}
@@ -116,26 +116,19 @@ class GenericDSDetails extends Component {
               <br />
               Content is designed for: {genericDS.klass_label}
             </span>
-            <ButtonToolbar className="pull-right">
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id="_tooltip_reload">
-                    click to reload the content template
-                  </Tooltip>
-                }
-              >
+            <ButtonToolbar className="gap-2 pull-right">
+              <LTooltip idf="reload_temp">
                 <Button
                   className="btn-gxs"
-                  bsStyle="danger"
+                  variant="danger"
                   onClick={() => this.handleReload()}
                 >
                   Reload
                 </Button>
-              </OverlayTrigger>
+              </LTooltip>
             </ButtonToolbar>
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       );
     }
     return null;

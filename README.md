@@ -1,25 +1,25 @@
-# chem-generic-ui [![npm version](https://img.shields.io/npm/v/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui) [![Downloads](https://img.shields.io/npm/dm/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8305319.svg)](https://doi.org/10.5281/zenodo.8305319)
+# chem-generic-ui
+[![npm version](https://img.shields.io/npm/v/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui)
+[![Downloads](https://img.shields.io/npm/dm/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8305319.svg)](https://doi.org/10.5281/zenodo.8305319)
 
 A React component for dynamically building user interfaces.
 
 This library is purely written in JavaScript and is based on the [React](https://reactjs.org/) library.
 
-**Community**
-- [GitHub discussions](https://github.com/LabIMotion/chem-generic-ui/discussions)
+## Project Showcase
 
-**Code**
-- [GitHub code](https://github.com/LabIMotion/chem-generic-ui)
+### [LabIMotion](https://www.chemotion.net/docs/labimotion)
 
+<img src="https://labimotion.github.io/assets/images/labimotion_logo.png" alt="LabIMotion Logo" width="300" />
 
-## Projects
+#### Flexible Layout Designs
 
-Our favorite projects:
-
-### :star: LabIMotion: Designer, you design what you need.
-
-[LabIMotion](https://www.chemotion.net/docs/labimotion)
-
-[![LabIMotion: Designer, you design what you need](https://img.youtube.com/vi/8o1U4QXU-B0/0.jpg)](https://www.youtube.com/watch?v=8o1U4QXU-B0)
+- [Rich UI Components](https://www.chemotion.net/docs/labimotion/designer/components/fields/types)
+- Different Layout Designs
+  - Element Details: [Text fields, checkboxes, selection inputs and drag-and-drop](https://www.chemotion.net/docs/labimotion/user/elements/details)
+  - Segment Details: [Table-Based layout, for multiple records with drag-and-drop functionality inside tables](https://www.chemotion.net/docs/labimotion/user/segments/details)
+  - Dataset Details: [Styling and unit conversion](https://www.chemotion.net/docs/labimotion/user/datasets/details)
 
 ## Installation
 
@@ -35,10 +35,6 @@ or Yarn:
 yarn add chem-generic-ui
 ```
 
-## Engage with Us
+## Support and Community
 
-Feel free to utilize the [Discussions](https://github.com/LabIMotion/labimotion/discussions) section to share any inquiries, concerns, suggestions, ideas, or even express your interest in collaboration. We welcome your participation! :sun_with_face:
-
-## License
-
-Code released under the [AGPL-3.0 License](https://www.gnu.org/licenses/agpl-3.0.txt).
+If you have questions, comments, or suggestions, the best place to share them is in the [Discussions](https://github.com/LabIMotion/chem-generic-ui/discussions) section. We welcome your feedback and participation!

@@ -1,10 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import GenericElTableDropTarget from './GenericElTableDropTarget';
 
-const DropRenderer = props => {
+const DropRenderer = (props) => {
   const { opt, sField, onChange, node } = props;
   if (!['drag_molecule', 'drag_sample'].includes(sField.type)) return null;
   const { data } = node;

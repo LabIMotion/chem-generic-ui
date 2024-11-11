@@ -3,12 +3,23 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Panel, Col, PanelGroup, Row } from 'react-bootstrap';
-import { genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
+import Accordion from 'react-bootstrap/Accordion';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import {
+  genUnits,
+  unitConversion,
+  FieldTypes,
+  showProperties,
+} from 'generic-ui-core';
 import GenProperties from '../fields/GenProperties';
-import { showProperties } from '../tools/utils';
 import PanelDnD from '../dnd/PanelDnD';
 import DateTimeRange from '../fields/DateTimeRange';
+import Prop from '../designer/template/Prop';
+import { bgColor } from '../tools/format-utils';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 export default class GenPropertiesLayer extends Component {
   constructor(props) {
@@ -26,15 +37,15 @@ export default class GenPropertiesLayer extends Component {
 
   handleSubChange(e, id, f, valueOnly = false) {
     const { onSubChange } = this.props;
-    const sub = f.sub_fields.find(m => m.id === id);
+    const sub = f.sub_fields.find((m) => m.id === id);
     if (!valueOnly) {
       if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
-        const units = genUnits(e.option_layers);
-        let uIdx = units.findIndex(u => u.key === e.value_system);
+        const units = genUnits(e.option_layers, ext);
+        let uIdx = units.findIndex((u) => u.key === e.value_system);
         if (uIdx < units.length - 1) uIdx += 1;
         else uIdx = 0;
         sub.value_system = units.length > 0 ? units[uIdx].key : '';
-        sub.value = unitConversion(e.option_layers, sub.value_system, e.value);
+        sub.value = unitConversion(e.option_layers, sub.value_system, e.value, ext);
       } else {
         sub.value = e.target.value;
       }
@@ -52,8 +63,8 @@ export default class GenPropertiesLayer extends Component {
 
   handleClick(keyLayer, obj, val) {
     const { onClick } = this.props;
-    const units = genUnits(obj.option_layers);
-    let uIdx = units.findIndex(e => e.key === val);
+    const units = genUnits(obj.option_layers, ext);
+    let uIdx = units.findIndex((e) => e.key === val);
     if (uIdx < units.length - 1) uIdx += 1;
     else uIdx = 0;
     const update = obj;
@@ -96,13 +107,13 @@ export default class GenPropertiesLayer extends Component {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {
           // If there are fields in the current row, push them to the rows array
           if (op.length > 0) {
-            vs.push(<Row key={vs.length}>{op}</Row>);
+            vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
             op = [];
             remainingWidth = 12;
           }
           vs.push(
             <DateTimeRange
-              key={vs.length}
+              key={`${key}_${vs.length}`}
               layer={layer}
               opt={{ f_obj: f }}
               onInputChange={this.handleDTRChange}
@@ -114,7 +125,7 @@ export default class GenPropertiesLayer extends Component {
         if (f.hasOwnRow) {
           // If there are fields in the current row, push them to the rows array
           if (op.length > 0) {
-            vs.push(<Row key={vs.length}>{op}</Row>);
+            vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
             op = [];
             remainingWidth = 12;
           }
@@ -131,13 +142,13 @@ export default class GenPropertiesLayer extends Component {
         }
 
         if ((perRow === 5 && columnCount >= 5) || remainingWidth < fieldWidth) {
-          vs.push(<Row key={vs.length}>{op}</Row>);
+          vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
           op = [];
           remainingWidth = 12;
           columnCount = 0;
         }
 
-        const unit = genUnits(f.option_layers)[0] || {};
+        const unit = genUnits(f.option_layers, ext)[0] || {};
         const cls =
           perRow === 5 &&
           ![FieldTypes.F_TABLE, FieldTypes.F_DATETIME_RANGE].includes(f.type) &&
@@ -171,7 +182,9 @@ export default class GenPropertiesLayer extends Component {
                   selectOptions[f.option_layers].options) ||
                 []
               }
-              onChange={event => this.handleChange(event, f.field, key, f.type)}
+              onChange={(event) =>
+                this.handleChange(event, f.field, key, f.type)
+              }
               onSubChange={this.handleSubChange}
               isEditable
               isPreview={isPreview}
@@ -199,7 +212,7 @@ export default class GenPropertiesLayer extends Component {
           idx === fields.length - 1 ||
           (perRow === 5 && columnCount >= 5)
         ) {
-          vs.push(<Row key={vs.length}>{op}</Row>);
+          vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
           op = [];
           remainingWidth = 12;
           columnCount = 0;
@@ -208,9 +221,8 @@ export default class GenPropertiesLayer extends Component {
     });
 
     if (op.length > 0) {
-      vs.push(<Row key={vs.length}>{op}</Row>);
+      vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
     }
-
     return vs;
   }
 
@@ -219,14 +231,15 @@ export default class GenPropertiesLayer extends Component {
   }
 
   render() {
-    const { id, layer, activeWF, hasAi, aiComp } = this.props;
-    const { color, style, label } = layer;
+    const { id, layer, layers, activeWF, hasAi, aiComp, expandAll } =
+      this.props;
+    const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
-    let bs = color || 'default';
-    const cl = (style || 'panel_generic_heading')?.replace(
-      'panel_generic_heading',
-      'panel_generic_heading_slim'
-    );
+    const bgColorClass = bgColor(color);
+    let klz = style || 'panel_generic_heading';
+    klz = ['bg-light', 'bg-white'].includes(bgColorClass)
+      ? `${klz} text-dark`
+      : `${klz} text-white`;
     // panel header color is based on input bs value
     const panelDnD = (
       <PanelDnD
@@ -237,45 +250,42 @@ export default class GenPropertiesLayer extends Component {
         handleMove={this.moveLayer}
         id={id}
         handleChange={this.handleChange}
-        onAttrChange={event =>
+        onAttrChange={(event) =>
           this.handleChange(event, 'timeRecord', layer, 'layer-data-change')
         }
-        bs={bs}
         hasAi={hasAi}
       />
     );
-    const panelHeader =
-      label === '' ? (
-        <span />
-      ) : (
-        <Panel.Heading className={cl}>
-          <Panel.Title toggle>{label}</Panel.Title>
-        </Panel.Heading>
-      );
-    const noneKlass = bs === 'none' ? 'generic_panel_none' : '';
-    if (bs === 'none') bs = 'default';
-    return (
-      <PanelGroup
-        accordion
-        id="accordion_generic_layer"
-        defaultActiveKey="1"
-        style={{ marginBottom: '0px' }}
+    const panelHeader = (
+      <Accordion.Header
+        as="div"
+        className={`custom-accordion-header ${bgColorClass} flex-grow-1`}
       >
-        <Panel
-          bsStyle={bs}
-          className={`panel_generic_properties ${noneKlass}`}
-          eventKey="1"
-        >
-          {activeWF ? panelDnD : panelHeader}
-          <Panel.Collapse>
-            <Panel.Body className="panel_generic_properties_body">
-              {this.views()}
-              {aiComp && aiComp[layer.key]}
-            </Panel.Body>
-          </Panel.Collapse>
-        </Panel>
-      </PanelGroup>
+        {label === '' ? <span className={klz}>&nbsp;</span> : <span className={klz}>{label}</span>}
+      </Accordion.Header>
     );
+    // const panelDiv = (
+    //   <div className="flex-grow-1">
+    //     {label === '' ? <span /> : <span className={klz}>{label}</span>}
+    //   </div>
+    // );
+
+    const newPanel = (
+      <Prop
+        key={`_usr_prop_content_${layer.key}`}
+        dnd={activeWF ? panelDnD : undefined}
+        layerKey={layer.key}
+        propHeader={panelHeader}
+        extClass={bgColorClass}
+        layers={layers}
+        expandAll={expandAll}
+      >
+        {this.views()}
+        {aiComp && aiComp[layer.key]}
+      </Prop>
+    );
+
+    return newPanel;
   }
 }
 
@@ -295,6 +305,7 @@ GenPropertiesLayer.propTypes = {
   onNavi: PropTypes.func,
   hasAi: PropTypes.bool,
   aiComp: PropTypes.any,
+  expandAll: PropTypes.bool,
 };
 
 GenPropertiesLayer.defaultProps = {
@@ -309,4 +320,5 @@ GenPropertiesLayer.defaultProps = {
   onNavi: () => {},
   hasAi: false,
   aiComp: null,
+  expandAll: undefined,
 };

@@ -1,6 +1,9 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { unitConversion } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 const collateValues = (currentFields, previousFields, previousValues) => {
   const result = [];
@@ -42,7 +45,7 @@ const collateValues = (currentFields, previousFields, previousValues) => {
         if (['text', 'drag_molecule', 'drag_sample'].includes(prev.type)) {
           newSub[preKey] = { value: '', value_system: curr.value_system };
         }
-        newSub[preKey].value = unitConversion(curr.option_layer, newSub[preKey].value_system, newSub[preKey].value);
+        newSub[preKey].value = unitConversion(curr.option_layers, newSub[preKey].value_system, newSub[preKey].value, ext);
       }
     });
     result.push(newSub);

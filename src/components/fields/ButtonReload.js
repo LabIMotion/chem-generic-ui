@@ -1,18 +1,16 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { cloneDeep, sortBy } from 'lodash';
+import { Button } from 'react-bootstrap';
+import cloneDeep from 'lodash/cloneDeep';
+import sortBy from 'lodash/sortBy';
+import { orgLayerObject } from 'generic-ui-core';
 import { importReaction, remodel } from '../../utils/template/remodel-handler';
-import { orgLayerObject } from '../tools/orten';
 import FIcons from '../icons/FIcons';
-
-const BTN_RELOAD_TIP = (
-  <Tooltip id="_cgu_tooltip_reload">click to reload the template</Tooltip>
-);
+import LTooltip from '../shared/LTooltip';
 
 // current generic value, new klass value
-const ButtonReload = props => {
+const ButtonReload = (props) => {
   const { klass, generic, fnReload } = props;
   if (
     generic &&
@@ -48,11 +46,11 @@ const ButtonReload = props => {
   };
 
   return (
-    <OverlayTrigger placement="top" overlay={BTN_RELOAD_TIP}>
-      <Button bsSize="sm" bsStyle="primary" onClick={() => handleReload()}>
+    <LTooltip idf="reload_temp">
+      <Button size="sm" variant="primary" onClick={() => handleReload()}>
         {FIcons.faArrowsRotate} Reload
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 };
 

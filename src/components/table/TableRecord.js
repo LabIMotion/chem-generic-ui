@@ -16,6 +16,9 @@ import DropLinkRenderer from './DropLinkRenderer';
 import SampOption from './SamOption';
 import DragDropItemTypes from '../dnd/DragDropItemTypes';
 import SelectRenderer from './SelectRenderer';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 export default class TableRecord extends React.Component {
   constructor(props) {
@@ -68,7 +71,7 @@ export default class TableRecord extends React.Component {
     const { opt } = this.props;
     const subVals = opt.f_obj.sub_values || [];
     const subVal = subVals.find(s => s.id === data.id);
-    const units = genUnits(subField.option_layers);
+    const units = genUnits(subField.option_layers, ext);
     let uIdx = units.findIndex(u => u.key === subVal[subField.id].value_system);
     if (uIdx < units.length - 1) uIdx += 1;
     else uIdx = 0;
@@ -76,7 +79,8 @@ export default class TableRecord extends React.Component {
     const v = unitConversion(
       subField.option_layers,
       vs,
-      subVal[subField.id].value
+      subVal[subField.id].value,
+      ext
     );
     subVal[subField.id] = { value: v, value_system: vs };
     const idx = subVals.findIndex(s => s.id === data.id);

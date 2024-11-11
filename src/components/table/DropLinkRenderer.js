@@ -11,7 +11,7 @@ const DropLinkRenderer = (props) => {
   const dVal = ((node.data[sField.id] || {}).value || {}).el_short_label || ' ';
   if (dId === '') return <div />;
   return (
-    <a role="link" onClick={() => onNavi('sample', dId)} style={{ cursor: 'pointer' }}>
+    <a role="link" onClick={() => onNavi('sample', dId)} className="gu-link">
       <span className="reaction-material-link">{dVal}</span>
     </a>
   );
@@ -20,7 +20,7 @@ const DropLinkRenderer = (props) => {
 DropLinkRenderer.propTypes = {
   sField: PropTypes.object.isRequired,
   node: PropTypes.object.isRequired,
-  onNavi: PropTypes.func
+  onNavi: PropTypes.func,
 };
 
 DropLinkRenderer.defaultProps = { onNavi: () => {} };

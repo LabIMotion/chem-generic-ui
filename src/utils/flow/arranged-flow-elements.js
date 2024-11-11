@@ -1,6 +1,4 @@
-import React from 'react';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import Constants from '../../components/tools/Constants';
 import createLayerNodeIcon from '../../components/flow/NodeIcon';
 import { flowInputNode, flowOutputNode } from './initial-flow';

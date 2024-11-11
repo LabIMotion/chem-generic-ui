@@ -1,10 +1,10 @@
 import React from 'react';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import { showProperties } from 'generic-ui-core';
 import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
-import { showProperties } from '../tools/utils';
 
-const LayersLayout = props => {
+const LayersLayout = (props) => {
   const {
     layers,
     options,
@@ -21,16 +21,16 @@ const LayersLayout = props => {
     isSpCall,
     hasAi,
     aiComp,
+    expandAll,
   } = props;
-
   // if call from SP, extra layer is impossible
   const buildExtLys = isSpCall
     ? []
-    : extLys.map(e => (
+    : extLys.map((e) => (
         <GenProperties
           key={`${e.generic.id}_${e.field}_elementalPropertiesExt`}
           field={e.field}
-          label={e.label || ''}
+          label="Short Label"
           classStr={classStr || ''}
           description={e.generic.description || ''}
           value={e.generic[e.field] || ''}
@@ -38,11 +38,15 @@ const LayersLayout = props => {
           isEditable={e.isEditable || true}
           readOnly={e.readOnly || false}
           isRequired={e.isRequired || false}
-          onChange={event => funcChange(event, e.field, '', e.type)}
+          onChange={(event) => funcChange(event, e.field, '', e.type)}
         />
       ));
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
-  const layout = [].concat(buildExtLys);
+  const layout = [].concat(
+    <div className="pb-3" key="ext-layers">
+      {buildExtLys}
+    </div>
+  );
   sortedLayers.forEach((layer, idx) => {
     // if call from SP and layer is not sp, skip
     if (isSpCall && !layer.sp) return;
@@ -70,6 +74,7 @@ const LayersLayout = props => {
           isSpCall={isSpCall}
           hasAi={hasAi}
           aiComp={aiComp}
+          expandAll={expandAll}
         />
       );
       layout.push(ig);
@@ -93,6 +98,7 @@ const LayersLayout = props => {
             isSpCall={isSpCall}
             hasAi={hasAi}
             aiComp={aiComp}
+            expandAll={expandAll}
           />
         );
         layout.push(igs);

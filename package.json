@@ -1,9 +1,12 @@
 {
   "name": "chem-generic-ui",
-  "version": "1.4.9",
+  "version": "2.0.0",
   "main": "./dist/bundle.js",
   "license": "AGPL-3.0",
   "private": false,
+  "engines": {
+    "node": ">=18.0.0 <23.0.0"
+  },
   "keywords": [
     "react",
     "user interface",
@@ -18,10 +21,10 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.1",
-    "ag-grid-community": "^32.0.1",
-    "ag-grid-react": "^32.0.1",
-    "date-fns": "^2.29.3",
-    "generic-ui-core": "^1.5.0",
+    "ag-grid-community": "^32.3.3",
+    "ag-grid-react": "^32.3.3",
+    "copy-to-clipboard": "^3.3.3",
+    "generic-ui-core": "1.5.2",
     "html-to-image": "^1.11.11",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -33,7 +36,7 @@
     "react-dnd-html5-backend": "^14.0.3",
     "react-draggable": "^4.4.5",
     "react-dropzone": "^3.6.0",
-    "react-select": "5.4.0",
+    "react-select": "^5.8.1",
     "react-svg-file-zoom-pan": "0.1.5",
     "reactflow": "^11.7.2",
     "uuid": "^9.0.0"

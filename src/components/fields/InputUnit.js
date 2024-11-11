@@ -1,14 +1,16 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Col, Form, OverlayTrigger, Popover } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { genUnit, getUnitSystem } from 'generic-ui-core';
 import { getFieldProps, genUnitSup } from '../tools/utils';
+import LLabel from '../shared/LLabel';
+import mergeExt from '../../utils/ext-utils';
 
 const getNextUnit = (currentUnit, units) => {
   // Find the index of the current unit in the units array
-  const currentIndex = units.findIndex(unit => unit.key === currentUnit);
+  const currentIndex = units.findIndex((unit) => unit.key === currentUnit);
 
   // If the unit is not found, throw an error
   if (currentIndex === -1) return null;
@@ -22,8 +24,8 @@ const getNextUnit = (currentUnit, units) => {
 
 const convertUnits = (fromUnit, toUnit, value, units) => {
   // Find the 'from' and 'to' units in the units array
-  const from = units.find(unit => unit.key === fromUnit);
-  const to = units.find(unit => unit.key === toUnit);
+  const from = units.find((unit) => unit.key === fromUnit);
+  const to = units.find((unit) => unit.key === toUnit);
 
   // If either unit is not found, throw an error
   if (!from || !to) return null;
@@ -34,7 +36,7 @@ const convertUnits = (fromUnit, toUnit, value, units) => {
 };
 
 const PopUnits = (si = []) => {
-  const tbl = si.units.map(e => (
+  const tbl = si.units.map((e) => (
     <div key={uuid()}>
       {genUnitSup(e.label)}
       <br />
@@ -42,24 +44,23 @@ const PopUnits = (si = []) => {
   ));
   return (
     <Popover id="popover-positioned-scrolling-left">
-      <b>
-        <u>available units</u>
-      </b>
-      <br />
-      {tbl}
+      <Popover.Header as="h3">Available units</Popover.Header>
+      <Popover.Body>{tbl}</Popover.Body>
     </Popover>
   );
 };
 
-const InputUnit = props => {
+const InputUnit = (props) => {
   const { fObj, fnUnitChange } = props;
   const { option_layers: si, value_system: valueSystem } = fObj;
-  const sis = getUnitSystem();
-  const fSi = sis.filter(e => e.field === si)[0];
+  let ext = mergeExt(false);
+  const sis = getUnitSystem(ext);
+  const fSi = sis.filter((e) => e.field === si)[0];
   if (!fSi || Object.keys(fSi).length === 0) return null; // return if SI is not found
 
   const defaultUnit = fSi?.units[0];
-  const unit = genUnit(fSi.field, valueSystem || defaultUnit?.key);
+  ext = mergeExt();
+  const unit = genUnit(fSi.field, (valueSystem || defaultUnit?.key), ext);
   if (!unit || Object.keys(unit).length === 0) return null; // return if unit is not found
 
   const onClick = () => {
@@ -68,26 +69,27 @@ const InputUnit = props => {
   };
 
   return (
-    <span style={{ display: 'flex', alignItems: 'center' }}>
-      <span
-        className="gu-form-group-label"
-        style={{ whiteSpace: 'nowrap', margin: '0px 5px' }}
-      >
-        {getFieldProps('supportedUnits').label}{' '}
-        {getFieldProps('supportedUnits').fieldTooltip}
-      </span>
-      <OverlayTrigger
-        animation
-        placement="top"
-        root
-        trigger={['hover', 'focus']}
-        overlay={PopUnits(fSi)}
-      >
-        <Button active onClick={onClick} bsStyle="success">
-          {genUnitSup(unit.label) || ''}
-        </Button>
-      </OverlayTrigger>
-    </span>
+    <Form.Group as={Col}>
+      <LLabel>
+        <>
+          {getFieldProps('supportedUnits').label}&nbsp;
+          {getFieldProps('supportedUnits').fieldTooltip}
+        </>
+      </LLabel>
+      <div className="d-flex align-items-center">
+        <OverlayTrigger
+          animation
+          placement="top"
+          root
+          trigger={['hover', 'focus']}
+          overlay={PopUnits(fSi)}
+        >
+          <Button onClick={onClick} variant="success" size="sm">
+            {genUnitSup(unit.label) || ''}
+          </Button>
+        </OverlayTrigger>
+      </div>
+    </Form.Group>
   );
 };
 

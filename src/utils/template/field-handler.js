@@ -1,4 +1,5 @@
-import { filter, findIndex } from 'lodash';
+import filter from 'lodash/filter';
+import findIndex from 'lodash/findIndex';
 import { validateFieldName } from './input-validation';
 import { notifyFieldAdd, notifySuccess } from './designer-message';
 import Response from '../response';

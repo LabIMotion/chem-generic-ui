@@ -1,13 +1,13 @@
-import React from 'react';
-import { cloneDeep, findKey } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import findKey from 'lodash/findKey';
 import { v4 as uuid } from 'uuid';
 import Constants from '../../components/tools/Constants';
 import createLayerNodeIcon from '../../components/flow/NodeIcon';
 import splitFlowElements from './split-flow-elements';
-import extendFlowElements from './ext-flow-elements';
+// import extendFlowElements from './ext-flow-elements';
 import arrangedFlowElements from './arranged-flow-elements';
 
-export const removeReactionLayers = _layers => {
+export const removeReactionLayers = (_layers) => {
   const layers = cloneDeep(_layers || {});
   return Object.keys(layers).reduce((acc, key) => {
     if (!key.startsWith(Constants.SYS_REACTION)) {
@@ -42,7 +42,7 @@ const updateDataProperties = (els, layers, properties) =>
     return d;
   });
 
-export const buildDefaultNode = props => {
+export const buildDefaultNode = (props) => {
   const { id, layer, position } = props;
   return {
     id: id || uuid(),
@@ -56,7 +56,7 @@ export const buildDefaultNode = props => {
   };
 };
 
-export const buildNode = props => {
+export const buildNode = (props) => {
   const { id, layer, position } = props;
   return {
     id: id || uuid(),
@@ -71,8 +71,8 @@ export const buildNode = props => {
 };
 
 export const decorateNodes = (_nodes, _layers = []) => {
-  const isValidLayer = _layer => _layers.includes(_layer.key);
-  return _nodes.map(_node =>
+  const isValidLayer = (_layer) => _layers.includes(_layer.key);
+  return _nodes.map((_node) =>
     _node.data.layer
       ? {
           ..._node,
@@ -103,7 +103,7 @@ export const decorateNodes = (_nodes, _layers = []) => {
  * @param {Object} props
  * @return {Object} Returns a flow object.
  */
-export const buildFlowElements = props => {
+export const buildFlowElements = (props) => {
   const { properties, propertiesRelease, flowType = 'default' } = props;
   const { flow, flowObject, layers } = propertiesRelease;
   const { nodes, edges, viewport } = flowObject

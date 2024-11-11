@@ -1,5 +1,8 @@
 import { FieldTypes, genUnit } from 'generic-ui-core';
 import si from './metadata.json';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 function DatasetMetadata(dcs, idDt) {
   const metadata = {};
@@ -24,7 +27,7 @@ function DatasetMetadata(dcs, idDt) {
       switch (fio.type) {
         case FieldTypes.F_SYSTEM_DEFINED: {
           const label =
-            genUnit(fio.option_layers, fio.value_system)?.label || '';
+            genUnit(fio.option_layers, fio.value_system, ext)?.label || '';
           metadata[sio.var] = `${fio.value} ${label}`;
           break;
         }

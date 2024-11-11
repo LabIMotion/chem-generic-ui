@@ -7,7 +7,7 @@ import Constants from '../tools/Constants';
 import { handleKlassUploading } from '../../utils/template/action-handler';
 
 const UploadKlassModal = props => {
-  const { data, genericType, fnUpload, showProps } = props;
+  const { genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
 
   const handleReaderLoaded = e => {
@@ -41,7 +41,6 @@ const UploadKlassModal = props => {
 };
 
 UploadKlassModal.propTypes = {
-  data: PropTypes.object.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,

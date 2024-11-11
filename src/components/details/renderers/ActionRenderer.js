@@ -3,7 +3,7 @@ import AttrEditBtn from '../../designer/AttrEditBtn';
 import AttrCopyBtn from '../../designer/AttrCopyBtn';
 import ButtonTooltipFA from '../../fields/ButtonTooltipFA';
 
-const ActionRenderer = params => {
+const ActionRenderer = (params) => {
   const {
     data,
     fnCopy,
@@ -19,13 +19,13 @@ const ActionRenderer = params => {
     node.setSelected(true, true);
   };
 
-  const onDownload = e => {
+  const onDownload = (e) => {
     node.setSelected(true, true);
     fnDownload(e);
   };
 
   return (
-    <span>
+    <span className="d-inline-flex gap-1">
       <AttrCopyBtn
         data={data}
         fnSelect={onSelect}
@@ -33,7 +33,6 @@ const ActionRenderer = params => {
         genericType={genericType}
         klasses={klasses || []}
       />
-      &nbsp;
       <AttrEditBtn
         data={data}
         fnSelect={onSelect}
@@ -42,7 +41,6 @@ const ActionRenderer = params => {
         genericType={genericType}
         klasses={klasses || []}
       />
-      &nbsp;
       <ButtonTooltipFA
         tip={`Export ${genericType} and its template`}
         fnClick={onDownload}

@@ -1,15 +1,23 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, FormGroup, InputGroup } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
-import renderDeleteButton from './renderDeleteButton';
+import { Form, InputGroup, Row } from 'react-bootstrap';
+import cloneDeep from 'lodash/cloneDeep';
 import ButtonTooltip from '../fields/ButtonTooltip';
+import FIcons from '../icons/FIcons';
 
+const stopPropagation = (event) => {
+  event.stopPropagation();
+};
 export default class SelectOption extends Component {
+  constructor(props) {
+    super(props);
+    this.inputNewOption = React.createRef();
+  }
+
   handleCreate() {
     const { generic, root, fnAddOption } = this.props;
-    const input = this.inputNewOption.value.trim();
+    const input = this.inputNewOption.current.value.trim();
     const newOption = { key: input, label: input };
 
     // prepare generic with new options of root
@@ -22,34 +30,34 @@ export default class SelectOption extends Component {
   }
 
   render() {
-    const { generic, root, fnChange } = this.props;
+    const { root, children } = this.props;
     return (
-      <FormGroup
-        bsSize="sm"
+      <Form.Group
+        size="sm"
+        as={Row}
         style={{ marginBottom: 'unset', display: 'inline-table' }}
       >
-        <InputGroup>
-          <InputGroup.Button>
-            {renderDeleteButton(generic, 'Select', root, '', fnChange)}
-          </InputGroup.Button>
-          <FormControl
+        <Form.Label>
+          {FIcons.faList}&nbsp;{root}
+        </Form.Label>
+        <InputGroup className="ug-input-group">
+          <Form.Control
             type="text"
             name="input_newOption"
-            inputRef={ref => {
-              this.inputNewOption = ref;
-            }}
+            ref={this.inputNewOption}
             placeholder="Input new option"
-            bsSize="sm"
+            size="sm"
+            onClick={stopPropagation}
+            onFocus={stopPropagation}
           />
-          <InputGroup.Button>
-            <ButtonTooltip
-              tip="Add new option"
-              fnClick={() => this.handleCreate()}
-              fa="faPlus"
-            />
-          </InputGroup.Button>
+          <ButtonTooltip
+            idf="sel_opt_add"
+            fnClick={() => this.handleCreate()}
+            fa="faPlus"
+          />
+          {children}
         </InputGroup>
-      </FormGroup>
+      </Form.Group>
     );
   }
 }
@@ -57,6 +65,6 @@ export default class SelectOption extends Component {
 SelectOption.propTypes = {
   generic: PropTypes.object.isRequired,
   root: PropTypes.string.isRequired,
-  fnChange: PropTypes.func.isRequired,
   fnAddOption: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
 };

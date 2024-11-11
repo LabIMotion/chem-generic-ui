@@ -6,7 +6,7 @@ import AttrChk from './AttrChk';
 
 const DefinedRenderer = props => {
   const { unitConfig, node, selDefined, chkAttr, selectOptions } = props;
-  if (node.data.type === 'select') {
+  if (node.data.type === FieldTypes.F_SELECT) {
     if (selectOptions.length > 0) {
       return (
         <SystemSelect

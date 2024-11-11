@@ -1,10 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, FormControl, InputGroup, Panel } from 'react-bootstrap';
-import renderDeleteButton from './renderDeleteButton';
+import { Card } from 'react-bootstrap';
 import SelectAttrNewModal from './SelectAttrNewModal';
-import SelectOption from './SelectOption';
+import Selection from './Selection';
 import ButtonTooltip from '../fields/ButtonTooltip';
 import {
   handleAddOption,
@@ -12,7 +11,7 @@ import {
   handleOptionInput,
 } from '../../utils/template/action-handler';
 
-const SelectOptionLayer = props => {
+const SelectOptionLayer = (props) => {
   const { generic, fnChange } = props;
 
   const [showAddSelect, setShowAddSelect] = useState(false);
@@ -23,7 +22,7 @@ const SelectOptionLayer = props => {
     setShowAddSelect(false);
   };
 
-  const onCreate = selectName => {
+  const onCreate = (selectName) => {
     const sos = { ...generic.properties_template?.select_options };
     sos[selectName] = {};
     const result = handleAddSelect(generic, selectName, sos);
@@ -37,80 +36,41 @@ const SelectOptionLayer = props => {
     fnChange(result);
   };
 
-  const optionR = _params => {
-    const { key, root, label } = _params;
-    return (
-      <FormGroup bsSize="sm" controlId={`_cgu_frmCtrlSelectOption_${key}`}>
-        <InputGroup>
-          <InputGroup.Addon>{key}</InputGroup.Addon>
-          <FormControl
-            type="text"
-            name="lf_label"
-            defaultValue={label}
-            onChange={event => onOptionInputChange(event, key, root)}
-          />
-          <InputGroup.Button>
-            {renderDeleteButton(generic, 'Option', key, root, fnChange)}
-          </InputGroup.Button>
-        </InputGroup>
-      </FormGroup>
-    );
-  };
-
-  const selects = [];
-  Object.keys(generic.properties_template?.select_options).forEach(root => {
-    const selectOptions =
-      (generic.properties_template?.select_options[root] &&
-        generic.properties_template?.select_options[root].options) ||
-      [];
-    const options = selectOptions.map(f => (
-      <div key={`${f.key}_${root}`} style={{ marginTop: '10px' }}>
-        {optionR({ key: f.key, root, label: f.label })}
-      </div>
-    ));
-
-    const selectNode = (
-      <Panel
-        className="panel_generic_properties"
-        defaultExpanded
-        key={`select_options_${root}`}
-      >
-        <Panel.Heading className="template_panel_heading">
-          <Panel.Title toggle>{root}</Panel.Title>
-          <SelectOption
-            generic={generic}
-            root={root}
-            fnAddOption={onAdd}
-            fnChange={fnChange}
-          />
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>{options}</Panel.Body>
-        </Panel.Collapse>
-      </Panel>
-    );
-    selects.push(selectNode);
-  });
-
   return (
     <div>
-      <Panel>
-        <Panel.Heading>
-          <Panel.Title>
-            Select Lists
-            <ButtonTooltip
-              tip="Add new select list"
-              fnClick={() => setShowAddSelect(true)}
-              fa="faPlus"
-              txt="Add new select list"
-              btnCls="button-right btn-gxs"
-            />
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Body>
-          <div>{selects}</div>
-        </Panel.Body>
-      </Panel>
+      <Card className="border-0">
+        <Card.Header
+          as="h5"
+          className="d-flex justify-content-between align-items-center bg-white"
+        >
+          Selection Lists
+          <ButtonTooltip
+            idf="sel_add"
+            fnClick={() => setShowAddSelect(true)}
+            fa="faPlus"
+            size="sm"
+            bs="primary"
+            txt="Add new selection list"
+            btnCls="ms-auto fw-medium"
+          />
+        </Card.Header>
+        <Card.Body>
+          {Object.keys(generic.properties_template?.select_options || {}).map(
+            (root) => {
+              return (
+                <Selection
+                  key={root}
+                  generic={generic}
+                  root={root}
+                  fnAdd={onAdd}
+                  fnChange={fnChange}
+                  fnInputChg={onOptionInputChange}
+                />
+              );
+            }
+          )}
+        </Card.Body>
+      </Card>
       <SelectAttrNewModal
         showModal={showAddSelect}
         fnClose={() => setShowAddSelect(false)}

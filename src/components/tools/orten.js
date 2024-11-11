@@ -1,4 +1,5 @@
-import { cloneDeep, sortBy } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
 import splitFlowElements from '../../utils/flow/split-flow-elements';
 

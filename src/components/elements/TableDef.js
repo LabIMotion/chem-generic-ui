@@ -2,16 +2,31 @@
 import { AgGridReact } from 'ag-grid-react';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FieldTypes } from 'generic-ui-core';
 import GenericSubField from '../models/GenericSubField';
 import { AddRowBtn, DelRowBtn } from '../table/GridBtn';
 import TypeSelect from './TypeSelect';
 import DefinedRenderer from './DefinedRenderer';
 
+const TP_BASE = [
+  FieldTypes.F_DRAG_MOLECULE,
+  FieldTypes.F_SELECT,
+  FieldTypes.F_SYSTEM_DEFINED,
+  FieldTypes.F_TEXT,
+];
+const TP_ELEMENT = TP_BASE.concat([FieldTypes.F_DRAG_SAMPLE]);
+const TP_LOCKED = [
+  FieldTypes.F_DRAG_MOLECULE,
+  FieldTypes.F_DRAG_SAMPLE,
+  FieldTypes.F_SELECT,
+  FieldTypes.F_SYSTEM_DEFINED,
+];
+
 export default class TableDef extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      unitConfig: props.unitsFields.map(e => ({
+      unitConfig: props.unitsFields.map((e) => ({
         value: e.field,
         name: e.label,
         label: e.label,
@@ -27,10 +42,7 @@ export default class TableDef extends React.Component {
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
     this.onFirstDataRendered = this.onFirstDataRendered.bind(this);
-    this.tblType =
-      props.genericType === 'Element'
-        ? ['drag_molecule', 'drag_sample', 'select', 'system-defined', 'text']
-        : ['drag_molecule', 'select', 'system-defined', 'text'];
+    this.tblType = props.genericType === 'Element' ? TP_ELEMENT : TP_BASE;
     this.columnDefs = [
       {
         headerName: 'Id',
@@ -55,23 +67,15 @@ export default class TableDef extends React.Component {
         width: 150,
         cellRenderer: TypeSelect,
         cellRendererParams: {
-          all: this.tblType.map(e => ({ key: e, val: e, lab: e })),
+          all: this.tblType.map((e) => ({ key: e, val: e, lab: e })),
           selType: this.selType,
         },
       },
       {
         headerName: 'Default Value',
         field: 'value',
-        editable: e => {
-          if (
-            [
-              'drag_molecule',
-              'drag_sample',
-              'select',
-              'system-defined',
-            ].includes(e.data.type)
-          )
-            return false;
+        editable: (e) => {
+          if (TP_LOCKED.includes(e.data.type)) return false;
           return true;
         },
         minWidth: 350,
@@ -113,8 +117,16 @@ export default class TableDef extends React.Component {
     ];
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    const { selectOptions } = this.props;
     this.autoSizeAll();
+    if (prevProps.selectOptions !== selectOptions && this.gridApi) {
+      const valueColumn = this.columnDefs.find((col) => col.field === 'value');
+      if (valueColumn) {
+        valueColumn.cellRendererParams.selectOptions = selectOptions;
+        this.gridApi.setGridOption('columnDefs', this.columnDefs);
+      }
+    }
   }
 
   onGridReady(e) {
@@ -128,7 +140,7 @@ export default class TableDef extends React.Component {
     this.refresh();
   }
 
-  onFirstDataRendered = params => {
+  onFirstDataRendered = (params) => {
     const { panelIsExpanded } = this.props;
     if (!panelIsExpanded) return;
     params.api.sizeColumnsToFit();
@@ -169,13 +181,13 @@ export default class TableDef extends React.Component {
     data.value = '';
     const { unitConfig } = this.state;
     const { selectOptions } = this.props;
-    if (data.type === 'select') {
+    if (data.type === FieldTypes.F_SELECT) {
       data.option_layers = selectOptions[0] && selectOptions[0].value;
       delete data.value_system;
-    } else if (data.type === 'system-defined') {
+    } else if (data.type === FieldTypes.F_SYSTEM_DEFINED) {
       data.option_layers = (unitConfig || [])[0].value;
       data.value_system = ((
-        this.props.unitsFields.find(u => u.field === data.option_layers) || {}
+        this.props.unitsFields.find((u) => u.field === data.option_layers) || {}
       ).units || [])[0].key;
     } else {
       delete data.option_layers;
@@ -183,7 +195,7 @@ export default class TableDef extends React.Component {
     }
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     field.sub_fields = rows;
@@ -201,7 +213,7 @@ export default class TableDef extends React.Component {
     }
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     field.sub_fields = rows;
@@ -215,9 +227,9 @@ export default class TableDef extends React.Component {
       return;
     }
     data.option_layers = e.target.value;
-    if (node.data.type === 'system-defined') {
+    if (node.data.type === FieldTypes.F_SYSTEM_DEFINED) {
       data.value_system = ((
-        this.props.unitsFields.find(u => u.field === data.option_layers) || {}
+        this.props.unitsFields.find((u) => u.field === data.option_layers) || {}
       ).units || [])[0].key;
     }
     this.refresh();
@@ -226,7 +238,7 @@ export default class TableDef extends React.Component {
   refresh() {
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     field.sub_fields = rows;
@@ -246,7 +258,11 @@ export default class TableDef extends React.Component {
             defaultColDef={{ resizable: true }}
             enableColResize
             columnDefs={this.columnDefs}
-            rowSelection="single"
+            rowSelection={{
+              mode: 'singleRow',
+              checkboxes: false,
+              enableClickSelection: true,
+            }}
             onGridReady={this.onGridReady}
             onFirstDataRendered={this.onFirstDataRendered}
             rowData={sub}

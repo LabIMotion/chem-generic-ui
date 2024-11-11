@@ -1,51 +1,85 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { v4 as uuid } from 'uuid';
+import { Button, Dropdown } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
+import TAs from '../tools/TAs';
 
-const ButtonTooltip = props => {
-  const { tip } = props;
-  const tt = typeof tip === 'string' ? [tip] : tip;
-  const tooltip = (
-    <Tooltip id={uuid()} className="pre_line_tooltip">
-      {tt.join('\r\n')}
-    </Tooltip>
-  );
-  const { size, bs, fnClick, element, place, fa, disabled, txt, btnCls } =
-    props;
+const ButtonTooltip = (props) => {
+  const {
+    idf,
+    bs,
+    size,
+    fnClick,
+    element,
+    place,
+    fa,
+    disabled,
+    txt,
+    btnCls,
+    as,
+  } = props;
   const content = txt ? <span>{txt} </span> : '';
+  const conditionMenu = (
+    <Dropdown.Item
+      eventKey={`${idf}_menu_item`}
+      onClick={() => fnClick(element)}
+    >
+      {FIcons[fa]}&nbsp;&nbsp;{TAs[idf]}
+    </Dropdown.Item>
+  );
+  if (as === 'menu') {
+    return conditionMenu;
+  }
   if (bs === '') {
     return (
-      <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
+      <LTooltip idf={idf} placement={place}>
         <Button
           className={btnCls}
-          bsSize={size}
-          onClick={() => fnClick(element)}
+          size={size || undefined}
+          onClick={(e) => {
+            e.stopPropagation();
+            fnClick(element);
+          }}
           disabled={disabled}
         >
-          {FIcons[fa]}&nbsp;{content}
+          {content === '' && FIcons[fa]}
+          {content !== '' && (
+            <>
+              {FIcons[fa]}&nbsp;
+              {content}
+            </>
+          )}
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
     );
   }
   return (
-    <OverlayTrigger delayShow={1000} placement={place} overlay={tooltip}>
+    <LTooltip idf={idf} placement={place}>
       <Button
         className={btnCls}
-        bsSize={size}
-        bsStyle={bs}
-        onClick={() => fnClick(element)}
+        size={size || undefined}
+        variant={bs}
+        onClick={(e) => {
+          e.stopPropagation();
+          fnClick(element);
+        }}
         disabled={disabled}
       >
-        {FIcons[fa]}&nbsp;{content}
+        {content === '' && FIcons[fa]}
+        {content !== '' && (
+          <>
+            {FIcons[fa]}&nbsp;
+            {content}
+          </>
+        )}
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 };
 
 ButtonTooltip.propTypes = {
-  tip: PropTypes.oneOfType([PropTypes.array, PropTypes.string]).isRequired,
+  idf: PropTypes.string,
   element: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   fnClick: PropTypes.func.isRequired,
   bs: PropTypes.string,
@@ -55,17 +89,20 @@ ButtonTooltip.propTypes = {
   disabled: PropTypes.bool,
   txt: PropTypes.string,
   btnCls: PropTypes.string,
+  as: PropTypes.string,
 };
 
 ButtonTooltip.defaultProps = {
-  bs: '',
-  size: 'sm',
+  idf: 'ltt',
+  bs: 'light',
+  size: undefined,
   place: 'top',
   fa: 'faPencil',
   disabled: false,
   txt: null,
   element: {},
   btnCls: '',
+  as: 'button',
 };
 
 export default ButtonTooltip;

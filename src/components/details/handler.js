@@ -1,6 +1,6 @@
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
+import { orgLayerObject } from 'generic-ui-core';
 import Layer from '../layers/Layer';
-import { orgLayerObject } from '../tools/orten';
 
 export const addLayer = (_generic, _source, _key) => {
   const [generic, source, key] = [_generic, _source, _key];
@@ -38,4 +38,16 @@ export const layerDropReaction = (_generic, _field, _layerKey) => {
     generic.properties.layers[layerKey].fields[0] = field;
     generic.changed = true;
   }
+};
+
+export const isFirstLayer = (layers, layerKey) => {
+  if (!layers || typeof layers !== 'object' || !layerKey) {
+    return false;
+  }
+
+  const sortedLayers = sortBy(Object.values(layers), [
+    'position',
+    'wf_position',
+  ]);
+  return sortedLayers.length > 0 && sortedLayers[0].key === layerKey;
 };

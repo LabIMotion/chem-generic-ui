@@ -3,76 +3,95 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Popover,
-  Col,
-  Checkbox,
-  Panel,
-  Form,
   ButtonGroup,
-  OverlayTrigger,
-  FormGroup,
-  FormControl,
+  Card,
+  Col,
+  Dropdown,
+  Form,
   InputGroup,
+  OverlayTrigger,
+  Popover,
+  Row,
 } from 'react-bootstrap';
 import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import ButtonTooltip from '../fields/ButtonTooltip';
-import { genUnitSup, getFieldProps, toBool, toNullOrInt } from '../tools/utils';
+import {
+  genUnitSup,
+  getFieldProps,
+  frmSelSty,
+  toNullOrInt,
+} from '../tools/utils';
 import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
 import GroupFields from './GroupFields';
 import TextFormula from './TextFormula';
 import TableDef from './TableDef';
 import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
+import VocabSaveBtn from '../designer/template/VocabSaveBtn';
 import FieldBadge from '../fields/FieldBadge';
 import InputUnit from '../fields/InputUnit';
-import TermLink from '../fields/TermLink';
+import OntCmp from '../fields/OntCmp';
 import {
   // renderDatetimeRange,
+  renderAdjust,
+  renderBlank,
+  renderColWidth,
   renderDummyFieldGroup,
   renderNameField,
-  renderTextFieldGroup,
+  renderNumberField,
   renderOwnRow,
   renderRequired,
   renderReadonly,
+  renderTextFieldGroup,
+  renderTypeField,
 } from './Fields';
 import PositionDnD from '../dnd/PositionDnD';
 import DroppablePanel from '../dnd/DroppablePanel';
 import DnDs from '../dnd/DnDs';
 import FIcons from '../icons/FIcons';
+import ButtonDelField from '../fields/ButtonDelField';
+import ButtonEllipse from '../fields/ButtonEllipse';
+import LLabel from '../shared/LLabel';
+import Prop from '../designer/template/Prop';
 
 class ElementField extends Component {
   constructor(props) {
     super(props);
-    this.state = { panelIsExpanded: false };
+    this.state = { parentIsExpanded: props.parentExpand, expandLayers: {} };
     this.handleChange = this.handleChange.bind(this);
-    this.handelDelete = this.handelDelete.bind(this);
+    // this.handelDelete = this.handelDelete.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleOntChange = this.handleOntChange.bind(this);
     this.handleUnitChange = this.handleUnitChange.bind(this);
     this.handleAddDummy = this.handleAddDummy.bind(this);
+    this.handleAddVoc = this.handleAddVoc.bind(this);
     this.updSubField = this.updSubField.bind(this);
-    this.handlePanelToggle = this.handlePanelToggle.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+    this.toggleExpandLayer = this.toggleExpandLayer.bind(this);
   }
 
-  handleDrop = _params => {
+  componentDidUpdate(prevProps) {
+    const { parentExpand } = this.props;
+    if (prevProps.parentExpand !== parentExpand) {
+      this.setState({ parentIsExpanded: parentExpand });
+    }
+  }
+
+  handleDrop = (_params) => {
     const { onMove } = this.props;
     const { source, target, rid } = _params;
     onMove.onPosition(rid.key, target, source.fid);
   };
 
-  handlePanelToggle = () => {
-    this.setState(prevState => {
-      return {
-        panelIsExpanded: !prevState.panelIsExpanded,
-      };
-    });
-  };
-
+  // e: Select event, orig: field type, fe: field, lk: layer key, fc: input change on 'Type', tp: type of input change, e.g. a select, a text, a checkbox, etc.
   handleChange(e, orig, fe, lk, fc, tp) {
     if (
-      (tp === FieldTypes.F_SELECT || tp === FieldTypes.F_SYSTEM_DEFINED) &&
+      [
+        FieldTypes.F_SELECT,
+        FieldTypes.F_SYSTEM_DEFINED,
+        'select-multi',
+      ].includes(tp) &&
       e === null
     ) {
       return;
@@ -120,21 +139,35 @@ class ElementField extends Component {
     onDummyAdd(_params);
   }
 
+  handleAddVoc(_params) {
+    this.handleChange(_params);
+  }
+
+  // Toggle function to handle expand/collapse
+  toggleExpandLayer = (layerKey) => {
+    this.setState((prev) => ({
+      expandLayers: {
+        ...prev.expandLayers,
+        [layerKey]: !prev.expandLayers[layerKey],
+      },
+    }));
+  };
+
   updSubField(layerKey, field, cb) {
     const { onFieldSubFieldChange } = this.props;
     onFieldSubFieldChange(layerKey, field, cb);
   }
 
-  handelDelete(delStr, delKey, delRoot) {
-    const { onDelete } = this.props;
-    onDelete(delStr, delKey, delRoot);
-  }
+  // handelDelete(delStr, delKey, delRoot) {
+  //   const { onDelete } = this.props;
+  //   onDelete(delStr, delKey, delRoot);
+  // }
 
   availableUnits(val) {
     const { unitsSystem } = this.props;
-    const us = unitsSystem.find(e => e.field === val);
+    const us = unitsSystem.find((e) => e.field === val);
     if (us === undefined) return null;
-    const tbl = us.units.map(e => (
+    const tbl = us.units.map((e) => (
       <div key={uuid()}>
         {genUnitSup(e.label)}
         <br />
@@ -142,11 +175,8 @@ class ElementField extends Component {
     ));
     const popover = (
       <Popover id="popover-positioned-scrolling-left">
-        <b>
-          <u>available units</u>
-        </b>
-        <br />
-        {tbl}
+        <Popover.Header as="h3">Available units</Popover.Header>
+        <Popover.Body>{tbl}</Popover.Body>
       </Popover>
     );
     return (
@@ -157,41 +187,9 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button className="btn-gxs">{FIcons.faTableCells}</Button>
-      </OverlayTrigger>
-    );
-  }
-
-  renderDeleteButton(delStr, delKey, delRoot) {
-    const msg = `remove this field: [${delKey}] from layer [${delRoot}] `;
-    const popover = (
-      <Popover id="popover-positioned-scrolling-left">
-        {msg} <br />
-        <div className="btn-toolbar">
-          <Button
-            bsSize="sm"
-            bsStyle="danger"
-            onClick={() => this.handelDelete(delStr, delKey, delRoot)}
-          >
-            Yes
-          </Button>
-          <span>&nbsp;&nbsp;</span>
-          <Button bsSize="sm" bsStyle="warning" onClick={this.handleClick}>
-            No
-          </Button>
-        </div>
-      </Popover>
-    );
-
-    return (
-      <OverlayTrigger
-        animation
-        placement="top"
-        root
-        trigger="focus"
-        overlay={popover}
-      >
-        <Button className="btn-gxs">{FIcons.faTrashCan}</Button>
+        <Button variant="success" className="btn-gxs">
+          {FIcons.faTableCells}
+        </Button>
       </OverlayTrigger>
     );
   }
@@ -206,9 +204,14 @@ class ElementField extends Component {
       allLayers,
       select_options,
       position,
+      generic,
+      onDelete,
+      vocabularies,
     } = this.props;
-    const { panelIsExpanded } = this.state;
-    const unitConfig = unitsSystem.map(_c => {
+    const { parentIsExpanded, expandLayers } = this.state;
+    const isExpanded = parentIsExpanded && (expandLayers[layerKey] || false);
+
+    const unitConfig = unitsSystem.map((_c) => {
       return {
         value: _c.field,
         name: _c.label,
@@ -216,14 +219,6 @@ class ElementField extends Component {
       };
     });
     let typeOpts = FieldBase;
-    const colOpts = [
-      { value: 1, label: '1' },
-      { value: 2, label: '2' },
-      { value: 3, label: '3' },
-      { value: 4, label: '4' },
-      { value: 5, label: '5' },
-      { value: 6, label: '6' },
-    ];
     if (genericType === 'Element') {
       typeOpts = ElementBase;
     } else if (genericType === 'Segment') {
@@ -231,124 +226,79 @@ class ElementField extends Component {
     }
     typeOpts.sort((a, b) => a.value.localeCompare(b.value));
     const f = fieldObject;
-    const formulaField =
-      f.type === FieldTypes.F_FORMULA_FIELD ? (
-        <FormGroup className="gu-form-group">
-          <Col sm={3}>
-            <span className="gu-form-group-label">
-              {getFieldProps('formula').label}{' '}
-              {getFieldProps('formula').fieldTooltip}
-            </span>
-          </Col>
-          <Col sm={9}>
-            <div style={{ display: 'flex' }}>
-              <span style={{ width: '100%' }}>
-                <FormControl
-                  type="text"
-                  name="f_label"
-                  defaultValue={f.formula}
-                  onChange={event =>
-                    this.handleChange(
-                      event,
-                      f.label,
-                      f.field,
-                      layerKey,
-                      'formula',
-                      'text'
-                    )
-                  }
-                />
-              </span>
-            </div>
-          </Col>
-        </FormGroup>
-      ) : (
-        <div />
-      );
-    const selectOptionsOpts =
-      f.type === FieldTypes.F_SELECT ? select_options : unitConfig;
+    const selectOptionsOpts = [FieldTypes.F_SELECT, 'select-multi'].includes(
+      f.type
+    )
+      ? select_options
+      : unitConfig;
     const selectOptionsVal =
-      selectOptionsOpts?.find(o => o.value === f.option_layers) || null;
-    const selectOptions =
-      f.type === FieldTypes.F_SELECT ||
-      f.type === FieldTypes.F_SYSTEM_DEFINED ? (
-        <FormGroup className="gu-form-group">
-          <Col sm={3}>
-            <span className="gu-form-group-label">
-              {f.type === FieldTypes.F_SELECT
-                ? `${getFieldProps('options').label} `
-                : ' '}
-              {f.type === FieldTypes.F_SELECT
-                ? getFieldProps('options').fieldTooltip
-                : null}
+      selectOptionsOpts?.find((o) => o.value === f.option_layers) || null;
+    const selectOptions = [
+      FieldTypes.F_SYSTEM_DEFINED,
+      FieldTypes.F_SELECT,
+      'select-multi',
+    ].includes(f.type) ? (
+      <>
+        <Form.Group as={Col}>
+          {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? (
+            <LLabel>
+              <>
+                {getFieldProps('options').label}&nbsp;
+                {getFieldProps('options').fieldTooltip}
+              </>
+            </LLabel>
+          ) : (
+            <LLabel>
+              <>{getFieldProps('si').label}</>
+            </LLabel>
+          )}
+          <div style={{ display: 'flex' }}>
+            <span style={{ width: '100%' }}>
+              <Select
+                styles={frmSelSty}
+                name={f.field}
+                multi={false}
+                options={selectOptionsOpts}
+                value={selectOptionsVal}
+                onChange={(event) =>
+                  this.handleChange(
+                    event,
+                    f.option_layers,
+                    f.field,
+                    layerKey,
+                    'option_layers',
+                    f.type
+                  )
+                }
+              />
             </span>
-          </Col>
-          <Col sm={9}>
-            <div style={{ display: 'flex' }}>
-              <span style={{ width: '100%' }}>
-                <Select
-                  styles={{
-                    menuPortal: base => {
-                      return { ...base, zIndex: 9999 };
-                    },
-                    menu: base => {
-                      return { ...base, zIndex: 9999 };
-                    },
-                    control: base => {
-                      return {
-                        ...base,
-                        height: 35,
-                        minHeight: 35,
-                      };
-                    },
-                  }}
-                  name={f.field}
-                  multi={false}
-                  options={selectOptionsOpts}
-                  value={selectOptionsVal}
-                  onChange={event =>
-                    this.handleChange(
-                      event,
-                      f.option_layers,
-                      f.field,
-                      layerKey,
-                      'option_layers',
-                      f.type
-                    )
-                  }
-                />
-              </span>
-              {f.type === FieldTypes.F_SELECT ? null : (
-                <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
-              )}
-            </div>
-          </Col>
-        </FormGroup>
-      ) : (
-        <div />
-      );
+          </div>
+        </Form.Group>
+        {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? null : (
+          <Form.Group as={Col} xs={2}>
+            <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
+          </Form.Group>
+        )}
+      </>
+    ) : null;
+
     const groupOptions = [FieldTypes.F_INPUT_GROUP].includes(f.type) ? (
-      <FormGroup className="gu-form-group">
-        <Col sm={3}>
-          <span className="gu-form-group-label">&nbsp;</span>
-        </Col>
-        <Col sm={9}>
+      <Row className="mb-1">
+        <Form.Group as={Col}>
           <GroupFields
             layerKey={layerKey}
             field={f}
             updSub={this.updSubField}
             unitsFields={unitsSystem}
-            panelIsExpanded={panelIsExpanded}
+            panelIsExpanded={isExpanded}
           />
-        </Col>
-      </FormGroup>
+        </Form.Group>
+      </Row>
     ) : null;
+
     const tableOptions = [FieldTypes.F_TABLE].includes(f.type) ? (
-      <FormGroup className="gu-form-group">
-        <Col sm={3}>
-          <span className="gu-form-group-label">&nbsp;</span>
-        </Col>
-        <Col sm={9}>
+      <Row className="mb-1">
+        <Form.Group as={Col}>
           <TableDef
             genericType={genericType}
             layerKey={layerKey}
@@ -356,15 +306,15 @@ class ElementField extends Component {
             updSub={this.updSubField}
             unitsFields={unitsSystem}
             selectOptions={select_options || []}
-            panelIsExpanded={panelIsExpanded}
+            panelIsExpanded={isExpanded}
           />
           <InputGroup>
-            <InputGroup.Addon>Tables per row</InputGroup.Addon>
-            <FormControl
+            <InputGroup.Text>Tables per row</InputGroup.Text>
+            <Form.Control
               name={`frmPerRow_${layer.key}_f_${fieldObject.field}`}
-              componentClass="select"
+              as="select"
               defaultValue={f.cols || 1}
-              onChange={event =>
+              onChange={(event) =>
                 this.handleChange(
                   event,
                   f.cols,
@@ -377,50 +327,52 @@ class ElementField extends Component {
             >
               <option value={1}>1</option>
               <option value={2}>2</option>
-            </FormControl>
+            </Form.Control>
           </InputGroup>
-        </Col>
-      </FormGroup>
+        </Form.Group>
+      </Row>
     ) : null;
+
     const textFormula = [FieldTypes.F_TEXT_FORMULA].includes(f.type) ? (
-      <FormGroup className="gu-form-group">
-        <Col sm={3}>
-          <span className="gu-form-group-label">&nbsp;</span>
-        </Col>
-        <Col sm={9}>
+      <Row className="mb-1">
+        <Form.Group as={Col}>
           <TextFormula
             layerKey={layerKey}
             field={f}
             updSub={this.updSubField}
             allLayers={allLayers}
-            panelIsExpanded={panelIsExpanded}
+            panelIsExpanded={isExpanded}
           />
-        </Col>
-      </FormGroup>
+        </Form.Group>
+      </Row>
     ) : null;
 
-    const nodeHeader = (
-      <Panel.Heading className="template_panel_heading">
-        <Panel.Title toggle onClick={this.handlePanelToggle}>
-          {position}&nbsp;
+    const fieldHeader = (
+      <span className="flex-grow-1">
+        <span className="fw-bold">
+          {position}{' '}
           {[FieldTypes.F_DUMMY].includes(f.type) ? '(dummy field)' : f.label}
-          &nbsp;
-          <FieldBadge fieldObj={f} prop="field" />
-          &nbsp;
-          <FieldBadge fieldObj={f} prop="type" />
-          &nbsp;
-          <FieldBadge fieldObj={f} prop="cols" />
-          {TermLink(fieldObject.ontology)}
-        </Panel.Title>
-        <ButtonGroup bsSize="sm" style={{ display: 'inline-flex' }}>
-          <ConditionFieldBtn
-            field={f}
-            fnUpdateSub={this.updSubField}
+        </span>
+        <FieldBadge fieldObj={f} prop="field" />
+        {OntCmp(fieldObject.ontology, '!link')}
+        <FieldBadge fieldObj={f} prop="type" />
+        <FieldBadge fieldObj={f} prop="cols" />
+      </span>
+    );
+
+    const fieldHeaderButtons = (
+      <div onClick={(e) => e.stopPropagation()}>
+        <ButtonGroup className="me-2">
+          <VocabSaveBtn
+            field={fieldObject}
+            data={generic}
             layer={layer}
-            sortedLayers={allLayers}
+            genericType={genericType}
           />
+        </ButtonGroup>
+        <ButtonGroup>
           <ButtonTooltip
-            tip="Move Up"
+            idf="mv_up"
             fnClick={this.handleMove}
             element={{ l: layerKey, f: f.field, isUp: true }}
             fa="faArrowUp"
@@ -428,282 +380,199 @@ class ElementField extends Component {
             disabled={position === 1}
           />
           <ButtonTooltip
-            tip="Move Down"
+            idf="mv_down"
             fnClick={this.handleMove}
             element={{ l: layerKey, f: f.field, isUp: false }}
             fa="faArrowDown"
             place="top"
           />
-          {this.renderDeleteButton('Field', f.field, layerKey)}
-          <ButtonTooltip
-            tip="Add Dummy field"
-            fnClick={this.handleAddDummy}
-            element={{ layerKey, field: f.field }}
-            fa="faSquare"
-            place="top"
-          />
-          <PositionDnD
-            type={`${DnDs.LAYER_FIELD}_${layer.key}`}
-            field={f}
-            rowValue={layer}
-            isButton
-          />
+          <ButtonEllipse condSet={f?.cond_fields?.length > 0 || false}>
+            <ConditionFieldBtn
+              field={f}
+              fnUpdateSub={this.updSubField}
+              layer={layer}
+              sortedLayers={allLayers}
+            />
+            <ButtonTooltip
+              idf="fld_dum_add"
+              fnClick={this.handleAddDummy}
+              element={{ layerKey, field: f.field }}
+              fa="faSquare"
+              place="top"
+              as="menu"
+            />
+            <Dropdown.Divider />
+            <ButtonDelField
+              delType={FieldTypes.DEL_FIELD}
+              delKey={f.field}
+              delRoot={layerKey}
+              generic={generic}
+              fnConfirm={onDelete}
+              as="menu"
+            />
+          </ButtonEllipse>
         </ButtonGroup>
-      </Panel.Heading>
+      </div>
     );
 
-    const addArrange = _node => (
-      <DroppablePanel
+    const dnd = (
+      <PositionDnD
+        key={`_drag_${DnDs.LAYER_FIELD}_${f.field}_${layer.key}`}
         type={`${DnDs.LAYER_FIELD}_${layer.key}`}
-        field={f}
-        rowValue={layer}
+        field={{ field: f.field }}
+        rowValue={{ key: layer.key }}
+        isButton={false}
+      />
+    );
+
+    const addArrange = (_node) => (
+      <DroppablePanel
+        key={`_drop_${DnDs.LAYER_FIELD}_${f.field}_${layer.key}`}
+        type={`${DnDs.LAYER_FIELD}_${layer.key}`}
+        field={{ field: f.field }}
+        rowValue={{ key: layer.key }}
         fnCb={this.handleDrop}
       >
         {_node}
       </DroppablePanel>
     );
 
+    const customHeader = (
+      <>
+        {fieldHeader}
+        {fieldHeaderButtons}
+      </>
+    );
+
     return (
       <div>
-        <Panel style={{ width: '100%', marginLeft: '10px' }}>
-          {addArrange(nodeHeader)}
-          <Panel.Collapse>
-            <Panel.Body>
-              <Form horizontal className="default_style">
-                {renderDummyFieldGroup({ layer, fieldObject })}
-                {renderNameField({
-                  layer,
-                  fieldObject,
-                  field: 'field',
-                  fnChange: this.handleChange,
-                  fnOntChange: this.handleOntChange,
-                })}
-                {renderTextFieldGroup({
-                  layer,
-                  fieldObject,
-                  field: 'label',
-                  fnChange: this.handleChange,
-                })}
-                {renderTextFieldGroup({
-                  layer,
-                  fieldObject,
-                  field: 'description',
-                  fnChange: this.handleChange,
-                })}
-                {renderOwnRow({
-                  layer,
-                  fieldObject,
-                  fnChange: this.handleChange,
-                })}
-                <FormGroup className="gu-form-group">
-                  <Col sm={3}>
-                    <span className="gu-form-group-label">
-                      {getFieldProps('cols').label}{' '}
-                      {getFieldProps('cols').fieldTooltip}
-                    </span>
-                  </Col>
-                  <Col sm={9}>
-                    <div style={{ display: 'flex' }}>
-                      <span style={{ width: '100%' }}>
-                        <Select
-                          styles={{
-                            menuPortal: base => {
-                              return { ...base, zIndex: 9999 };
-                            },
-                            menu: base => {
-                              return { ...base, zIndex: 9999 };
-                            },
-                          }}
-                          name={f.field}
-                          multi={false}
-                          options={colOpts}
-                          value={colOpts?.find(
-                            o => o.value === (f.cols || layer.cols)
-                          )}
-                          onChange={event =>
-                            this.handleChange(
-                              event,
-                              f.type,
-                              f.field,
-                              layerKey,
-                              'cols',
-                              'select'
-                            )
-                          }
-                        />
-                      </span>
-                    </div>
-                  </Col>
-                </FormGroup>
-                {[FieldTypes.F_DUMMY, FieldTypes.F_FORMULA_FIELD].includes(
-                  f.type
-                ) ? null : (
-                  <FormGroup className="gu-form-group">
-                    <Col sm={3}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('type').label}{' '}
-                        {getFieldProps('type').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={9}>
-                      <div style={{ display: 'flex' }}>
-                        <span style={{ width: '100%' }}>
-                          <Select
-                            styles={{
-                              menuPortal: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                              menu: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                            }}
-                            name={f.field}
-                            multi={false}
-                            options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
-                            onChange={event =>
-                              this.handleChange(
-                                event,
-                                f.type,
-                                f.field,
-                                layerKey,
-                                'type',
-                                'select'
-                              )
-                            }
-                          />
-                        </span>
-                      </div>
-                    </Col>
-                  </FormGroup>
-                )}
+        {/* <Card className="border-0 border-top gu-square-corners"> */}
+        <Card className="border-0 gu-square-corners">
+          {/* {addArrange(nodeHeader)} */}
+          <Card.Body className="p-0">
+            <Prop
+              key={`_prop_content_${f.field}_${layerKey}`}
+              layerKey={`${f.field}_${layerKey}`}
+              toggleExpand={this.toggleExpandLayer}
+              propHeader={customHeader}
+            >
+              <Form>
+                <Row className="mb-1">
+                  {renderNameField({
+                    layer,
+                    fieldObject,
+                    field: 'field',
+                    fnChange: this.handleChange,
+                    fnOntChange: this.handleOntChange,
+                  })}
+                  {renderTextFieldGroup({
+                    layer,
+                    fieldObject,
+                    field: 'label',
+                    fnChange: this.handleChange,
+                  })}
+                  {renderDummyFieldGroup({ fieldObject })}
+                </Row>
+                <Row className="mb-1">
+                  {renderTextFieldGroup({
+                    layer,
+                    fieldObject,
+                    field: 'description',
+                    fnChange: this.handleChange,
+                    xs: 6,
+                  })}
+                  {renderColWidth({
+                    layer,
+                    fieldObject,
+                    field: 'cols',
+                    fnChange: this.handleChange,
+                  })}
+                  {renderOwnRow({
+                    layer,
+                    fieldObject,
+                    fnChange: this.handleChange,
+                  })}
+                </Row>
+                <Row className="mb-1">
+                  {renderTypeField({
+                    layer,
+                    fieldObject,
+                    fnChange: this.handleChange,
+                    typeOpts,
+                    xs: [
+                      FieldTypes.F_SELECT,
+                      FieldTypes.F_SYSTEM_DEFINED,
+                      'select-multi',
+                    ].includes(f.type)
+                      ? 3
+                      : undefined,
+                  })}
+                  {selectOptions}
+                </Row>
                 {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
-                  <FormGroup className="gu-form-group">
-                    <Col sm={3}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('type').label}{' '}
-                        {getFieldProps('type').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={3}>
-                      <div style={{ display: 'flex' }}>
-                        <span style={{ width: '100%' }}>
-                          <Select
-                            styles={{
-                              menuPortal: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                              menu: base => {
-                                return { ...base, zIndex: 9999 };
-                              },
-                            }}
-                            name={f.field}
-                            multi={false}
-                            options={typeOpts}
-                            value={typeOpts?.find(o => o.value === f.type)}
-                            onChange={event =>
-                              this.handleChange(
-                                event,
-                                f.type,
-                                f.field,
-                                layerKey,
-                                'type',
-                                'select'
-                              )
-                            }
-                          />
-                        </span>
-                      </div>
-                    </Col>
-                    <Col sm={2}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('decimal').label}{' '}
-                        {getFieldProps('decimal').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={1}>
-                      <div style={{ display: 'flex' }}>
-                        <span style={{ width: '100%' }}>
-                          <FormControl
-                            name={`frmDecimal_${layer.key}_f_${fieldObject.field}`}
-                            type="number"
-                            value={f.decimal}
-                            onChange={event =>
-                              this.handleChange(
-                                event,
-                                f.label,
-                                f.field,
-                                this.props.layerKey,
-                                'decimal',
-                                'text'
-                              )
-                            }
-                            min={1}
-                          />
-                        </span>
-                      </div>
-                    </Col>
-                    <Col sm={2}>
-                      <span className="gu-form-group-label">
-                        {getFieldProps('canAdjust').label}{' '}
-                        {getFieldProps('canAdjust').fieldTooltip}
-                      </span>
-                    </Col>
-                    <Col sm={1}>
-                      <Checkbox
-                        name={`frmChk_${layer.key}_f_${fieldObject.field}`}
-                        checked={toBool(f.canAdjust)}
-                        onChange={event =>
-                          this.handleChange(
-                            event,
-                            toBool(f.canAdjust),
-                            f.field,
-                            layerKey,
-                            'canAdjust',
-                            'checkbox'
-                          )
-                        }
-                      />
-                    </Col>
-                  </FormGroup>
-                ) : null}
-                {/* {renderDatetimeRange({ fieldObject })} */}
-                {groupOptions}
-                {tableOptions}
-                {selectOptions}
-                {formulaField}
-                {textFormula}
-                {['Element'].includes(genericType)
-                  ? renderRequired({
+                  <Row className="mb-1">
+                    {renderTextFieldGroup({
+                      layer,
+                      fieldObject,
+                      field: 'formula',
+                      fnChange: this.handleChange,
+                      xs: 8,
+                    })}
+                    {renderNumberField({
+                      layer,
+                      fieldObject,
+                      field: 'decimal',
+                      fnChange: this.handleChange,
+                      xs: 2,
+                    })}
+                    {renderAdjust({
                       layer,
                       fieldObject,
                       fnChange: this.handleChange,
-                    })
-                  : null}
-                {renderReadonly({
-                  layer,
-                  fieldObject,
-                  fnChange: this.handleChange,
-                })}
-                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type)
-                  ? renderTextFieldGroup({
+                      xs: 2,
+                    })}
+                  </Row>
+                ) : null}
+                {groupOptions}
+                {/* {renderDatetimeRange({ fieldObject })} */}
+                {tableOptions}
+                {/* {selectOptions} */}
+                {textFormula}
+                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type) ? (
+                  <Row className="mb-1">
+                    {renderTextFieldGroup({
                       layer,
                       fieldObject,
                       field: 'placeholder',
                       fnChange: this.handleChange,
-                    })
-                  : null}
+                      xs: 6,
+                    })}
+                    {renderReadonly({
+                      layer,
+                      fieldObject,
+                      fnChange: this.handleChange,
+                    })}
+                    {['Element'].includes(genericType)
+                      ? renderRequired({
+                          layer,
+                          fieldObject,
+                          fnChange: this.handleChange,
+                          xs: 2,
+                        })
+                      : renderBlank()}
+                  </Row>
+                ) : null}
               </Form>
-            </Panel.Body>
-          </Panel.Collapse>
-        </Panel>
+            </Prop>
+          </Card.Body>
+        </Card>
       </div>
     );
   }
 
   render() {
     return (
-      <Col md={12} style={{ paddingLeft: '0px' }}>
+      <Col md={12} className="ps-0">
         {this.renderComponent()}
       </Col>
     );
@@ -726,8 +595,15 @@ ElementField.propTypes = {
   unitsSystem: PropTypes.array,
   onFieldSubFieldChange: PropTypes.func.isRequired,
   onDummyAdd: PropTypes.func.isRequired,
+  vocabularies: PropTypes.array,
+  parentExpand: PropTypes.bool,
 };
 
-ElementField.defaultProps = { genericType: 'Element', unitsSystem: [] };
+ElementField.defaultProps = {
+  genericType: 'Element',
+  unitsSystem: [],
+  vocabularies: [],
+  parentExpand: false,
+};
 
 export default ElementField;

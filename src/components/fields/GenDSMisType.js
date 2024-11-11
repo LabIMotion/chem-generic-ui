@@ -1,28 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
 
-const GenDSMisType = props => {
+const GenDSMisType = (props) => {
   const { uiCtrl } = props;
   if (uiCtrl) {
     return (
-      <OverlayTrigger
-        placement="top"
-        delay={300}
-        overlay={
-          <Tooltip id="tooltip">
-            Type (Chemical Methods Ontology) has been changed.
-            <br />
-            Please review this Dataset content.
-          </Tooltip>
-        }
-      >
-        <span style={{ color: 'red' }}>
+      <LTooltip idf="chmo_changed">
+        <span className="text-danger">
           {FIcons.faExclamationCircle}
           &nbsp;
         </span>
-      </OverlayTrigger>
+      </LTooltip>
     );
   }
   return null;

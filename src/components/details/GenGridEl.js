@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ActionRenderer from './renderers/ActionRenderer';
 import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
+import Constants from '../tools/Constants';
 
-const IconRenderer = params => {
+const IconRenderer = (params) => {
   const { value, iconStyle } = params;
   return (
     <i
@@ -31,64 +32,69 @@ const GenGridEl = props => {
     fnShowProp,
   } = props;
 
-  const columnDefs = [
-    {
-      hide: true,
-      headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
-      sortable: false,
-    },
-    {
-      headerName: 'Action',
-      cellRenderer: ActionRenderer,
-      minWidth: 50,
-      cellRendererParams: {
-        fnCopy: fnCopyKlass,
-        fnDelete: fnDeleteKlass,
-        fnEdit: fnEditKlass,
-        fnDownload: fnDownloadKlass,
-        genericType,
+  const columnDefs = useMemo(
+    () => [
+      {
+        hide: true,
+        headerName: '#',
+        valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
+        sortable: false,
       },
-      sortable: false,
-      filter: false,
-    },
-    {
-      headerName: 'Active',
-      field: 'is_active',
-      minWidth: 50,
-      cellRenderer: ActiveRenderer,
-      cellRendererParams: { fnDeActivate: fnDeActivateKlass },
-    },
-    {
-      field: 'name',
-      minWidth: 170,
-    },
-    { headerName: 'Prefix', field: 'klass_prefix' },
-    { headerName: 'Element label', field: 'label' },
-    {
-      headerName: 'Icon',
-      field: 'icon_name',
-      minWidth: 50,
-      width: 50,
-      sortable: false,
-      filter: false,
-      cellRenderer: IconRenderer,
-    },
-    { headerName: 'Description', field: 'desc' },
-    {
-      headerName: 'Template',
-      cellRenderer: TemplateRenderer,
-      width: 50,
-      cellRendererParams: { fnShow: fnShowProp }, // , fnShowJson: fnShowPropJson
-      sortable: false,
-      filter: false,
-    },
-    { headerName: 'Version', field: 'version' },
-    { headerName: 'Released at', field: 'released_at' },
-    { headerName: 'Updated at', field: 'updated_at' },
-    { headerName: 'Id', field: 'uuid' },
-    { headerName: 'Sync Time', field: 'sync_time' },
-  ];
+      {
+        headerName: 'Action',
+        cellRenderer: ActionRenderer,
+        cellRendererParams: {
+          fnCopy: fnCopyKlass,
+          fnDelete: fnDeleteKlass,
+          fnEdit: fnEditKlass,
+          fnDownload: fnDownloadKlass,
+          genericType,
+        },
+        sortable: false,
+      },
+      {
+        headerName: 'Active',
+        field: 'is_active',
+        width: 100,
+        cellRenderer: ActiveRenderer,
+        cellRendererParams: { fnDeActivate: fnDeActivateKlass },
+      },
+      {
+        field: 'name',
+      },
+      { headerName: 'Prefix', field: 'klass_prefix', width: 100 },
+      { headerName: 'Element label', field: 'label' },
+      {
+        headerName: 'Icon',
+        field: 'icon_name',
+        width: 100,
+        sortable: false,
+        cellRenderer: IconRenderer,
+      },
+      { headerName: 'Description', field: 'desc', width: 150 },
+      {
+        headerName: 'Template',
+        cellRenderer: TemplateRenderer,
+        width: 100,
+        cellRendererParams: { fnShow: fnShowProp }, // , fnShowJson: fnShowPropJson
+        sortable: false,
+      },
+      { headerName: 'Version', field: 'version', width: 100 },
+      { headerName: 'Released at', field: 'released_at' },
+      { headerName: 'Updated at', field: 'updated_at' },
+      { headerName: 'Id', field: 'uuid' },
+      { headerName: 'Sync Time', field: 'sync_time' },
+    ],
+    [
+      fnCopyKlass,
+      fnDeleteKlass,
+      fnEditKlass,
+      fnDownloadKlass,
+      fnDeActivateKlass,
+      fnShowProp,
+      genericType,
+    ]
+  );
 
   return (
     <GenGrid
@@ -114,6 +120,9 @@ GenGridEl.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGridEl.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGridEl.defaultProps = {
+  pageSize: 10,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGridEl;

@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { genUnit } from 'generic-ui-core';
 import { genUnitSup } from '../tools/utils';
+import mergeExt from '../../utils/ext-utils';
+
+const ext = mergeExt();
 
 const UConverterRenderer = props => {
   const { sField, onChange, node } = props;
@@ -17,7 +20,7 @@ const UConverterRenderer = props => {
       bsStyle="success"
     >
       {genUnitSup(
-        genUnit(sField.option_layers, data[sField.id].value_system).label
+        genUnit(sField.option_layers, data[sField.id].value_system, ext).label
       ) || ''}
     </Button>
   );

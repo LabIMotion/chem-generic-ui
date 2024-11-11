@@ -386,16 +386,14 @@
   }
 }
 
-.generic_tbl_chks {
-  line-height: 1em;
-  margin: 0px -10px !important;
+.generic_attr_chks {
+  display: inline-flex;
+  align-items: center;
+  > input {
+    margin-top: 0px;
+  }
   > label {
-    display: inline-flex;
-    align-content: center;
-    align-items: center;
-    > input {
-      margin-top: 0px;
-    }
+    padding-left: 4px;
   }
 }
 
