@@ -221,6 +221,7 @@ export default class Preview extends Component {
                 fa={screenFa}
                 place="left"
                 bs="default"
+                size="sm"
               />
             </div>
             <Badge bg="warning" text="dark">
