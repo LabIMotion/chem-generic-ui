@@ -104,6 +104,7 @@ export default class GenPropertiesLayer extends Component {
     const vs = [];
     let op = [];
     let remainingWidth = 12;
+    let columnCount = 0; // Add counter to track columns in current row
 
     (fields || []).forEach((f, idx) => {
       const [showProp, showLabel] = showProperties(f, layers);
@@ -125,6 +126,7 @@ export default class GenPropertiesLayer extends Component {
               onInputChange={this.handleDTRChange}
             />
           );
+          columnCount = 0;
           return;
         }
         if (f.hasOwnRow) {
@@ -135,8 +137,10 @@ export default class GenPropertiesLayer extends Component {
             remainingWidth = 12;
           }
           fieldWidth = 12;
+          columnCount = 0;
         } else if (f.type === FieldTypes.F_TABLE) {
           fieldWidth = 12 / (f.cols || 1);
+          columnCount = 0;
         } else {
           // field level settings
           perRow = f.cols || perRow;
@@ -144,10 +148,11 @@ export default class GenPropertiesLayer extends Component {
           fieldWidth = colWidth;
         }
 
-        if (remainingWidth < fieldWidth) {
+        if ((perRow === 5 && columnCount >= 5) || remainingWidth < fieldWidth) {
           vs.push(<Row key={vs.length}>{op}</Row>);
           op = [];
           remainingWidth = 12;
+          columnCount = 0;
         }
 
         const unit = genUnits(f.option_layers)[0] || {};
@@ -208,11 +213,17 @@ export default class GenPropertiesLayer extends Component {
         );
 
         remainingWidth -= fieldWidth;
+        columnCount += 1;
 
-        if (fieldWidth === 12 || idx === fields.length - 1) {
+        if (
+          fieldWidth === 12 ||
+          idx === fields.length - 1 ||
+          (perRow === 5 && columnCount >= 5)
+        ) {
           vs.push(<Row key={vs.length}>{op}</Row>);
           op = [];
           remainingWidth = 12;
+          columnCount = 0;
         }
       }
     });
