@@ -112,9 +112,18 @@ const PanelDnD = (props) => {
 
   const moveIcon = (
     <div className={dndKlz}>
-      <div className="dnd-btn text-black">
+      <div className="text-black">
         <span>{FIcons.faArrowsUpDownLeftRight}</span>
       </div>
+    </div>
+  );
+  const moveDiv = (
+    <div
+      className={`p-2 m-2 ${className}`}
+      ref={(node) => drag(drop(node))}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
+      {moveIcon}
     </div>
   );
 
@@ -123,7 +132,7 @@ const PanelDnD = (props) => {
 
   const extHead =
     splitKey.length > 1 ? (
-      <span style={{ float: 'right' }}>
+      <span>
         {`Repetition ${splitKey[1]}`}
         &nbsp;
         {wfIcon}
@@ -168,27 +177,19 @@ const PanelDnD = (props) => {
         {isSys ? null : btnAdd}
         {btnRemove}
       </ButtonGroup>
-      <ButtonGroup className={className}>{moveIcon}</ButtonGroup>
+      {/* {moveDiv} */}
+      {/* <ButtonGroup className={className}>{moveIcon}</ButtonGroup> */}
     </>
   );
 
   const accordionDiv = (
-    <div>
+    <div className="py-2 d-flex justify-content-between align-items-center">
       {extHead}
       {btnLayer}
     </div>
   );
 
-  return (
-    <div>
-      <div
-        ref={(node) => drag(drop(node))}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
-        {accordionDiv}
-      </div>
-    </div>
-  );
+  return <div>{accordionDiv}</div>;
 };
 
 export default PanelDnD;

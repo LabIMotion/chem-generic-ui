@@ -14,6 +14,7 @@ import GenProperties from '../fields/GenProperties';
 import PanelDnD from '../dnd/PanelDnD';
 import DateTimeRange from '../fields/DateTimeRange';
 import Prop from '../designer/template/Prop';
+import { bgColor } from '../tools/format-utils';
 
 export default class GenPropertiesLayer extends Component {
   constructor(props) {
@@ -243,15 +244,7 @@ export default class GenPropertiesLayer extends Component {
     const { id, layer, activeWF, hasAi, aiComp } = this.props;
     const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
-    let bgColorClass;
-    switch (color) {
-      case 'default':
-        bgColorClass = 'bg-light';
-        break;
-      default:
-        bgColorClass = `bg-${color}`;
-        break;
-    }
+    const bgColorClass = bgColor(color);
     const klz = style || 'panel_generic_heading';
     // panel header color is based on input bs value
     const panelDnD = (
@@ -274,7 +267,7 @@ export default class GenPropertiesLayer extends Component {
         as="div"
         className={`custom-accordion-header ${bgColorClass} flex-grow-1`}
       >
-        {label === '' ? <span /> : <span className={klz}>{label}</span>}
+        {label === '' ? <span className={klz}>&nbsp;</span> : <span className={klz}>{label}</span>}
       </Accordion.Header>
     );
     // const panelDiv = (
@@ -282,8 +275,6 @@ export default class GenPropertiesLayer extends Component {
     //     {label === '' ? <span /> : <span className={klz}>{label}</span>}
     //   </div>
     // );
-
-    if (bgColorClass === 'bg-none') bgColorClass = 'bg-white';
 
     const newPanel = (
       <Prop

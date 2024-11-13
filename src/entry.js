@@ -24,6 +24,7 @@ export { default as GenFlowViewerBtn } from './components/flow/FlowViewerBtn';
 export { buildInitWF } from './components/tools/orten';
 export { default as GenericElCriteriaModal } from './components/elements/GenericElCriteriaModal';
 export { default as SegmentCriteria } from './components/elements/SegmentCriteria';
+export { default as GenButtonArrange } from './components/actions/ButtonArrange';
 export { default as GenButtonExport } from './components/actions/ButtonExport';
 export { default as GenButtonDrawflow } from './components/actions/ButtonDraw';
 export { default as InlineMetadata } from './components/addon/DatasetMetadata';

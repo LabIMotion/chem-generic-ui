@@ -1,7 +1,7 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 import { findIndex, cloneDeep } from 'lodash';
-import { FieldTypes } from 'generic-ui-core';
+import { FieldTypes, showProperties } from 'generic-ui-core';
 import Attachment from '../models/Attachment';
 import FieldTooltip from '../fields/FieldTooltip';
 import DocuConst from './DocuConst';
@@ -21,18 +21,18 @@ const createEnum = (arr, fn = 'toString') =>
 const uploadFiles = (properties, event, field, layer) => {
   const files = [];
   const fieldObj =
-    properties.layers[`${layer}`].fields.find(e => e.field === field) || {};
+    properties.layers[`${layer}`].fields.find((e) => e.field === field) || {};
   const value = fieldObj.value || {};
   switch (event.action) {
     case 'l': {
-      const valIdx = findIndex(value.files || [], o => o.uid === event.uid);
+      const valIdx = findIndex(value.files || [], (o) => o.uid === event.uid);
       const label =
         event && event.val && event.val.target && event.val.target.value;
       if (value.files[valIdx] && label) value.files[valIdx].label = label;
       break;
     }
     case 'f': {
-      (event.val || []).forEach(file => {
+      (event.val || []).forEach((file) => {
         const uid = uuid();
         if (typeof value.files === 'undefined' || value.files === null)
           value.files = [];
@@ -46,7 +46,7 @@ const uploadFiles = (properties, event, field, layer) => {
       break;
     }
     case 'd': {
-      const valIdx = findIndex(value.files || [], o => o.uid === event.uid);
+      const valIdx = findIndex(value.files || [], (o) => o.uid === event.uid);
       if (valIdx >= 0 && value.files && value.files.length > 0)
         value.files.splice(valIdx, 1);
       return [value, files, event.uid];
@@ -87,12 +87,12 @@ const inputEventVal = (event, type) => {
   return event.target && event.target.value;
 };
 
-const toNum = val => {
+const toNum = (val) => {
   const parse = Number(val || '');
   return Number.isNaN(parse) ? 0 : parse;
 };
 
-const toNullOrInt = val => {
+const toNullOrInt = (val) => {
   if (val) {
     const parse = Number(val);
     return Number.isNaN(parse) ? null : parseInt(val, 10);
@@ -100,12 +100,12 @@ const toNullOrInt = val => {
   return null;
 };
 
-const genUnitSup = val => {
+const genUnitSup = (val) => {
   if (typeof val === 'undefined' || val === null) return '';
   const vals = val.match(
     /<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g
   );
-  const reV = vals.map(v => {
+  const reV = vals.map((v) => {
     const supVal = v.match(/<sup[^>]*>([^<]+)<\/sup>/);
     if (supVal) return <sup key={uuid()}>{supVal[1]}</sup>;
     const subVal = v.match(/<sub[^>]*>([^<]+)<\/sub>/);
@@ -115,11 +115,10 @@ const genUnitSup = val => {
   return <span>{reV}</span>;
 };
 
-const toBool = val => {
+const toBool = (val) => {
   const valLower = String(val).toLowerCase();
   return !(!valLower || valLower === 'false' || valLower === '0');
 };
-
 
 const molOptions = [
   { label: 'InChiKey', value: 'inchikey' },
@@ -133,10 +132,10 @@ const samOptions = [
   { label: 'Mass', value: 'molecular_weight' },
 ];
 
-const storeFlow = props => {
+const storeFlow = (props) => {
   const { elements } = props;
   const els = cloneDeep(elements);
-  els.map(d => {
+  els.map((d) => {
     if (['default'].includes(d.type) && d.data) {
       delete d.data.label;
       delete d.data.layer;
@@ -151,7 +150,6 @@ const fieldCls = (isSpCall = false) => {
   const clsCol = isSpCall ? 'gu_sp_column' : 'gu_sp_column_none';
   return [clsFrm, clsCol];
 };
-
 
 const docFields = [
   DocuConst.DOC_SITE,
@@ -236,7 +234,7 @@ const propDefault = {
   },
 };
 
-const getFieldProps = name => {
+const getFieldProps = (name) => {
   if (!propDefault[name]) return {};
   return {
     label: propDefault[name].label,
@@ -287,6 +285,43 @@ const frmSelSty = {
   }),
 };
 
+const isLayerVisible = (layer, layers) => {
+  if (
+    typeof layer.cond_fields === 'undefined' ||
+    layer.cond_fields == null ||
+    layer.cond_fields.length === 0
+  )
+    return true;
+  const [isVisible] = showProperties(layer, layers);
+  return isVisible;
+};
+
+const moveLayer = (layers, sourceKey, targetKey) => {
+  if (!layers || typeof layers !== 'object') {
+    console.warn('Invalid input: layers must be a non-null object');
+    return {};
+  }
+
+  // Convert to array and sort by current positions
+  const layerEntries = Object.entries(layers).sort(
+    ([, a], [, b]) => a.position - b.position
+  );
+
+  // Find indices
+  const sourceIndex = layerEntries.findIndex(([key]) => key === sourceKey);
+  const targetIndex = layerEntries.findIndex(([key]) => key === targetKey);
+
+  // Move the layer (shift others)
+  const [movedLayer] = layerEntries.splice(sourceIndex, 1);
+  layerEntries.splice(targetIndex, 0, movedLayer);
+
+  // Update all positions with multiples of 10
+  return layerEntries.reduce((acc, [key, layer], index) => {
+    acc[key] = { ...layer, position: index * 10 };
+    return acc;
+  }, {});
+};
+
 export {
   createEnum,
   frmSelSty,
@@ -295,6 +330,7 @@ export {
   toNum,
   genUnitSup,
   inputEventVal,
+  isLayerVisible,
   molOptions,
   samOptions,
   storeFlow,
@@ -303,4 +339,5 @@ export {
   fieldCls,
   toNullOrInt,
   getFieldProps,
+  moveLayer,
 };

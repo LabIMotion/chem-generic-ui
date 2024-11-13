@@ -59,4 +59,15 @@ const mc2res = (code, msg = '') => {
   return isSuccess ? notifySuccess(finalMsg) : notifyError(finalMsg);
 };
 
-export { capFirst, pl, s2c, p2s, c2s, mc2res };
+const bgColor = (color = 'default') => {
+  switch (color) {
+    case 'default':
+      return 'bg-light';
+    case 'none':
+      return 'bg-white';
+    default:
+      return `bg-${color}`;
+  }
+};
+
+export { capFirst, pl, s2c, p2s, c2s, mc2res, bgColor };

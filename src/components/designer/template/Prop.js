@@ -5,7 +5,7 @@ import { Accordion, useAccordionButton } from 'react-bootstrap';
 import Constants from '../../tools/Constants';
 
 const customToggleClass =
-  'd-flex justify-content-between align-items-center p-2 rounded';
+  'd-flex justify-content-between align-items-center rounded';
 
 const CustomToggleContent = ({
   dnd,
