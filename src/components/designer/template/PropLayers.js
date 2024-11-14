@@ -14,6 +14,7 @@ import {
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import Prop from './Prop';
+import LayerOrderBtn from './LayerOrderBtn';
 import LayerAttrEditBtn from '../LayerAttrEditBtn';
 import LayerAttrNewBtn from '../LayerAttrNewBtn';
 import LayerGridBtn from './LayerGridBtn';
@@ -267,7 +268,6 @@ const PropLayers = (props) => {
     const newNode = (
       <Prop
         key={`_prop_content_${layerKey}`}
-        dnd={addArrange(dnd, layerKey)}
         layerKey={layerKey}
         toggleExpand={toggleExpandLayer}
         propHeader={customHeader}
@@ -288,6 +288,11 @@ const PropLayers = (props) => {
         >
           Layers
           <span className="button-right">
+            <LayerOrderBtn
+              generic={data}
+              genericType={genericType}
+              fnSave={fnUpdate}
+            />
             <LayerAttrNewBtn fnCreate={onLayerCreate} />
             <LayerGridBtn
               fnCreate={onAddStandardLayer}

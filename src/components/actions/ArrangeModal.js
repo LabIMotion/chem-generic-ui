@@ -33,7 +33,7 @@ const ArrangeModal = ({ onSave, showProps, children }) => {
       >
         {children}
       </Modal.Body>
-      <Modal.Footer>
+      <Modal.Footer className="justify-content-start">
         <Button variant="secondary" onClick={() => setShow(false)}>
           Cancel
         </Button>
