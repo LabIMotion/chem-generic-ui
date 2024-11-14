@@ -29,7 +29,7 @@ const LayerOrderBtn = ({ generic = {}, genericType, fnSave = () => {} }) => {
     <>
       <LTooltip idf="arrange_layer">
         <Button
-          className="me-2"
+          className="fw-medium"
           size="sm"
           variant="primary"
           onClick={() => setShow(true)}

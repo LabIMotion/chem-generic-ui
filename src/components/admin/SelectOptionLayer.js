@@ -51,7 +51,7 @@ const SelectOptionLayer = (props) => {
             size="sm"
             bs="primary"
             txt="Add new selection list"
-            btnCls="ms-auto"
+            btnCls="ms-auto fw-medium"
           />
         </Card.Header>
         <Card.Body>

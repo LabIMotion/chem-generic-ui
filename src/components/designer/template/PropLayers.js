@@ -294,7 +294,7 @@ const PropLayers = (props) => {
           className="d-flex justify-content-between align-items-center bg-white px-1"
         >
           Layers
-          <span className="button-right">
+          <span className="button-right d-flex gap-1">
             <LayerOrderBtn
               generic={data}
               genericType={genericType}

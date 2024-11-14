@@ -63,7 +63,12 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
   return (
     <>
       <LTooltip idf="sel_lyr2tpl">
-        <Button size="sm" variant="primary" onClick={handleShow}>
+        <Button
+          className="fw-medium"
+          size="sm"
+          variant="primary"
+          onClick={handleShow}
+        >
           {FIcons.faGlobe}&nbsp;Standard Layers
         </Button>
       </LTooltip>

@@ -17,6 +17,7 @@ const UploadTemplateBtn = (props) => {
         <Button
           onClick={() => setShow(true)}
           variant="light"
+          size="sm"
           className={btnCls}
         >
           {FIcons.faArrowRightToBracket}&nbsp;Import template into Work Area

@@ -41,18 +41,18 @@ const TemplateProps = (props) => {
           className="d-flex justify-content-between align-items-center"
         >
           {headerText(genericType, data)}
-          <span className="button-right">
+          <span className="button-right d-flex gap-1">
             <UploadTemplateBtn
               data={data}
               fnUpload={innerAction}
               genericType={genericType}
-              btnCls="me-2"
+              btnCls="fw-medium"
             />
             <WorkflowDesignBtn
               element={data}
               fnSave={innerAction}
               genericType={genericType}
-              btnCls="me-2"
+              btnCls="fw-medium"
             />
             <ButtonTooltip
               txt="Save and Release (Major)"
@@ -62,7 +62,8 @@ const TemplateProps = (props) => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
-              btnCls="me-2"
+              size="sm"
+              btnCls="fw-medium"
             />
             <ButtonTooltip
               txt="Save and Release (Minor)"
@@ -72,7 +73,8 @@ const TemplateProps = (props) => {
               fa="faFloppyDisk"
               place="top"
               bs="success"
-              btnCls="me-2"
+              size="sm"
+              btnCls="fw-medium"
             />
             <ButtonTooltip
               txt="Save as draft"
@@ -82,6 +84,8 @@ const TemplateProps = (props) => {
               fa="faFloppyDisk"
               place="top"
               bs="primary"
+              size="sm"
+              btnCls="fw-medium"
             />
           </span>
         </Card.Header>

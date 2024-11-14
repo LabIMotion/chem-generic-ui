@@ -43,6 +43,7 @@ const WorkflowDesignBtn = (props) => {
         <Button
           onClick={() => setShow(true)}
           variant="light"
+          size="sm"
           className={btnCls}
         >
           {FIcons.faDiagramProject}&nbsp;Workflow

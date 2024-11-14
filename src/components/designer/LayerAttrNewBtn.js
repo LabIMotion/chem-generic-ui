@@ -14,7 +14,7 @@ const LayerAttrNewBtn = (props) => {
     <>
       <LTooltip idf="add_layer">
         <Button
-          className="me-2"
+          className="fw-medium"
           size="sm"
           variant="primary"
           onClick={() => setShow(true)}
