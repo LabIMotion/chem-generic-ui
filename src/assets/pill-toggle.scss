@@ -1,0 +1,63 @@
+@use 'color' as *;
+.pill-toggle {
+  // Main toggle container
+  border-radius: 30px;
+  padding: 5px 15px;
+  width: 120px;
+  height: 34px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &-container {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    &:focus {
+      .pill-toggle {
+        outline: 2px solid $color-bs-primary;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  // Circle indicator
+  &-circle {
+    position: absolute;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: $color-bs-primary;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  // Text label
+  &-text {
+    font-size: 14px;
+    color: $color-bs-primary;
+    position: absolute;
+    left: 15px;
+    transition: all 0.3s ease;
+  }
+
+  // Active state
+  &.active {
+    .pill-toggle-circle {
+      right: calc(100% - 29px);
+    }
+
+    .pill-toggle-text {
+      left: 45px;
+    }
+  }
+}

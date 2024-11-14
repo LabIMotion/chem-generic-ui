@@ -1,13 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Alert,
-  Button,
-  ButtonGroup,
-  Tooltip,
-  OverlayTrigger,
-} from 'react-bootstrap';
+import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import DocuConst from '../../tools/DocuConst';
 import FIcons from '../../icons/FIcons';
 import LTooltip from '../../shared/LTooltip';
@@ -27,15 +21,35 @@ const TemplateBar = (props) => {
 
   return (
     <span className="gu-designer-template-bar">
+      {/* <LTooltip
+        idf={active === 'w' ? 'design_template' : 'preview_or_versions'}
+      >
+        <LPillToggle
+          leftText="Work Area"
+          rightText="Preview"
+          isRight={active === 'p'}
+          onChange={(isRight) => fnSwitch(isRight ? 'p' : 'w')}
+        />
+      </LTooltip> */}
       <ButtonGroup>
         <LTooltip idf="design_template">
-          <Button active={active === 'w'} onClick={() => fnSwitch('w')}>
+          <Button
+            className={active === 'w' ? 'border-secondary' : ''}
+            variant={active === 'w' ? 'secondary' : 'light'}
+            onClick={() => fnSwitch('w')}
+            active={active === 'w'}
+          >
             Work Area
           </Button>
         </LTooltip>
         <LTooltip idf="preview_or_versions">
-          <Button active={active === 'p'} onClick={() => fnSwitch('p')}>
-            Preview Design
+          <Button
+            className={active === 'p' ? 'border-secondary' : ''}
+            variant={active === 'p' ? 'secondary' : 'light'}
+            onClick={() => fnSwitch('p')}
+            active={active === 'p'}
+          >
+            Preview
           </Button>
         </LTooltip>
       </ButtonGroup>
