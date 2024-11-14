@@ -43,6 +43,7 @@ import LBadge from '../../shared/LBadge';
 import { pl } from '../../tools/format-utils';
 import LayerManager from '../../../utils/desMgr';
 import VocabularyListBtn from './VocabularyListBtn';
+import FieldOrderBtn from './FieldOrderBtn';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
@@ -226,6 +227,12 @@ const PropLayers = (props) => {
               fa="faSquare"
               place="top"
               as="menu"
+            />
+            <FieldOrderBtn
+              layer={layer}
+              generic={data}
+              genericType={genericType}
+              fnSave={fnUpdate}
             />
             <Dropdown.Divider />
             <ButtonDelField

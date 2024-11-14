@@ -9,9 +9,9 @@ const ArrangeModal = ({ onSave, showProps, children }) => {
 
   const handleSave = () => {
     // Get the current value from ArrangeContent via ref
-    const updatedLayers = children.ref?.current?.getNewLayers();
-    if (updatedLayers) {
-      onSave(updatedLayers);
+    const updates = children.ref?.current?.getUpdates();
+    if (updates) {
+      onSave(updates);
       setShow(false);
     }
   };

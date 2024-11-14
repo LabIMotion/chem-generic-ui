@@ -4,7 +4,8 @@ import { sortBy } from 'lodash';
 import DnD from '../dnd/DnD';
 import Constants from '../tools/Constants';
 import { bgColor } from '../tools/format-utils';
-import { isLayerVisible, moveLayer } from '../tools/utils';
+import { isLayerVisible } from '../tools/utils';
+import { moveLayer } from '../tools/order-util';
 
 const extHeaderInfo = (splitKey) => {
   return splitKey.length > 1 ? (
@@ -42,7 +43,7 @@ const ArrangeContent = forwardRef(({ element }, ref) => {
 
   // Expose method to get current newLayers value
   useImperativeHandle(ref, () => ({
-    getNewLayers: () => newLayers,
+    getUpdates: () => newLayers,
   }));
 
   if (!element?.properties?.layers) return defaultContent;

@@ -48,6 +48,8 @@ const SelectOptionLayer = (props) => {
             idf="sel_add"
             fnClick={() => setShowAddSelect(true)}
             fa="faPlus"
+            size="sm"
+            bs="primary"
             txt="Add new selection list"
             btnCls="ms-auto"
           />

@@ -1,57 +1,55 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
-import LayerOrderContent from './LayerOrderContent';
+import FieldOrderContent from './FieldOrderContent';
 import ArrangeModal from '../../actions/ArrangeModal';
 import Constants from '../../tools/Constants';
 import FIcons from '../../icons/FIcons';
-import LTooltip from '../../shared/LTooltip';
 import Response from '../../../utils/response';
 import { notifySuccess } from '../../../utils/template/designer-message';
 
-const LayerOrderBtn = ({ generic = {}, genericType, fnSave = () => {} }) => {
+const FieldOrderBtn = ({
+  layer = {},
+  generic = {},
+  genericType,
+  fnSave = () => {},
+}) => {
   const [show, setShow] = useState(false);
   const arrangeContentRef = useRef(null);
 
-  if (Object.keys(generic.properties_template).length === 0) return null;
+  if ((layer.fields || []).length === 0) return null;
 
-  const handleSave = (updatedLayers) => {
+  const handleSave = (updatedFields) => {
     // Save changes
     const updates = cloneDeep(generic);
-    updates.properties_template.layers = updatedLayers;
+    updates.properties_template.layers[layer.key].fields = updatedFields;
     updates.changed = true;
     fnSave(new Response(notifySuccess(), updates));
   };
 
   return (
     <>
-      <LTooltip idf="arrange_layer">
-        <Button
-          className="me-2"
-          size="sm"
-          variant="primary"
-          onClick={() => setShow(true)}
-        >
-          {FIcons.faBars} Arrange Layers
-        </Button>
-      </LTooltip>
+      <Dropdown.Item
+        eventKey={`arrange_fields.${layer.label}`}
+        onClick={() => setShow(true)}
+      >
+        {FIcons.faBars}&nbsp;&nbsp;Arrange Fields Order
+      </Dropdown.Item>
       <ArrangeModal
         genericType={genericType}
         showProps={{ show, setShow }}
         onSave={handleSave}
       >
-        <LayerOrderContent
-          ref={arrangeContentRef}
-          element={cloneDeep(generic || {})}
-        />
+        <FieldOrderContent ref={arrangeContentRef} layer={layer} />
       </ArrangeModal>
     </>
   );
 };
 
-LayerOrderBtn.propTypes = {
+FieldOrderBtn.propTypes = {
+  layer: PropTypes.object,
   generic: PropTypes.object,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
@@ -60,8 +58,9 @@ LayerOrderBtn.propTypes = {
   ]).isRequired,
   fnSave: PropTypes.func,
 };
-LayerOrderBtn.defaultProps = {
+FieldOrderBtn.defaultProps = {
+  layer: {},
   generic: {},
   fnSave: () => {},
 };
-export default LayerOrderBtn;
+export default FieldOrderBtn;

@@ -440,10 +440,9 @@ class ElementField extends Component {
         {/* <Card className="border-0 border-top gu-square-corners"> */}
         <Card className="border-0 border-top gu-square-corners">
           {/* {addArrange(nodeHeader)} */}
-          <Card.Body>
+          <Card.Body className="p-2">
             <Prop
               key={`_prop_content_${f.field}_${layerKey}`}
-              dnd={addArrange(dnd)}
               layerKey={`${f.field}_${layerKey}`}
               toggleExpand={this.toggleExpandLayer}
               propHeader={customHeader}

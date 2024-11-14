@@ -296,32 +296,6 @@ const isLayerVisible = (layer, layers) => {
   return isVisible;
 };
 
-const moveLayer = (layers, sourceKey, targetKey) => {
-  if (!layers || typeof layers !== 'object') {
-    console.warn('Invalid input: layers must be a non-null object');
-    return {};
-  }
-
-  // Convert to array and sort by current positions
-  const layerEntries = Object.entries(layers).sort(
-    ([, a], [, b]) => a.position - b.position
-  );
-
-  // Find indices
-  const sourceIndex = layerEntries.findIndex(([key]) => key === sourceKey);
-  const targetIndex = layerEntries.findIndex(([key]) => key === targetKey);
-
-  // Move the layer (shift others)
-  const [movedLayer] = layerEntries.splice(sourceIndex, 1);
-  layerEntries.splice(targetIndex, 0, movedLayer);
-
-  // Update all positions with multiples of 10
-  return layerEntries.reduce((acc, [key, layer], index) => {
-    acc[key] = { ...layer, position: index * 10 };
-    return acc;
-  }, {});
-};
-
 export {
   createEnum,
   frmSelSty,
@@ -339,5 +313,4 @@ export {
   fieldCls,
   toNullOrInt,
   getFieldProps,
-  moveLayer,
 };

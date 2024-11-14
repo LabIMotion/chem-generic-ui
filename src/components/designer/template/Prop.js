@@ -61,7 +61,7 @@ const Prop = ({
         >
           {propHeader}
         </CustomToggleContent>
-        <Accordion.Body>{children}</Accordion.Body>
+        <Accordion.Body className="px-0">{children}</Accordion.Body>
       </Accordion.Item>
     </Accordion>
   );

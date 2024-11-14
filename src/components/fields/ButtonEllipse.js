@@ -48,9 +48,9 @@ const ButtonEllipse = ({ children, condSet }) => {
               : child // Pass dividers directly
         )}
       </DropdownButton>
-      <Overlay target={target.current} show={show && !isOpen} placement="top">
-        <Tooltip id="btn-ellipse-tooltip">more...</Tooltip>
-      </Overlay>
+      {/* <Overlay target={target.current} show={show && !isOpen} placement="top">
+        <Tooltip id="btn-ellipse-tooltip">More functions</Tooltip>
+      </Overlay> */}
     </>
   );
 };

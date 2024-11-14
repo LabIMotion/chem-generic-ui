@@ -29,7 +29,7 @@ const ButtonArrange = ({ generic = {}, genericType, fnSave = () => {} }) => {
 
   return (
     <>
-      <LTooltip idf="arrange">
+      <LTooltip idf="arrange_layer">
         <Button size="sm" variant="primary" onClick={() => setShow(true)}>
           {FIcons.faBars} Arrange
         </Button>

@@ -1,12 +1,12 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Col, Row, Table } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import DnD from '../../dnd/DnD';
 import Constants from '../../tools/Constants';
 import { bgColor } from '../../tools/format-utils';
-import { moveLayer } from '../../tools/utils';
-import { getCondOperator } from '../../tools/cond-util';
+import { moveLayer } from '../../tools/order-util';
 import FIcons from '../../icons/FIcons';
+import ConditionsDisplay from './ConditionsDisplay';
 
 const extHeaderInfo = (splitKey) => {
   return splitKey.length > 1 ? (
@@ -36,37 +36,6 @@ const definedHeader = (className, label, key, fields) => {
   );
 };
 
-const definedCond = (_layer) => {
-  const { cond_fields: condFields = [], cond_operator: matchOp = 1 } = _layer;
-  if (!condFields.length) return null;
-  const matchOpLabel = getCondOperator[matchOp];
-  const condFieldsList = condFields.map((condField) => {
-    const { id, layer, field, value } = condField;
-    return (
-      <tr key={id}>
-        <td>{layer}</td>
-        <td>{field}</td>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-  return (
-    <>
-      <div>Restriction Setting: {matchOpLabel}</div>
-      <Table size="sm" bordered responsive>
-        <thead className="table-light">
-          <tr>
-            {['Layer', 'Field', 'Value'].map((label) => (
-              <th key={label}>{label}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{condFieldsList}</tbody>
-      </Table>
-    </>
-  );
-};
-
 const LayerOrderContent = forwardRef(({ element }, ref) => {
   // Initialize state with empty object or layers
   const layers = element?.properties_template?.layers || {};
@@ -75,7 +44,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
 
   // Expose method to get current newLayers value
   useImperativeHandle(ref, () => ({
-    getNewLayers: () => newLayers,
+    getUpdates: () => newLayers,
   }));
 
   if (!element?.properties_template?.layers) return defaultContent;
@@ -104,7 +73,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
     const content = (
       <div className={`${bgColor(color)} ${contentStyle}`}>
         {definedHeader(style, label, key, fields)}
-        {definedCond(obj)}
+        <ConditionsDisplay conditions={obj} />
       </div>
     );
 
@@ -147,7 +116,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
         <Col md={6}>
           <h5>Current Arrangement</h5>
         </Col>
-        <Col md={6}>
+        <Col md={6} className="text-primary">
           <h5>
             New Arrangement: Drag and drop to reorder layers.{' '}
             {FIcons.faArrowsUpDownLeftRight}
