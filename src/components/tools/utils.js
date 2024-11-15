@@ -285,17 +285,6 @@ const frmSelSty = {
   }),
 };
 
-const isLayerVisible = (layer, layers) => {
-  if (
-    typeof layer.cond_fields === 'undefined' ||
-    layer.cond_fields == null ||
-    layer.cond_fields.length === 0
-  )
-    return true;
-  const [isVisible] = showProperties(layer, layers);
-  return isVisible;
-};
-
 export {
   createEnum,
   frmSelSty,
@@ -304,7 +293,6 @@ export {
   toNum,
   genUnitSup,
   inputEventVal,
-  isLayerVisible,
   molOptions,
   samOptions,
   storeFlow,

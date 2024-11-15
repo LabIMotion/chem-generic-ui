@@ -1,10 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { sortBy } from 'lodash';
-import { FieldTypes } from 'generic-ui-core';
+import { FieldTypes, moveField } from 'generic-ui-core';
 import DnD from '../../dnd/DnD';
 import DnDs from '../../dnd/DnDs';
-import { moveField } from '../../tools/order-util';
 import FIcons from '../../icons/FIcons';
 import FieldConditionsDisplay from './ConditionsDisplay';
 

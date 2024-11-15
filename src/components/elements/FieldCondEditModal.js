@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, ButtonGroup, Modal, ToggleButton } from 'react-bootstrap';
 import { cloneDeep } from 'lodash';
+import { condOperatorOptions } from 'generic-ui-core';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';
 import GenericSubField from '../models/GenericSubField';
@@ -320,18 +321,8 @@ export default class FieldCondEditModal extends Component {
                 Checkbox (true/false), Select, Text
               </div>
               <div>
-                <ButtonGroup
-                  // type="radio"
-                  // name="cond_operator"
-                  // defaultValue={defaultCondOperator}
-                  // value={defaultCondOperator}
-                  // onChange={this.onOpChanged}
-                >
-                  {[
-                    { value: 1, label: 'Match One' },
-                    { value: 9, label: 'Match All' },
-                    { value: 0, label: 'Match None' },
-                  ].map((radio, idx) => (
+                <ButtonGroup>
+                  {condOperatorOptions.map((radio, idx) => (
                     <ToggleButton
                       // eslint-disable-next-line react/no-array-index-key
                       key={idx}
@@ -352,24 +343,6 @@ export default class FieldCondEditModal extends Component {
                       {radio.label}
                     </ToggleButton>
                   ))}
-                  {/* <ToggleButton
-                    value={1}
-                    variant={defaultCondOperator === 1 ? 'success' : 'default'}
-                  >
-                    Match One
-                  </ToggleButton>
-                  <ToggleButton
-                    value={9}
-                    variant={defaultCondOperator === 9 ? 'success' : 'default'}
-                  >
-                    Match All
-                  </ToggleButton>
-                  <ToggleButton
-                    value={0}
-                    variant={defaultCondOperator === 0 ? 'success' : 'default'}
-                  >
-                    Match None
-                  </ToggleButton> */}
                 </ButtonGroup>
               </div>
             </div>

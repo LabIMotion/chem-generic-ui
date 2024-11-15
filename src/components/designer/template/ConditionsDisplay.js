@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { getCondOperator } from '../../tools/cond-util';
+import { getCondOperator } from 'generic-ui-core';
 
 const ConditionsDisplay = ({ conditions }) => {
   const { cond_fields: condFields = [], cond_operator: matchOp = 1 } =

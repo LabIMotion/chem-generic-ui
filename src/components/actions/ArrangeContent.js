@@ -1,11 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { sortBy } from 'lodash';
+import { isLayerVisible, moveLayer } from 'generic-ui-core';
 import DnD from '../dnd/DnD';
 import Constants from '../tools/Constants';
 import { bgColor } from '../tools/format-utils';
-import { isLayerVisible } from '../tools/utils';
-import { moveLayer } from '../tools/order-util';
 
 const extHeaderInfo = (splitKey) => {
   return splitKey.length > 1 ? (
