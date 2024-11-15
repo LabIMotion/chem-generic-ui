@@ -245,7 +245,10 @@ export default class GenPropertiesLayer extends Component {
     const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
     const bgColorClass = bgColor(color);
-    const klz = style || 'panel_generic_heading';
+    let klz = style || 'panel_generic_heading';
+    klz = ['bg-light', 'bg-white'].includes(bgColorClass)
+      ? `${klz} text-dark`
+      : `${klz} text-white`;
     // panel header color is based on input bs value
     const panelDnD = (
       <PanelDnD

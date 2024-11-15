@@ -183,7 +183,7 @@ const PanelDnD = (props) => {
   );
 
   const accordionDiv = (
-    <div className="py-2 d-flex justify-content-between align-items-center">
+    <div className="d-flex justify-content-between align-items-center">
       {extHead}
       {btnLayer}
     </div>
