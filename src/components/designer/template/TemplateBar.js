@@ -49,7 +49,7 @@ const TemplateBar = (props) => {
             onClick={() => fnSwitch('p')}
             active={active === 'p'}
           >
-            Preview
+            Preview & Versions
           </Button>
         </LTooltip>
       </ButtonGroup>

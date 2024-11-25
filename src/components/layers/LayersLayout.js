@@ -1,5 +1,5 @@
 import React from 'react';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { showProperties } from 'generic-ui-core';
 import GenPropertiesLayer from './GenPropertiesLayer';
 import GenProperties from '../fields/GenProperties';
@@ -44,7 +44,7 @@ const LayersLayout = (props) => {
         />
       ));
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
-  const layout = [].concat(buildExtLys);
+  const layout = [].concat(<div className="pb-3">{buildExtLys}</div>);
   sortedLayers.forEach((layer, idx) => {
     // if call from SP and layer is not sp, skip
     if (isSpCall && !layer.sp) return;

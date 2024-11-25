@@ -43,7 +43,6 @@ const Prop = ({
   toggleExpand,
   children,
 }) => {
-  // console.log('Prop layer.key=', layerKey);
   const isSys = layerKey.startsWith(Constants.SYS_REACTION);
   return (
     <Accordion
@@ -51,7 +50,7 @@ const Prop = ({
       id={`accordion_design_props_${layerKey}`}
       defaultActiveKey={isSys ? '1' : undefined}
     >
-      <Accordion.Item className="panel_generic_properties" eventKey="1">
+      <Accordion.Item className="panel_generic_properties pb-3" eventKey="1">
         <CustomToggleContent
           dnd={dnd}
           eventKey="1"
@@ -61,7 +60,7 @@ const Prop = ({
         >
           {propHeader}
         </CustomToggleContent>
-        <Accordion.Body className="p-0">{children}</Accordion.Body>
+        <Accordion.Body className="py-0 px-3">{children}</Accordion.Body>
       </Accordion.Item>
     </Accordion>
   );

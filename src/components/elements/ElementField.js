@@ -438,9 +438,9 @@ class ElementField extends Component {
     return (
       <div>
         {/* <Card className="border-0 border-top gu-square-corners"> */}
-        <Card className="border-0 border-top gu-square-corners">
+        <Card className="border-0 gu-square-corners">
           {/* {addArrange(nodeHeader)} */}
-          <Card.Body className="p-2">
+          <Card.Body className="p-0">
             <Prop
               key={`_prop_content_${f.field}_${layerKey}`}
               layerKey={`${f.field}_${layerKey}`}
