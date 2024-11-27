@@ -10,7 +10,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze javascript-typescript
+    name: Analyze javascript
     runs-on: ubuntu-latest
     permissions:
       security-events: write
@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - language: javascript-typescript
+        - language: javascript
 
     steps:
     - name: Checkout repository
@@ -33,7 +33,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        languages: javascript-typescript
+        languages: javascript
         queries: security-extended,security-and-quality
 
     - name: Perform CodeQL Analysis
