@@ -26,7 +26,7 @@ const VisionListBtn = ({ generic, fnRetrieve }) => {
       <OverlayTrigger
         delayShow={1000}
         placement="top"
-        overlay={<Tooltip id={uuid()}>Click to view the revisions</Tooltip>}
+        overlay={<Tooltip id={uuid()}>View the revisions</Tooltip>}
       >
         <Button onClick={() => setShow(!show)} size="sm" variant="primary">
           {FIcons.faClockRotateLeft}&nbsp;Revision

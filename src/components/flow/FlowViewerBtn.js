@@ -1,12 +1,18 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import ButtonTooltip from '../fields/ButtonTooltip';
+import Button from 'react-bootstrap/Button';
+import FIcons from '../icons/FIcons';
+import LTooltip from '../shared/LTooltip';
+import WorkflowModal from '../elements/WorkflowModal';
+import FlowView from './FlowView';
 
-const FlowViewerBtn = (props) => {
-  const { fnClick, generic, label } = props;
+const FlowViewerBtn = ({ generic }) => {
+  const [show, setShow] = useState(false);
+  const properties = generic.properties || {};
   const propertiesRelease = generic.properties_release || {};
 
+  if (generic?.is_new) return null;
   if (Object.keys(propertiesRelease || {}).length < 1) return null;
 
   const hasFlow =
@@ -21,20 +27,24 @@ const FlowViewerBtn = (props) => {
   if (!hasFlow && !hasFlowObject) return null;
 
   return (
-    <ButtonTooltip
-      idf="fl_view"
-      fnClick={() => fnClick(generic, true)}
-      fa="faDiagramProject"
-      txt={label || 'Designed Workflow'}
-      bs="primary"
-    />
+    <>
+      <LTooltip idf="fl_view">
+        <Button size="sm" variant="primary" onClick={() => setShow(true)}>
+          {FIcons.faDiagramProject}&nbsp;Workflow (Predefined)
+        </Button>
+      </LTooltip>
+      <WorkflowModal showProps={{ show, setShow }}>
+        <FlowView
+          properties={properties}
+          propertiesRelease={propertiesRelease}
+        />
+      </WorkflowModal>
+    </>
   );
 };
 
 FlowViewerBtn.propTypes = {
-  fnClick: PropTypes.func.isRequired,
   generic: PropTypes.object.isRequired,
-  label: PropTypes.string,
 };
-FlowViewerBtn.defaultProps = { label: 'Designed Workflow' };
+
 export default FlowViewerBtn;

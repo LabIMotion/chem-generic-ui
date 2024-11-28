@@ -1,8 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import Button from 'react-bootstrap/Button';
+import cloneDeep from 'lodash/cloneDeep';
 import Constants from '../tools/Constants';
 import WorkflowModal from '../elements/WorkflowModal';
 import FlowDesigner from '../flow/FlowDesigner';
@@ -45,7 +45,8 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
     <>
       <LTooltip idf="draw_flow">
         <Button size="sm" variant="primary" onClick={() => setShow(true)}>
-          {FIcons.faPencil} Draw Flow
+          {FIcons.faDiagramProject}&nbsp;{FIcons.faPaintbrush}&nbsp;Workflow
+          (Custom)
         </Button>
       </LTooltip>
       <WorkflowModal genericType={genericType} showProps={{ show, setShow }}>
