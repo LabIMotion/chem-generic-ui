@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
-import { differenceWith, toPairs, isEqual } from 'lodash';
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
+import toPairs from 'lodash/toPairs';
 import Constants from '../tools/Constants';
 
 const defaultColDef = {

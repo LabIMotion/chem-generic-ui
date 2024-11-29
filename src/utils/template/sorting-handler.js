@@ -1,9 +1,9 @@
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { reUnit, FieldTypes, orgLayerObject } from 'generic-ui-core';
 
-export const handleSaveSorting = _element => {
+export const handleSaveSorting = (_element) => {
   const element = _element;
-  Object.keys(element.properties_template.layers).forEach(key => {
+  Object.keys(element.properties_template.layers).forEach((key) => {
     const layer = element.properties_template.layers[key];
     let sortedFields = layer?.fields || [];
     (sortedFields || []).forEach((f, idx) => {

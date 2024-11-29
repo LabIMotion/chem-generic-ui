@@ -18,7 +18,7 @@ import {
 import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
-import { filter } from 'lodash';
+import filter from 'lodash/filter';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import { downloadFile, genUnit, unitConvToBase } from 'generic-ui-core';

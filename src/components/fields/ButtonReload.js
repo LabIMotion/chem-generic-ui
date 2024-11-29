@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { cloneDeep, sortBy } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import sortBy from 'lodash/sortBy';
 import { orgLayerObject } from 'generic-ui-core';
 import { importReaction, remodel } from '../../utils/template/remodel-handler';
 import FIcons from '../icons/FIcons';

@@ -1,4 +1,5 @@
-import { findIndex, sortBy } from 'lodash';
+import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 import { FieldTypes, genUnits, reUnit } from 'generic-ui-core';
 import { GenericDummy } from '../../components/tools/utils';
 import { notifyDummyAdd, notifyError, notifySuccess } from './designer-message';

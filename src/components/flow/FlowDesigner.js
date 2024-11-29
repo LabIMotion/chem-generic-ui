@@ -11,7 +11,7 @@ import ReactFlow, {
   MarkerType,
 } from 'reactflow';
 import { useDrop } from 'react-dnd';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import DnDNodes from './DnDNodes';
 import LayerNode from './LayerNode';
 import {

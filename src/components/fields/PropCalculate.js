@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import { filter } from 'lodash';
+import filter from 'lodash/filter';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from './FieldHeader';
 import { fieldCls, toBool, toNullOrInt } from '../tools/utils';

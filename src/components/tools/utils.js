@@ -1,7 +1,8 @@
 import React from 'react';
 import { v4 as uuid } from 'uuid';
-import { findIndex, cloneDeep } from 'lodash';
-import { FieldTypes, showProperties } from 'generic-ui-core';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
+import { FieldTypes } from 'generic-ui-core';
 import Attachment from '../models/Attachment';
 import FieldTooltip from '../fields/FieldTooltip';
 import DocuConst from './DocuConst';

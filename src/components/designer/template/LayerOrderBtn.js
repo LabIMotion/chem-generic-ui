@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import LayerOrderContent from './LayerOrderContent';
 import ArrangeModal from '../../actions/ArrangeModal';
 import Constants from '../../tools/Constants';

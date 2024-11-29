@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import { Button, ButtonGroup, Modal, ToggleButton } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { condOperatorOptions } from 'generic-ui-core';
 import LayerSelect from './LayerSelect';
 import FieldSelect from './FieldSelect';

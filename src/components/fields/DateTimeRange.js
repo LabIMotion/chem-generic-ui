@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
-import { round } from 'lodash';
+import round from 'lodash/round';
 import moment from 'moment';
 import 'moment-precise-range-plugin';
 import { genUnit, genUnits, unitConversion } from 'generic-ui-core';

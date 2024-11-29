@@ -1,4 +1,7 @@
-import { findIndex, cloneDeep, mergeWith, isArray } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
+import isArray from 'lodash/isArray';
+import mergeWith from 'lodash/mergeWith';
 import { FieldTypes, genUnits } from 'generic-ui-core';
 import { toBool, toNum } from '../../components/tools/utils';
 import organizeSubValues from '../../components/tools/collate';

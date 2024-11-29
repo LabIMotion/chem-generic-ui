@@ -1,7 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findIndex, cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import findIndex from 'lodash/findIndex';
 import { Card } from 'react-bootstrap';
 import { genUnits } from 'generic-ui-core';
 import GenInterface from './GenInterface';

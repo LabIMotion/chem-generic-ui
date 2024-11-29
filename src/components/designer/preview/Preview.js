@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, ButtonGroup, Col, Row } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 // import LoadingActions from 'src/stores/alt/actions/LoadingActions';
 import { downloadFile } from 'generic-ui-core';
 import ButtonConfirm from '../../fields/ButtonConfirm';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import GenInterface from '../../details/GenInterface';
 
 const LayerGridView = ({ _layer }) => {

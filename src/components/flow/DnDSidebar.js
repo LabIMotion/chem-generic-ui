@@ -1,10 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import DnDNodes from './DnDNodes';
 
-const DnDSidebar = props => {
+const DnDSidebar = (props) => {
   const { element } = props;
 
   if (element?.properties_template == null) {
@@ -14,7 +14,7 @@ const DnDSidebar = props => {
     element.properties_template.layers || [],
     l => l.position
   );
-  const inputs = sortedLayers.filter(e => e.wf);
+  const inputs = sortedLayers.filter((e) => e.wf);
 
   return (
     <aside>

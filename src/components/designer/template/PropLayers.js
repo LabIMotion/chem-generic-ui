@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonGroup, Card, Dropdown } from 'react-bootstrap';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { FieldTypes } from 'generic-ui-core';
 import Prop from './Prop';
 import LayerOrderBtn from './LayerOrderBtn';

@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { FieldTypes } from 'generic-ui-core';
 import VocabForm from './VocabForm';
 import LayerSaveModal from '../../elements/LayerSaveModal';

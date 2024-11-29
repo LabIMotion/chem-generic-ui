@@ -5,7 +5,7 @@ import {
   Tooltip,
   OverlayTrigger,
 } from 'react-bootstrap';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import AttrNewBtn from './AttrNewBtn';
 import GridToolbar from './GridToolbar';
 import Constants from '../tools/Constants';

@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { MarkerType } from 'reactflow';
 import { initialNodes, initialViewport } from './initial-flow';
 

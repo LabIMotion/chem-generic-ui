@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { getUnitSystem } from 'generic-ui-core';
 import ElementField from '../../elements/ElementField';
 import {
