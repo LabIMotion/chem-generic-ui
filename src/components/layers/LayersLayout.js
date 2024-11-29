@@ -44,7 +44,11 @@ const LayersLayout = (props) => {
         />
       ));
   const sortedLayers = sortBy(layers, ['position', 'wf_position']) || [];
-  const layout = [].concat(<div className="pb-3">{buildExtLys}</div>);
+  const layout = [].concat(
+    <div className="pb-3" key="ext-layers">
+      {buildExtLys}
+    </div>
+  );
   sortedLayers.forEach((layer, idx) => {
     // if call from SP and layer is not sp, skip
     if (isSpCall && !layer.sp) return;
