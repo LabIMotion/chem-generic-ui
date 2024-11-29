@@ -7,6 +7,7 @@ import Constants from '../tools/Constants';
 import WorkflowModal from '../elements/WorkflowModal';
 import FlowDesigner from '../flow/FlowDesigner';
 import FIcons from '../icons/FIcons';
+import { LWf } from '../shared/LCom';
 import LTooltip from '../shared/LTooltip';
 
 const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
@@ -45,8 +46,7 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
     <>
       <LTooltip idf="draw_flow">
         <Button size="sm" variant="primary" onClick={() => setShow(true)}>
-          {FIcons.faDiagramProject}&nbsp;{FIcons.faPaintbrush}&nbsp;Workflow
-          (Custom)
+          <LWf wf /> {FIcons.faPaintbrush}&nbsp;Workflow (Custom)
         </Button>
       </LTooltip>
       <WorkflowModal genericType={genericType} showProps={{ show, setShow }}>

@@ -8,7 +8,7 @@ import LTooltip from '../shared/LTooltip';
 import UploadKlassModal from '../elements/UploadKlassModal';
 
 const AttrUploadBtn = (props) => {
-  const { data, fnUpload, genericType } = props;
+  const { fnUpload, genericType } = props;
   const [show, setShow] = useState(false);
 
   if (genericType === Constants.GENERIC_TYPES.DATASET) return null;
@@ -21,7 +21,6 @@ const AttrUploadBtn = (props) => {
         </Button>
       </LTooltip>
       <UploadKlassModal
-        data={data}
         fnUpload={fnUpload}
         genericType={genericType}
         showProps={{ show, setShow }}
@@ -31,7 +30,6 @@ const AttrUploadBtn = (props) => {
 };
 
 AttrUploadBtn.propTypes = {
-  data: PropTypes.object.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,

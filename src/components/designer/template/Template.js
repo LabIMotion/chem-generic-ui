@@ -35,6 +35,8 @@ const Template = (props) => {
     });
   }, [inputData]);
 
+  if (!inputData || Object.keys(inputData).length === 0) return null;
+
   const innerAction = (_result) => {
     const { element: newElement, notify: newNotify, additional } = _result;
     if (newNotify.isSuccess) {

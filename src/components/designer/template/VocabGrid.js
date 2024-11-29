@@ -1,15 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import LTooltip from '../../shared/LTooltip';
 import VocabManager from '../../../utils/vocMgr';
 import ButtonConfirm from '../../fields/ButtonConfirm';
+import Constants from '../../tools/Constants';
 
-const editableSource = ['Element', 'Segment', 'Dataset'];
+const editableSource = [
+  Constants.GENERIC_TYPES.ELEMENT,
+  Constants.GENERIC_TYPES.SEGMENT,
+  Constants.GENERIC_TYPES.DATASET,
+];
 
 const VocabGrid = ({ onVocSelect, onVocDelete }) => {
   const [rowData, setRowData] = useState([]);
-  const gridRef = useRef(null); // Add a reference to the grid
 
   useEffect(() => {
     const fetchVocabularies = async () => {
@@ -52,7 +57,7 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       width: 70,
     },
     {
-      field: 'name', // it is from field: 'field',
+      field: 'name',
       headerName: 'Field Name',
       sortable: true,
       filter: true,
@@ -66,28 +71,28 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       flex: 1,
     },
     {
-      field: 'field_type', // it is from field: 'type',
+      field: 'field_type',
       headerName: 'Type',
       sortable: true,
       filter: true,
       flex: 1,
     },
     {
-      field: 'source', // it is from field: 'voc.source',
+      field: 'source',
       headerName: 'Ref. Source',
       sortable: true,
       filter: true,
       flex: 1,
     },
     {
-      field: 'voc.source_name', // it is from field: 'voc.source_name',
+      field: 'voc.source_name',
       headerName: 'Ref. Source Name',
       sortable: true,
       filter: true,
       flex: 1,
     },
     {
-      field: 'layer_id', // it is from field: 'voc.layer_id',
+      field: 'layer_id',
       headerName: 'Ref. Source Layer',
       sortable: true,
       filter: true,
@@ -108,7 +113,6 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
       <AgGridReact
-        ref={gridRef}
         columnDefs={columnDefs}
         rowData={rowData}
         domLayout="normal"
@@ -116,6 +120,11 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       />
     </div>
   );
+};
+
+VocabGrid.propTypes = {
+  onVocSelect: PropTypes.func.isRequired,
+  onVocDelete: PropTypes.func.isRequired,
 };
 
 export default VocabGrid;

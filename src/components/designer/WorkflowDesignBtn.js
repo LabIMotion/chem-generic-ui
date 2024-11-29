@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
+import { LWf } from '../shared/LCom';
 import LTooltip from '../shared/LTooltip';
 import WorkflowModal from '../elements/WorkflowModal';
 import DnDFlow from '../flow/DnDFlow';
@@ -46,7 +46,7 @@ const WorkflowDesignBtn = (props) => {
           size="sm"
           className={btnCls}
         >
-          {FIcons.faDiagramProject}&nbsp;Workflow
+          <LWf wf /> Workflow
         </Button>
       </LTooltip>
       <WorkflowModal genericType={genericType} showProps={{ show, setShow }}>

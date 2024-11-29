@@ -88,7 +88,7 @@ const LayerForm = ({ init, layer, onChange }) => {
           <LFormGroup>
             <Form.Label>Who can use this layer?</Form.Label>
             <Form.Check type="radio">
-              <Form.Check.Input type="radio" checked />
+              <Form.Check.Input type="radio" checked readOnly />
               <Form.Check.Label>
                 <span className="gu-mr-1">{FIcons.faGlobe}</span>
                 <b>Standard</b>

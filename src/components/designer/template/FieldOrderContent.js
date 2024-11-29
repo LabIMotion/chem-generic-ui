@@ -1,11 +1,13 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { sortBy } from 'lodash';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import sortBy from 'lodash/sortBy';
 import { FieldTypes, moveField } from 'generic-ui-core';
 import DnD from '../../dnd/DnD';
 import DnDs from '../../dnd/DnDs';
 import FIcons from '../../icons/FIcons';
 import FieldConditionsDisplay from './ConditionsDisplay';
+import { LHText } from '../../shared/LCom';
 
 const defaultContent = <h1>No fields to arrange</h1>;
 const definedHeader = (label, field, type) => {
@@ -91,13 +93,12 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
     <div className="d-flex flex-column h-100">
       <Row className="mx-0 p-3">
         <Col md={6}>
-          <h5>Current Arrangement</h5>
+          <LHText title="Current Arrangement">The existing arrangement</LHText>
         </Col>
         <Col md={6} className="text-primary">
-          <h5>
-            New Arrangement: Drag and drop to reorder fields.{' '}
-            {FIcons.faArrowsUpDownLeftRight}
-          </h5>
+          <LHText title="New Arrangement">
+            Drag and drop ({FIcons.faArrowsUpDownLeftRight}) to reorder fields
+          </LHText>
         </Col>
       </Row>
       <div

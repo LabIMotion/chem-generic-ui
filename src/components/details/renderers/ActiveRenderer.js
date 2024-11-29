@@ -30,7 +30,7 @@ const ActiveRenderer = (params) => {
       fnClick={onActivate}
       element={data}
       fa={attrs[value].fa}
-      btnCls={`${attrs[value].cls} btn-gxs`}
+      btnCls={`${attrs[value].cls} btn-sm`}
       bs={attrs[value].bs}
     />
   );

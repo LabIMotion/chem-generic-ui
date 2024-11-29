@@ -1,9 +1,13 @@
 import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { ButtonGroup, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import { GenPropertiesDate } from '../fields/GenPropertiesFields';
 import Constants from '../tools/Constants';
 import FIcons from '../icons/FIcons';
+import { LWf } from '../shared/LCom';
 
 const orderSource = {
   canDrag(props) {
@@ -61,7 +65,7 @@ const PanelDnD = (props) => {
     isOverValidTarget ? ' can-drop' : ''
   }${isDraggingSource ? ' is-dragging' : ''}`;
 
-  const { style, label, wf, key, timeRecord } = layer;
+  const { style, label, wf = false, key, timeRecord } = layer;
   const dndKlz = wf ? `dnd-none` : `dnd`;
 
   const klz = style || 'panel_generic_heading';
@@ -108,8 +112,6 @@ const PanelDnD = (props) => {
     (event) => handleChange(event, id, layer, 'layer-remove')
   );
 
-  const wfIcon = wf ? <span>{FIcons.faDiagramProject}</span> : null;
-
   const moveIcon = (
     <div className={dndKlz}>
       <div className="text-black">
@@ -131,13 +133,7 @@ const PanelDnD = (props) => {
   const isSys = key.startsWith(Constants.SYS_REACTION);
 
   const extHead =
-    splitKey.length > 1 ? (
-      <span>
-        {`Repetition ${splitKey[1]}`}
-        &nbsp;
-        {wfIcon}
-      </span>
-    ) : null;
+    splitKey.length > 1 ? <span>{`Repetition ${splitKey[1]}`}</span> : null;
 
   const btnLayer = wf ? (
     <>
@@ -184,6 +180,7 @@ const PanelDnD = (props) => {
 
   const accordionDiv = (
     <div className="d-flex justify-content-between align-items-center">
+      <LWf wf={wf} />
       {extHead}
       {btnLayer}
     </div>

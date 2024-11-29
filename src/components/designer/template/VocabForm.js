@@ -39,7 +39,7 @@ const VocabForm = ({ init }) => {
           <Form.Group className="p-3 mt-3">
             <Form.Label>Who can use this vocabulary?</Form.Label>
             <Form.Check type="radio">
-              <Form.Check.Input type="radio" checked />
+              <Form.Check.Input type="radio" checked readOnly />
               <Form.Check.Label>
                 <span className="gu-mr-1">{FIcons.faGlobe}</span>
                 <b>LabIMotion Generic Module</b>

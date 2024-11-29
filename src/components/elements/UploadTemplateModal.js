@@ -9,7 +9,6 @@ import { handleTemplateUploading } from '../../utils/template/action-handler';
 const UploadTemplateModal = (props) => {
   const { data, genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
-
   const handleReaderLoaded = (e) => {
     const verify = handleTemplateUploading(e, genericType);
     if (verify.notify.isSuccess) {

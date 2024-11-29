@@ -3,7 +3,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Accordion, Col, Row } from 'react-bootstrap';
+import Accordion from 'react-bootstrap/Accordion';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import {
   genUnits,
   unitConversion,

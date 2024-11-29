@@ -1,12 +1,14 @@
 import React from 'react';
 import ButtonTooltip from '../../fields/ButtonTooltip';
-import FIcons from '../../icons/FIcons';
-import LTooltip from '../../shared/LTooltip';
+import { LWf } from '../../shared/LCom';
 
-const renderWFLayerMark = (props) =>
-  props && (props.flow || props.flowObject) ? (
-    <LTooltip idf="fl_defined">{FIcons.faDiagramProject}</LTooltip>
-  ) : null;
+const WFLayerMark = ({ data }) => {
+  if (!data || (!data.flow && !data.flowObject)) {
+    return null;
+  }
+
+  return <LWf wf />;
+};
 
 const TemplateRenderer = (params) => {
   const { data, fnShow, node } = params;
@@ -17,17 +19,16 @@ const TemplateRenderer = (params) => {
   };
 
   return (
-    <span>
+    <span className="d-inline-flex align-items-center gap-1">
       <ButtonTooltip
         idf="tpl_edit"
         fa="faFileLines"
         element={data}
         fnClick={onShow}
-        btnCls="btn-gxs"
+        size="sm"
         bs="light"
       />
-      &nbsp;
-      {renderWFLayerMark(data.properties_template)}
+      <WFLayerMark data={data.properties_template} />
     </span>
   );
 };

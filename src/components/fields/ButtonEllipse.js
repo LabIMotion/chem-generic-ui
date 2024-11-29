@@ -1,20 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  ButtonGroup,
-  DropdownButton,
-  Dropdown,
-  Overlay,
-  Tooltip,
-} from 'react-bootstrap';
+import { ButtonGroup, DropdownButton, Dropdown } from 'react-bootstrap';
 import FIcons from '../icons/FIcons';
 
 const ButtonEllipse = ({ children, condSet }) => {
   const [show, setShow] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const target = React.useRef(null);
 
-  // Function to handle tooltip hide and dropdown close
   const handleItemClick = (child, event) => {
     event.stopPropagation();
     setIsOpen(false); // Close the dropdown
@@ -27,7 +19,6 @@ const ButtonEllipse = ({ children, condSet }) => {
   return (
     <>
       <DropdownButton
-        ref={target}
         variant={condSet ? 'warning' : 'default'}
         title={FIcons.faEllipsis}
         as={ButtonGroup}
@@ -48,9 +39,6 @@ const ButtonEllipse = ({ children, condSet }) => {
               : child // Pass dividers directly
         )}
       </DropdownButton>
-      {/* <Overlay target={target.current} show={show && !isOpen} placement="top">
-        <Tooltip id="btn-ellipse-tooltip">More functions</Tooltip>
-      </Overlay> */}
     </>
   );
 };

@@ -55,7 +55,6 @@ const ButtonTooltip = (props) => {
     );
   }
   return (
-    // <span className="project-a-container">
     <LTooltip idf={idf} placement={place}>
       <Button
         className={btnCls}
@@ -76,7 +75,6 @@ const ButtonTooltip = (props) => {
         )}
       </Button>
     </LTooltip>
-    // </span>
   );
 };
 

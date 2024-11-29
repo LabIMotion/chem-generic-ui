@@ -6,7 +6,7 @@ import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
 
-const IconRenderer = params => {
+const IconRenderer = (params) => {
   const { value, iconStyle } = params;
   return (
     <i
@@ -35,7 +35,7 @@ const GenGridEl = (props) => {
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
+      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     {

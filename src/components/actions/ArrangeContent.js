@@ -1,10 +1,13 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { sortBy } from 'lodash';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import sortBy from 'lodash/sortBy';
 import { isLayerVisible, moveLayer } from 'generic-ui-core';
+import FIcons from '../icons/FIcons';
 import DnD from '../dnd/DnD';
 import Constants from '../tools/Constants';
 import { bgColor } from '../tools/format-utils';
+import { LHText, LWf } from '../shared/LCom';
 
 const extHeaderInfo = (splitKey) => {
   return splitKey.length > 1 ? (
@@ -20,7 +23,7 @@ const sysHeaderInfo = (fields) => {
 };
 
 const defaultContent = <h1>No layers to arrange</h1>;
-const definedHeader = (className, label, key, fields) => {
+const definedHeader = (className, label, key, fields, wf) => {
   const isSys = key.startsWith(Constants.SYS_REACTION);
   const content = isSys ? sysHeaderInfo(fields) : `${label}(${key})`;
   const splitKey = key.split('.');
@@ -30,6 +33,7 @@ const definedHeader = (className, label, key, fields) => {
     >
       {content}
       {extHeaderInfo(splitKey)}
+      <LWf wf={wf} />
     </span>
   );
 };
@@ -75,7 +79,7 @@ const ArrangeContent = forwardRef(({ element }, ref) => {
 
     const content = (
       <div className={`${bgColor(color)} p-3 rounded`}>
-        {definedHeader(style, label, key, fields)}
+        {definedHeader(style, label, key, fields, wf)}
       </div>
     );
 
@@ -116,10 +120,13 @@ const ArrangeContent = forwardRef(({ element }, ref) => {
     <div className="d-flex flex-column h-100">
       <Row className="mx-0 p-3">
         <Col md={6}>
-          <h5>Current Arrangement</h5>
+          <LHText title="Current Arrangement">The existing arrangement</LHText>
         </Col>
-        <Col md={6}>
-          <h5>New Arrangement</h5>
+        <Col md={6} className="text-primary">
+          <LHText title="New Arrangement">
+            Drag and drop ({FIcons.faArrowsUpDownLeftRight}) to reorder layers (
+            workflow layers (<LWf wf />) cannot be moved )
+          </LHText>
         </Col>
       </Row>
       <Row className="mx-0 flex-grow-1" style={{ minHeight: 0 }}>

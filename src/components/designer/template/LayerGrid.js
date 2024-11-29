@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import LTooltip from '../../shared/LTooltip';
@@ -7,7 +7,6 @@ import ButtonConfirm from '../../fields/ButtonConfirm';
 
 const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
   const [rowData, setRowData] = useState([]);
-  const gridRef = useRef(null); // Add a reference to the grid
 
   useEffect(() => {
     const fetchLayers = async () => {
@@ -103,7 +102,6 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
       <AgGridReact
-        ref={gridRef}
         columnDefs={columnDefs}
         rowData={rowData}
         domLayout="normal"

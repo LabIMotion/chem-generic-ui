@@ -1,12 +1,14 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { sortBy } from 'lodash';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import sortBy from 'lodash/sortBy';
 import { moveLayer } from 'generic-ui-core';
 import DnD from '../../dnd/DnD';
 import Constants from '../../tools/Constants';
 import { bgColor } from '../../tools/format-utils';
 import FIcons from '../../icons/FIcons';
 import ConditionsDisplay from './ConditionsDisplay';
+import { LHText } from '../../shared/LCom';
 
 const extHeaderInfo = (splitKey) => {
   return splitKey.length > 1 ? (
@@ -114,13 +116,12 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
     <div className="d-flex flex-column h-100">
       <Row className="mx-0 p-3">
         <Col md={6}>
-          <h5>Current Arrangement</h5>
+          <LHText title="Current Arrangement">The existing arrangement</LHText>
         </Col>
         <Col md={6} className="text-primary">
-          <h5>
-            New Arrangement: Drag and drop to reorder layers.{' '}
-            {FIcons.faArrowsUpDownLeftRight}
-          </h5>
+          <LHText title="New Arrangement">
+            Drag and drop ({FIcons.faArrowsUpDownLeftRight}) to reorder layers
+          </LHText>
         </Col>
       </Row>
       <div

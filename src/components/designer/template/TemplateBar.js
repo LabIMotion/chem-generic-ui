@@ -21,16 +21,6 @@ const TemplateBar = (props) => {
 
   return (
     <span className="gu-designer-template-bar">
-      {/* <LTooltip
-        idf={active === 'w' ? 'design_template' : 'preview_or_versions'}
-      >
-        <LPillToggle
-          leftText="Work Area"
-          rightText="Preview"
-          isRight={active === 'p'}
-          onChange={(isRight) => fnSwitch(isRight ? 'p' : 'w')}
-        />
-      </LTooltip> */}
       <ButtonGroup>
         <LTooltip idf="design_template">
           <Button

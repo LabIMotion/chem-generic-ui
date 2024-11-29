@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
-import FIcons from '../icons/FIcons';
+import { LWf } from '../shared/LCom';
 import LTooltip from '../shared/LTooltip';
 import WorkflowModal from '../elements/WorkflowModal';
 import FlowView from './FlowView';
@@ -30,7 +30,7 @@ const FlowViewerBtn = ({ generic }) => {
     <>
       <LTooltip idf="fl_view">
         <Button size="sm" variant="primary" onClick={() => setShow(true)}>
-          {FIcons.faDiagramProject}&nbsp;Workflow (Predefined)
+          <LWf wf /> Workflow (Predefined)
         </Button>
       </LTooltip>
       <WorkflowModal showProps={{ show, setShow }}>

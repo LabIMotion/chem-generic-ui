@@ -1,16 +1,8 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Accordion,
-  ButtonGroup,
-  Card,
-  Dropdown,
-  Tooltip,
-  OverlayTrigger,
-  Button,
-} from 'react-bootstrap';
+import { ButtonGroup, Card, Dropdown } from 'react-bootstrap';
 import { sortBy } from 'lodash';
 import { FieldTypes } from 'generic-ui-core';
 import Prop from './Prop';
@@ -20,9 +12,6 @@ import LayerAttrNewBtn from '../LayerAttrNewBtn';
 import LayerGridBtn from './LayerGridBtn';
 import Constants from '../../tools/Constants';
 import ButtonTooltip from '../../fields/ButtonTooltip';
-import DnDs from '../../dnd/DnDs';
-import DroppablePanel from '../../dnd/DroppablePanel';
-import PositionDnD from '../../dnd/PositionDnD';
 import PropFields from './PropFields';
 import {
   handleAddDummy,
@@ -47,31 +36,14 @@ import FieldOrderBtn from './FieldOrderBtn';
 
 const PropLayers = (props) => {
   const { data, genericType, fnUpdate, vocabularies } = props;
-  // State to track expand/collapse state for each layer
   const [expandLayers, setExpandLayers] = useState({});
 
-  // Toggle function to handle expand/collapse
   const toggleExpandLayer = (layerKey) => {
     setExpandLayers((prev) => ({
       ...prev,
       [layerKey]: !prev[layerKey],
     }));
   };
-
-  // // Initialize expand states once
-  // const initialExpandStates = useMemo(() => {
-  //   const states = {};
-  //   const sortedLayers = sortBy(
-  //     data.properties_template.layers,
-  //     (l) => l.position
-  //   );
-  //   (sortedLayers || []).forEach((layer) => {
-  //     states[layer.key] = false; // Set to false for collapsed by default
-  //   });
-  //   return states;
-  // }, [data.properties_template?.layers]);
-
-  // const [expandStates, setExpandStates] = useState(initialExpandStates);
 
   const onFieldAdd = (_e) => {
     const { newFieldKey, layer } = _e;
@@ -121,28 +93,6 @@ const PropLayers = (props) => {
       { key: source.fid.field }
     );
     fnUpdate(result);
-  };
-
-  const addArrange = (node, layerKey, noButton = true) => {
-    // const pBtn = (
-    //   <PositionDnD
-    //     type={DnDs.LAYER}
-    //     field={{ field: layerKey }}
-    //     rowValue={{ key: '' }}
-    //     isButton={false}
-    //   />
-    // );
-    return (
-      <DroppablePanel
-        type={DnDs.LAYER}
-        field={{ field: layerKey }}
-        rowValue={{ key: '' }}
-        fnCb={onPositionMove}
-      >
-        {/* {noButton ? null : pBtn} */}
-        {node}
-      </DroppablePanel>
-    );
   };
 
   const layers = [];
@@ -244,25 +194,7 @@ const PropLayers = (props) => {
             />
           </ButtonEllipse>
         </ButtonGroup>
-        {/* <ButtonGroup>
-          <PositionDnD
-            type={DnDs.LAYER}
-            field={{ field: layerKey }}
-            rowValue={{ key: '' }}
-            isButton={false}
-          />
-        </ButtonGroup> */}
       </div>
-    );
-
-    const dnd = (
-      <PositionDnD
-        key={`_drag_${DnDs.LAYER}_${layer.key}`}
-        type={DnDs.LAYER}
-        field={{ field: layerKey }}
-        rowValue={{ key: '' }}
-        isButton={false}
-      />
     );
 
     const customHeader = (
@@ -287,7 +219,6 @@ const PropLayers = (props) => {
 
   return (
     <div>
-      {/* <Card className="border-0 border-top gu-square-corners"> */}
       <Card className="border-0">
         <Card.Header
           as="h5"
@@ -317,7 +248,7 @@ const PropLayers = (props) => {
 
 PropLayers.propTypes = {
   data: PropTypes.object.isRequired,
-  fnUpdate: PropTypes.func.isRequired, // { notify, element }
+  fnUpdate: PropTypes.func.isRequired,
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,

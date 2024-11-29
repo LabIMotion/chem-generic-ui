@@ -32,7 +32,7 @@ const Designer = (_props) => {
     fnUpdate,
     fnRefresh,
     genericType,
-    gridData,
+    gridData = [],
     klasses,
     preview,
   } = _props;
@@ -146,11 +146,7 @@ const Designer = (_props) => {
             />
           }
           btnUpload={
-            <AttrUploadBtn
-              data={klasses}
-              fnUpload={fnUpload}
-              genericType={genericType}
-            />
+            <AttrUploadBtn fnUpload={fnUpload} genericType={genericType} />
           }
           fnClickLarge={() => setTheme(Constants.GRID_THEME.ALPINE.VALUE)}
           fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}

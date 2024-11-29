@@ -8,7 +8,7 @@ const GenDSMisType = (props) => {
   if (uiCtrl) {
     return (
       <LTooltip idf="chmo_changed">
-        <span style={{ color: 'red' }}>
+        <span className="text-danger">
           {FIcons.faExclamationCircle}
           &nbsp;
         </span>
