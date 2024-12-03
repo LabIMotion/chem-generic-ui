@@ -70,17 +70,20 @@ const PanelDnD = (props) => {
 
   const klz = style || 'panel_generic_heading';
 
-  const createButton = (icon, tooltip, tooltipId, handleClick) => (
-    <OverlayTrigger
-      delayShow={1000}
-      placement="top"
-      overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}
-    >
-      <Button variant="light" size="sm" onClick={handleClick}>
-        {icon}
-      </Button>
-    </OverlayTrigger>
-  );
+  const createButton = (icon, tooltip, tooltipId, handleClick) => {
+    return (
+      <OverlayTrigger
+        key={`${layer.key}-${tooltipId}`}
+        delayShow={1000}
+        placement="top"
+        overlay={<Tooltip id={`tooltip-${layer.key}-${tooltipId}`}>{tooltip}</Tooltip>}
+      >
+        <Button key={`btn-${layer.key}-${tooltipId}`} variant="light" size="sm" onClick={handleClick}>
+          {icon}
+        </Button>
+      </OverlayTrigger>
+    );
+  };
 
   const btnLinkAna = hasAi
     ? createButton(
@@ -138,7 +141,7 @@ const PanelDnD = (props) => {
   const btnLayer = wf ? (
     <>
       {isSys ? null : (
-        <ButtonGroup>
+        <ButtonGroup key={`${layer.key}-group1`}>
           {GenPropertiesDate({
             isSpCall: false,
             isAtLayer: true,
@@ -148,7 +151,7 @@ const PanelDnD = (props) => {
           })}
         </ButtonGroup>
       )}
-      <ButtonGroup className="me-2">
+      <ButtonGroup className="me-2" key={`${layer.key}-group2`}>
         {btnReaction}
         {btnLinkAna}
         {isSys ? null : btnAdd}
@@ -157,7 +160,7 @@ const PanelDnD = (props) => {
   ) : (
     <>
       {isSys ? null : (
-        <ButtonGroup>
+        <ButtonGroup key={`${layer.key}-group3`}>
           {GenPropertiesDate({
             isSpCall: false,
             isAtLayer: true,
@@ -167,7 +170,7 @@ const PanelDnD = (props) => {
           })}
         </ButtonGroup>
       )}
-      <ButtonGroup className="me-1">
+      <ButtonGroup className="me-1" key={`${layer.key}-group4`}>
         {btnReaction}
         {btnLinkAna}
         {isSys ? null : btnAdd}

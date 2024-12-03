@@ -50,7 +50,11 @@ const Prop = ({
       id={`accordion_design_props_${layerKey}`}
       defaultActiveKey={isSys ? '1' : undefined}
     >
-      <Accordion.Item className="panel_generic_properties pb-3" eventKey="1">
+      <Accordion.Item
+        key={`_accordion_design_props_item_${layerKey}`}
+        className="panel_generic_properties pb-3"
+        eventKey="1"
+      >
         <CustomToggleContent
           dnd={dnd}
           eventKey="1"

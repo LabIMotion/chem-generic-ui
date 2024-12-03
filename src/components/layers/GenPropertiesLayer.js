@@ -117,13 +117,13 @@ export default class GenPropertiesLayer extends Component {
         if (f.type === FieldTypes.F_DATETIME_RANGE) {
           // If there are fields in the current row, push them to the rows array
           if (op.length > 0) {
-            vs.push(<Row key={vs.length}>{op}</Row>);
+            vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
             op = [];
             remainingWidth = 12;
           }
           vs.push(
             <DateTimeRange
-              key={vs.length}
+              key={`${key}_${vs.length}`}
               layer={layer}
               opt={{ f_obj: f }}
               onInputChange={this.handleDTRChange}
@@ -135,7 +135,7 @@ export default class GenPropertiesLayer extends Component {
         if (f.hasOwnRow) {
           // If there are fields in the current row, push them to the rows array
           if (op.length > 0) {
-            vs.push(<Row key={vs.length}>{op}</Row>);
+            vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
             op = [];
             remainingWidth = 12;
           }
@@ -152,7 +152,7 @@ export default class GenPropertiesLayer extends Component {
         }
 
         if ((perRow === 5 && columnCount >= 5) || remainingWidth < fieldWidth) {
-          vs.push(<Row key={vs.length}>{op}</Row>);
+          vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
           op = [];
           remainingWidth = 12;
           columnCount = 0;
@@ -223,7 +223,7 @@ export default class GenPropertiesLayer extends Component {
           idx === fields.length - 1 ||
           (perRow === 5 && columnCount >= 5)
         ) {
-          vs.push(<Row key={vs.length}>{op}</Row>);
+          vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
           op = [];
           remainingWidth = 12;
           columnCount = 0;
@@ -232,9 +232,8 @@ export default class GenPropertiesLayer extends Component {
     });
 
     if (op.length > 0) {
-      vs.push(<Row key={vs.length}>{op}</Row>);
+      vs.push(<Row key={`${key}_${vs.length}`}>{op}</Row>);
     }
-
     return vs;
   }
 
