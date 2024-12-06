@@ -246,7 +246,7 @@ export default class TableDef extends React.Component {
             defaultColDef={{ resizable: true }}
             enableColResize
             columnDefs={this.columnDefs}
-            rowSelection="single"
+            rowSelection={{ type: 'single' }}
             onGridReady={this.onGridReady}
             onFirstDataRendered={this.onFirstDataRendered}
             rowData={sub}

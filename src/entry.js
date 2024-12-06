@@ -9,6 +9,7 @@ import './assets/template.scss';
 import {
   absOlsTermId,
   absOlsTermLabel,
+  genUnits,
   isLayerInWF,
   resetProperties,
   reUnit,
@@ -24,7 +25,14 @@ export { buildInitWF } from './components/tools/orten';
 export { default as GenericElCriteriaModal } from './components/elements/GenericElCriteriaModal';
 export { default as SegmentCriteria } from './components/elements/SegmentCriteria';
 export { default as InlineMetadata } from './components/addon/DatasetMetadata';
-export { absOlsTermId, absOlsTermLabel, isLayerInWF, resetProperties, reUnit };
+export {
+  absOlsTermId,
+  absOlsTermLabel,
+  genUnits as getGenSI,
+  isLayerInWF,
+  resetProperties,
+  reUnit,
+};
 export { default as RepoNewModal } from './components/repo/RepoNewModal';
 // is ready to replace PreviewModal and RevisionViewerBtn in REPO
 export { default as GenVersionsBtn } from './components/designer/preview/VersionListBtn';

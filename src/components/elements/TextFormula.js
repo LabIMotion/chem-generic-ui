@@ -225,7 +225,7 @@ export default class TextFormula extends React.Component {
           <AgGridReact
             enableColResize
             defaultColDef={{ suppressMovable: true }}
-            rowSelection="single"
+            rowSelection={{ type: 'single' }}
             onGridReady={this.onGridReady}
             rowData={sub}
             singleClickEdit

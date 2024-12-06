@@ -230,7 +230,7 @@ export default class GroupFields extends React.Component {
           <AgGridReact
             enableColResize
             columnDefs={this.columnDefs}
-            rowSelection="single"
+            rowSelection={{ type: 'single' }}
             onGridReady={this.onGridReady}
             rowData={sub}
             singleClickEdit

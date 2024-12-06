@@ -67,9 +67,11 @@ class GenGrid extends Component {
           <AgGridReact
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}
-            suppressRowClickSelection // https://www.ag-grid.com/react-data-grid/row-selection/
+            rowSelection={{
+              type: 'single',
+              enableClickSelection: false,
+            }}
             suppressCellFocus // https://www.ag-grid.com/react-data-grid/grid-options/#reference-selection
-            rowSelection="single"
             pagination={false} // disabled pagination & do not set domLayout="autoHeight"
             paginationPageSize={pageSize}
             onGridReady={this.onGridReady}
