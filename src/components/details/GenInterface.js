@@ -45,7 +45,6 @@ const GenInterface = (props) => {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
     generic,
-    dic,
     fnChange,
     extLayers,
     genId,
@@ -437,7 +436,6 @@ const GenInterface = (props) => {
   ai = ai.filter(x => !x.is_new); // get ai is not new
 
   const paramsLayersLayout = {
-    dic,
     layers: generic.properties.layers,
     options: generic.properties_release?.select_options || {},
     funcChange: handleInputChange,
@@ -487,7 +485,6 @@ const GenInterface = (props) => {
 
 GenInterface.propTypes = {
   generic: PropTypes.object.isRequired,
-  dic: PropTypes.object,
   fnChange: PropTypes.func.isRequired,
   extLayers: PropTypes.array,
   genId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -501,7 +498,6 @@ GenInterface.propTypes = {
 
 GenInterface.defaultProps = {
   extLayers: [],
-  dic: {},
   isSearch: false,
   genId: 0,
   fnNavi: () => {},

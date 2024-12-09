@@ -83,7 +83,6 @@ export default class GenPropertiesLayer extends Component {
 
   views() {
     const {
-      dic,
       layer,
       selectOptions,
       id,
@@ -176,7 +175,6 @@ export default class GenPropertiesLayer extends Component {
             <GenProperties
               key={`${id}_${layer}_${f.field}_GenPropertiesLayer`}
               layers={layers}
-              dic={dic}
               id={id}
               layer={layer}
               classStr={classStr || ''}
@@ -300,7 +298,6 @@ export default class GenPropertiesLayer extends Component {
 
 GenPropertiesLayer.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // element id or new id
-  dic: PropTypes.object,
   layer: PropTypes.object,
   selectOptions: PropTypes.object,
   onChange: PropTypes.func.isRequired,
@@ -319,7 +316,6 @@ GenPropertiesLayer.propTypes = {
 
 GenPropertiesLayer.defaultProps = {
   id: 0,
-  dic: {},
   selectOptions: {},
   onClick: () => {},
   isPreview: false,

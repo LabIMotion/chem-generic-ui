@@ -435,9 +435,8 @@ const GenPropertiesTable = (opt) => (
 
 const GenPropertiesText = (opt) => {
   const [id] = useState(uuid());
-  const { f_obj: fObj, dic } = opt;
-  let showVal = opt.value;
-  // if (fObj?.readonly && fObj?.is_voc === true) return GenLabel(opt, fObj.value);
+  const { f_obj: fObj } = opt;
+  const showVal = opt.value;
   if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
@@ -447,10 +446,6 @@ const GenPropertiesText = (opt) => {
   if (fObj?.is_voc === true && fObj?.opid >= 7) {
     readOnly = true;
     className = 'readonly';
-  }
-
-  if (fObj?.is_voc === true && fObj?.opid === 8) {
-    showVal = dic[fObj.identifier] || showVal;
   }
 
   return (
