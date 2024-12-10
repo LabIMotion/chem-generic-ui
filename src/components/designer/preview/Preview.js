@@ -2,15 +2,17 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, ButtonGroup, Col, Row } from 'react-bootstrap';
+import Badge from 'react-bootstrap/Badge';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import cloneDeep from 'lodash/cloneDeep';
 // import LoadingActions from 'src/stores/alt/actions/LoadingActions';
 import { downloadFile } from 'generic-ui-core';
-import ButtonConfirm from '../../fields/ButtonConfirm';
 import ButtonTooltip from '../../fields/ButtonTooltip';
 import GenInterface from '../../details/GenInterface';
 import { responseExt } from '../../../utils/template/action-handler';
 import { notifySuccess } from '../../../utils/template/designer-message';
+import VersionBlock from './VersionBlock';
 
 export default class Preview extends Component {
   constructor(props) {
@@ -57,11 +59,10 @@ export default class Preview extends Component {
 
   compare(params) {
     const { revisions } = this.props;
-    // LoadingActions.start();
-    this.setState(
-      { revisions: cloneDeep(revisions), compareUUID: params.uuid } // ,
-      // LoadingActions.stop()
-    );
+    this.setState({
+      revisions: cloneDeep(revisions),
+      compareUUID: params.uuid,
+    });
   }
 
   delRevision(params) {
@@ -101,67 +102,7 @@ export default class Preview extends Component {
     const { compareUUID, revisions, fullScreen } = this.state;
     if (revisions.length < 1) return null;
     const { data, src, canDL } = this.props;
-    const t = (v, idx) => {
-      const s = v.uuid === compareUUID ? 'generic_block_select' : '';
-      const ver = v.released_at ? `Id: ${v.uuid}` : 'Id:';
-      let at = v.released_at
-        ? `Released at: ${v.released_at} (UTC)`
-        : '(In Progress)';
-      if (src === 'properties') {
-        at = `saved at: ${v.released_at} (UTC)`;
-      }
 
-      const del =
-        v.released_at && idx > 1 ? (
-          <ButtonConfirm
-            msg="Delete this version permanently?"
-            fnClick={this.delRevision}
-            fnParams={{ id: v.id, data, uuid: v.uuid }}
-          />
-        ) : null;
-      const ret = v.released_at ? (
-        <ButtonConfirm
-          msg="Retrieve this version?"
-          fnClick={this.retrieveRevision}
-          fnParams={{ id: v.id }}
-          fa="faReply"
-        />
-      ) : null;
-      const dl = canDL ? (
-        <ButtonTooltip
-          idf="ver_download"
-          fnClick={this.dlRevision}
-          element={{ id: v.id }}
-          fa="faDownload"
-          place="top"
-          bs="default"
-        />
-      ) : null;
-      return (
-        <div className={`generic_version_block ${s}`} key={v.uuid}>
-          <div>
-            <div style={{ width: '100%' }}>{ver}</div>
-            <div style={{ color: 'blue' }}>{v.version}</div>
-            <div style={{ fontSize: '0.8rem' }}> #{idx + 1}</div>
-          </div>
-          <div>
-            <div style={{ width: '100%' }}>{at}</div>
-            <ButtonGroup size="sm" className="gap-1">
-              {del}
-              {dl}
-              {ret}
-              <ButtonTooltip
-                idf="ver_view"
-                fnClick={this.compare}
-                element={{ uuid: v.uuid }}
-                fa="faEye"
-                place="top"
-              />
-            </ButtonGroup>
-          </div>
-        </div>
-      );
-    };
     const options = [];
     const selected =
       (revisions || []).find((r) => r.uuid === compareUUID) || {};
@@ -200,9 +141,22 @@ export default class Preview extends Component {
     const his = fullScreen ? null : (
       <Col md={4}>
         <b>Only show the latest 10 revisions.</b>
-        {revisions.map((r, idx) => t(r, idx))}
+        {revisions.map((rev, idx) => (
+          <VersionBlock
+            key={rev.uuid}
+            data={data}
+            download={{ canDL, fnDownload: this.dlRevision }}
+            idxSelect={`${idx}:${compareUUID}`}
+            rev={rev}
+            src={src}
+            fnDelete={this.delRevision}
+            fnRetrieve={this.retrieveRevision}
+            fnView={this.compare}
+          />
+        ))}
       </Col>
     );
+
     const contentCol = fullScreen ? 12 : 8;
     const screenFa = fullScreen
       ? 'faDownLeftAndUpRightToCenter'
@@ -236,7 +190,7 @@ export default class Preview extends Component {
 }
 
 Preview.propTypes = {
-  data: PropTypes.object.isRequired,
+  data: PropTypes.object,
   revisions: PropTypes.array,
   fnRetrieve: PropTypes.func,
   fnDelete: PropTypes.func,
@@ -245,6 +199,7 @@ Preview.propTypes = {
 };
 
 Preview.defaultProps = {
+  data: {},
   revisions: [],
   fnRetrieve: () => {},
   fnDelete: () => {},
