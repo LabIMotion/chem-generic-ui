@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Col, Form, InputGroup } from 'react-bootstrap';
-import renderDeleteButton from './renderDeleteButton';
+import renderDeleteButton from '../../admin/renderDeleteButton';
 
 const PropFieldList = (props) => {
   const { generic, root, fnInputChg, fnDel } = props;
@@ -46,11 +46,6 @@ PropFieldList.propTypes = {
   root: PropTypes.string.isRequired,
   fnInputChg: PropTypes.func.isRequired,
   fnDel: PropTypes.func.isRequired,
-};
-
-Option.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
 };
 
 export default PropFieldList;

@@ -48,9 +48,4 @@ SelectOptionList.propTypes = {
   fnDel: PropTypes.func.isRequired,
 };
 
-Option.propTypes = {
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-};
-
 export default SelectOptionList;
