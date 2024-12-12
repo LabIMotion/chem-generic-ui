@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import LTooltip from '../../shared/LTooltip';
 import LayerManager from '../../../utils/desMgr';
 import ButtonConfirm from '../../fields/ButtonConfirm';
+import Constants from '../../tools/Constants';
 
 const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
   const [rowData, setRowData] = useState([]);
@@ -98,15 +99,10 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
 
   return (
     <div
-      className="ag-theme-alpine"
+      className={Constants.GRID_THEME.ALPINE.VALUE}
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
-      <AgGridReact
-        columnDefs={columnDefs}
-        rowData={rowData}
-        domLayout="normal"
-        suppressAutoSize
-      />
+      <AgGridReact columnDefs={columnDefs} rowData={rowData} suppressAutoSize />
     </div>
   );
 };

@@ -142,8 +142,8 @@ const PropLayers = (props) => {
     );
 
     const layerHeaderButtons = (
-      <div onClick={(e) => e.stopPropagation()}>
-        <ButtonGroup className="me-2">
+      <div className="d-flex">
+        <div className="me-2">
           <NewFieldBtn fnUpdate={onFieldAdd} layer={layer}>
             <VocabularyListBtn
               element={data}
@@ -151,7 +151,7 @@ const PropLayers = (props) => {
               layer={layer}
             />
           </NewFieldBtn>
-        </ButtonGroup>
+        </div>
         <ButtonGroup className="me-2">
           <LayerSaveBtn layer={layer} data={data} />
         </ButtonGroup>

@@ -42,7 +42,7 @@ class GenGrid extends Component {
         if (changes.length > 0 || updated) {
           this.gridApi.setGridOption('rowData', gridData);
           if (selected) {
-            this.gridApi.forEachNode(node => {
+            this.gridApi.forEachNode((node) => {
               node.setSelected(node.data.id === selected.id);
             });
           }
@@ -51,7 +51,7 @@ class GenGrid extends Component {
     }
   }
 
-  onGridReady = params => {
+  onGridReady = (params) => {
     const { gridData } = this.props;
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
@@ -68,8 +68,9 @@ class GenGrid extends Component {
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}
             rowSelection={{
-              type: 'single',
-              enableClickSelection: false,
+              mode: 'singleRow',
+              checkboxes: false,
+              enableClickSelection: true,
             }}
             suppressCellFocus // https://www.ag-grid.com/react-data-grid/grid-options/#reference-selection
             pagination={false} // disabled pagination & do not set domLayout="autoHeight"
@@ -90,6 +91,9 @@ GenGrid.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGrid.defaultProps = { pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE, theme: Constants.GRID_THEME.BALHAM.VALUE };
+GenGrid.defaultProps = {
+  pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGrid;

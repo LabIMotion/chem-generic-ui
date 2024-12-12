@@ -353,7 +353,11 @@ export default class FieldCondEditModal extends Component {
               >
                 <AgGridReact
                   defaultColDef={{ suppressMovable: true, resizable: true }}
-                  rowSelection={{ type: 'single' }}
+                  rowSelection={{
+                    mode: 'singleRow',
+                    checkboxes: false,
+                    enableClickSelection: true,
+                  }}
                   onGridReady={this.onGridReady}
                   rowData={sub}
                   singleClickEdit

@@ -109,21 +109,6 @@ const Designer = (_props) => {
             theme={theme}
           />
         );
-      case Constants.GENERIC_TYPES.VOCABULARY:
-        return (
-          <GenGridVocab
-            fnCopyKlass={fnCopy}
-            fnDeActivateKlass={fnActive}
-            fnDownloadKlass={fnDownload}
-            fnEditKlass={fnUpdate}
-            genericType={genericType}
-            fnShowProp={onDataSelected}
-            // fnShowPropJson={() => {}}
-            gridData={gridData}
-            pageSize={getPageSizeForTheme(theme)}
-            theme={theme}
-          />
-        );
       default:
         return <>Undefined Data.</>;
     }

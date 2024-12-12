@@ -5,6 +5,7 @@ import ActionRenderer from './renderers/ActionRenderer';
 import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
+import Constants from '../tools/Constants';
 
 const IconRenderer = (params) => {
   const { value, iconStyle } = params;
@@ -114,6 +115,9 @@ GenGridEl.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGridEl.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGridEl.defaultProps = {
+  pageSize: 10,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGridEl;

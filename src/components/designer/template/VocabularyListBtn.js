@@ -1,6 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import { handleAddVocabulary } from '../../../utils/template/field-handler';
@@ -41,39 +40,36 @@ const VocabularyListBtn = (props) => {
           {FIcons.faSpellCheck}
         </Button>
       </LTooltip>
-      {show &&
-        ReactDOM.createPortal(
-          <Modal
-            centered
-            show={show}
-            onHide={handleClose}
-            dialogClassName="gu_modal-68w"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <VocabGrid
-                onVocSelect={handleSelectVoc}
-                onVocDelete={handleDeleteVoc}
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <LTooltip idf="close">
-                <Button
-                  variant="primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleClose();
-                  }}
-                >
-                  Close
-                </Button>
-              </LTooltip>
-            </Modal.Footer>
-          </Modal>,
-          document.body // Mount the modal to the body
-        )}
+
+      <Modal
+        centered
+        show={show}
+        onHide={handleClose}
+        dialogClassName="gu_modal-68w"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <VocabGrid
+            onVocSelect={handleSelectVoc}
+            onVocDelete={handleDeleteVoc}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <LTooltip idf="close">
+            <Button
+              variant="primary"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClose();
+              }}
+            >
+              Close
+            </Button>
+          </LTooltip>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

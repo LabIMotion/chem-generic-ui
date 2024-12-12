@@ -4,14 +4,15 @@ import PropTypes from 'prop-types';
 import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
+import Constants from '../tools/Constants';
 
-const GenGridDs = props => {
+const GenGridDs = (props) => {
   const { gridData, pageSize, theme, fnDeActivateKlass, fnShowProp } = props;
   const columnDefs = [
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
+      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     {
@@ -61,6 +62,9 @@ GenGridDs.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGridDs.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGridDs.defaultProps = {
+  pageSize: 10,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGridDs;

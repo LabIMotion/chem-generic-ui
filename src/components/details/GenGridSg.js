@@ -5,8 +5,9 @@ import ActionRenderer from './renderers/ActionRenderer';
 import ActiveRenderer from './renderers/ActiveRenderer';
 import TemplateRenderer from './renderers/TemplateRenderer';
 import GenGrid from './GenGrid';
+import Constants from '../tools/Constants';
 
-const BelongsToRenderer = params => {
+const BelongsToRenderer = (params) => {
   const { data } = params;
   return (
     <>
@@ -17,7 +18,7 @@ const BelongsToRenderer = params => {
   );
 };
 
-const GenGridSg = props => {
+const GenGridSg = (props) => {
   const {
     gridData,
     klasses,
@@ -35,7 +36,7 @@ const GenGridSg = props => {
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
+      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     {
@@ -98,6 +99,7 @@ GenGridSg.propTypes = {
   klasses: PropTypes.array.isRequired,
   fnCopyKlass: PropTypes.func.isRequired,
   fnDeActivateKlass: PropTypes.func.isRequired,
+  fnDownloadKlass: PropTypes.func.isRequired,
   fnDeleteKlass: PropTypes.func.isRequired,
   fnEditKlass: PropTypes.func.isRequired,
   genericType: PropTypes.string.isRequired,
@@ -107,6 +109,9 @@ GenGridSg.propTypes = {
   theme: PropTypes.string,
 };
 
-GenGridSg.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGridSg.defaultProps = {
+  pageSize: 10,
+  theme: Constants.GRID_THEME.BALHAM.VALUE,
+};
 
 export default GenGridSg;

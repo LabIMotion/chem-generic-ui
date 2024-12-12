@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { AgGridReact } from 'ag-grid-react';
 import LTooltip from '../../shared/LTooltip';
 import VocabManager from '../../../utils/vocMgr';
@@ -14,7 +20,83 @@ const editableSource = [
 ];
 
 const VocabGrid = ({ onVocSelect, onVocDelete }) => {
+  const gridRef = useRef();
+  const qfRef = useRef();
+  const gridStyle = useMemo(() => ({ height: '600px', width: '100%' }), []);
   const [rowData, setRowData] = useState([]);
+  const [columnDefs] = useState([
+    {
+      headerName: 'Action',
+      cellRenderer: (params) => (
+        <>
+          <LTooltip idf="voc_add2tpl">
+            <Button className="btn-gxs" onClick={() => onVocSelect(params)}>
+              Add
+            </Button>
+          </LTooltip>
+          {editableSource.includes(params.data.source) && (
+            <ButtonConfirm
+              cls="btn-gxs gu-ml-1"
+              msg="Delete this Lab-Vocab permanently?"
+              fnClick={onVocDelete}
+              fnParams={params}
+              disabled={false}
+            />
+          )}
+        </>
+      ),
+      sortable: false,
+      width: 100,
+    },
+    {
+      field: 'id',
+      headerName: 'ID',
+      sortable: false,
+      width: 70,
+    },
+    {
+      field: 'name',
+      headerName: 'Field Name',
+      width: 200,
+    },
+    {
+      field: 'label',
+      headerName: 'Display Name',
+      width: 200,
+    },
+    {
+      field: 'field_type',
+      headerName: 'Type',
+      width: 120,
+    },
+    {
+      field: 'source',
+      headerName: 'Ref. Source',
+      width: 120,
+    },
+    {
+      field: 'voc.source_name',
+      headerName: 'Ref. Source Name',
+      width: 200,
+    },
+    {
+      field: 'layer_id',
+      headerName: 'Ref. Source Layer',
+      width: 200,
+    },
+    {
+      field: 'ontology.short_form',
+      headerName: 'Ref. Terminology',
+      width: 120,
+    },
+  ]);
+  const defaultColDef = useMemo(() => {
+    return {
+      minWidth: 70,
+      filter: false,
+      sortable: true,
+    };
+  }, []);
 
   useEffect(() => {
     const fetchVocabularies = async () => {
@@ -26,98 +108,29 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
     fetchVocabularies();
   }, []);
 
-  const columnDefs = [
-    {
-      headerName: 'Action',
-      cellRenderer: (params) => (
-        <>
-          <LTooltip idf="voc_add2tpl">
-            <Button className="btn-gxs" onClick={() => onVocSelect(params)}>
-              Add
-            </Button>
-          </LTooltip>
-          <ButtonConfirm
-            cls="btn-gxs gu-ml-1"
-            msg="Delete this Lab-Vocab permanently?"
-            fnClick={onVocDelete}
-            fnParams={params}
-            disabled={!editableSource.includes(params.data.source)}
-          />
-        </>
-      ),
-      sortable: false,
-      filter: false,
-      width: 120,
-    },
-    {
-      field: 'id',
-      headerName: 'ID',
-      sortable: false,
-      filter: false,
-      width: 70,
-    },
-    {
-      field: 'name',
-      headerName: 'Field Name',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'label',
-      headerName: 'Display Name',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'field_type',
-      headerName: 'Type',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'source',
-      headerName: 'Ref. Source',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'voc.source_name',
-      headerName: 'Ref. Source Name',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'layer_id',
-      headerName: 'Ref. Source Layer',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-    {
-      field: 'ontology.short_form',
-      headerName: 'Ref. Terminology',
-      sortable: true,
-      filter: true,
-      flex: 1,
-    },
-  ];
+  const onFilterTextBoxChanged = useCallback(() => {
+    gridRef.current.api.setGridOption('quickFilterText', qfRef.current.value);
+  }, []);
 
   return (
-    <div
-      className="ag-theme-alpine"
-      style={{ height: '600px', width: '100%', overflow: 'auto' }}
-    >
-      <AgGridReact
-        columnDefs={columnDefs}
-        rowData={rowData}
-        domLayout="normal"
-        suppressAutoSize
-      />
+    <div>
+      <div className="mb-2">
+        <Form>
+          <Form.Control
+            ref={qfRef}
+            placeholder="Enter text to filter..."
+            onChange={onFilterTextBoxChanged}
+          />
+        </Form>
+      </div>
+      <div className={Constants.GRID_THEME.ALPINE.VALUE} style={gridStyle}>
+        <AgGridReact
+          ref={gridRef}
+          columnDefs={columnDefs}
+          defaultColDef={defaultColDef}
+          rowData={rowData}
+        />
+      </div>
     </div>
   );
 };
