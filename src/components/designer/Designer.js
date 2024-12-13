@@ -12,7 +12,6 @@ import Constants from '../tools/Constants';
 import GenGridEl from '../details/GenGridEl';
 import GenGridSg from '../details/GenGridSg';
 import GenGridDs from '../details/GenGridDs';
-import GenGridVocab from '../details/GenGridVocab';
 import getPageSizeForTheme from '../../utils/grid';
 import Template from './template/Template';
 import AttrUploadBtn from './AttrUploadBtn';

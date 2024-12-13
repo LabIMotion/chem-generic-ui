@@ -35,7 +35,9 @@ AttrUploadBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  fnUpload: PropTypes.func.isRequired,
+  fnUpload: PropTypes.func,
 };
+
+AttrUploadBtn.defaultProps = { fnUpload: () => {} };
 
 export default AttrUploadBtn;

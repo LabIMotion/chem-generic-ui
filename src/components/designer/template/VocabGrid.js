@@ -19,6 +19,12 @@ const editableSource = [
   Constants.GENERIC_TYPES.DATASET,
 ];
 
+const defaultColDef = {
+  minWidth: 70,
+  filter: false,
+  sortable: true,
+};
+
 const VocabGrid = ({ onVocSelect, onVocDelete }) => {
   const gridRef = useRef();
   const qfRef = useRef();
@@ -90,13 +96,6 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       width: 120,
     },
   ]);
-  const defaultColDef = useMemo(() => {
-    return {
-      minWidth: 70,
-      filter: false,
-      sortable: true,
-    };
-  }, []);
 
   useEffect(() => {
     const fetchVocabularies = async () => {

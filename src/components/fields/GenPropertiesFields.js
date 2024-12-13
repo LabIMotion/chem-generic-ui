@@ -5,7 +5,7 @@
 /* eslint-disable no-eval */
 /* eslint-disable no-restricted-globals */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Button,
   Form,
@@ -13,15 +13,18 @@ import {
   ListGroup,
   ListGroupItem,
 } from 'react-bootstrap';
-// import DatePicker, { registerLocale } from 'react-datepicker';
-// import ptBR from 'date-fns/locale/pt-BR';
 import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
 import filter from 'lodash/filter';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
-import { downloadFile, genUnit, unitConvToBase } from 'generic-ui-core';
+import {
+  downloadFile,
+  genUnit,
+  unitConvToBase,
+  FieldTypes,
+} from 'generic-ui-core';
 import DateTimeRange from './DateTimeRange';
 import FieldHeader from './FieldHeader';
 import { fieldCls, frmSelSty, genUnitSup } from '../tools/utils';
@@ -32,9 +35,6 @@ import DropReaction from '../dnd/DropReaction';
 import ButtonDatePicker from './ButtonDatePicker';
 import FIcons from '../icons/FIcons';
 import LTooltip from '../shared/LTooltip';
-
-// registerLocale('ptBR', ptBR);
-// import 'react-datepicker/dist/react-datepicker.css';
 
 const GenPropertiesCalculate = (opt) => {
   const fields = (opt.layer && opt.layer.fields) || [];
@@ -295,60 +295,53 @@ const GenLabel = (opt, value) => (
 );
 
 const GenPropertiesInputGroup = (opt) => {
-  const fLab = (e) => (
-    <div key={uuid()} className="form-control g_input_group_label">
-      {e.value}
-    </div>
+  const { f_obj: fObj, isSpCall, onSubChange } = opt;
+  const handleSubChange = useCallback(
+    (event, id) => {
+      onSubChange(event, id, fObj);
+    },
+    [onSubChange, fObj]
   );
-  const fTxt = (e) => (
-    <Form.Control
-      className="g_input_group"
-      key={e.id}
-      type={e.type}
-      name={e.id}
-      value={e.value || ''}
-      onChange={(o) => opt.onSubChange(o, e.id, opt.f_obj)}
-    />
-  );
-  const fUnit = (e) => (
-    <span
-      key={`${e.id}_GenPropertiesInputGroup`}
-      className="input-group"
-      style={{ width: '100%' }}
-    >
+  const klz = fieldCls(isSpCall);
+  const subs = fObj?.sub_fields?.map((e) => {
+    if (e.type === FieldTypes.F_LABEL) {
+      return (
+        <InputGroup.Text key={`_label_${e.id}`}>{e.value}</InputGroup.Text>
+      );
+    }
+    if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
+      return (
+        <React.Fragment key={`_fra_${e.id}`}>
+          <Form.Control
+            type="number"
+            name={e.id}
+            value={e.value}
+            onChange={(o) => handleSubChange(o, e.id, fObj)}
+            min={1}
+          />
+          <Button
+            onClick={() => handleSubChange(e, e.id, fObj)}
+            variant="success"
+          >
+            {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
+          </Button>
+        </React.Fragment>
+      );
+    }
+    return (
       <Form.Control
         key={e.id}
-        type="number"
+        type={e.type}
         name={e.id}
-        value={e.value}
-        onChange={(o) => opt.onSubChange(o, e.id, opt.f_obj)}
-        min={1}
+        value={e.value || ''}
+        onChange={(o) => handleSubChange(o, e.id, fObj)}
       />
-      <Button
-        onClick={() => opt.onSubChange(e, e.id, opt.f_obj)}
-        variant="success"
-      >
-        {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
-      </Button>
-    </span>
-  );
-  const subs =
-    opt.f_obj &&
-    opt.f_obj.sub_fields &&
-    opt.f_obj.sub_fields.map((e) => {
-      if (e.type === 'label') {
-        return fLab(e);
-      }
-      if (e.type === 'system-defined') {
-        return fUnit(e);
-      }
-      return fTxt(e);
-    });
-  const klz = fieldCls(opt.isSpCall);
+    );
+  });
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
-      <InputGroup style={{ display: 'flex' }}>{subs}</InputGroup>
+      <InputGroup>{subs}</InputGroup>
     </Form.Group>
   );
 };

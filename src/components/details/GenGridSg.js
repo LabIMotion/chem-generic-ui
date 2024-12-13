@@ -1,5 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ActionRenderer from './renderers/ActionRenderer';
 import ActiveRenderer from './renderers/ActiveRenderer';
@@ -32,57 +32,67 @@ const GenGridSg = (props) => {
     genericType,
     fnShowProp,
   } = props;
-  const columnDefs = [
-    {
-      hide: true,
-      headerName: '#',
-      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
-      sortable: false,
-    },
-    {
-      headerName: 'Action',
-      cellRenderer: ActionRenderer,
-      minWidth: 50,
-      cellRendererParams: {
-        fnCopy: fnCopyKlass,
-        fnDelete: fnDeleteKlass,
-        fnEdit: fnEditKlass,
-        fnDownload: fnDownloadKlass,
-        genericType,
-        klasses,
+
+  const columnDefs = useMemo(
+    () => [
+      {
+        hide: true,
+        headerName: '#',
+        valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
+        sortable: false,
       },
-      sortable: false,
-      filter: false,
-    },
-    {
-      headerName: 'Active',
-      field: 'is_active',
-      minWidth: 50,
-      cellRenderer: ActiveRenderer,
-      cellRendererParams: { fnDeActivate: fnDeActivateKlass },
-    },
-    { headerName: 'Segment label', field: 'label' },
-    { headerName: 'Description', field: 'desc' },
-    {
-      headerName: 'Belongs to',
-      field: 'element_klass.name',
-      minWidth: 50,
-      cellRenderer: BelongsToRenderer,
-    },
-    {
-      headerName: 'Template',
-      minWidth: 50,
-      cellRenderer: TemplateRenderer,
-      cellRendererParams: { fnShow: fnShowProp }, // ,fnShowJson: fnShowPropJson
-      sortable: false,
-      filter: false,
-    },
-    { headerName: 'Version', field: 'version' },
-    { headerName: 'Released at', field: 'released_at' },
-    { headerName: 'Updated at', field: 'updated_at' },
-    { headerName: 'Id', field: 'uuid' },
-    { headerName: 'Sync Time', field: 'sync_time' },
-  ];
+      {
+        headerName: 'Action',
+        cellRenderer: ActionRenderer,
+        cellRendererParams: {
+          fnCopy: fnCopyKlass,
+          fnDelete: fnDeleteKlass,
+          fnEdit: fnEditKlass,
+          fnDownload: fnDownloadKlass,
+          genericType,
+          klasses,
+        },
+        sortable: false,
+      },
+      {
+        headerName: 'Active',
+        field: 'is_active',
+        width: 100,
+        cellRenderer: ActiveRenderer,
+        cellRendererParams: { fnDeActivate: fnDeActivateKlass },
+      },
+      { headerName: 'Segment label', field: 'label' },
+      { headerName: 'Description', field: 'desc', flex: 1 },
+      {
+        headerName: 'Belongs to',
+        field: 'element_klass.name',
+        width: 100,
+        cellRenderer: BelongsToRenderer,
+      },
+      {
+        headerName: 'Template',
+        cellRenderer: TemplateRenderer,
+        width: 100,
+        cellRendererParams: { fnShow: fnShowProp },
+        sortable: false,
+      },
+      { headerName: 'Version', field: 'version', width: 100 },
+      { headerName: 'Released at', field: 'released_at' },
+      { headerName: 'Updated at', field: 'updated_at' },
+      { headerName: 'Id', field: 'uuid' },
+      { headerName: 'Sync Time', field: 'sync_time' },
+    ],
+    [
+      fnCopyKlass,
+      fnDeleteKlass,
+      fnEditKlass,
+      fnDownloadKlass,
+      fnDeActivateKlass,
+      fnShowProp,
+      genericType,
+      klasses,
+    ]
+  );
 
   return (
     <GenGrid
