@@ -11,6 +11,7 @@ const SamOption = (props) => {
   const fValue = (data[sField.id] && data[sField.id].value) || {};
   if (!fValue.is_new) return <div />;
   const rUUID = uuid();
+
   return (
     <div className="generic_sam_options">
       <LTooltip idf="associate_direct" placement="right">
@@ -20,9 +21,8 @@ const SamOption = (props) => {
           disabled={fValue.isAssoc}
           checked={fValue.cr_opt === 0}
           onChange={() => onChange({ node, subField: sField, crOpt: 0 })}
-        >
-          Current
-        </Form.Check>
+          label="Current"
+        />
       </LTooltip>
       <LTooltip idf="associate_split" placement="right">
         <Form.Check
@@ -30,9 +30,8 @@ const SamOption = (props) => {
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 1}
           onChange={() => onChange({ node, subField: sField, crOpt: 1 })}
-        >
-          Split
-        </Form.Check>
+          label="Split"
+        />
       </LTooltip>
       <LTooltip idf="associate_duplicate" placement="right">
         <Form.Check
@@ -40,9 +39,8 @@ const SamOption = (props) => {
           name={`dropS_${rUUID}`}
           checked={fValue.cr_opt === 2}
           onChange={() => onChange({ node, subField: sField, crOpt: 2 })}
-        >
-          Copy
-        </Form.Check>
+          label="Copy"
+        />
       </LTooltip>
     </div>
   );

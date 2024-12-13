@@ -200,6 +200,7 @@ const GenPropertiesDrop = (opt) => {
     : 'drop_generic_properties';
 
   let createOpt = null;
+
   if (opt.value?.is_new === true && opt.classStr) {
     createOpt = (
       <div className="sample_radios">
@@ -211,9 +212,8 @@ const GenPropertiesDrop = (opt) => {
             checked={opt.value.cr_opt === 0}
             onChange={() => opt.onChange({ ...opt.value, cr_opt: 0 })}
             inline
-          >
-            Current
-          </Form.Check>
+            label="Current"
+          />
         </LTooltip>
         <LTooltip idf="associate_split">
           <Form.Check
@@ -222,9 +222,8 @@ const GenPropertiesDrop = (opt) => {
             checked={opt.value.cr_opt === 1}
             onChange={() => opt.onChange({ ...opt.value, cr_opt: 1 })}
             inline
-          >
-            Split
-          </Form.Check>
+            label="Split"
+          />
         </LTooltip>
         <LTooltip idf="associate_duplicate">
           <Form.Check
@@ -233,9 +232,8 @@ const GenPropertiesDrop = (opt) => {
             checked={opt.value.cr_opt === 2}
             onChange={() => opt.onChange({ ...opt.value, cr_opt: 2 })}
             inline
-          >
-            Copy
-          </Form.Check>
+            label="Copy"
+          />
         </LTooltip>
       </div>
     );
