@@ -1,5 +1,42 @@
 # Chem-Generic-UI Changelog
 
+## [2.0.0]
+> 2025-01-04
+
+* Features and enhancements:
+  * Upgraded the main UI component.
+  * Introduced a new form layout for designers.
+  * Introduced the `Arrange Layers` and `Arrange Fields` feature for reordering the layers and fields.
+  * Expanded the `LabIMotion Vocabulary (Lab-Vocab)`, more vocabularies are added.
+  * Introduced a new toggle button for designers to switch between `Work Area` and `Preview` modes.
+  * Provided template version data for users.
+  * Introduced the `Quick Filter` feature for all grids.
+
+* Bug fixes:
+  * Fixed a JavaScript warning related to the missing key prop for unique elements.
+
+* Chores:
+  * Bumped react-bootstrap from 0.33.1 to 2.10.2.
+  * Bumped cross-spawn from 7.0.3 to 7.0.6.
+  * Bumped sass from 1.49.10 to 1.80.4.
+  * Bumped sass from 12.6.0 to 16.0.2.
+
+## [1.5.0]
+> 2024-11-30
+
+* Features and enhancements:
+  * LabIMotion Vocabulary (Lab-Vocab)
+    * [Concept of LabIMotion Vocabulary (Lab-Vocab)](https://doi.org/10.5281/zenodo.13881070)
+  * Generic Layer
+  * User Interface Foundation
+  * Extract "other solvent" for dataset.
+
+* Bug fixes:
+  * Fixed an issue where an unexpected page was dislayed when no dataset existed for the CV case.
+
+* Chores:
+  * Bumped express from 4.19.2 to 4.21.0.
+
 ## [1.4.9]
 > 2024-11-11
 
