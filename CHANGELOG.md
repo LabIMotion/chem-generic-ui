@@ -1,5 +1,43 @@
-
 # Chem-Generic-UI Changelog
+
+## [1.4.9]
+> 2024-11-11
+
+* Features and enhancements:
+  * Introduced the `Workflow for Segement` feature.
+  * Given the default wording 'Learn more' for the Designer Helper.
+
+* Bug fixes:
+  * Fixed an issue where an extra line was created in the CV template.
+  * Resolved a page-breaking error that occurred when reloading the template.
+  * Fixed an incorrect layout with the "datetime-range" type field.
+  * Corrected the layout problem for columns with the "hasOwnLine" attribute enabled.
+
+* Chores:
+  * Bumped webpack from 5.86.0 to 5.94.0.
+  * Bumped micromatch from 4.0.5 to 4.0.8.
+
+## [1.4.0]
+> 2024-08-22
+
+* Features and enhancements:
+  * Added image preview feature for the "Upload" type field when the uploaded file is an image.
+  * Introduced the `Drag Reaction to Element` feature for users.
+  * Introduced the feature to use the drag-and-drop functionality to arrange the layer or field order.
+  * Auto-mapping CV dataset data to reaction description.
+  * Added the ability for users to record their work steps and visualize them as a flow diagram.
+  * Refactored the "Date-Time" component in the layer header.
+  * Style: Better view size for template hub.
+  * Style: Aligned field styles for better consistency.
+  * Style: Selection options style to be vertically aligned.
+
+* Chores:
+  * Bumped ejs from 3.1.9 to 3.1.10
+  * Bumped ws from 7.5.9 to 7.5.10
+  * Bumped braces from 3.0.2 to 3.0.3
+  * Upgraded ag-grid to 32.0.1
+  * Upgraded nodejs to 18.20.3
+  * Upgraded yarn to 1.22.22
 
 ## [1.3.0]
 > 2024-04-24
