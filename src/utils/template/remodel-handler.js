@@ -40,6 +40,7 @@ export const remodel = (generic, klass) => {
   const newProps = cloneDeep(klass.properties_release);
   newProps.klass = generic.properties.klass;
   newProps.klass_uuid = klass.uuid;
+  const newPropsSelectOptions = newProps.select_options || {};
   Object.keys(newProps.layers).forEach((key) => {
     const newLayer = newProps.layers[key] || {};
     newLayer.ai = generic.properties.layers[key]?.ai || []; // copy linked analyses or []
@@ -77,6 +78,29 @@ export const remodel = (generic, klass) => {
         ) {
           newProps.layers[key].fields[idx].value =
             curType !== FieldTypes.V_UNDEFINED ? (curVal || '').toString() : '';
+        }
+        if (newFieldType === 'select-multi') {
+          newProps.layers[key].fields[idx].value = '';
+          if (
+            generic.properties.layers[key].fields[curIdx].type !== newFieldType
+          ) {
+            newProps.layers[key].fields[idx].sub_fields = [];
+          } else {
+            const newOptionLayers =
+              newProps.layers[key].fields[idx].option_layers;
+            const newOptions =
+              (newPropsSelectOptions[newOptionLayers] || {}).options || [];
+            if (newOptions.length < 1) {
+              newProps.layers[key].fields[idx].sub_fields = [];
+            } else {
+              const newOptionsKeys = new Set(newOptions.map((o) => o.key));
+              const cSubs =
+                generic.properties.layers[key].fields[curIdx].sub_fields || [];
+              newProps.layers[key].fields[idx].sub_fields = cSubs.filter((sf) =>
+                newOptionsKeys.has(sf.value)
+              );
+            }
+          }
         }
         if (newFieldType === FieldTypes.F_INTEGER) {
           const notInteger =

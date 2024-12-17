@@ -321,7 +321,11 @@ export const handleFieldInputChange = (
     _type,
   ];
   let value = '';
-  if (type === FieldTypes.F_SELECT || type === FieldTypes.F_SYSTEM_DEFINED) {
+  if (
+    [FieldTypes.F_SELECT, FieldTypes.F_SYSTEM_DEFINED, 'select-multi'].includes(
+      type
+    )
+  ) {
     ({ value } = event);
   } else if (type?.startsWith('drag')) {
     value = event;

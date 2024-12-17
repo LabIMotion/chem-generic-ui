@@ -24,7 +24,10 @@ const extractOptionsFromTable = (_layer, _data) => {
     // For each table field, a property "sub_fields" is an array of objects, each object has a property "type"
     // If the type is "select", then a property "option_layers" may exist, which is a string, and we use it to search the data?.properties_template?.select_options to get the options
     (selectField.sub_fields || []).forEach((subField) => {
-      if (subField.type === FieldTypes.F_SELECT && subField.option_layers) {
+      if (
+        [FieldTypes.F_SELECT, 'select-multi'].includes(subField.type) &&
+        subField.option_layers
+      ) {
         const optionLayerKey = subField.option_layers;
         if (data?.properties_template?.select_options?.[optionLayerKey]) {
           // Add the entire matching object to the result
@@ -47,8 +50,8 @@ const extractOptions = (_layer, _data) => {
   const layer = cloneDeep(_layer);
   const data = cloneDeep(_data);
   // Extract the "select" type fields
-  const selectFields = layer.fields.filter(
-    (field) => field.type === FieldTypes.F_SELECT
+  const selectFields = layer.fields.filter((field) =>
+    [FieldTypes.F_SELECT, 'select-multi'].includes(field.type)
   );
   // For each select field, use the option_layers to find the matching options
   selectFields.forEach((selectField) => {

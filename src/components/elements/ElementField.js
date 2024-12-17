@@ -84,9 +84,14 @@ class ElementField extends Component {
     onMove.onPosition(rid.key, target, source.fid);
   };
 
+  // e: Select event, orig: field type, fe: field, lk: layer key, fc: input change on 'Type', tp: type of input change, e.g. a select, a text, a checkbox, etc.
   handleChange(e, orig, fe, lk, fc, tp) {
     if (
-      (tp === FieldTypes.F_SELECT || tp === FieldTypes.F_SYSTEM_DEFINED) &&
+      [
+        FieldTypes.F_SELECT,
+        FieldTypes.F_SYSTEM_DEFINED,
+        'select-multi',
+      ].includes(tp) &&
       e === null
     ) {
       return;
@@ -135,7 +140,6 @@ class ElementField extends Component {
   }
 
   handleAddVoc(_params) {
-    console.log('handleAddVoc', _params);
     this.handleChange(_params);
   }
 
@@ -222,56 +226,61 @@ class ElementField extends Component {
     }
     typeOpts.sort((a, b) => a.value.localeCompare(b.value));
     const f = fieldObject;
-    const selectOptionsOpts =
-      f.type === FieldTypes.F_SELECT ? select_options : unitConfig;
+    const selectOptionsOpts = [FieldTypes.F_SELECT, 'select-multi'].includes(
+      f.type
+    )
+      ? select_options
+      : unitConfig;
     const selectOptionsVal =
       selectOptionsOpts?.find((o) => o.value === f.option_layers) || null;
-    const selectOptions =
-      f.type === FieldTypes.F_SELECT ||
-      f.type === FieldTypes.F_SYSTEM_DEFINED ? (
-        <>
-          <Form.Group as={Col}>
-            {f.type === FieldTypes.F_SELECT ? (
-              <LLabel>
-                <>
-                  {getFieldProps('options').label}&nbsp;
-                  {getFieldProps('options').fieldTooltip}
-                </>
-              </LLabel>
-            ) : (
-              <LLabel>
-                <>{getFieldProps('si').label}</>
-              </LLabel>
-            )}
-            <div style={{ display: 'flex' }}>
-              <span style={{ width: '100%' }}>
-                <Select
-                  styles={frmSelSty}
-                  name={f.field}
-                  multi={false}
-                  options={selectOptionsOpts}
-                  value={selectOptionsVal}
-                  onChange={(event) =>
-                    this.handleChange(
-                      event,
-                      f.option_layers,
-                      f.field,
-                      layerKey,
-                      'option_layers',
-                      f.type
-                    )
-                  }
-                />
-              </span>
-            </div>
-          </Form.Group>
-          {f.type === FieldTypes.F_SELECT ? null : (
-            <Form.Group as={Col} xs={2}>
-              <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
-            </Form.Group>
+    const selectOptions = [
+      FieldTypes.F_SYSTEM_DEFINED,
+      FieldTypes.F_SELECT,
+      'select-multi',
+    ].includes(f.type) ? (
+      <>
+        <Form.Group as={Col}>
+          {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? (
+            <LLabel>
+              <>
+                {getFieldProps('options').label}&nbsp;
+                {getFieldProps('options').fieldTooltip}
+              </>
+            </LLabel>
+          ) : (
+            <LLabel>
+              <>{getFieldProps('si').label}</>
+            </LLabel>
           )}
-        </>
-      ) : null;
+          <div style={{ display: 'flex' }}>
+            <span style={{ width: '100%' }}>
+              <Select
+                styles={frmSelSty}
+                name={f.field}
+                multi={false}
+                options={selectOptionsOpts}
+                value={selectOptionsVal}
+                onChange={(event) =>
+                  this.handleChange(
+                    event,
+                    f.option_layers,
+                    f.field,
+                    layerKey,
+                    'option_layers',
+                    f.type
+                  )
+                }
+              />
+            </span>
+          </div>
+        </Form.Group>
+        {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? null : (
+          <Form.Group as={Col} xs={2}>
+            <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
+          </Form.Group>
+        )}
+      </>
+    ) : null;
 
     const groupOptions = [FieldTypes.F_INPUT_GROUP].includes(f.type) ? (
       <Row className="mb-1">
@@ -493,6 +502,7 @@ class ElementField extends Component {
                     xs: [
                       FieldTypes.F_SELECT,
                       FieldTypes.F_SYSTEM_DEFINED,
+                      'select-multi',
                     ].includes(f.type)
                       ? 3
                       : undefined,

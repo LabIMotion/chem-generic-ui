@@ -69,6 +69,7 @@ class GenericDummy {
   }
 }
 
+// TODO: Remove this function, maybe not needed
 const inputEventVal = (event, type) => {
   if (type === FieldTypes.F_SELECT) {
     return event ? event.value : null;
@@ -271,6 +272,10 @@ const frmSelSty = {
     marginTop: '0',
     lineHeight: '29px',
   }),
+  multiValue: (base) => ({
+    ...base,
+    lineHeight: 'normal',
+  }),
   input: (base) => ({
     ...base,
     margin: '0',
@@ -284,6 +289,44 @@ const frmSelSty = {
     ...base,
     padding: '4px',
   }),
+};
+
+const storeOptions = (options) => {
+  // First check if options is an array
+  if (!Array.isArray(options)) {
+    return [];
+  }
+
+  // Empty array is valid
+  if (options.length === 0) {
+    return [];
+  }
+
+  // Check if all elements are objects with a 'value' property
+  if (
+    !options.every(
+      (item) => item && typeof item === 'object' && 'value' in item
+    )
+  ) {
+    return [];
+  }
+
+  // Filter out objects with falsy values and remove duplicates
+  return Array.from(
+    new Map(
+      options.filter((item) => item.value).map((item) => [item.value, item])
+    ).values()
+  ).map((item) => ({ value: item.value }));
+};
+
+const transformValues = (options) => {
+  if (!Array.isArray(options)) {
+    return [];
+  }
+  return options
+    .map((item) => item.value)
+    .filter((value) => value !== null && typeof value !== 'object')
+    .map(String);
 };
 
 export {
@@ -302,4 +345,6 @@ export {
   fieldCls,
   toNullOrInt,
   getFieldProps,
+  storeOptions,
+  transformValues,
 };

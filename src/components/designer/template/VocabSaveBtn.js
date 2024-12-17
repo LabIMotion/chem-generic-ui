@@ -16,8 +16,8 @@ const extractOptionsFromField = (_field, _data) => {
   const options = { select_options: {} };
   const field = cloneDeep(_field);
   const data = cloneDeep(_data);
-  // Extract the "select" type fields
-  if (field.type === FieldTypes.F_SELECT) {
+  // Extract the "select"/"select-multi" type fields
+  if ([FieldTypes.F_SELECT, 'select-multi'].includes(field.type)) {
     const optionLayerKey = field.option_layers;
     // Check if it has options for this layer key
     if (data?.properties_template?.select_options?.[optionLayerKey]) {

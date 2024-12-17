@@ -26,7 +26,7 @@ import {
   removeFromObject,
   reformCondFields,
 } from '../tools/orten';
-import { uploadFiles } from '../tools/utils';
+import { storeOptions, uploadFiles } from '../tools/utils';
 import useReducerWithCallback from '../tools/useReducerWithCallback';
 import splitFlowElements from '../../utils/flow/split-flow-elements';
 import { addLayer, layerDropReaction } from './handler';
@@ -317,6 +317,9 @@ const GenInterface = (props) => {
       case FieldTypes.F_SELECT:
         value = event ? event.value : null;
         break;
+      case 'select-multi':
+        value = storeOptions(event || []);
+        break;
       case FieldTypes.F_DRAG_MOLECULE:
       case FieldTypes.F_DRAG_SAMPLE:
       case FieldTypes.F_DRAG_ELEMENT:
@@ -356,6 +359,12 @@ const GenInterface = (props) => {
             e => e.field === field
           ).value;
         }
+      } else if (type === 'select-multi') {
+        properties.layers[layer].fields.find(
+          (e) => e.field === field
+        ).sub_fields = value;
+        generic.properties = properties;
+        if (isSearch) generic.search_properties = properties;
       } else if (type === FieldTypes.F_DATETIME_RANGE) {
         properties.layers[layer].fields.find(
           e => e.field === field
