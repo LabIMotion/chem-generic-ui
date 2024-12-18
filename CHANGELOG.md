@@ -1,16 +1,25 @@
 # Chem-Generic-UI Changelog
 
+## [2.1.0]
+> 2025-03-04
+
+* Features and enhancements:
+  * Introduced multiple selections feature.
+  * Elimiated the JavaScript warning related to two children with the same key.
+  * Provided template version data for users.
+  * Introduced the `Quick Filter` feature for all grids.
+
 ## [2.0.0]
 > 2025-01-04
 
+This is a major release and includes a breaking change.
+
 * Features and enhancements:
-  * Upgraded the main UI component.
+  * Upgraded the main UI component - a breaking change of `react-bootstrap` and is not compatible with the previous ELN version.
   * Introduced a new form layout for designers.
   * Introduced the `Arrange Layers` and `Arrange Fields` feature for reordering the layers and fields.
   * Expanded the `LabIMotion Vocabulary (Lab-Vocab)`, more vocabularies are added.
   * Introduced a new toggle button for designers to switch between `Work Area` and `Preview` modes.
-  * Provided template version data for users.
-  * Introduced the `Quick Filter` feature for all grids.
 
 * Bug fixes:
   * Fixed a JavaScript warning related to the missing key prop for unique elements.
