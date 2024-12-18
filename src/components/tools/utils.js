@@ -329,8 +329,13 @@ const transformValues = (options) => {
     .map(String);
 };
 
+const buildString = (inputs, separator = '-') => {
+  return inputs.join(separator);
+};
+
 export {
   createEnum,
+  buildString,
   frmSelSty,
   GenericDummy,
   toBool,

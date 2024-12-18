@@ -13,6 +13,7 @@ import GenInterface from '../../details/GenInterface';
 import { responseExt } from '../../../utils/template/action-handler';
 import { notifySuccess } from '../../../utils/template/designer-message';
 import VersionBlock from './VersionBlock';
+import { buildString } from '../../tools/utils';
 
 export default class Preview extends Component {
   constructor(props) {
@@ -28,21 +29,25 @@ export default class Preview extends Component {
   }
 
   componentDidMount() {
-    if (this.props.revisions) {
-      this.setRevision(cloneDeep(this.props.revisions));
+    const { revisions } = this.props;
+    if (revisions) {
+      this.setRevision(cloneDeep(revisions));
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.revisions !== prevProps.revisions) {
-      this.setRevision(cloneDeep(this.props.revisions));
+    const { revisions } = this.props;
+    if (revisions !== prevProps.revisions) {
+      this.setRevision(cloneDeep(revisions));
     }
   }
 
   handleChanged(el) {
     const { compareUUID, revisions } = this.state;
     const { src } = this.props;
-    let selected = (revisions || []).find((r) => r.uuid === compareUUID);
+    let selected = (revisions || []).find(
+      (r) => buildString([r.uuid, r.id]) === compareUUID
+    );
     if (selected && selected[src]) {
       selected = el;
       this.setRevision(revisions);
@@ -61,7 +66,7 @@ export default class Preview extends Component {
     const { revisions } = this.props;
     this.setState({
       revisions: cloneDeep(revisions),
-      compareUUID: params.uuid,
+      compareUUID: buildString([params.uuid, params.id]),
     });
   }
 
@@ -105,7 +110,9 @@ export default class Preview extends Component {
 
     const options = [];
     const selected =
-      (revisions || []).find((r) => r.uuid === compareUUID) || {};
+      (revisions || []).find(
+        (r) => buildString([r.uuid, r.id]) === compareUUID
+      ) || {};
     const selectOptions =
       (selected && selected[src] && selected[src].select_options) || {};
 
@@ -143,7 +150,7 @@ export default class Preview extends Component {
         <b>Only show the latest 10 revisions.</b>
         {revisions.map((rev, idx) => (
           <VersionBlock
-            key={rev.uuid}
+            key={buildString([rev.uuid, rev.id])}
             data={data}
             download={{ canDL, fnDownload: this.dlRevision }}
             idxSelect={`${idx}:${compareUUID}`}

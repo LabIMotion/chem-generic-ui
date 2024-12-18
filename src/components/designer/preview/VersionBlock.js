@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonConfirm from '../../fields/ButtonConfirm';
 import ButtonTooltip from '../../fields/ButtonTooltip';
+import { buildString } from '../../tools/utils';
 
 const VersionBlock = ({
   data,
@@ -24,7 +25,8 @@ const VersionBlock = ({
   } = rev;
   const { canDL, fnDownload } = download;
   const [idx, compareUUID] = idxSelect.split(':');
-  const s = uuid === compareUUID ? 'generic_block_select' : '';
+  const s =
+    buildString([uuid, id]) === compareUUID ? 'generic_block_select' : '';
   const ver = `Id: ${releasedAt ? uuid : ''}`;
   let at = releasedAt ? `Released at: ${releasedAt} (UTC)` : '(In Progress)';
   let version = src === 'properties' ? properties?.version : '';
@@ -80,7 +82,7 @@ const VersionBlock = ({
           <ButtonTooltip
             idf="ver_view"
             fnClick={fnView}
-            element={{ uuid }}
+            element={{ uuid, id }}
             fa="faEye"
             place="top"
           />
