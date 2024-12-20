@@ -58,7 +58,10 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
 
 ButtonDraw.propTypes = {
   generic: PropTypes.object,
-  genericType: PropTypes.oneOf([Constants.GENERIC_TYPES.ELEMENT]).isRequired,
+  genericType: PropTypes.oneOf([
+    Constants.GENERIC_TYPES.ELEMENT,
+    Constants.GENERIC_TYPES.SEGMENT,
+  ]).isRequired,
   fnSave: PropTypes.func,
 };
 ButtonDraw.defaultProps = {

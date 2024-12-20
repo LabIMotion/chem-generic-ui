@@ -383,21 +383,11 @@ const GenPropertiesSelect = (opt) => {
   // className = `${className} status-select`;
   const val = options.find((o) => o.value === opt.value) || null;
   const klz = fieldCls(opt.isSpCall);
-  // const selectStyles = {
-  //   menuPortal: (base) => {
-  //     return { ...base, zIndex: 9999 };
-  //   },
-  //   menu: (base) => {
-  //     return { ...base, zIndex: 9999 };
-  //   },
-  //   control: (base) => {
-  //     return {
-  //       ...base,
-  //       height: 35,
-  //       minHeight: 35,
-  //     };
-  //   },
-  // };
+
+  const customStyles = {
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    menu: (base) => ({ ...base, zIndex: 9999 }),
+  };
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
@@ -412,7 +402,7 @@ const GenPropertiesSelect = (opt) => {
           className={className}
           isDisabled={opt.readOnly}
           menuPortalTarget={document.body}
-          styles={frmSelSty}
+          styles={{ ...frmSelSty, ...customStyles }}
         />
       </span>
     </Form.Group>

@@ -69,7 +69,6 @@ const PropLayers = (props) => {
 
   const onDeleteStandardLayer = async (_layer) => {
     const result = await LayerManager.deleteStandardLayer(_layer.id);
-    console.log('onDeleteStandardLayer result=', result);
   };
 
   const onLayerUpdate = (_layerKey, _updates) => {
