@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
 import { Card } from 'react-bootstrap';
-import { genUnits } from 'generic-ui-core';
-import GenInterface from './GenInterface';
-import { toBool, toNum } from '../tools/utils';
-import organizeSubValues from '../tools/collate';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { FieldTypes, genUnits } from 'generic-ui-core';
+import GenInterface from '@components/details/GenInterface';
+import organizeSubValues from '@components/tools/collate';
+import { toBool, toNum } from '@utils/pureUtils';
 
 class SegmentDetails extends Component {
   constructor(props) {
@@ -31,22 +28,22 @@ class SegmentDetails extends Component {
         if (curIdx >= 0) {
           const curVal = segment.properties.layers[key].fields[curIdx].value;
           const curType = typeof curVal;
-          if (['select', 'text', 'textarea', 'formula-field'].includes(newProps.layers[key].fields[idx].type)) {
+          if ([FieldTypes.F_SELECT, FieldTypes.F_TEXT, FieldTypes.F_TEXTAREA, FieldTypes.F_FORMULA_FIELD].includes(newProps.layers[key].fields[idx].type)) {
             newProps.layers[key].fields[idx].value = curType !== 'undefined' ? curVal.toString() : '';
           }
-          if (newProps.layers[key].fields[idx].type === 'integer') {
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_INTEGER) {
             newProps.layers[key].fields[idx].value = (curType === 'undefined' || curType === 'boolean' || isNaN(curVal)) ? 0 : parseInt(curVal, 10);
           }
-          if (newProps.layers[key].fields[idx].type === 'checkbox') {
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_CHECKBOX) {
             newProps.layers[key].fields[idx].value = curType !== 'undefined' ? toBool(curVal) : false;
           }
-          if (newProps.layers[key].fields[idx].type === 'system-defined') {
-            const units = genUnits(newProps.layers[key].fields[idx].option_layers, ext);
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_SYSTEM_DEFINED) {
+            const units = genUnits(newProps.layers[key].fields[idx].option_layers);
             const vs = units.find(u => u.key === segment.properties.layers[key].fields[curIdx].value_system);
             newProps.layers[key].fields[idx].value_system = (vs && vs.key) || units[0].key;
             newProps.layers[key].fields[idx].value = toNum(curVal);
           }
-          if (newProps.layers[key].fields[idx].type === 'input-group') {
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_INPUT_GROUP) {
             if (segment.properties.layers[key].fields[curIdx].type
               !== newProps.layers[key].fields[idx].type) {
               newProps.layers[key].fields[idx].value = undefined;
@@ -59,14 +56,14 @@ class SegmentDetails extends Component {
               } else {
                 nSubs.forEach(nSub => {
                   const hitSub = cSubs.find(c => c.id === nSub.id) || {};
-                  if (nSub.type === 'label') { exSubs.push(nSub); }
-                  if (nSub.type === 'text') {
-                    if (hitSub.type === 'label') {
+                  if (nSub.type === FieldTypes.F_LABEL) { exSubs.push(nSub); }
+                  if (nSub.type === FieldTypes.F_TEXT) {
+                    if (hitSub.type === FieldTypes.F_LABEL) {
                       exSubs.push(nSub);
                     } else { exSubs.push({ ...nSub, value: (hitSub.value || '').toString() }); }
                   }
 
-                  if (['number', 'system-defined'].includes(nSub.type)) {
+                  if ([FieldTypes.F_NUMBER, FieldTypes.F_SYSTEM_DEFINED].includes(nSub.type)) {
                     const nvl = (typeof hitSub.value === 'undefined' || hitSub.value == null || hitSub.value.length === 0) ? '' : toNum(hitSub.value);
                     if (nSub.option_layers === hitSub.option_layers) {
                       exSubs.push({ ...nSub, value: nvl, value_system: hitSub.value_system });
@@ -79,7 +76,7 @@ class SegmentDetails extends Component {
               newProps.layers[key].fields[idx].sub_fields = exSubs;
             }
           }
-          if (newProps.layers[key].fields[idx].type === 'upload') {
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_UPLOAD) {
             if (segment.properties.layers[key].fields[curIdx].type
               === newProps.layers[key].fields[idx].type) {
               newProps.layers[key].fields[idx].value = segment.properties.layers[key].fields[curIdx].value;
@@ -87,7 +84,7 @@ class SegmentDetails extends Component {
               newProps.layers[key].fields[idx].value = {};
             }
           }
-          if (newProps.layers[key].fields[idx].type === 'table') {
+          if (newProps.layers[key].fields[idx].type === FieldTypes.F_TABLE) {
             if (segment.properties.layers[key].fields[curIdx].type
               !== newProps.layers[key].fields[idx].type) {
               newProps.layers[key].fields[idx].sub_values = [];

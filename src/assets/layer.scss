@@ -1,0 +1,9 @@
+@use 'color' as *;
+
+.lu-bg-light {
+  background-color: $color-surface-grey !important;
+}
+
+.lu-bg-white {
+  background-color: $color-white !important;
+}

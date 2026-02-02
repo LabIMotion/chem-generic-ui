@@ -11,7 +11,7 @@ const DropLinkRenderer = (props) => {
   const dVal = ((node.data[sField.id] || {}).value || {}).el_short_label || ' ';
   if (dId === '') return <div />;
   return (
-    <a role="link" onClick={() => onNavi('sample', dId)} className="gu-link">
+    <a role="link" onClick={() => onNavi('sample', dId)} className="lu-link">
       <span className="reaction-material-link">{dVal}</span>
     </a>
   );

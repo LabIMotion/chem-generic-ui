@@ -1,14 +1,88 @@
 import filter from 'lodash/filter';
 import findIndex from 'lodash/findIndex';
-import { validateFieldName } from './input-validation';
-import { notifyFieldAdd, notifySuccess } from './designer-message';
-import Response from '../response';
+import { FieldTypes } from 'generic-ui-core';
+import { validateFieldName } from '@utils/template/input-validation';
+import { mergeOptions } from '@utils/template/remodel-handler';
+import { notifyFieldAdd, notifySuccess } from '@utils/template/designer-message';
+import Response from '@utils/response';
 
-const resetPosition = _fields => {
+const resetPosition = (_fields) => {
   const updatedFields = _fields.map((f, idx) => {
     return { ...f, position: idx + 1 };
   });
   return updatedFields;
+};
+
+export const handleAddVocabulary = (_element, _layer, _selected) => {
+  const [element, layer, selected] = [_element, _layer, _selected];
+
+  const fields = layer.fields || [];
+  // const ontology = {
+  //   id: `ncit:class:http://purl.obolibrary.org/obo/${selected.term_id}`,
+  //   iri: `http://purl.obolibrary.org/obo/${selected.term_id}`,
+  //   type: 'class',
+  //   label: selected.name,
+  //   ontology_name: 'ncit',
+  //   ontology_prefix: 'NCIT',
+  //   obo_id: selected.term_id,
+  //   short_form: selected.term_id,
+  //   description: [selected.name],
+  // };
+  const dupFields = filter(fields, (o) => o.field === selected.name);
+  if (dupFields && dupFields.length > 0) {
+    return new Response(
+      notifyFieldAdd(
+        false,
+        `Field (${selected.name}) ${selected.label} is already exist.`
+      ),
+      element
+    );
+  }
+  // move "select_options" to another constant
+  const selectOptions = selected.properties?.select_options || {};
+  // delete selected.select_options; // TODO: need to delete later
+  const newField = {
+    is_voc: true,
+    identifier: selected.identifier,
+    type: selected.field_type,
+    ontology: selected.ontology,
+    field: selected.name,
+    position: 100,
+    label: selected.label,
+    default: '',
+  };
+  if (selected.opid) newField.opid = selected.opid;
+  if (selected.source) newField.source = selected.source;
+  if (selected.source_id) newField.source_id = selected.source_id;
+  if (selected.layer_id) newField.layer_id = selected.layer_id;
+  if (selected.field_id) newField.field_id = selected.field_id;
+  if (selected.properties?.option_layers)
+    newField.option_layers = selected.properties?.option_layers;
+  fields.push(newField);
+  element.properties_template.layers[layer.key].fields = fields;
+  // Handle select_options in the properties_template
+  if (!element.properties_template?.select_options) {
+    element.properties_template.select_options = selectOptions;
+  } else {
+    // Merge selectOptions with existing select_options
+    element.properties_template.select_options = mergeOptions(
+      selectOptions,
+      element.properties_template.select_options
+    );
+  }
+  // Check if "select_options" is empty, if so, delete it
+  if (
+    Object.keys(element.properties_template?.select_options || {}).length === 0
+  ) {
+    delete element.properties_template.select_options;
+  }
+  return new Response(
+    notifyFieldAdd(
+      true,
+      `New field (from Lab-Voc) has been added successfully.`
+    ),
+    element
+  );
 };
 
 /**
@@ -25,7 +99,7 @@ export const handleCreateField = (_newFieldKey, _element, _layer) => {
     return new Response(verify, element);
   }
   const fields = layer.fields || [];
-  const dupFields = filter(fields, o => o.field === newFieldKey);
+  const dupFields = filter(fields, (o) => o.field === newFieldKey);
   if (dupFields && dupFields.length > 0) {
     return new Response(
       notifyFieldAdd(
@@ -36,7 +110,7 @@ export const handleCreateField = (_newFieldKey, _element, _layer) => {
     );
   }
   const newField = {
-    type: 'text',
+    type: FieldTypes.F_TEXT,
     field: newFieldKey,
     position: 100,
     label: newFieldKey,
@@ -54,7 +128,7 @@ export const handleFieldMove = (_element, _layerKey, _field, _isUp) => {
   const [element, layerKey, field, isUp] = [_element, _layerKey, _field, _isUp];
   const layer = element?.properties_template?.layers[layerKey];
   const { fields } = layer;
-  const idx = findIndex(fields, o => o.field === field);
+  const idx = findIndex(fields, (o) => o.field === field);
   if (idx >= 0 && isUp) {
     const curObj = fields[idx];
     curObj.position -= 1;
@@ -84,8 +158,8 @@ export const handlePositionChange = (_element, _layerKey, _target, _source) => {
   const layer = element?.properties_template?.layers[layerKey];
   if (layer) {
     const { fields } = layer;
-    const sourceIdx = findIndex(fields, o => o.field === source.field);
-    const targetIdx = findIndex(fields, o => o.field === target.field);
+    const sourceIdx = findIndex(fields, (o) => o.field === source.field);
+    const targetIdx = findIndex(fields, (o) => o.field === target.field);
     if (sourceIdx < 0 || targetIdx < 0) {
       return new Response(notifySuccess(), element);
     }

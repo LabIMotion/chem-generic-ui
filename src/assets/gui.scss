@@ -1,6 +1,34 @@
 @use 'color' as *;
 @use 'mixins' as *;
 
+::placeholder {
+  color: $color-placeholder !important;
+}
+
+/* Vendor prefixes for broader compatibility */
+::-webkit-input-placeholder {
+  color: $color-placeholder !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: $color-placeholder !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+  color: $color-placeholder !important;
+}
+
+:-ms-input-placeholder {
+  color: $color-placeholder !important;
+}
+
+/* react-select placeholder support */
+.Select-placeholder,
+[class$='-placeholder'],
+.react-select__placeholder {
+  color: $color-placeholder !important;
+}
+
 .gu-ml-0 {
   @include gux-ml(0);
 }
@@ -146,7 +174,7 @@
 
         .accordion-button {
           padding: 0rem 1rem !important;
-          background-color: inherit;
+          background-color: inherit !important;
         }
 
         // .accordion-button {
@@ -184,13 +212,10 @@
   }
 }
 
-.gu-link {
-  color: $color-bs-link !important;
-  text-decoration: none;
-  cursor: pointer;
+.gu-bg-light {
+  background-color: $color-surface-grey !important;
 }
 
-.gu-link:hover {
-  color: $color-bs-link-hover !important;
-  text-decoration: underline;
+.gu-bg-white {
+  background-color: $color-white !important;
 }

@@ -1,13 +1,14 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
-import { handleDelete } from '../../../utils/template/action-handler';
-import FIcons from '../../icons/FIcons';
+import { handleDelete } from '@utils/template/action-handler';
+import FIcons from '@components/icons/FIcons';
+import LPopover from '@components/shared/LPopover';
 
 // replace renderDeleteButton
-const RemovePropBtn = props => {
+const RemovePropBtn = (props) => {
   const { delStr, delKey, delRoot, element, fnDelete } = props;
   let allowed = Object.entries(FieldTypes)
     .filter(([key]) => key.startsWith('DEL_'))
@@ -30,19 +31,19 @@ const RemovePropBtn = props => {
     msg = `remove ???: ${delStr}`;
   }
 
-  const onClick = event => {
+  const onClick = (event) => {
     event.stopPropagation();
     const result = handleDelete(delStr, delKey, delRoot, element);
     fnDelete(result);
   };
 
-  const popover = (
-    <Popover id="popover-template-remove-props-btn">
-      {msg} <br />
+  const popoverContent = (
+    <>
+      <p>{msg}</p>
       <div className="btn-toolbar">
         <Button
-          bsSize="sm"
-          bsStyle="danger"
+          size="sm"
+          variant="danger"
           aria-hidden="true"
           onClick={onClick}
           data-testid="template-remove-yes-btn"
@@ -51,28 +52,22 @@ const RemovePropBtn = props => {
         </Button>
         <span>&nbsp;&nbsp;</span>
         <Button
-          bsSize="sm"
-          bsStyle="warning"
+          size="sm"
+          variant="warning"
           data-testid="template-remove-no-btn"
         >
           No
         </Button>
       </div>
-    </Popover>
+    </>
   );
 
   return (
-    <OverlayTrigger
-      animation
-      placement="top"
-      root
-      trigger="focus"
-      overlay={popover}
-    >
-      <Button bsSize="sm" data-testid="template-remove-btn">
+    <LPopover content={popoverContent} trigger={['focus']}>
+      <Button size="sm" data-testid="template-remove-btn">
         {FIcons.faTrashCan}
       </Button>
-    </OverlayTrigger>
+    </LPopover>
   );
 };
 

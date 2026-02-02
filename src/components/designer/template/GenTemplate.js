@@ -2,18 +2,19 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Constants from '../../tools/Constants';
-import TemplateToolbar from '../TemplateToolbar';
-import TemplateProps from './TemplateProps';
+import Constants from '@components/tools/Constants';
+import TemplateToolbar from '@components/designer/TemplateToolbar';
+import TemplateProps from '@components/designer/template/TemplateProps';
 
 const GenTemplate = props => {
-  const { data, fnDelete, fnDerive, fnUpdate, fnUpload, genericType } = props;
+  const { data, fnDelete, fnDerive, fnUpdate, fnUpload, genericType, vocabularies } = props;
 
   return (
     <>
       <TemplateToolbar />
       <TemplateProps
         data={data}
+        vocabularies={vocabularies}
         fnDelete={fnDelete}
         fnDerive={fnDerive}
         fnUpdate={fnUpdate}
@@ -34,6 +35,9 @@ GenTemplate.propTypes = {
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
   ]).isRequired,
+  vocabularies: PropTypes.array,
 };
+
+GenTemplate.defaultProps = { vocabularies: [] };
 
 export default GenTemplate;

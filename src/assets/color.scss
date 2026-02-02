@@ -5,6 +5,8 @@ $color-lightgray: lightgrey;
 $color-lightyellow: lightyellow;
 $color-red: red;
 $color-black: black;
+$color-white: white;
+$color-placeholder: #adb5bd;
 
 $color-background: #eee;
 $color-bs-info: #5bc0de;
@@ -20,8 +22,10 @@ $color-default: #777;
 $color-editable: #fff;
 $color-invalid: $color-lightcoral;
 $color-is-over: #31708f;
-$color-readonly: #ddd;
+$color-readonly: hsl(0, 0%, 95%);
 $color-required: $color-lightyellow;
 $color-selected-border: #0dcaf0;
 $color-attention-emphasis: #9a6700;
 $color-halloween: #fe9600;
+
+$color-surface-grey: #eef1f2; // eln shades

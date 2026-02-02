@@ -13,7 +13,7 @@ const ConditionsDisplay = ({ conditions }) => {
   const condFieldsList = condFields.map((condField) => {
     const { id, layer, field, value } = condField;
     return (
-      <tr key={id} className="bg-light">
+      <tr key={id}>
         <td>{layer}</td>
         <td>{field}</td>
         <td>{value}</td>
@@ -25,7 +25,7 @@ const ConditionsDisplay = ({ conditions }) => {
       <div className="fw-semibold fst-italic">
         Restriction Setting: {matchOpLabel}
       </div>
-      <Table size="sm" bordered responsive>
+      <Table size="sm" bordered responsive className="m-0">
         <thead className="table-light">
           <tr>
             {['Layer', 'Field', 'Value'].map((label) => (
@@ -47,7 +47,7 @@ ConditionsDisplay.propTypes = {
         layer: PropTypes.string,
         field: PropTypes.string,
         value: PropTypes.string,
-      })
+      }),
     ),
     cond_operator: PropTypes.number,
   }).isRequired,

@@ -1,34 +1,33 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
+import { FieldTypes } from 'generic-ui-core';
 
 const setCell = (columnDef, rowValue) => {
   const { type, field, onCellChange, cellRenderer, cellParams } = columnDef;
   switch (type) {
-    case 'text':
+    case FieldTypes.F_TEXT:
       return (
-        <FormControl
+        <Form.Control
           type="text"
           value={rowValue[field] || ''}
           onChange={e => onCellChange({ e, columnDef, rowValue })}
         />
       );
-    case 'system-defined':
+    case FieldTypes.F_SYSTEM_DEFINED:
       return (
         <InputGroup>
-          <FormControl
+          <Form.Control
             type="number"
             value={rowValue[field].value || ''}
-            onChange={e => onCellChange({ e, columnDef, rowValue })}
+            onChange={(e) => onCellChange({ e, columnDef, rowValue })}
           />
-          <InputGroup.Button>
-            {cellRenderer({ ...cellParams, node: { data: rowValue } })}
-          </InputGroup.Button>
+          {cellRenderer({ ...cellParams, node: { data: rowValue } })}
         </InputGroup>
       );
-    case 'select':
-    case 'drag_molecule':
-    case 'drag_sample':
+    case FieldTypes.F_SELECT:
+    case FieldTypes.F_DRAG_MOLECULE:
+    case FieldTypes.F_DRAG_SAMPLE:
     case 'dnd':
       return cellRenderer({ ...cellParams, node: { data: rowValue } });
     default:
@@ -75,7 +74,7 @@ const ColumnRow = (_columnDefs, _rowValue) => {
       Object.assign(colCss, { width, minWidth: width });
     }
     const rowKlz =
-      type === 'select'
+      type === FieldTypes.F_SELECT
         ? 'generic_grid_row generic_grid_row_left'
         : 'generic_grid_row';
     return (
@@ -98,7 +97,7 @@ const ColumnRow = (_columnDefs, _rowValue) => {
   );
 };
 
-const NoRow = rows => {
+const NoRow = (rows) => {
   const values = rows;
   if (values && values.length > 0) return null;
   return (

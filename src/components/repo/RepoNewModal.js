@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-import RepoGridDs from './RepoGridDs';
-import RepoGridSg from './RepoGridSg';
-import RepoGridEl from './RepoGridEl';
+import RepoGridDs from '@components/repo/RepoGridDs';
+import RepoGridSg from '@components/repo/RepoGridSg';
+import RepoGridEl from '@components/repo/RepoGridEl';
 
 const contentComponents = {
   Dataset: RepoGridDs,
@@ -11,7 +11,7 @@ const contentComponents = {
   Element: RepoGridEl,
 };
 
-const RepoNewModal = ({ showModal, fnClose, gridData, fnCreate, content }) => {
+const RepoNewModal = ({ showModal, fnClose, fnCreate, content }) => {
   const ContentComponent = contentComponents[content];
   if (!ContentComponent) return null;
 
@@ -19,17 +19,18 @@ const RepoNewModal = ({ showModal, fnClose, gridData, fnCreate, content }) => {
 
   return (
     <Modal
+      centered
       backdrop="static"
-      bsSize="lg"
+      size="lg"
       show={showModal}
-      onHide={() => fnClose()}
+      onHide={fnClose}
       dialogClassName="gu_modal-68w"
     >
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
-        <ContentComponent fnApi={fnCreate} gridData={gridData} />
+        <ContentComponent fnApi={fnCreate} />
       </Modal.Body>
     </Modal>
   );
@@ -38,7 +39,6 @@ const RepoNewModal = ({ showModal, fnClose, gridData, fnCreate, content }) => {
 RepoNewModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
-  gridData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   fnClose: PropTypes.func.isRequired,
   fnCreate: PropTypes.func.isRequired,
 };

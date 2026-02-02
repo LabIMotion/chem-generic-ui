@@ -2,25 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { genUnit } from 'generic-ui-core';
-import { genUnitSup } from '../tools/utils';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { genUnit, FieldTypes } from 'generic-ui-core';
+import { genUnitSup } from '@components/tools/utils';
 
 const UConverterRenderer = props => {
   const { sField, onChange, node } = props;
-  if (sField.type !== 'system-defined') return null;
+  if (sField.type !== FieldTypes.F_SYSTEM_DEFINED) return null;
   const { data } = node;
   return (
     <Button
       key={`ucr_${data.id}`}
-      active
       onClick={() => onChange(sField, node)}
-      bsStyle="success"
+      variant="success"
+      size="sm"
     >
       {genUnitSup(
-        genUnit(sField.option_layers, data[sField.id].value_system, ext).label
+        genUnit(sField.option_layers, data[sField.id].value_system).label
       ) || ''}
     </Button>
   );

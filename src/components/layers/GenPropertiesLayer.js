@@ -12,16 +12,19 @@ import {
   FieldTypes,
   showProperties,
 } from 'generic-ui-core';
-import GenProperties from '../fields/GenProperties';
-import PanelDnD from '../dnd/PanelDnD';
-import DateTimeRange from '../fields/DateTimeRange';
-import Prop from '../designer/template/Prop';
-import { bgColor } from '../tools/format-utils';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import GenProperties from '@components/fields/GenProperties';
+import PanelDnD from '@components/dnd/PanelDnD';
+import DateTimeRange from '@components/fields/DateTimeRange';
+import Prop from '@components/designer/template/Prop';
+import { bgColor } from '@components/tools/format-utils';
+import { editable } from '@/utils/pureUtils';
+import { computeDynamicDisplayName } from '@utils/template/label-handler';
+import { isFieldEffectivelyVisible } from '@utils/template/visibility-handler';
+import GenInterfaceContext from '@components/details/GenInterfaceContext';
 
 export default class GenPropertiesLayer extends Component {
+  static contextType = GenInterfaceContext;
+
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -40,12 +43,12 @@ export default class GenPropertiesLayer extends Component {
     const sub = f.sub_fields.find((m) => m.id === id);
     if (!valueOnly) {
       if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
-        const units = genUnits(e.option_layers, ext);
+        const units = genUnits(e.option_layers);
         let uIdx = units.findIndex((u) => u.key === e.value_system);
         if (uIdx < units.length - 1) uIdx += 1;
         else uIdx = 0;
         sub.value_system = units.length > 0 ? units[uIdx].key : '';
-        sub.value = unitConversion(e.option_layers, sub.value_system, e.value, ext);
+        sub.value = unitConversion(e.option_layers, sub.value_system, e.value);
       } else {
         sub.value = e.target.value;
       }
@@ -63,7 +66,7 @@ export default class GenPropertiesLayer extends Component {
 
   handleClick(keyLayer, obj, val) {
     const { onClick } = this.props;
-    const units = genUnits(obj.option_layers, ext);
+    const units = genUnits(obj.option_layers);
     let uIdx = units.findIndex((e) => e.key === val);
     if (uIdx < units.length - 1) uIdx += 1;
     else uIdx = 0;
@@ -83,6 +86,8 @@ export default class GenPropertiesLayer extends Component {
       isSearch,
       onNavi,
       isSpCall,
+      editMode,
+      genericType,
     } = this.props;
     const { fields, key, sp } = layer;
     let { cols } = layer;
@@ -99,8 +104,10 @@ export default class GenPropertiesLayer extends Component {
     let remainingWidth = 12;
     let columnCount = 0; // Add counter to track columns in current row
 
+    const { refSource } = this.context;
+
     (fields || []).forEach((f, idx) => {
-      const [showProp, showLabel] = showProperties(f, layers);
+      const [showProp, showLabel] = isFieldEffectivelyVisible(f, layer, layers, new Set(), refSource?.element);
       if (showProp) {
         let fieldWidth;
 
@@ -117,7 +124,8 @@ export default class GenPropertiesLayer extends Component {
               layer={layer}
               opt={{ f_obj: f }}
               onInputChange={this.handleDTRChange}
-            />
+              editMode={editMode}
+            />,
           );
           columnCount = 0;
           return;
@@ -148,7 +156,7 @@ export default class GenPropertiesLayer extends Component {
           columnCount = 0;
         }
 
-        const unit = genUnits(f.option_layers, ext)[0] || {};
+        const unit = genUnits(f.option_layers)[0] || {};
         const cls =
           perRow === 5 &&
           ![FieldTypes.F_TABLE, FieldTypes.F_DATETIME_RANGE].includes(f.type) &&
@@ -173,7 +181,7 @@ export default class GenPropertiesLayer extends Component {
               label={showLabel || f.label}
               value={f.value || ''}
               description={f.description || ''}
-              type={f.type || 'text'}
+              type={f.type || FieldTypes.F_TEXT}
               field={f.field || 'field'}
               formula={f.formula || ''}
               options={
@@ -186,10 +194,10 @@ export default class GenPropertiesLayer extends Component {
                 this.handleChange(event, f.field, key, f.type)
               }
               onSubChange={this.handleSubChange}
-              isEditable
+              isEditable={editable(editMode, !(f.readonly ?? false))}
               isPreview={isPreview}
               isSearch={isSearch}
-              readOnly={false}
+              readOnly={!editable(editMode, !(f.readonly ?? false))}
               isRequired={f.required || false}
               placeholder={f.placeholder || ''}
               option_layers={f.option_layers}
@@ -200,8 +208,9 @@ export default class GenPropertiesLayer extends Component {
               selectOptions={selectOptions || {}}
               onNavi={onNavi}
               isSpCall={isSpCall}
+              genericType={genericType}
             />
-          </Col>
+          </Col>,
         );
 
         remainingWidth -= fieldWidth;
@@ -231,13 +240,35 @@ export default class GenPropertiesLayer extends Component {
   }
 
   render() {
-    const { id, layer, layers, activeWF, hasAi, aiComp, expandAll } =
-      this.props;
+    const {
+      id,
+      layer,
+      layers,
+      activeWF,
+      hasAi,
+      aiComp,
+      expandAll,
+      editMode,
+      grouped,
+    } = this.props;
     const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
+
+    const { refSource } = this.context;
+
+    // Compute dynamic display name
+    const displayName = computeDynamicDisplayName(
+      label,
+      layer.label_fields || [],
+      layer,
+      layers,
+      {},
+      refSource?.element,
+    );
+
     const bgColorClass = bgColor(color);
     let klz = style || 'panel_generic_heading';
-    klz = ['bg-light', 'bg-white'].includes(bgColorClass)
+    klz = ['lu-bg-light', 'lu-bg-white'].includes(bgColorClass)
       ? `${klz} text-dark`
       : `${klz} text-white`;
     // panel header color is based on input bs value
@@ -254,6 +285,8 @@ export default class GenPropertiesLayer extends Component {
           this.handleChange(event, 'timeRecord', layer, 'layer-data-change')
         }
         hasAi={hasAi}
+        editMode={editMode}
+        grouped={grouped}
       />
     );
     const panelHeader = (
@@ -261,7 +294,11 @@ export default class GenPropertiesLayer extends Component {
         as="div"
         className={`custom-accordion-header ${bgColorClass} flex-grow-1`}
       >
-        {label === '' ? <span className={klz}>&nbsp;</span> : <span className={klz}>{label}</span>}
+        {displayName === '' ? (
+          <span className={klz}>&nbsp;</span>
+        ) : (
+          <span className={klz}>{displayName}</span>
+        )}
       </Accordion.Header>
     );
     // const panelDiv = (
@@ -306,6 +343,9 @@ GenPropertiesLayer.propTypes = {
   hasAi: PropTypes.bool,
   aiComp: PropTypes.any,
   expandAll: PropTypes.bool,
+  editMode: PropTypes.bool.isRequired,
+  genericType: PropTypes.string.isRequired,
+  grouped: PropTypes.bool.isRequired,
 };
 
 GenPropertiesLayer.defaultProps = {

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup, Row } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
-import ButtonTooltip from '../fields/ButtonTooltip';
-import FIcons from '../icons/FIcons';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import FIcons from '@components/icons/FIcons';
 
 const stopPropagation = (event) => {
   event.stopPropagation();

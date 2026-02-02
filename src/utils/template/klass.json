@@ -1,0 +1,1238 @@
+{
+  "eln": {
+    "version": "1.0.3",
+    "base_revision": "c55e64ec712a688f27e80d0be08f8db256da0a08",
+    "current_revision": "9c65ccf2d4bbecbbbbbf6450dc971f9ee1448eed\n"
+  },
+  "uuid": "1f5e0557-293d-4d20-9317-830a58059905",
+  "klass": "SegmentKlass",
+  "layers": {
+    "set": {
+      "wf": false,
+      "key": "set",
+      "cols": 6,
+      "color": "default",
+      "label": "Settings describing the measurement",
+      "label_fields": ["mode", "atmosphere"],
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "select",
+          "field": "mode",
+          "label": "Operation mode",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "operation_mode",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "atmosphere",
+          "label": "Atmosphere",
+          "default": "",
+          "position": 2,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "atm",
+          "text_sub_fields": []
+        },
+        {
+          "type": "system-defined",
+          "field": "temperature",
+          "label": "Temperature",
+          "default": "",
+          "position": 3,
+          "required": false,
+          "sub_fields": [],
+          "placeholder": "if not room temperature",
+          "option_layers": "temperature",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "conditions",
+          "label": "Conditions",
+          "default": "",
+          "position": 4,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "conditions",
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "conditions_ill",
+          "label": "Wavelength",
+          "default": "",
+          "position": 5,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "98eb4f70-d3cc-11ec-92af-9bedac5a63c4",
+              "field": "conditions",
+              "layer": "set",
+              "value": "illumination"
+            },
+            {
+              "id": "123-123-123-123",
+              "field": "TYPE",
+              "layer": "SRC-EL",
+              "value": "Reaction"
+            },
+            {
+              "id": "456-456-456-456",
+              "field": "TYPE",
+              "layer": "SRC-EL",
+              "value": "Sample"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "applied_charge",
+          "label": "Applied charge (C)",
+          "decimal": "2",
+          "default": "",
+          "position": 6,
+          "required": false,
+          "canAdjust": false,
+          "hasOwnRow": false,
+          "sub_fields": [],
+          "description": "Total applied charge in Coulomb",
+          "text_sub_fields": []
+        },
+        {
+          "type": "table",
+          "field": "additives",
+          "label": "Additives",
+          "default": "",
+          "position": 7,
+          "required": false,
+          "sub_fields": [
+            {
+              "id": "1779c5c6-d4b9-43d0-8af7-19d984a27408",
+              "type": "drag_molecule",
+              "value": "molecular_weight;",
+              "col_name": "salt"
+            },
+            {
+              "id": "32d40034-7e5b-4433-a51e-ef11cbbb4ed7",
+              "type": "system-defined",
+              "value": "",
+              "col_name": "amount",
+              "value_system": "g",
+              "option_layers": "mass"
+            },
+            {
+              "id": "6dde65f9-9a52-44fd-916f-603fea9b8f89",
+              "type": "system-defined",
+              "value": "",
+              "col_name": "concentration",
+              "value_system": "ng_l",
+              "option_layers": "concentration"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "comments",
+          "label": "Comments",
+          "default": "",
+          "position": 8,
+          "required": false,
+          "hasOwnRow": true,
+          "sub_fields": [],
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "Stirring_speed",
+          "label": "Stirring speed (rpm)",
+          "default": "",
+          "position": 9,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "4371246c-b717-43f3-b4c9-fad48c7acb28",
+              "field": "mode",
+              "layer": "set",
+              "value": "stirred"
+            }
+          ],
+          "text_sub_fields": []
+        }
+      ],
+      "position": 40,
+      "cond_fields": [
+        {
+          "id": "fb0aae1b-29d2-4ced-a3df-ff3444f88e11",
+          "field": "measurement_type",
+          "layer": "measurement_type",
+          "value": "single experiment"
+        }
+      ],
+      "wf_position": 0
+    },
+    "cell": {
+      "wf": false,
+      "key": "cell",
+      "cols": 5,
+      "color": "default",
+      "label": "Cell design",
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "text",
+          "field": "link",
+          "label": "Link to cell setting",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "hasOwnRow": true,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "125ce73f-28a7-45dc-9b08-fc98360b5736",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            },
+            {
+              "id": "ddf09207-10b9-436f-a3f5-e86b6cb3b1be",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            }
+          ],
+          "text_sub_fields": [],
+          "value": "single"
+        },
+        {
+          "type": "select",
+          "field": "anode_type",
+          "label": "Type of the anode",
+          "default": "",
+          "position": 2,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "9f92b749-fce9-4f80-a8e3-4a806c534a9a",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "ebe4f24e-17c4-41d3-8649-4f2482a6a715",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "type",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "anode",
+          "label": "Anode material",
+          "default": "",
+          "position": 3,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "71e9d1a4-1ad5-41da-aa91-a0b1887a82f8",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "6bc63b10-e8ce-44a0-ba06-6f58e58be63f",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "working",
+          "text_sub_fields": []
+        },
+        {
+          "type": "system-defined",
+          "field": "anode_size",
+          "label": "Size of the anode",
+          "default": "",
+          "position": 4,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "152eb238-a8c1-4cb2-839b-9a21397ed0f0",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "837c8b5e-6586-4bb6-9a17-0e6a2ddc10c7",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "surface",
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "anode_details",
+          "label": "Other details for the anode",
+          "default": "",
+          "position": 5,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "d5e166c2-b74f-4a95-8cc4-2c278e476672",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "01702b68-3039-43f3-99ac-38f5fcf949d1",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "anode_name",
+          "label": "Name/ID of the anode",
+          "default": "",
+          "position": 6,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "e15df532-28f0-4cf6-81f6-866d87a7e2ef",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "2a8b598b-9af3-4ee7-a86e-e4dd7c4e2413",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "kathode_type",
+          "label": "Type of the cathode",
+          "default": "",
+          "position": 7,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "d4f1a0e5-6b7f-41e4-84c2-1305bf9416bf",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "d22012ed-36df-4069-ad35-af7f7d1719bf",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "type",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "kathode",
+          "label": "Cathode material",
+          "default": "",
+          "position": 8,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "9685c900-00b0-4cd6-ac69-02896d482d2d",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "2f5aee12-d12c-4a76-835d-081f61d2f76b",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "working",
+          "text_sub_fields": []
+        },
+        {
+          "type": "system-defined",
+          "field": "kathode_size",
+          "label": "Size of the cathode",
+          "default": "",
+          "position": 9,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "00940a8a-cde3-44c2-9b2f-932a584de666",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "8da3c50c-a84f-4911-b469-8a70b85511f2",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "surface",
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "kathode_details",
+          "label": "Other details for the cathode",
+          "default": "",
+          "position": 10,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "940a00bc-7081-46f3-921a-2b80ea5cd1cd",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "5c83da5e-8e17-4576-8b94-4ede6cfbab60",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "kathode_name",
+          "label": "Name/ID of the cathode",
+          "default": "",
+          "position": 11,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "85a4dd48-8dd7-4f16-9a0f-0a70bcf24ffe",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "3f386527-93b1-496f-be22-5a2db13d61fa",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "text_sub_fields": []
+        },
+        {
+          "type": "system-defined",
+          "field": "distance",
+          "label": "Distance of anode to cathode",
+          "default": "",
+          "position": 12,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "7cc7d617-c08a-4216-bea8-9698d4c02a41",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "f32c08a3-5150-4733-8ded-af43629870cc",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "option_layers": "length",
+          "text_sub_fields": []
+        },
+        {
+          "type": "checkbox",
+          "field": "separation",
+          "label": "Half cell separation",
+          "default": "",
+          "position": 13,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "c680baaa-3de9-4e5c-ac9e-8c014020a9cb",
+              "field": "screening_var",
+              "layer": "measurement_type",
+              "value": "single"
+            },
+            {
+              "id": "d83045d2-79e7-4a9f-978c-c0a6b61ee469",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "single experiment"
+            }
+          ],
+          "description": "are anode and cathode separated by a membrane or frit?",
+          "option_layers": "separations",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "separator_material",
+          "label": "Separator material",
+          "default": "",
+          "position": 14,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "7fdea3dc-e21f-482b-bbaf-afe9b761b62a",
+              "field": "separation",
+              "layer": "cell",
+              "value": "true"
+            }
+          ],
+          "description": "If a separator is used, what material was used?",
+          "option_layers": "separator_materials",
+          "text_sub_fields": []
+        }
+      ],
+      "position": 30,
+      "cond_fields": [
+        {
+          "id": "5bc0bbef-9582-4ebf-b550-bd88b7aea99f",
+          "field": "measurement_type",
+          "layer": "measurement_type",
+          "value": "single experiment"
+        },
+        {
+          "id": "3563a7ca-c170-41af-83f1-c30620afeb6f",
+          "field": "screening_var",
+          "layer": "measurement_type",
+          "value": "single"
+        }
+      ],
+      "wf_position": 0,
+      "cond_operator": 0
+    },
+    "meas": {
+      "wf": false,
+      "key": "meas",
+      "cols": 6,
+      "color": "default",
+      "label": "Measurement details",
+      "style": "panel_generic_heading",
+      "fields": [],
+      "position": 50,
+      "cond_fields": [
+        {
+          "id": "6e46e523-84d6-4608-a4af-98d419d00edd",
+          "field": "measurement_type",
+          "layer": "measurement_type",
+          "value": "single experiment"
+        }
+      ],
+      "wf_position": 0
+    },
+    "electrodes": {
+      "wf": false,
+      "key": "electrodes",
+      "cols": 4,
+      "color": "default",
+      "label": "Settings of the experiment",
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "select",
+          "field": "device",
+          "label": "Potentiostat (brand)",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "potentiostat",
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "device_details",
+          "label": "Potentiostat (name)",
+          "default": "",
+          "position": 2,
+          "required": false,
+          "sub_fields": [],
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "exper_type",
+          "label": "Operation mode",
+          "default": "",
+          "position": 3,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "experiment_type",
+          "text_sub_fields": []
+        },
+        {
+          "type": "text",
+          "field": "device_link",
+          "label": "Link to details of the device",
+          "default": "",
+          "position": 4,
+          "required": false,
+          "hasOwnRow": true,
+          "sub_fields": [],
+          "text_sub_fields": []
+        }
+      ],
+      "position": 20,
+      "cond_fields": [],
+      "wf_position": 0
+    },
+    "set_screen": {
+      "wf": false,
+      "key": "set_screen",
+      "cols": 3,
+      "color": "none",
+      "label": "Reaction condition screening",
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "table",
+          "field": "table",
+          "label": "Screening variations",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "sub_fields": [
+            {
+              "id": "71d8404a-5992-492a-8b03-1a0ea1bc14c1",
+              "type": "text",
+              "value": "",
+              "col_name": "Setting"
+            },
+            {
+              "id": "78adf344-652d-45fe-a982-abf721748cc2",
+              "type": "text",
+              "value": "",
+              "col_name": "Temp"
+            },
+            {
+              "id": "94ef8979-9863-48f4-b591-72576ea6dd13",
+              "type": "text",
+              "value": "",
+              "col_name": "Duration"
+            },
+            {
+              "id": "4e5d2bb1-8922-4bbd-bf6a-0ec1631615dc",
+              "type": "text",
+              "value": "",
+              "col_name": "Ilumination"
+            },
+            {
+              "id": "17223b11-8118-4902-bc08-40f1ce9845ee",
+              "type": "text",
+              "value": "",
+              "col_name": "Supporting electrolyte"
+            },
+            {
+              "id": "472d1089-80a4-4978-a13d-9cef9e8846d2",
+              "type": "text",
+              "value": "",
+              "col_name": "Amount supporting electrolyte"
+            },
+            {
+              "id": "a59d1aa5-adab-4675-b769-42dc41056aab",
+              "type": "text",
+              "value": "",
+              "col_name": "Current"
+            },
+            {
+              "id": "dc94dda0-5e2e-4f40-b170-90aa27e91387",
+              "type": "text",
+              "value": "",
+              "col_name": "Charge (F)"
+            },
+            {
+              "id": "88fc3199-25bf-4f1c-94a5-52e47fefa475",
+              "type": "select",
+              "value": "",
+              "col_name": "Anode",
+              "option_layers": "working"
+            },
+            {
+              "id": "2de0ec67-3be8-4deb-840b-1873937733d5",
+              "type": "select",
+              "value": "",
+              "col_name": "Cathode",
+              "option_layers": "working"
+            }
+          ],
+          "text_sub_fields": []
+        }
+      ],
+      "position": 70,
+      "cond_fields": [
+        {
+          "id": "a46ad73e-439a-4a27-9237-186cdd3b744a",
+          "field": "screening_var",
+          "layer": "measurement_type",
+          "value": "reaction conditions"
+        }
+      ],
+      "wf_position": 0
+    },
+    "cell_design_two": {
+      "wf": false,
+      "key": "cell_design_two",
+      "cols": 1,
+      "color": "default",
+      "label": "Cell design screening",
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "table",
+          "field": "table",
+          "label": "Summary cell design - multiple options",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "sub_fields": [
+            {
+              "id": "f338f23c-c1c7-4ca5-9db7-07067bf281d1",
+              "type": "text",
+              "value": "",
+              "col_name": "Setting No"
+            },
+            {
+              "id": "ed4dd718-ca5d-4330-9652-9ad18fc2249a",
+              "type": "select",
+              "value": "",
+              "col_name": "Anode",
+              "option_layers": "counter"
+            },
+            {
+              "id": "2cfd2717-efae-4739-973a-30568be5e186",
+              "type": "select",
+              "value": "",
+              "col_name": "Kathode",
+              "option_layers": "working"
+            },
+            {
+              "id": "6890db28-5f3f-4112-822f-3171c49fabc7",
+              "type": "select",
+              "value": "",
+              "col_name": "Compartiment",
+              "option_layers": "separator_materials"
+            },
+            {
+              "id": "0b368ab8-0048-48f9-902b-43a9cc4b2ce6",
+              "type": "text",
+              "value": "",
+              "col_name": "link"
+            }
+          ],
+          "text_sub_fields": []
+        }
+      ],
+      "position": 60,
+      "cond_fields": [
+        {
+          "id": "dd0c27a6-d074-4e3a-b9dc-14ae43a139b9",
+          "field": "screening_var",
+          "layer": "measurement_type",
+          "value": "cell design"
+        }
+      ],
+      "wf_position": 0
+    },
+    "measurement_type": {
+      "wf": false,
+      "key": "measurement_type",
+      "cols": 2,
+      "color": "default",
+      "label": "Type of the measurement",
+      "style": "panel_generic_heading",
+      "fields": [
+        {
+          "type": "select",
+          "field": "measurement_type",
+          "label": "measurement_type",
+          "default": "",
+          "position": 1,
+          "required": false,
+          "sub_fields": [],
+          "option_layers": "measurement_type",
+          "text_sub_fields": []
+        },
+        {
+          "type": "select",
+          "field": "screening_var",
+          "label": "Screening Variation",
+          "default": "",
+          "position": 2,
+          "required": false,
+          "sub_fields": [],
+          "cond_fields": [
+            {
+              "id": "2d5ea434-a4a8-474c-b13f-73cee624db21",
+              "field": "measurement_type",
+              "layer": "measurement_type",
+              "value": "screening"
+            }
+          ],
+          "option_layers": "screening_var",
+          "text_sub_fields": []
+        }
+      ],
+      "position": 10,
+      "wf_position": 0
+    }
+  },
+  "select_options": {
+    "atm": {
+      "options": [
+        {
+          "key": "nitrogen",
+          "label": "nitrogen"
+        },
+        {
+          "key": "argon",
+          "label": "argon"
+        },
+        {
+          "key": "CO2",
+          "label": "CO2"
+        },
+        {
+          "key": "O2",
+          "label": "O2"
+        },
+        {
+          "key": "H2",
+          "label": "H2"
+        },
+        {
+          "key": "none",
+          "label": "none"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "salt": {
+      "options": [
+        {
+          "key": "KCl",
+          "label": "KCl"
+        },
+        {
+          "key": "TBA[PF6]",
+          "label": "TBA[PF6]"
+        },
+        {
+          "key": "TBABF4",
+          "label": "TBABF4"
+        },
+        {
+          "key": "TMABF4",
+          "label": "TMABF4"
+        },
+        {
+          "key": "TEABF4",
+          "label": "TEABF4"
+        },
+        {
+          "key": "KOH",
+          "label": "KOH"
+        },
+        {
+          "key": "KHCO3",
+          "label": "KHCO3"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "type": {
+      "options": [
+        {
+          "key": "traditional",
+          "label": "traditional (disk)"
+        },
+        {
+          "key": "disk (coated)",
+          "label": "disk (coated)"
+        },
+        {
+          "key": "plate",
+          "label": "plate"
+        },
+        {
+          "key": "wire",
+          "label": "wire"
+        },
+        {
+          "key": "foam",
+          "label": "foam"
+        }
+      ]
+    },
+    "counter": {
+      "options": [
+        {
+          "key": "gold",
+          "label": "gold"
+        },
+        {
+          "key": "platinum",
+          "label": "platinum"
+        },
+        {
+          "key": "carbon",
+          "label": "carbon"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "working": {
+      "options": [
+        {
+          "key": "gold",
+          "label": "gold"
+        },
+        {
+          "key": "silver",
+          "label": "silver"
+        },
+        {
+          "key": "platinum",
+          "label": "platinum"
+        },
+        {
+          "key": "glassy carbon",
+          "label": "glassy carbon"
+        },
+        {
+          "key": "boron doped diamond",
+          "label": "boron doped diamond"
+        },
+        {
+          "key": "pyrolytic carbon",
+          "label": "pyrolytic carbon"
+        },
+        {
+          "key": "copper",
+          "label": "copper"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        },
+        {
+          "key": "DSA",
+          "label": "DSA"
+        },
+        {
+          "key": "Graphite",
+          "label": "graphite"
+        },
+        {
+          "key": "Graphite (felt)",
+          "label": "graphite (felt)"
+        },
+        {
+          "key": "stainless steel",
+          "label": "stainless steel"
+        },
+        {
+          "key": "Lead",
+          "label": "Lead"
+        }
+      ]
+    },
+    "chip_type": {
+      "options": [
+        {
+          "key": "AC1.W2.R2",
+          "label": "AC1.W2.R2"
+        },
+        {
+          "key": "AC1.W4.R2",
+          "label": "AC1.W4.R2"
+        }
+      ]
+    },
+    "reference": {
+      "options": [
+        {
+          "key": "calomel",
+          "label": "calomel"
+        },
+        {
+          "key": "Ag/AgCl in KCl (sat.)",
+          "label": "Ag/AgCl in KCl (sat.)"
+        },
+        {
+          "key": "Ag/AgNO3 in MeCN",
+          "label": "Ag/AgNO3 in MeCN"
+        },
+        {
+          "key": "Ag/AgCl in NaCl (sat.)",
+          "label": "Ag/AgCl in NaCl (sat.)"
+        },
+        {
+          "key": "Ag/AgCl in KCl (3M)",
+          "label": "Ag/AgCl in KCl (3M)"
+        },
+        {
+          "key": "Ag/AgCl in NaCl (3M)",
+          "label": "Ag/AgCl in NaCl (3M)"
+        },
+        {
+          "key": "Standard Hydrogen Electrode (SHE)",
+          "label": "Standard Hydrogen Electrode (SHE)"
+        },
+        {
+          "key": "Reversible Hydrogen Electrode (RHE)",
+          "label": "Reversible Hydrogen Electrode (RHE)"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "chip_brand": {
+      "options": [
+        {
+          "key": "BVT",
+          "label": "BVT"
+        },
+        {
+          "key": "Pine Research",
+          "label": "Pine Research"
+        }
+      ]
+    },
+    "conditions": {
+      "options": [
+        {
+          "key": "illumination",
+          "label": "illumination"
+        },
+        {
+          "key": "dark",
+          "label": "darkness"
+        }
+      ]
+    },
+    "separations": {
+      "options": [
+        {
+          "key": "none",
+          "label": "none"
+        },
+        {
+          "key": "membrane",
+          "label": "membrane"
+        },
+        {
+          "key": "frit",
+          "label": "frit"
+        }
+      ]
+    },
+    "potentiostat": {
+      "options": [
+        {
+          "key": "Gamry",
+          "label": "Gamry"
+        },
+        {
+          "key": "Methrom",
+          "label": "Methrom"
+        },
+        {
+          "key": "Palmsens",
+          "label": "Palmsens"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        },
+        {
+          "key": "Rohde & Schwarz",
+          "label": "Rohde & Schwarz"
+        },
+        {
+          "key": "VersaSTAT",
+          "label": "VersaSTAT"
+        }
+      ]
+    },
+    "screening_var": {
+      "options": [
+        {
+          "key": "cell design",
+          "label": "cell design"
+        },
+        {
+          "key": "reaction conditions",
+          "label": "reaction conditions"
+        }
+      ]
+    },
+    "operation_mode": {
+      "options": [
+        {
+          "key": "stirred",
+          "label": "stirred"
+        },
+        {
+          "key": "without motion",
+          "label": "without motion"
+        },
+        {
+          "key": "flow cell - single pass",
+          "label": "flow cell - single pass"
+        },
+        {
+          "key": "flow cell - continuous flow",
+          "label": "flow cell - continuous flow"
+        },
+        {
+          "key": "flow cell - cascade",
+          "label": "flow cell - cascade"
+        },
+        {
+          "key": "Alternating polarity",
+          "label": "Alternating polarity"
+        }
+      ]
+    },
+    "experiment_type": {
+      "options": [
+        {
+          "key": "batch",
+          "label": "batch"
+        },
+        {
+          "key": "flow",
+          "label": "flow"
+        }
+      ]
+    },
+    "measurement_type": {
+      "options": [
+        {
+          "key": "single experiment",
+          "label": "single experiment"
+        },
+        {
+          "key": "screening",
+          "label": "screening"
+        }
+      ]
+    },
+    "reference_measure": {
+      "options": [
+        {
+          "key": "ferrocene",
+          "label": "ferrocene"
+        },
+        {
+          "key": "decamethylferrocene",
+          "label": "decamethylferrocene"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "polishing_material": {
+      "options": [
+        {
+          "key": "Al2O3",
+          "label": "Al2O3"
+        },
+        {
+          "key": "others",
+          "label": "others"
+        }
+      ]
+    },
+    "separator_materials": {
+      "options": [
+        {
+          "key": "Nafion",
+          "label": "Nafion"
+        },
+        {
+          "key": "Glass frit",
+          "label": "Glass frit"
+        }
+      ]
+    },
+    "potentiostat_inventory": {
+      "options": [
+        {
+          "key": "deviceNo1",
+          "label": "deviceNo1"
+        },
+        {
+          "key": "deviceNo2",
+          "label": "deviceNo2"
+        },
+        {
+          "key": "deviceNo3",
+          "label": "deviceNo3"
+        }
+      ]
+    }
+  },
+  "released_at": ""
+}

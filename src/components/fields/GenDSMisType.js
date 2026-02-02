@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const GenDSMisType = (props) => {
   const { uiCtrl } = props;

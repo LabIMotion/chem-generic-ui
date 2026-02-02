@@ -3,38 +3,41 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonGroup, Card, Dropdown } from 'react-bootstrap';
-import sortBy from 'lodash/sortBy';
 import { FieldTypes } from 'generic-ui-core';
-import Prop from './Prop';
-import LayerOrderBtn from './LayerOrderBtn';
-import LayerAttrEditBtn from '../LayerAttrEditBtn';
-import LayerAttrNewBtn from '../LayerAttrNewBtn';
-import LayerGridBtn from './LayerGridBtn';
-import Constants from '../../tools/Constants';
-import ButtonTooltip from '../../fields/ButtonTooltip';
-import PropFields from './PropFields';
+import Prop from '@components/designer/template/Prop';
+import LayerHeader from '@components/designer/template/LayerHeader';
+import GroupLayerOrderBtn from '@components/designer/template/GroupLayerOrderBtn';
+import LayerAttrEditBtn from '@components/designer/LayerAttrEditBtn';
+import LayerAttrNewBtn from '@components/designer/LayerAttrNewBtn';
+import LayerGridBtn from '@components/designer/template/LayerGridBtn';
+import Constants from '@components/tools/Constants';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import GroupButton from '@components/actions/GroupButton';
+import PropFields from '@components/designer/template/PropFields';
+import NewFieldBtn from '@components/designer/template/NewFieldBtn';
+import LayerSaveBtn from '@components/designer/template/LayerSaveBtn';
+import ButtonDelField from '@components/fields/ButtonDelField';
+import ButtonEllipse from '@components/fields/ButtonEllipse';
+import VocabularyListBtn from '@components/designer/template/VocabularyListBtn';
+import FieldOrderBtn from '@components/designer/template/FieldOrderBtn';
+import fbc from '@components/tools/ui-styles';
+import LayerManager from '@utils/desMgr';
 import {
   handleAddDummy,
   handleCreateLayer,
   handleAddStandardLayer,
   handleUpdateLayer,
-} from '../../../utils/template/action-handler';
+} from '@utils/template/action-handler';
 import {
   handleCreateField,
   handleLayerPositionChange,
-} from '../../../utils/template/field-handler';
-import ConditionLayerBtn from './ConditionLayerBtn';
-import NewFieldBtn from './NewFieldBtn';
-import LayerSaveBtn from './LayerSaveBtn';
-import ButtonDelField from '../../fields/ButtonDelField';
-import ButtonEllipse from '../../fields/ButtonEllipse';
-import LBadge from '../../shared/LBadge';
-import { pl } from '../../tools/format-utils';
-import LayerManager from '../../../utils/desMgr';
-import VocabularyListBtn from './VocabularyListBtn';
-import FieldOrderBtn from './FieldOrderBtn';
+} from '@utils/template/field-handler';
+import {
+  getGroupInfoByLayer,
+  organizeLayersForDisplay,
+} from '@utils/template/group-handler';
 
-const PropLayers = (props) => {
+function PropLayers(props) {
   const { data, genericType, fnUpdate, vocabularies } = props;
   const [expandLayers, setExpandLayers] = useState({});
 
@@ -89,18 +92,38 @@ const PropLayers = (props) => {
     const result = handleLayerPositionChange(
       data,
       { key: target.field },
-      { key: source.fid.field }
+      { key: source.fid.field },
     );
     fnUpdate(result);
   };
 
   const layers = [];
-  const sortedLayers = sortBy(
-    data.properties_template.layers,
-    (l) => l.position
+
+  // Use organizeLayersForDisplay to get layers in the same order as others
+  const displayItems = organizeLayersForDisplay(
+    data.properties_template.layers || {},
+    data.metadata?.groups || [],
   );
+
+  // Flatten displayItems to get layers in correct order
+  const sortedLayers = [];
+  displayItems.forEach((item) => {
+    if (item.type === 'group') {
+      // Add all layers from the group in the order they appear in the group
+      item.layers.forEach((layerItem) => {
+        sortedLayers.push(layerItem.data);
+      });
+    } else {
+      // Add ungrouped layer
+      sortedLayers.push(item.data);
+    }
+  });
+
   (sortedLayers || []).forEach((layer) => {
     const layerKey = `${layer.key}`;
+
+    // Get group information if layer belongs to a group
+    const groupInfo = getGroupInfoByLayer(data.metadata, layerKey);
 
     const fields = (
       <PropFields
@@ -112,33 +135,13 @@ const PropLayers = (props) => {
         parentExpand={expandLayers[layerKey]}
       />
     );
+
     const isAttrOnWF = [
       Constants.GENERIC_TYPES.ELEMENT,
       Constants.GENERIC_TYPES.SEGMENT,
     ].includes(genericType);
 
-    const layerHeader = (
-      <span className="flex-grow-1">
-        <span className="fw-bold">{layer.label}</span>
-        <LBadge as="badge" text={layer.key} />
-        <LBadge
-          as="!badge"
-          text={`${layer.cols} ${pl(layer.cols, 'column')} per row`}
-          cls="primary"
-        />
-        <LBadge
-          as="!badge"
-          text={`${layer?.fields?.length || 0} ${pl(
-            layer?.fields?.length || 0,
-            'field'
-          )}`}
-          cls="primary"
-        />
-        {layer?.wf ? (
-          <LBadge as="!badge" text="workflow" cls="warning" />
-        ) : null}
-      </span>
-    );
+    const layerHeader = <LayerHeader layer={layer} groupInfo={groupInfo} />;
 
     const layerHeaderButtons = (
       <div className="d-flex">
@@ -155,18 +158,11 @@ const PropLayers = (props) => {
           <LayerSaveBtn layer={layer} data={data} />
         </ButtonGroup>
         <ButtonGroup>
-          <ButtonEllipse condSet={layer?.cond_fields?.length > 0 || false}>
+          <ButtonEllipse condSet={false}>
             <LayerAttrEditBtn
               fnUpdate={onLayerUpdate}
               isAttrOnWF={isAttrOnWF}
               layer={layer}
-              as="menu"
-            />
-            <ConditionLayerBtn
-              element={data}
-              fnUpdate={onLayerCondition}
-              layer={layer}
-              sortedLayers={sortedLayers}
               as="menu"
             />
             <ButtonTooltip
@@ -219,13 +215,15 @@ const PropLayers = (props) => {
   return (
     <div>
       <Card className="border-0">
-        <Card.Header
-          as="h5"
-          className="d-flex justify-content-between align-items-center bg-white px-1"
-        >
+        <Card.Header as="h5" className={`${fbc} lu-bg-white px-1`}>
           Layers
           <span className="button-right d-flex gap-1">
-            <LayerOrderBtn
+            <GroupLayerOrderBtn
+              generic={data}
+              genericType={genericType}
+              fnSave={fnUpdate}
+            />
+            <GroupButton
               generic={data}
               genericType={genericType}
               fnSave={fnUpdate}
@@ -243,7 +241,7 @@ const PropLayers = (props) => {
       </Card>
     </div>
   );
-};
+}
 
 PropLayers.propTypes = {
   data: PropTypes.object.isRequired,

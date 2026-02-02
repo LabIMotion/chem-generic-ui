@@ -12,25 +12,28 @@ import ReactFlow, {
 } from 'reactflow';
 import { useDrop } from 'react-dnd';
 import sortBy from 'lodash/sortBy';
-import DnDNodes from './DnDNodes';
-import LayerNode from './LayerNode';
+import DnDNodes from '@components/flow/DnDNodes';
+import LayerNode from '@components/flow/LayerNode';
 import {
   buildDefaultNode,
   decorateNodes,
   removeReactionLayers,
-} from '../../utils/flow/build-flow-elements';
+  removeGroupedLayers,
+} from '@utils/flow/build-flow-elements';
 
 const nodeTypes = { selectorNode: LayerNode };
 
-const getValidLayers = properties =>
-  removeReactionLayers(properties?.layers || {});
+const getValidLayers = (properties, metadata) => {
+  const layers = removeReactionLayers(properties?.layers || {});
+  return removeGroupedLayers(layers, metadata);
+};
 
-const Sidebar = ({ properties = {}, nodes = [] }) => {
+const Sidebar = ({ properties = {}, metadata = {}, nodes = [] }) => {
   if (!properties || Object.keys(properties).length < 1) {
     return null;
   }
 
-  const newLayers = getValidLayers(properties);
+  const newLayers = getValidLayers(properties, metadata);
   const sortedLayers = sortBy(newLayers, l => l.position) || [];
   const layersInFlow = nodes.map(n => n.data.lKey);
   const layersNotInFlow = sortedLayers.filter(
@@ -53,12 +56,12 @@ const Sidebar = ({ properties = {}, nodes = [] }) => {
 };
 
 const FlowDesigner = ({ element, fnSave }) => {
-  const { properties } = element;
+  const { properties, metadata } = element;
   const [flow] = useState(properties?.u?.draw || {});
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes] = useState(
-    decorateNodes(flow.nodes || [], Object.keys(getValidLayers(properties)))
+    decorateNodes(flow.nodes || [], Object.keys(getValidLayers(properties, metadata)))
   );
   const [edges, setEdges] = useState(flow.edges || []);
   const [changed, setChanged] = useState(false);
@@ -132,7 +135,7 @@ const FlowDesigner = ({ element, fnSave }) => {
     setNodes(
       decorateNodes(
         initFlow.nodes || [],
-        Object.keys(getValidLayers(properties))
+        Object.keys(getValidLayers(properties, metadata))
       )
     );
     setEdges(initFlow.edges || []);
@@ -157,7 +160,7 @@ const FlowDesigner = ({ element, fnSave }) => {
             <Controls />
           </ReactFlow>
         </div>
-        <Sidebar properties={properties} nodes={nodes} />
+        <Sidebar properties={properties} metadata={metadata} nodes={nodes} />
       </ReactFlowProvider>
     </div>
   );

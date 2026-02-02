@@ -2,12 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
 
-const GridDnD = ({ field, rowValue, handleMove }) => {
+const GridDnD = ({ field, rowValue, handleMove, isEditable }) => {
   const [{ isDraggingSource }, drag] = useDrag({
     type: 'GRID',
     item: { fid: field, rId: rowValue.id, type: 'GRID' },
+    canDrag: () => isEditable,
     collect: monitor => {
       return {
         isDraggingSource: monitor.isDragging(),
@@ -16,6 +17,7 @@ const GridDnD = ({ field, rowValue, handleMove }) => {
   });
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: 'GRID',
+    canDrop: () => isEditable,
     drop: item => {
       const tar = { fid: field, rId: rowValue.id };
       const src = item;
@@ -37,7 +39,7 @@ const GridDnD = ({ field, rowValue, handleMove }) => {
     <div ref={drop}>
       <div ref={drag} className={className}>
         <div className="dnd-btn">
-          <span className="text-info">{FIcons.faArrowsUpDownLeftRight}</span>
+          <span className="text-primary">{FIcons.faArrowsUpDownLeftRight}</span>
         </div>
       </div>
     </div>

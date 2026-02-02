@@ -1,13 +1,24 @@
 @use 'color' as *;
-@use 'flow-default';
-@use 'flow';
-@use 'modal';
-@use 'gui';
+@use 'flow-default' as *;
+@use 'flow' as *;
+@use 'modal' as *;
+@use 'gui' as *;
+@use 'reset-d-picker' as *;
+@use 'upgrade' as *;
+@use 'layer' as *;
+@use 'dataset-element' as *;
+// @use 'lib';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
   border: 2px dashed $borderColor !important;
   color: $textColor !important;
   opacity: $opacity !important;
+}
+
+@mixin lbg-outline($color) {
+  background-color: unset !important;
+  color: $color !important;
+  border: $color solid 1px;
 }
 
 .gu_can-drop {
@@ -36,10 +47,6 @@
   border-width: 0px 0px 1px 0px;
   border-color: black;
   border-style: solid;
-}
-
-.gu_field_label {
-  font-weight: bold;
 }
 
 .gu_sp_form {
@@ -75,10 +82,16 @@
   background-color: $color-bs-warning !important;
 }
 
-.bg-bs-field-display {
-  background-color: unset !important;
-  color: $color-attention-emphasis !important;
-  border: $color-attention-emphasis solid 1px;
+.lbg-outline-default {
+  @include lbg-outline($color-attention-emphasis);
+}
+
+.lbg-outline-primary {
+  @include lbg-outline($color-bs-primary);
+}
+
+.lbg-outline-warning {
+  @include lbg-outline($color-halloween);
 }
 
 .icon_generic_nav {
@@ -131,7 +144,7 @@
 
 @mixin generic_panel_header {
   font-weight: bold;
-  padding: 10px 0px !important;
+  padding: unset !important;
 }
 
 .panel_generic_heading_slim {
@@ -153,7 +166,7 @@
   font-style: italic;
 }
 
-.text_generic_properties {
+.props_text {
   .dummy {
     background-color: unset !important;
     border: unset !important;
@@ -170,6 +183,11 @@
   }
   input:invalid {
     border: 1px solid $color-invalid;
+  }
+  .form-control {
+    &.readonly {
+      background-color: $color-readonly !important;
+    }
   }
 }
 
@@ -275,8 +293,9 @@
   }
   .help {
     font-size: 80%;
-    margin: 6px;
     font-style: italic;
+    margin-left: var(--gu-ml-2) !important;
+    margin-right: var(--gu-mr-2) !important;
   }
 }
 
@@ -359,24 +378,6 @@
   @include generic_version_badge;
   background-color: unset;
   color: black;
-}
-
-.generic_version_block {
-  display: block;
-  padding: 6px 10px;
-  margin: 10px;
-  border-radius: 0px;
-  border: thin solid $color-default;
-  font-size: 1.2em;
-  > div {
-    display: flex;
-    flex-wrap: nowrap;
-  }
-}
-
-.generic_block_select {
-  border-width: medium;
-  border-style: solid;
 }
 
 .generic_panel_none {
@@ -482,10 +483,10 @@
 
 .generic_grid_dnd {
   > div {
-    display: table;
+    // display: table;
     width: 100%;
     > div {
-      display: table-cell;
+      // display: table-cell;
       vertical-align: middle;
     }
   }
@@ -506,6 +507,13 @@
   }
   &.is-dragging {
     @extend .gu_is-dragging;
+  }
+}
+
+.dnd-btn {
+  font-size: large;
+  span {
+    cursor: move;
   }
 }
 
@@ -622,33 +630,43 @@
   }
 }
 
-// https://github.com/Hacker0x01/react-datepicker/issues/624#issuecomment-261696513
-
-.react-datepicker {
-  font-size: 1.3rem !important;
-  display: flex !important;
-}
-
-.react-datepicker__current-month {
-  font-size: 1.5rem !important;
-}
-
-.react-datepicker__header {
-  padding-top: 6px !important;
-}
-
-.react-datepicker__navigation {
-  top: 2px !important;
-}
-
-.react-datepicker__day-name,
-.react-datepicker__day {
-  margin: 0.5rem !important;
-}
-// ===================================================================
-
 .pre_line_tooltip {
   .tooltip-inner {
     white-space: pre-wrap !important;
   }
+}
+
+.drag-layer-preview {
+  pointer-events: none;       // ensures it doesn’t block mouse events
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drag-item-content {
+  background-color: #ffffff;       // light background
+  border: 1px solid #cccccc;      // subtle border
+  padding: 8px 12px;              // padding inside
+  border-radius: 4px;             // rounded corners
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);  // soft shadow
+  font-weight: 500;
+  color: #333333;
+  white-space: nowrap;            // prevent line breaks
+}
+
+.gu-btn-outline-secondary:hover {
+  color: white !important;
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+}
+
+.gu-btn-outline-primary:hover {
+  color: white !important;
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
 }

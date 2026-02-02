@@ -2,7 +2,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import GenInterface from './GenInterface';
+import GenInterface from '@components/details/GenInterface';
 
 const GenInterfaceSP = (props) => {
   const { generic, fnChange } = props;

@@ -1,0 +1,178 @@
+{
+  "baseFields": [
+    {
+      "key": "type",
+      "label": "Type",
+      "hover_text": "Information on where your analyze comes from",
+      "source": "element"
+    },
+    {
+      "key": "id",
+      "label": "Id",
+      "hover_text": "ID of the source of your analyze",
+      "source": "element"
+    },
+    {
+      "key": "short_label",
+      "label": "Short Label",
+      "hover_text": "Additional Name or Label",
+      "source": "element"
+    },
+    {
+      "key": "name",
+      "label": "Name",
+      "source": "element"
+    }
+  ],
+  "sample": [
+    "type",
+    "id",
+    "short_label",
+    "name",
+    {
+      "key": "resource_identifier",
+      "label": "Identifier",
+      "source": "element"
+    },{
+      "key": "external_label",
+      "label": "External Label",
+      "source": "element"
+    },
+    {
+      "key": "purity",
+      "label": "Concentration",
+      "source": "element"
+    },
+    {
+      "key": "molarity_value",
+      "label": "Molarity",
+      "source": "element",
+      "additionalKey": "molarity_unit"
+    }
+  ],
+  "reaction": [
+    "type",
+    "id",
+    "short_label",
+    "name",
+    {
+      "key": "rxno",
+      "label": "Name Reaction Ontology",
+      "source": "element"
+    }
+  ],
+  "research_plan": [
+    "type",
+    "id",
+    "name"
+  ],
+  "wellplate": [
+    "type",
+    "id",
+    "short_label",
+    "name",
+    {
+      "key": "size",
+      "label": "Size",
+      "source": "element"
+    }
+  ],
+  "screen": [
+    "type",
+    "id",
+    "name",
+    {
+      "key": "collaborator",
+      "label": "Collaborator",
+      "source": "element"
+    },
+    {
+      "key": "requirements",
+      "label": "Requirements",
+      "source": "element"
+    },
+    {
+      "key": "conditions",
+      "label": "Conditions",
+      "source": "element"
+    },
+    {
+      "key": "result",
+      "label": "Result",
+      "source": "element"
+    }
+  ],
+  "device_description": [
+    "type",
+    "id",
+    "short_label",
+    "name",
+    {
+      "key": "device_type",
+      "label": "Device Type",
+      "source": "element"
+    },
+    {
+      "key": "device_type_detail",
+      "label": "Device Type Detail",
+      "source": "element"
+    },
+    {
+      "key": "operation_mode",
+      "label": "Operation Mode",
+      "source": "element"
+    },
+    {
+      "key": "vendor_device_name",
+      "label": "Device Name",
+      "source": "element"
+    },
+    {
+      "key": "vendor_device_id",
+      "label": "Device ID",
+      "source": "element"
+    },
+    {
+      "key": "serial_number",
+      "label": "Serial Number",
+      "source": "element"
+    },
+    {
+      "key": "vendor_company_name",
+      "label": "Vendor",
+      "source": "element"
+    },
+    {
+      "key": "vendor_id",
+      "label": "Vendor ID",
+      "source": "element"
+    }
+  ],
+  "cell_line": [
+    "type",
+    "id",
+    "short_label",
+    {
+      "key": "cellLineName",
+      "label": "Name",
+      "source": "element"
+    },
+    {
+      "key": "amount",
+      "label": "Amount",
+      "source": "element"
+    }
+  ],
+  "Sem S": [
+    "type",
+    "id",
+    "short_label",
+    "name"
+  ],
+  "default": [
+    "type",
+    "id",
+    "short_label",
+    "name"
+  ]
+}

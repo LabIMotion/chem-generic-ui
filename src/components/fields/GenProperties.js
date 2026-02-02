@@ -1,10 +1,11 @@
+import React from 'react';
 import { FieldTypes } from 'generic-ui-core';
 import {
   GenPropertiesCheckbox,
   GenPropertiesDate,
   GenPropertiesDateTimeRange,
   GenPropertiesSelect,
-  GenPropertiesDrop,
+  // GenPropertiesDrop,
   GenPropertiesNumber,
   GenPropertiesSystemDefined,
   GenPropertiesInputGroup,
@@ -16,17 +17,37 @@ import {
   GenWFNext,
   GenPropertiesText,
   GenDropReaction,
-} from './GenPropertiesFields';
-import PropCalculate from './PropCalculate';
-import GenPropSelectMulti from './GenPropSelectMulti';
+} from '@components/fields/GenPropertiesFields';
+// import Constants from '@components/tools/Constants';
+import PropCalculate from '@components/fields/PropCalculate';
+import PropDrop from '@components/fields/PropDrop';
+import GenPropSelectMulti from '@components/fields/GenPropSelectMulti';
+// import ElementSelectButton from '@components/shared/ElementSelectButton';
+import { VOC_MODE, vocMode } from '@/utils/vocUtils';
 
-const GenProperties = opt => {
-  const fieldProps = { ...opt, dndItems: [] };
-  const type = fieldProps.type.split('_');
-  if (opt.isSearch && type[0] === 'drag') type[0] = 'text';
-  // if (opt.isPreview && (type[0] === 'drag' || type[0] === 'upload')) type[0] = 'text';
-  switch (type[0]) {
-    case 'checkbox':
+// const renderDrop = (props) => {
+//   const { genericType } = props;
+//   console.log('renderDrop props:', props);
+//   if (genericType === Constants.GENERIC_TYPES.DATASET) {
+//     return <ElementSelectButton {...props} />;
+//   }
+//   return <GenPropertiesDrop {...props} />;
+// };
+
+const readVoc = (field, readonly) => {
+  if (vocMode(field) === VOC_MODE.R.value) {
+    return true;
+  }
+  return readonly;
+};
+
+const GenProperties = (opt) => {
+  const fieldProps = { ...opt, dndItems: [], readOnly: readVoc(opt.f_obj, opt.readOnly), isEditable: !readVoc(opt.f_obj, !opt.isEditable) };
+  const [mainType, custom] = fieldProps.type.split('_');
+  if (opt.isSearch && mainType === FieldTypes.F_DRAG) mainType = FieldTypes.F_TEXT;
+  // if (opt.isPreview && (mainType === 'drag' || mainType === 'upload')) mainType = 'text';
+  switch (mainType) {
+    case FieldTypes.F_CHECKBOX:
       return GenPropertiesCheckbox(fieldProps);
     case FieldTypes.F_DATETIME:
       return GenPropertiesDate(fieldProps);
@@ -34,32 +55,34 @@ const GenProperties = opt => {
     //   return GenPropertiesDateTimeRange(fieldProps);
     case FieldTypes.F_FORMULA_FIELD:
       return PropCalculate(fieldProps);
-    case 'select':
+    case FieldTypes.F_SELECT:
       return GenPropertiesSelect(fieldProps);
-    case 'select-multi':
+    case FieldTypes.F_SELECT_MULTI:
       return GenPropSelectMulti(fieldProps);
-    case 'drag':
-      fieldProps.dndItems = [...fieldProps.dndItems, type[1]];
-      return GenPropertiesDrop(fieldProps);
-    case 'integer':
+    case FieldTypes.F_DRAG:
+      fieldProps.dndItems = [...fieldProps.dndItems, custom];
+      // return GenPropertiesDrop(fieldProps);
+      // return renderDrop(fieldProps);
+      return PropDrop(fieldProps);
+    case FieldTypes.F_INTEGER:
       return GenPropertiesNumber(fieldProps);
-    case 'system-defined':
+    case FieldTypes.F_SYSTEM_DEFINED:
       return GenPropertiesSystemDefined(fieldProps);
-    case 'input-group':
+    case FieldTypes.F_INPUT_GROUP:
       return GenPropertiesInputGroup(fieldProps);
-    case 'textarea':
+    case FieldTypes.F_TEXTAREA:
       return GenPropertiesTextArea(fieldProps);
-    case 'upload':
+    case FieldTypes.F_UPLOAD:
       return GenPropertiesUpload(fieldProps);
-    case 'dummy':
+    case FieldTypes.F_DUMMY:
       return GenDummy();
-    case 'sys-reaction':
+    case FieldTypes.F_SYS_REACTION:
       return GenDropReaction(fieldProps);
-    case 'table':
+    case FieldTypes.F_TABLE:
       return GenPropertiesTable(fieldProps);
-    case 'text-formula':
+    case FieldTypes.F_TEXT_FORMULA:
       return GenTextFormula(fieldProps);
-    case 'wf-next':
+    case FieldTypes.F_WF_NEXT:
       return GenWFNext(fieldProps);
     default:
       return GenPropertiesText(fieldProps);

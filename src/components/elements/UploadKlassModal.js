@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Modal } from 'react-bootstrap';
-import Constants from '../tools/Constants';
-import { handleKlassUploading } from '../../utils/template/action-handler';
+import Constants from '@components/tools/Constants';
+import { handleKlassUploading } from '@utils/template/action-handler';
 
 const UploadKlassModal = props => {
   const { genericType, fnUpload, showProps } = props;
@@ -23,14 +23,14 @@ const UploadKlassModal = props => {
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
+    <Modal size="lg" centered show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>{`Import ${genericType} and its template`}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: 'auto' }}>
         <Dropzone
           onDrop={attach => handleUploadTemplate(attach)}
-          className="gu-drop-zone"
+          className="lu-drop-zone"
           style={{ height: 50 }}
         >
           <div style={{ paddingTop: 12 }}>Drop File, or Click to Select.</div>

@@ -3,17 +3,14 @@ import findIndex from 'lodash/findIndex';
 import isArray from 'lodash/isArray';
 import mergeWith from 'lodash/mergeWith';
 import { FieldTypes, genUnits } from 'generic-ui-core';
-import { toBool, toNum } from '../../components/tools/utils';
-import organizeSubValues from '../../components/tools/collate';
-import Constants from '../../components/tools/Constants';
+import organizeSubValues from '@components/tools/collate';
+import Constants from '@components/tools/Constants';
 import {
   FieldBase,
   ElementBase,
   SegmentBase,
-} from '../../components/elements/BaseFields';
-import mergeExt from '../ext-utils';
-
-const ext = mergeExt();
+} from '@components/elements/BaseFields';
+import { toBool, toNum } from '@utils/pureUtils';
 
 export const mergeOptions = (A, B) => {
   return mergeWith({}, A, B, (objValue, srcValue) => {
@@ -56,10 +53,19 @@ export const remodel = (generic, klass) => {
       [];
     (newLayer.fields || []).forEach((f, idx) => {
       const curIdx = findIndex(curFields, (o) => o.field === f.field);
+      const newFieldType = newProps.layers[key].fields[idx].type;
+
+      // Initialize checkbox fields with false if they are new and have no default value
+      if (curIdx === -1 && newFieldType === FieldTypes.F_CHECKBOX) {
+        const currentValue = newProps.layers[key].fields[idx].value;
+        if (currentValue === undefined || currentValue === null) {
+          newProps.layers[key].fields[idx].value = false;
+        }
+      }
+
       if (curIdx >= 0) {
         const curVal = generic.properties.layers[key].fields[curIdx].value;
         const curType = typeof curVal;
-        const newFieldType = newProps.layers[key].fields[idx].type;
         if (newFieldType === FieldTypes.F_DATETIME_RANGE) {
           if (
             generic.properties.layers[key].fields[curIdx].type !== newFieldType
@@ -82,7 +88,7 @@ export const remodel = (generic, klass) => {
           newProps.layers[key].fields[idx].value =
             curType !== FieldTypes.V_UNDEFINED ? (curVal || '').toString() : '';
         }
-        if (newFieldType === 'select-multi') {
+        if (newFieldType === FieldTypes.F_SELECT_MULTI) {
           newProps.layers[key].fields[idx].value = '';
           if (
             generic.properties.layers[key].fields[curIdx].type !== newFieldType
@@ -115,8 +121,11 @@ export const remodel = (generic, klass) => {
             : parseInt(curVal, 10);
         }
         if (newFieldType === FieldTypes.F_CHECKBOX) {
-          newProps.layers[key].fields[idx].value =
-            curType !== FieldTypes.V_UNDEFINED ? toBool(curVal) : false;
+          if (curVal === undefined || curVal === null) {
+            newProps.layers[key].fields[idx].value = false;
+          } else {
+            newProps.layers[key].fields[idx].value = toBool(curVal);
+          }
         }
         if (
           (newFieldType === FieldTypes.F_DRAG_ELEMENT &&
@@ -135,8 +144,7 @@ export const remodel = (generic, klass) => {
         }
         if (newFieldType === FieldTypes.F_SYSTEM_DEFINED) {
           const units = genUnits(
-            newProps.layers[key].fields[idx].option_layers,
-            ext
+            newProps.layers[key].fields[idx].option_layers
           );
           const vs = units.find(
             (u) =>
@@ -310,7 +318,7 @@ export const updateUnsupports = (layer, genericType) => {
         const { option_layers: optionLayers, ...restField } = field;
         return {
           ...restField,
-          type: 'text',
+          type: FieldTypes.F_TEXT,
           text_sub_fields: [],
           sub_fields: [],
         };

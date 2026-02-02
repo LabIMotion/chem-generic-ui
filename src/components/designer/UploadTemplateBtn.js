@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import Constants from '../tools/Constants';
-import UploadTemplateModal from '../elements/UploadTemplateModal';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import Constants from '@components/tools/Constants';
+import UploadTemplateModal from '@components/elements/UploadTemplateModal';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const UploadTemplateBtn = (props) => {
   const { data, fnUpload, genericType, btnCls } = props;
@@ -16,19 +16,21 @@ const UploadTemplateBtn = (props) => {
       <LTooltip idf="imp_temp_to_area">
         <Button
           onClick={() => setShow(true)}
-          variant="light"
+          variant="outline-secondary"
           size="sm"
           className={btnCls}
         >
           {FIcons.faArrowRightToBracket}&nbsp;Import template into Work Area
         </Button>
       </LTooltip>
-      <UploadTemplateModal
-        data={data}
-        fnUpload={fnUpload}
-        genericType={genericType}
-        showProps={{ show, setShow }}
-      />
+      {show && (
+        <UploadTemplateModal
+          data={data}
+          fnUpload={fnUpload}
+          genericType={genericType}
+          showProps={{ show, setShow }}
+        />
+      )}
     </>
   );
 };

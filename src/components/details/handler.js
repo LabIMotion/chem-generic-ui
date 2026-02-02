@@ -1,16 +1,18 @@
 import sortBy from 'lodash/sortBy';
-import { orgLayerObject } from 'generic-ui-core';
-import Layer from '../layers/Layer';
+import { orgLayerObject, FieldTypes } from 'generic-ui-core';
+import Layer from '@components/layers/Layer';
+import { reorderPositions } from '@utils/template/sorting-handler';
 
 export const addLayer = (_generic, _source, _key) => {
   const [generic, source, key] = [_generic, _source, _key];
+  const { metadata = {} } = generic;
   const { layers } = generic.properties;
   const sortedLayers = sortBy(layers, ['position', 'wf_position']);
   const srcIdx = sortedLayers.findIndex(e => e.key === source.key);
   if (srcIdx !== -1) {
     const layer = new Layer({ sys: key });
     layer.addField({
-      type: 'sys-reaction',
+      type: FieldTypes.F_SYS_REACTION,
       field: 'reaction',
       hasOwnRow: true,
     });
@@ -18,15 +20,20 @@ export const addLayer = (_generic, _source, _key) => {
     // add layer next to source layer
     sortedLayers.splice(srcIdx + 1, 0, layer);
 
-    // re-count layer position
-    sortedLayers.map((e, idx) => {
-      const el = e;
-      el.position = (idx + 1) * 10;
-      return el;
-    });
+    // add layer to group if source layer is in a group, and layer's position is updated as group's position
+    const group = metadata.groups?.find((g) => g.layers?.includes(source.key));
+    if (group) {
+      group.layers.splice(group.layers.indexOf(source.key) + 1, 0, layer.key);
+      layer.position = group.position + 0.5; // Position after the group
+    } else {
+      layer.position = source.position + 0.5; // Position after the source layer
+    }
 
-    const orgLayers = orgLayerObject(sortedLayers);
-    generic.properties.layers = orgLayers;
+    // Reorder positions considering groups and layers
+    const layersObj = orgLayerObject(sortedLayers);
+    const reordered = reorderPositions(layersObj, metadata);
+    generic.properties.layers = reordered.layers;
+    generic.metadata = reordered.metadata;
     generic.changed = true;
   }
 };

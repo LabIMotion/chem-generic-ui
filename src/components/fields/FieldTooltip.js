@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
 
 const FieldTooltip = ({ link }) => {
   if (!link) return null;
@@ -14,7 +14,7 @@ const FieldTooltip = ({ link }) => {
     >
       <Button
         style={{ padding: '0' }}
-        bsStyle="link"
+        variant="link"
         href={link}
         target="_blank"
         onClick={(e) => e.stopPropagation()}

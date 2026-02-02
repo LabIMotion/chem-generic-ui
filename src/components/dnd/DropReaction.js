@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import SvgFileZoomPan from 'react-svg-file-zoom-pan';
-import DroppablePanel from './DroppablePanel';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
+import DroppablePanel from '@components/dnd/DroppablePanel';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
 
 const DropReaction = props => {
-  const { field: fObj, onNavi, onChange } = props;
+  const { field: fObj, onNavi, onChange, isEditable } = props;
   const { value = {} } = fObj;
   const {
     el_id: elId,
@@ -51,7 +51,7 @@ const DropReaction = props => {
 
   const showDrop = (
     <div
-      className="gu-drop-zone"
+      className="lu-drop-zone"
       style={{ alignContent: 'center', height: 68 }}
     >
       Drop Reaction {FIcons.faFlask} Here
@@ -59,12 +59,15 @@ const DropReaction = props => {
   );
 
   const showReaction = () => {
+    if (!isEditable && !elId) {
+      return null;
+    }
     if (!elId) {
       return showDrop;
     }
     const reactionLink = (
       <Button
-        bsStyle="link"
+        variant="link"
         style={{
           border: '1px solid #003366',
           borderRadius: '4px',
@@ -96,16 +99,16 @@ const DropReaction = props => {
     );
   };
 
-  return (
-    <DroppablePanel
-      type="element" // drag type from element list is "element", not "reaction"
-      field={fObj}
-      rowValue={{ key: fObj.type }}
-      fnCb={onDrop}
-    >
-      {showReaction()}
-    </DroppablePanel>
-  );
+  return isEditable ? (
+      <DroppablePanel
+        type={["reaction"]} // rename the drop target as 'reaction' to differentiate the 'element' drop zones
+        field={fObj}
+        rowValue={{ key: fObj.type }}
+        fnCb={onDrop}
+      >
+        {showReaction()}
+      </DroppablePanel>
+    ) : showReaction()
 };
 
 DropReaction.propTypes = {

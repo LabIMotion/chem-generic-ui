@@ -1,0 +1,17 @@
+$btn-variants: (
+  'primary': #337ab7,
+  'success': #28a745,
+  'warning': #ffc107,
+  'danger': #dc3545,
+  'info': #17a2b8,
+);
+
+@each $variant, $color in $btn-variants {
+  .project-a-container .btn-outline-#{$variant} {
+    --bs-btn-border-color: var(--bs-#{$variant}, #{$color});
+    --bs-btn-color: var(--bs-#{$variant}, #{$color});
+    --bs-btn-hover-color: #fff;  /* Fallback for hover text color */
+    --bs-btn-disabled-border-color: var(--bs-btn-#{$variant}, #{$color}); /* Fallback for disabled border */
+    --bs-btn-disabled-color: #fff;
+  }
+}

@@ -16,22 +16,21 @@ import {
 import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
-import ButtonTooltip from '../fields/ButtonTooltip';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import { genUnitSup, getFieldProps, frmSelSty } from '@components/tools/utils';
 import {
-  genUnitSup,
-  getFieldProps,
-  frmSelSty,
-  toNullOrInt,
-} from '../tools/utils';
-import { FieldBase, ElementBase, SegmentBase } from './BaseFields';
-import GroupFields from './GroupFields';
-import TextFormula from './TextFormula';
-import TableDef from './TableDef';
-import ConditionFieldBtn from '../designer/template/ConditionFieldBtn';
-import VocabSaveBtn from '../designer/template/VocabSaveBtn';
-import FieldBadge from '../fields/FieldBadge';
-import InputUnit from '../fields/InputUnit';
-import OntCmp from '../fields/OntCmp';
+  FieldBase,
+  ElementBase,
+  SegmentBase,
+} from '@components/elements/BaseFields';
+import GroupFields from '@components/elements/GroupFields';
+import TextFormula from '@components/elements/TextFormula';
+import FieldTable from '@ui/tables/FieldTable';
+import ConditionFieldBtn from '@components/designer/template/ConditionFieldBtn';
+import VocabSaveBtn from '@components/designer/template/VocabSaveBtn';
+import FieldBadge from '@components/fields/FieldBadge';
+import InputUnit from '@components/fields/InputUnit';
+import OntCmp from '@components/fields/OntCmp';
 import {
   // renderDatetimeRange,
   renderAdjust,
@@ -45,15 +44,16 @@ import {
   renderReadonly,
   renderTextFieldGroup,
   renderTypeField,
-} from './Fields';
-import PositionDnD from '../dnd/PositionDnD';
-import DroppablePanel from '../dnd/DroppablePanel';
-import DnDs from '../dnd/DnDs';
-import FIcons from '../icons/FIcons';
-import ButtonDelField from '../fields/ButtonDelField';
-import ButtonEllipse from '../fields/ButtonEllipse';
-import LLabel from '../shared/LLabel';
-import Prop from '../designer/template/Prop';
+} from '@components/elements/Fields';
+import PositionDnD from '@components/dnd/PositionDnD';
+import DnDs from '@components/dnd/DnDs';
+import FIcons from '@components/icons/FIcons';
+import ButtonDelField from '@components/fields/ButtonDelField';
+import ButtonEllipse from '@components/fields/ButtonEllipse';
+import LLabel from '@components/shared/LLabel';
+import Prop from '@components/designer/template/Prop';
+import { toNullOrInt } from '@utils/pureUtils';
+import Constants from '@components/tools/Constants';
 
 class ElementField extends Component {
   constructor(props) {
@@ -90,7 +90,7 @@ class ElementField extends Component {
       [
         FieldTypes.F_SELECT,
         FieldTypes.F_SYSTEM_DEFINED,
-        'select-multi',
+        FieldTypes.F_SELECT_MULTI,
       ].includes(tp) &&
       e === null
     ) {
@@ -118,7 +118,7 @@ class ElementField extends Component {
       fieldObject.field,
       layer.key,
       'ontology', // 'field',
-      'select' // 'Ontology' // 'text'
+      FieldTypes.F_SELECT, // 'Ontology' // 'text'
     );
   }
 
@@ -130,7 +130,7 @@ class ElementField extends Component {
       fieldObject.field,
       layer.key,
       'value_system', // 'field',
-      FieldTypes.F_SYSTEM_DEFINED
+      FieldTypes.F_SYSTEM_DEFINED,
     );
   }
 
@@ -187,7 +187,7 @@ class ElementField extends Component {
         trigger={['hover', 'focus', 'click']}
         overlay={popover}
       >
-        <Button variant="success" className="btn-gxs">
+        <Button variant="success" size="sm">
           {FIcons.faTableCells}
         </Button>
       </OverlayTrigger>
@@ -202,7 +202,7 @@ class ElementField extends Component {
       layerKey,
       genericType,
       allLayers,
-      select_options,
+      select_options: selections,
       position,
       generic,
       onDelete,
@@ -210,6 +210,16 @@ class ElementField extends Component {
     } = this.props;
     const { parentIsExpanded, expandLayers } = this.state;
     const isExpanded = parentIsExpanded && (expandLayers[layerKey] || false);
+
+    const metadata = generic?.metadata || {};
+    const groups = metadata.groups || [];
+
+    // Get data for restriction
+    const groupedLayerKeys = groups.flatMap((group) => group.layers || []);
+    const currentLayerGroup = groups.find((group) =>
+      (group.layers || []).includes(layerKey),
+    );
+    const sameGroupLayerKeys = currentLayerGroup?.layers || null;
 
     const unitConfig = unitsSystem.map((_c) => {
       return {
@@ -224,23 +234,32 @@ class ElementField extends Component {
     } else if (genericType === 'Segment') {
       typeOpts = SegmentBase;
     }
-    typeOpts.sort((a, b) => a.value.localeCompare(b.value));
+    typeOpts.sort((a, b) => a.label.localeCompare(b.label));
     const f = fieldObject;
-    const selectOptionsOpts = [FieldTypes.F_SELECT, 'select-multi'].includes(
-      f.type
-    )
-      ? select_options
+
+    // Transform to expected format
+    const selectOptionsArray = Object.keys(selections || {}).map((key) => ({
+      value: key,
+      name: key,
+      label: key,
+    }));
+
+    const selectOptionsOpts = [
+      FieldTypes.F_SELECT,
+      FieldTypes.F_SELECT_MULTI,
+    ].includes(f.type)
+      ? selectOptionsArray
       : unitConfig;
     const selectOptionsVal =
       selectOptionsOpts?.find((o) => o.value === f.option_layers) || null;
     const selectOptions = [
       FieldTypes.F_SYSTEM_DEFINED,
       FieldTypes.F_SELECT,
-      'select-multi',
+      FieldTypes.F_SELECT_MULTI,
     ].includes(f.type) ? (
       <>
         <Form.Group as={Col}>
-          {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? (
+          {[FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(f.type) ? (
             <LLabel>
               <>
                 {getFieldProps('options').label}&nbsp;
@@ -267,14 +286,18 @@ class ElementField extends Component {
                     f.field,
                     layerKey,
                     'option_layers',
-                    f.type
+                    f.type,
                   )
                 }
+                menuPlacement="auto"
+                menuPortalTarget={document.body}
               />
             </span>
           </div>
         </Form.Group>
-        {[FieldTypes.F_SELECT, 'select-multi'].includes(f.type) ? null : (
+        {[FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(
+          f.type,
+        ) ? null : (
           <Form.Group as={Col} xs={2}>
             <InputUnit fObj={f} fnUnitChange={this.handleUnitChange} />
           </Form.Group>
@@ -299,13 +322,13 @@ class ElementField extends Component {
     const tableOptions = [FieldTypes.F_TABLE].includes(f.type) ? (
       <Row className="mb-1">
         <Form.Group as={Col}>
-          <TableDef
+          <FieldTable
             genericType={genericType}
             layerKey={layerKey}
             field={f}
             updSub={this.updSubField}
             unitsFields={unitsSystem}
-            selectOptions={select_options || []}
+            selectOptions={selectOptionsArray}
             panelIsExpanded={isExpanded}
           />
           <InputGroup>
@@ -321,7 +344,7 @@ class ElementField extends Component {
                   f.field,
                   layerKey,
                   'cols',
-                  f.cols
+                  f.cols,
                 )
               }
             >
@@ -362,14 +385,16 @@ class ElementField extends Component {
 
     const fieldHeaderButtons = (
       <div onClick={(e) => e.stopPropagation()}>
-        <ButtonGroup className="me-2">
-          <VocabSaveBtn
-            field={fieldObject}
-            data={generic}
-            layer={layer}
-            genericType={genericType}
-          />
-        </ButtonGroup>
+        {genericType !== Constants.GENERIC_TYPES.DATASET && (
+          <ButtonGroup className="me-2">
+            <VocabSaveBtn
+              field={fieldObject}
+              data={generic}
+              layer={layer}
+              genericType={genericType}
+            />
+          </ButtonGroup>
+        )}
         <ButtonGroup>
           <ButtonTooltip
             idf="mv_up"
@@ -386,13 +411,19 @@ class ElementField extends Component {
             fa="faArrowDown"
             place="top"
           />
-          <ButtonEllipse condSet={f?.cond_fields?.length > 0 || false}>
-            <ConditionFieldBtn
-              field={f}
-              fnUpdateSub={this.updSubField}
-              layer={layer}
-              sortedLayers={allLayers}
-            />
+          <ConditionFieldBtn
+            field={f}
+            fnUpdateSub={this.updSubField}
+            layer={layer}
+            sortedLayers={allLayers}
+            groupedLayerKeys={groupedLayerKeys}
+            sameGroupLayerKeys={sameGroupLayerKeys}
+            selectOptions={selections || {}}
+            as="button"
+            // disabled={f.required === true || f.required === 'true'}
+            disabled={false} // for testing
+          />
+          <ButtonEllipse condSet={false}>
             <ButtonTooltip
               idf="fld_dum_add"
               fnClick={this.handleAddDummy}
@@ -425,18 +456,6 @@ class ElementField extends Component {
       />
     );
 
-    const addArrange = (_node) => (
-      <DroppablePanel
-        key={`_drop_${DnDs.LAYER_FIELD}_${f.field}_${layer.key}`}
-        type={`${DnDs.LAYER_FIELD}_${layer.key}`}
-        field={{ field: f.field }}
-        rowValue={{ key: layer.key }}
-        fnCb={this.handleDrop}
-      >
-        {_node}
-      </DroppablePanel>
-    );
-
     const customHeader = (
       <>
         {fieldHeader}
@@ -448,7 +467,6 @@ class ElementField extends Component {
       <div>
         {/* <Card className="border-0 border-top gu-square-corners"> */}
         <Card className="border-0 gu-square-corners">
-          {/* {addArrange(nodeHeader)} */}
           <Card.Body className="p-0">
             <Prop
               key={`_prop_content_${f.field}_${layerKey}`}
@@ -502,13 +520,19 @@ class ElementField extends Component {
                     xs: [
                       FieldTypes.F_SELECT,
                       FieldTypes.F_SYSTEM_DEFINED,
-                      'select-multi',
+                      FieldTypes.F_SELECT_MULTI,
                     ].includes(f.type)
-                      ? 3
+                      ? undefined
                       : undefined,
                   })}
-                  {selectOptions}
                 </Row>
+                {[
+                  FieldTypes.F_SELECT,
+                  FieldTypes.F_SYSTEM_DEFINED,
+                  FieldTypes.F_SELECT_MULTI,
+                ].includes(f.type) && (
+                  <Row className="mb-1">{selectOptions}</Row>
+                )}
                 {[FieldTypes.F_FORMULA_FIELD].includes(f.type) ? (
                   <Row className="mb-1">
                     {renderTextFieldGroup({
@@ -536,17 +560,19 @@ class ElementField extends Component {
                 {groupOptions}
                 {/* {renderDatetimeRange({ fieldObject })} */}
                 {tableOptions}
-                {/* {selectOptions} */}
                 {textFormula}
-                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type) ? (
+                {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type) && (
+                <>
                   <Row className="mb-1">
                     {renderTextFieldGroup({
                       layer,
                       fieldObject,
                       field: 'placeholder',
                       fnChange: this.handleChange,
-                      xs: 6,
+                      xs: undefined,
                     })}
+                  </Row>
+                  <Row className="mb-1">
                     {renderReadonly({
                       layer,
                       fieldObject,
@@ -557,11 +583,12 @@ class ElementField extends Component {
                           layer,
                           fieldObject,
                           fnChange: this.handleChange,
-                          xs: 2,
+                          xs: 6,
                         })
                       : renderBlank()}
                   </Row>
-                ) : null}
+                  </>
+                )}
               </Form>
             </Prop>
           </Card.Body>
@@ -583,7 +610,7 @@ ElementField.propTypes = {
   genericType: PropTypes.string, // PropTypes.arrayOf(PropTypes.object),
   layer: PropTypes.object.isRequired,
   layerKey: PropTypes.string.isRequired,
-  select_options: PropTypes.array.isRequired,
+  select_options: PropTypes.object,
   position: PropTypes.number.isRequired,
   field: PropTypes.object.isRequired,
   onMove: PropTypes.shape({
@@ -604,6 +631,7 @@ ElementField.defaultProps = {
   unitsSystem: [],
   vocabularies: [],
   parentExpand: false,
+  select_options: {},
 };
 
 export default ElementField;

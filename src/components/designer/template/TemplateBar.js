@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
-import DocuConst from '../../tools/DocuConst';
-import FIcons from '../../icons/FIcons';
-import LTooltip from '../../shared/LTooltip';
+import DocuConst from '@components/tools/DocuConst';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const TemplateBar = (props) => {
   const { notify, active, fnSwitch } = props;
@@ -39,7 +39,7 @@ const TemplateBar = (props) => {
             onClick={() => fnSwitch('p')}
             active={active === 'p'}
           >
-            Preview & Versions
+            Preview, Revisions & Share
           </Button>
         </LTooltip>
       </ButtonGroup>

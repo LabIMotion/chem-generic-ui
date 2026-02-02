@@ -1,0 +1,48 @@
+@use 'color' as *;
+
+.ug-no-caret .dropdown-toggle::after {
+  display: none !important;
+}
+
+.ug-input-group .ug-no-caret .dropdown-toggle::after {
+  display: none !important;
+}
+
+// Remove borders and shadows when focused or active
+.panel_generic_properties {
+  &.accordion-item {
+    &:focus,
+    &:active,
+    &.show {
+      border: none; // Remove border
+      box-shadow: none; // Remove shadow
+    }
+
+    // To remove borders from the button as well
+    .accordion-button {
+      &:focus,
+      &:active {
+        border: none; // Remove button border
+        box-shadow: none; // Remove button shadow
+      }
+      // Remove shadow when expanded
+      &:not(.collapsed) {
+        box-shadow: none;
+        // If you also want to remove the background color change
+        background-color: transparent;
+        // If you want to remove the color change
+        color: inherit;
+      }
+      // Add this to remove the caret in both states
+      &::after {
+        display: none !important;
+      }
+    }
+
+    // Optional: To remove hover styles as well
+    &:hover {
+      border: none; // Remove hover border
+      box-shadow: none; // Remove hover shadow
+    }
+  }
+}

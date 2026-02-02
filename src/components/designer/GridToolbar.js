@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import FIcons from '../icons/FIcons';
+import { Button, ButtonGroup } from 'react-bootstrap';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
-const GridToolbar = ({ btnNew, btnUpload, fnClickLarge, fnClickSmall }) => (
-  <ButtonGroup bsSize="sm">
+const GridToolbar = ({ btnNew, btnUpload, fnClickLarge, fnClickSmall, children }) => (
+  <ButtonGroup className="ms-2">
     {btnUpload}
     {btnNew}
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip id="_tooltip_theme_large">Enlarge grid size</Tooltip>}
-    >
-      <Button onClick={fnClickLarge}>{FIcons.faTableCellsLarge}</Button>
-    </OverlayTrigger>
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip id="_tooltip_theme_small">Shrink grid size</Tooltip>}
-    >
-      <Button onClick={fnClickSmall}>{FIcons.faTableCells}</Button>
-    </OverlayTrigger>
+    <LTooltip idf="grid_large">
+      <Button onClick={fnClickLarge} variant="outline-secondary" className="gu-btn-outline-secondary">
+        {FIcons.faTableCellsLarge}
+      </Button>
+    </LTooltip>
+    <LTooltip idf="grid_small">
+      <Button onClick={fnClickSmall} variant="outline-secondary" className="gu-btn-outline-secondary">
+        {FIcons.faTableCells}
+      </Button>
+    </LTooltip>
+    {children}
   </ButtonGroup>
 );
 

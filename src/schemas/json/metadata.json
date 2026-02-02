@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:metadata",
+  "title": "Metadata Schema",
+  "description": "Schema for metadata configuration with groups and restrictions.",
+  "type": "object",
+  "properties": {
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "layers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "position",
+          "layers"
+        ]
+      }
+    },
+    "restrict": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "op": {
+              "type": "integer"
+            },
+            "cond": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "field": {
+                    "type": "string"
+                  },
+                  "layer": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "field",
+                  "layer",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "op",
+            "cond"
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "restrict": [
+      "groups"
+    ]
+  },
+  "additionalProperties": false
+}

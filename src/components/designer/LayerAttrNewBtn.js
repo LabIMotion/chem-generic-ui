@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import LayerAttrModal from '../elements/LayerAttrModal';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import LayerAttrModal from '@components/elements/LayerAttrModal';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const LayerAttrNewBtn = (props) => {
   const { fnCreate, isAttrOnWF } = props;

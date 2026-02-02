@@ -1,4 +1,4 @@
-import { initialNodes } from '../../utils/flow/initial-flow';
+import { initialNodes } from '@utils/flow/initial-flow';
 
 export default Object.freeze({
   // plan to replace flowDefault

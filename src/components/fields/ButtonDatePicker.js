@@ -1,51 +1,66 @@
 import React, { useState } from 'react';
-import { Button, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
-const BTN_DATETIME_PICKER_TIP = (
-  <Tooltip id="_cgu_tooltip_datetime_picker">Record time</Tooltip>
-);
+const DatePickerComponent = ({ handleChange, val, readOnly }) => {
+  const selectedValue = val ? new Date(val) : null;
 
-const DatePickerComponent = ({ handleChange, val }) => (
-  <FormGroup>
-    <DatePicker
-      isClearable
-      clearButtonClassName="gu_date_picker-clear"
-      showTimeSelect
-      timeFormat="HH:mm"
-      timeIntervals={15}
-      timeCaption="Time"
-      dateFormat="dd/MM/yyyy HH:mm"
-      selected={val}
-      onSelect={handleChange}
-      onChange={handleChange}
-      placeholderText="DD/MM/YYYY hh:mm"
-    />
-  </FormGroup>
-);
+  return (
+    <Form.Group onClick={(e) => e.stopPropagation()}>
+      <div className="gu-datepicker">
+        <DatePicker
+          isClearable={!readOnly}
+          clearButtonClassName="gu_date_picker-clear"
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          timeCaption="Time"
+          dateFormat="dd/MM/yyyy HH:mm"
+          selected={selectedValue}
+          onSelect={handleChange}
+          onChange={handleChange}
+          placeholderText="DD/MM/YYYY hh:mm"
+          readOnly={readOnly}
+          className={readOnly ? 'gu-readonly' : ''}
+        />
+      </div>
+    </Form.Group>
+  );
+};
 
-const ButtonDatePicker = ({ onChange, val }) => {
+const ButtonDatePicker = ({ onChange, val, readOnly }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     onChange(date);
     setShowDatePicker(false);
   };
 
   if (val || showDatePicker) {
-    return <DatePickerComponent handleChange={handleDateChange} val={val} />;
+    return (
+      <DatePickerComponent
+        handleChange={handleDateChange}
+        val={val}
+        readOnly={readOnly}
+      />
+    );
   }
   return (
-    <OverlayTrigger placement="top" overlay={BTN_DATETIME_PICKER_TIP}>
+    <LTooltip idf="record_time">
       <Button
-        className="btn-gxs"
-        onClick={() => setShowDatePicker(!showDatePicker)}
+        variant="light"
+        size="sm"
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowDatePicker(!showDatePicker);
+        }}
+        disabled={readOnly}
       >
         {FIcons.faClock}
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 };
 

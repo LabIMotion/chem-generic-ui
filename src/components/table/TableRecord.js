@@ -4,26 +4,27 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Numeral from 'numeral';
-import { genUnits, unitConversion } from 'generic-ui-core';
-import GenericSubField from '../models/GenericSubField';
-import { AddRowBtn, DelRowBtn, DnDRowBtn, NullRowBtn } from './GridBtn';
-import { ColumnHeader, ColumnRow, NoRow } from './GridEntry';
-import UConverterRenderer from './UConverterRenderer';
-import { molOptions, samOptions } from '../tools/utils';
-import DropRenderer from './DropRenderer';
-import DropTextRenderer from './DropTextRenderer';
-import DropLinkRenderer from './DropLinkRenderer';
-import SampOption from './SamOption';
-import DragDropItemTypes from '../dnd/DragDropItemTypes';
-import SelectRenderer from './SelectRenderer';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
+import Constants from '@components/tools/Constants';
+import GenericSubField from '@components/models/GenericSubField';
+import { AddRowBtn, DelRowBtn, DnDRowBtn, DLGridBtn } from '@components/table/GridBtn';
+import { ColumnHeader, ColumnRow, NoRow } from '@components/table/GridEntry';
+import UConverterRenderer from '@components/table/UConverterRenderer';
+import { molOptions, samOptions } from '@components/tools/utils';
+import DropRenderer from '@components/table/DropRenderer';
+import DropTextRenderer from '@components/table/DropTextRenderer';
+import DropLinkRenderer from '@components/table/DropLinkRenderer';
+import SampOption from '@components/table/SamOption';
+import SelectRenderer from '@components/table/SelectRenderer';
+import { downloadResponseAsFile } from '@utils/fileUtils';
+import ImpExpManager from '@/utils/impExpMgr';
 
 export default class TableRecord extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { dlLoading: false };
     this.delRow = this.delRow.bind(this);
+    this.download = this.download.bind(this);
     this.addRow = this.addRow.bind(this);
     this.moveRow = this.moveRow.bind(this);
     this.onCellChange = this.onCellChange.bind(this);
@@ -39,10 +40,10 @@ export default class TableRecord extends React.Component {
     const newValue = e.target.value;
     const oldValue = rowValue[columnDef.field].value;
     if (oldValue === newValue) return;
-    if (columnDef.type === 'text') {
+    if (columnDef.type === FieldTypes.F_TEXT) {
       rowValue[columnDef.field] = newValue;
     }
-    if (columnDef.type === 'system-defined') {
+    if (columnDef.type === FieldTypes.F_SYSTEM_DEFINED) {
       if (isNaN(newValue)) return;
       rowValue[columnDef.field].value = Numeral(newValue).value();
     }
@@ -71,7 +72,7 @@ export default class TableRecord extends React.Component {
     const { opt } = this.props;
     const subVals = opt.f_obj.sub_values || [];
     const subVal = subVals.find(s => s.id === data.id);
-    const units = genUnits(subField.option_layers, ext);
+    const units = genUnits(subField.option_layers);
     let uIdx = units.findIndex(u => u.key === subVal[subField.id].value_system);
     if (uIdx < units.length - 1) uIdx += 1;
     else uIdx = 0;
@@ -79,8 +80,7 @@ export default class TableRecord extends React.Component {
     const v = unitConversion(
       subField.option_layers,
       vs,
-      subVal[subField.id].value,
-      ext
+      subVal[subField.id].value
     );
     subVal[subField.id] = { value: v, value_system: vs };
     const idx = subVals.findIndex(s => s.id === data.id);
@@ -116,7 +116,8 @@ export default class TableRecord extends React.Component {
 
   getColumns() {
     const { opt } = this.props;
-    const { selectOptions, onNavi } = opt;
+
+    const { selectOptions, onNavi, isEditable } = opt;
     const sValues = opt.f_obj.sub_values || [];
     let columnDefs = [];
     (opt.f_obj.sub_fields || []).forEach(sF => {
@@ -126,10 +127,10 @@ export default class TableRecord extends React.Component {
         field: sF.id,
       };
       const colDefExt = [];
-      if (sF.type === 'text') {
+      if (sF.type === FieldTypes.F_TEXT) {
         colDef = { ...colDef, editable: true, onCellChange: this.onCellChange };
       }
-      if (sF.type === 'select') {
+      if (sF.type === FieldTypes.F_SELECT) {
         let sOptions =
           (selectOptions[sF.option_layers] &&
             selectOptions[sF.option_layers].options) ||
@@ -153,7 +154,7 @@ export default class TableRecord extends React.Component {
           onCellChange: this.onCellChange,
         };
       }
-      if (sF.type === 'system-defined') {
+      if (sF.type === FieldTypes.F_SYSTEM_DEFINED) {
         const cellParams = { sField: sF, onChange: this.onUnitClick };
         colDef = {
           ...colDef,
@@ -162,8 +163,8 @@ export default class TableRecord extends React.Component {
           onCellChange: this.onCellChange,
         };
       }
-      if (sF.type === 'drag_molecule') {
-        const cellParams = { sField: sF, opt, onChange: this.onDrop };
+      if (sF.type === FieldTypes.F_DRAG_MOLECULE) {
+        const cellParams = { sField: sF, opt, onChange: this.onDrop, genericType: opt.genericType };
         colDef = {
           ...colDef,
           cellRenderer: DropRenderer,
@@ -178,7 +179,7 @@ export default class TableRecord extends React.Component {
             const ext = {
               colId: c,
               editable: false,
-              type: 'text',
+              type: FieldTypes.F_TEXT,
               headerName: attr.label,
               cellRenderer: DropTextRenderer,
               cellParams: { attr, sField: sF },
@@ -187,11 +188,11 @@ export default class TableRecord extends React.Component {
           }
         });
       }
-      if (sF.type === 'drag_sample') {
+      if (sF.type === FieldTypes.F_DRAG_SAMPLE) {
         const sOpt = sValues.filter(
           o => o[sF.id] && o[sF.id].value && o[sF.id].value.is_new
         );
-        const cellParams = { sField: sF, opt, onChange: this.onDrop };
+        const cellParams = { sField: sF, opt, onChange: this.onDrop, genericType: opt.genericType };
         colDef = {
           ...colDef,
           cellRenderer: DropRenderer,
@@ -202,17 +203,18 @@ export default class TableRecord extends React.Component {
         const addOption = {
           colId: 'sam_option',
           editable: false,
-          type: 'text',
+          type: FieldTypes.F_TEXT,
           headerName: '',
           cellRenderer: SampOption,
-          cellParams: { sField: sF, onChange: this.onChk },
+          cellParams: { sField: sF, onChange: this.onChk, genericType: opt.genericType },
           width: '3vw',
         };
-        if (sOpt.length > 0) colDefExt.push(addOption);
+        // Add the option column if the generic type is not 'Segment'
+        if (sOpt.length > 0 && opt.genericType !== 'Segment') colDefExt.push(addOption);
         const addLink = {
           colId: 'sam_link',
           editable: false,
-          type: 'text',
+          type: FieldTypes.F_TEXT,
           headerName: 'Short label',
           cellRenderer: DropLinkRenderer,
           cellParams: { sField: sF, onNavi },
@@ -226,7 +228,7 @@ export default class TableRecord extends React.Component {
             const ext = {
               colId: c,
               editable: false,
-              type: 'text',
+              type: FieldTypes.F_TEXT,
               headerName: attr.label,
               cellRenderer: DropTextRenderer,
               cellParams: { attr, sField: sF },
@@ -243,24 +245,26 @@ export default class TableRecord extends React.Component {
       headerName: '',
       colId: opt.f_obj.field,
       headerComponent: AddRowBtn,
-      headerParams: { addRow: this.addRow },
+      headerParams: { addRow: this.addRow, isEditable: isEditable },
       cellRenderer: DelRowBtn,
-      cellParams: { delRow: this.delRow },
+      cellParams: { delRow: this.delRow, isEditable: isEditable },
       width: 'unset',
     };
     columnDefs.splice(0, 0, act);
-    const dtype = `${DragDropItemTypes.GENERIC_GRID}_${opt.layer.key}_${opt.f_obj.field}`;
+    const dtype = `${Constants.PERMIT_TARGET.GENERIC_GRID}_${opt.layer.key}_${opt.f_obj.field}`;
     const move = {
       type: 'dnd',
       field: opt.f_obj.field,
       headerName: '',
       colId: `${opt.f_obj.field}_dnd`,
-      headerComponent: NullRowBtn,
+      headerComponent: DLGridBtn,
+      headerParams: { download: this.download, opt: opt, loading: this.state.dlLoading },
       cellRenderer: DnDRowBtn,
       cellParams: {
         moveRow: this.moveRow,
         field: opt.f_obj.field,
         type: dtype,
+        isEditable, isEditable,
       },
       width: 'unset',
     };
@@ -292,7 +296,7 @@ export default class TableRecord extends React.Component {
     const subFields = opt.f_obj.sub_fields || [];
     const newSub = new GenericSubField();
     subFields.map(e => {
-      if (e.type === 'text') return Object.assign(newSub, { [e.id]: '' });
+      if (e.type === FieldTypes.F_TEXT) return Object.assign(newSub, { [e.id]: '' });
       return Object.assign(newSub, {
         [e.id]: { value: '', value_system: e.value_system },
       });
@@ -300,6 +304,25 @@ export default class TableRecord extends React.Component {
     opt.f_obj.sub_values = opt.f_obj.sub_values || [];
     opt.f_obj.sub_values.push(newSub);
     opt.onSubChange(0, 0, opt.f_obj, true);
+  }
+
+  async download() {
+    try {
+      this.setState({ dlLoading: true });
+
+      const { opt } = this.props;
+      const response = await ImpExpManager.exportTable(opt.id, {
+        klass: opt.genericType,
+        layer_id: opt.layer.key,
+        field_id: opt.field,
+      });
+
+      await downloadResponseAsFile(response);
+    } catch (error) {
+      console.error('Error exporting file:', error);
+    } finally {
+      this.setState({ dlLoading: false });
+    }
   }
 
   render() {

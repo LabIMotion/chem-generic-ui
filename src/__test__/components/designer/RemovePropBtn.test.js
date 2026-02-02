@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import RemovePropBtn from '../../../components/designer/template/RemovePropBtn';
+import { render, fireEvent, act, waitFor } from '@testing-library/react';
+import RemovePropBtn from '@components/designer/template/RemovePropBtn';
 
 // Mock the handleDelete function since it's not provided in the test
 // jest.mock('./path/to/handleDelete', () => ({
@@ -21,6 +22,30 @@ describe('RemovePropBtn', () => {
     fnDelete: mockFn,
   };
 
+  // Helper function to handle overlay interactions with proper act wrapping
+  const interactWithOverlay = async (callback) => {
+    await act(async () => {
+      callback();
+      // Allow React to process the event
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    // Wait for any async overlay updates (popper positioning, etc.)
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    });
+  };
+
+  beforeEach(() => {
+    mockFn.mockClear();
+  });
+
+  afterEach(async () => {
+    // Ensure all pending updates are flushed after each test
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
+  });
+
   describe('Rendering', () => {
     test('should not render the button if delStr is not allowed', () => {
       const { queryByTestId } = render(
@@ -36,36 +61,66 @@ describe('RemovePropBtn', () => {
       expect(button).toBeInTheDocument();
     });
 
-    test('should show a popover when the button is clicked', () => {
+    test('should show a popover when the button is clicked', async () => {
       const { getByTestId, getByText } = render(<RemovePropBtn {...props} />);
       const button = getByTestId('template-remove-btn');
-      fireEvent.focus(button);
-      const popover = getByText(
-        'remove this option: [option1] from select [select1] ?'
-      );
-      expect(popover).toBeInTheDocument();
+
+      await interactWithOverlay(() => {
+        fireEvent.focus(button);
+      });
+
+      await waitFor(() => {
+        const popover = getByText(
+          'remove this option: [option1] from select [select1] ?'
+        );
+        expect(popover).toBeInTheDocument();
+      });
     });
   });
 
   describe('Confirm action', () => {
-    test('should call fnDelete when the "Yes" button is clicked', () => {
+    test('should call fnDelete when the "Yes" button is clicked', async () => {
       const { getByTestId } = render(<RemovePropBtn {...props} />);
       const button = getByTestId('template-remove-btn');
-      fireEvent.focus(button);
+
+      await interactWithOverlay(() => {
+        fireEvent.focus(button);
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('template-remove-yes-btn')).toBeInTheDocument();
+      });
+
       const yesButton = getByTestId('template-remove-yes-btn');
-      fireEvent.click(yesButton);
+
+      await interactWithOverlay(() => {
+        fireEvent.click(yesButton);
+      });
+
       expect(props.fnDelete).toHaveBeenCalled();
     });
   });
 
   describe('Cancel action', () => {
-    test('should not call fnDelete', () => {
+    test('should not call fnDelete', async () => {
       const { getByTestId } = render(<RemovePropBtn {...props} />);
       const button = getByTestId('template-remove-btn');
-      fireEvent.focus(button);
+
+      await interactWithOverlay(() => {
+        fireEvent.focus(button);
+      });
+
+      await waitFor(() => {
+        expect(getByTestId('template-remove-no-btn')).toBeInTheDocument();
+      });
+
       const noButton = getByTestId('template-remove-no-btn');
-      fireEvent.click(noButton);
-      expect(jest.fn()).not.toHaveBeenCalled();
+
+      await interactWithOverlay(() => {
+        fireEvent.click(noButton);
+      });
+
+      expect(props.fnDelete).not.toHaveBeenCalled();
     });
   });
 });

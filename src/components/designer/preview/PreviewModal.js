@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
-import Preview from './Preview';
+import Preview from '@components/designer/preview/Preview';
 
 export default class PreviewModal extends React.Component {
   constructor(props) {
@@ -57,6 +57,7 @@ export default class PreviewModal extends React.Component {
     if (revisions.length < 1) return null;
     return (
       <Modal
+        centered
         backdrop="static"
         dialogClassName="importChemDrawModal"
         show={showModal}

@@ -21,6 +21,8 @@ This library is purely written in JavaScript and is based on the [React](https:/
   - Segment Details: [Table-Based layout, for multiple records with drag-and-drop functionality inside tables](https://www.chemotion.net/docs/labimotion/user/segments/details)
   - Dataset Details: [Styling and unit conversion](https://www.chemotion.net/docs/labimotion/user/datasets/details)
 
+- Layer grouping to manage multiple layers
+
 ## Installation
 
 The chem-generic-ui library is available as an NPM package. Install it either with NPM:

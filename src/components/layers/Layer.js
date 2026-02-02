@@ -1,4 +1,4 @@
-import Field from '../models/Field';
+import Field from '@components/models/Field';
 
 export default class Layer {
   constructor(args) {

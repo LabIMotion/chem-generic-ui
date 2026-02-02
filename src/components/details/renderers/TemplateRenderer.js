@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonTooltip from '../../fields/ButtonTooltip';
-import { LWf } from '../../shared/LCom';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import { LWf } from '@components/shared/LCom';
 
 const WFLayerMark = ({ data }) => {
   if (!data || (!data.flow && !data.flowObject)) {

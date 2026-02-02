@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dropdown } from 'react-bootstrap';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
-import TAs from '../tools/TAs';
+import { Dropdown } from 'react-bootstrap';
+import FIcons from '@components/icons/FIcons';
+import TooltipButton from '@ui/common/TooltipButton';
+import TAs from '@components/tools/TAs';
 
-const ButtonTooltip = (props) => {
+const ButtonTooltip = memo((props) => {
   const {
     idf,
     bs,
@@ -31,52 +31,29 @@ const ButtonTooltip = (props) => {
   if (as === 'menu') {
     return conditionMenu;
   }
-  if (bs === '') {
-    return (
-      <LTooltip idf={idf} placement={place}>
-        <Button
-          className={btnCls}
-          size={size || undefined}
-          onClick={(e) => {
-            e.stopPropagation();
-            fnClick(element);
-          }}
-          disabled={disabled}
-        >
-          {content === '' && FIcons[fa]}
-          {content !== '' && (
-            <>
-              {FIcons[fa]}&nbsp;
-              {content}
-            </>
-          )}
-        </Button>
-      </LTooltip>
-    );
-  }
   return (
-    <LTooltip idf={idf} placement={place}>
-      <Button
-        className={btnCls}
-        size={size || undefined}
-        variant={bs}
-        onClick={(e) => {
-          e.stopPropagation();
-          fnClick(element);
-        }}
-        disabled={disabled}
-      >
-        {content === '' && FIcons[fa]}
-        {content !== '' && (
-          <>
-            {FIcons[fa]}&nbsp;
-            {content}
-          </>
-        )}
-      </Button>
-    </LTooltip>
+    <TooltipButton
+      tooltipId={idf}
+      placement={place}
+      variant={bs || undefined}
+      size={size || undefined}
+      className={btnCls}
+      disabled={disabled}
+      onClick={(e) => {
+        e.stopPropagation();
+        fnClick(element);
+      }}
+    >
+      {content === '' && FIcons[fa]}
+      {content !== '' && (
+        <>
+          {FIcons[fa]}&nbsp;
+          {content}
+        </>
+      )}
+    </TooltipButton>
   );
-};
+});
 
 ButtonTooltip.propTypes = {
   idf: PropTypes.string,

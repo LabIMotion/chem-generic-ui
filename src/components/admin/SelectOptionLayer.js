@@ -2,14 +2,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'react-bootstrap';
-import SelectAttrNewModal from './SelectAttrNewModal';
-import Selection from './Selection';
-import ButtonTooltip from '../fields/ButtonTooltip';
+import SelectAttrNewModal from '@components/admin/SelectAttrNewModal';
+import Selection from '@components/admin/Selection';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
 import {
   handleAddOption,
   handleAddSelect,
   handleOptionInput,
-} from '../../utils/template/action-handler';
+} from '@utils/template/action-handler';
+import fbc from '@components/tools/ui-styles';
 
 const SelectOptionLayer = (props) => {
   const { generic, fnChange } = props;
@@ -41,7 +42,7 @@ const SelectOptionLayer = (props) => {
       <Card className="border-0">
         <Card.Header
           as="h5"
-          className="d-flex justify-content-between align-items-center bg-white"
+          className={`${fbc} lu-bg-white`}
         >
           Selection Lists
           <ButtonTooltip

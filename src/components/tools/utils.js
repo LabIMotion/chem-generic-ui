@@ -2,21 +2,13 @@ import React from 'react';
 import { v4 as uuid } from 'uuid';
 import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
-import { FieldTypes } from 'generic-ui-core';
-import Attachment from '../models/Attachment';
-import FieldTooltip from '../fields/FieldTooltip';
-import DocuConst from './DocuConst';
+import { FieldTypes, getUnitSystem } from 'generic-ui-core';
+import Attachment from '@components/models/Attachment';
+import Constants from '@components/tools/Constants';
+import FieldTooltip from '@components/fields/FieldTooltip';
+import DocuConst from '@components/tools/DocuConst';
 
 const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
-
-// key: always uppercase, value: depends on the fn
-const createEnum = (arr, fn = 'toString') =>
-  Object.freeze(
-    arr.reduce((acc, cur) => {
-      acc[cur.toUpperCase()] = cur[fn]();
-      return acc;
-    }, {})
-  );
 
 // move from GenericElCommon.js > UploadInputChange
 const uploadFiles = (properties, event, field, layer) => {
@@ -89,23 +81,10 @@ const inputEventVal = (event, type) => {
   return event.target && event.target.value;
 };
 
-const toNum = (val) => {
-  const parse = Number(val || '');
-  return Number.isNaN(parse) ? 0 : parse;
-};
-
-const toNullOrInt = (val) => {
-  if (val) {
-    const parse = Number(val);
-    return Number.isNaN(parse) ? null : parseInt(val, 10);
-  }
-  return null;
-};
-
 const genUnitSup = (val) => {
-  if (typeof val === 'undefined' || val === null) return '';
+  if (typeof val === 'undefined' || val === null || val === '') return '';
   const vals = val.match(
-    /<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g
+    /<\s*(\w+\b)(?:(?!<\s*\/\s*\1\b)[\s\S])*<\s*\/\s*\1\s*>|[^<]+/g,
   );
   const reV = vals.map((v) => {
     const supVal = v.match(/<sup[^>]*>([^<]+)<\/sup>/);
@@ -115,11 +94,6 @@ const genUnitSup = (val) => {
     return v;
   });
   return <span>{reV}</span>;
-};
-
-const toBool = (val) => {
-  const valLower = String(val).toLowerCase();
-  return !(!valLower || valLower === 'false' || valLower === '0');
 };
 
 const molOptions = [
@@ -153,9 +127,14 @@ const fieldCls = (isSpCall = false) => {
   return [clsFrm, clsCol];
 };
 
-const docFields = [DocuConst.DOC_SITE, 'designer', 'components', 'fields'].join(
-  '/'
-);
+const buildDocPath = (segments, hash = '') => {
+  const path = [DocuConst.DOC_SITE, ...segments].join('/');
+  return hash ? `${path}#${hash}` : path;
+};
+
+const docDesignerBase = ['designer', 'components'];
+const docFields = buildDocPath([...docDesignerBase, 'fields']);
+
 const propDefault = {
   cols: {
     label: 'Column Width Division',
@@ -224,6 +203,10 @@ const propDefault = {
     label: 'LabIMotion Designer',
     doc: [DocuConst.DOC_SITE, 'designer'].join('/'),
   },
+  restrictionSetting: {
+    label: 'Restriction Setting',
+    doc: [docFields, 'layers', 'restriction-setting'].join(''),
+  },
   templateFeatures: {
     label: 'Template Features',
     doc: [DocuConst.DOC_SITE, 'designer', 'template-features'].join('/'),
@@ -244,8 +227,8 @@ const getFieldProps = (name) => {
 };
 
 const frmSelSty = {
-  menuPortal: (base) => ({ ...base, zIndex: 90 }),
-  menu: (base) => ({ ...base, zIndex: 90 }),
+  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+  menu: (base) => ({ ...base, zIndex: 9999 }),
   control: (base) => ({
     ...base,
     minHeight: '31px',
@@ -299,7 +282,7 @@ const storeOptions = (options) => {
   // Check if all elements are objects with a 'value' property
   if (
     !options.every(
-      (item) => item && typeof item === 'object' && 'value' in item
+      (item) => item && typeof item === 'object' && 'value' in item,
     )
   ) {
     return [];
@@ -308,8 +291,8 @@ const storeOptions = (options) => {
   // Filter out objects with falsy values and remove duplicates
   return Array.from(
     new Map(
-      options.filter((item) => item.value).map((item) => [item.value, item])
-    ).values()
+      options.filter((item) => item.value).map((item) => [item.value, item]),
+    ).values(),
   ).map((item) => ({ value: item.value }));
 };
 
@@ -323,17 +306,60 @@ const transformValues = (options) => {
     .map(String);
 };
 
-const buildString = (inputs, separator = '-') => {
-  return inputs.join(separator);
+const getAssociationStatus = (id, taggable) => {
+  if (taggable.element?.id === id) {
+    return false;
+  }
+  return !!(taggable.reaction_id || taggable.wellplate_id || taggable.element);
+};
+
+const permitTargets = Object.values(Constants.PERMIT_TARGET);
+const srcElement = Constants.PERMIT_TARGET.ELEMENT;
+const srcElements = [
+  Constants.PERMIT_TARGET.SAMPLE,
+  Constants.PERMIT_TARGET.MOLECULE,
+];
+const exceptElements = srcElements.concat([Constants.PERMIT_TARGET.GRID]);
+
+// source could be one of sample, molecule, element
+// when element, return all permit targets except sample and molecule and grid
+const searchTargets = (source) => {
+  if (srcElements.includes(source[0])) {
+    return source;
+  }
+  return permitTargets.filter((t) => !exceptElements.includes(t));
+};
+
+const userData = (user) => {
+  const userObj = user || {};
+  const id = userObj.id;
+  if (!id) return { id: '', name: '', email: '' };
+
+  const name = `${userObj?.first_name} ${userObj?.last_name}` || '';
+  const email = userObj?.email || '';
+  return { id, name, email };
+}
+
+const defaultVSystem = (si) => {
+  const sis = getUnitSystem();
+  const fSi = sis.filter((e) => e.field === si)[0];
+  if (!fSi || Object.keys(fSi).length === 0) return null; // return if SI is not found
+
+  return fSi?.units[0];
+};
+
+// true → {}, { a: 1 }, any plain object
+// false → "hello", "", "2", 2, 3.14, null, []
+const isObject = (value) => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
 
 export {
-  createEnum,
-  buildString,
+  defaultVSystem,
+  isObject,
+  searchTargets,
   frmSelSty,
   GenericDummy,
-  toBool,
-  toNum,
   genUnitSup,
   inputEventVal,
   molOptions,
@@ -342,8 +368,12 @@ export {
   uploadFiles,
   KlzIcon,
   fieldCls,
-  toNullOrInt,
+  getAssociationStatus,
   getFieldProps,
+  permitTargets,
+  srcElement,
+  srcElements,
   storeOptions,
   transformValues,
+  userData,
 };

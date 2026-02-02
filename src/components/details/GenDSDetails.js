@@ -4,13 +4,10 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import findIndex from 'lodash/findIndex';
 import { Card, Button, ButtonToolbar } from 'react-bootstrap';
-import { genUnits, absOlsTermLabel } from 'generic-ui-core';
-import GenInterface from './GenInterface';
-import { toBool, toNum } from '../tools/utils';
-import LTooltip from '../shared/LTooltip';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { FieldTypes, genUnits, absOlsTermLabel } from 'generic-ui-core';
+import GenInterface from '@components/details/GenInterface';
+import LTooltip from '@components/shared/LTooltip';
+import { toBool, toNum } from '@utils/pureUtils';
 
 class GenericDSDetails extends Component {
   constructor(props) {
@@ -36,14 +33,14 @@ class GenericDSDetails extends Component {
               genericDS.properties.layers[key].fields[curIdx].value;
             const curType = typeof curVal;
             if (
-              ['select', 'text', 'textarea', 'formula-field'].includes(
+              [FieldTypes.F_SELECT, FieldTypes.F_TEXT, FieldTypes.F_TEXTAREA, FieldTypes.F_FORMULA_FIELD].includes(
                 newProps.layers[key].fields[idx].type
               )
             ) {
               newProps.layers[key].fields[idx].value =
                 curType !== 'undefined' ? curVal.toString() : '';
             }
-            if (newProps.layers[key].fields[idx].type === 'integer') {
+            if (newProps.layers[key].fields[idx].type === FieldTypes.F_INTEGER) {
               // eslint-disable-next-line no-restricted-globals
               newProps.layers[key].fields[idx].value =
                 curType === 'undefined' ||
@@ -52,14 +49,13 @@ class GenericDSDetails extends Component {
                   ? 0
                   : parseInt(curVal, 10);
             }
-            if (newProps.layers[key].fields[idx].type === 'checkbox') {
+            if (newProps.layers[key].fields[idx].type === FieldTypes.F_CHECKBOX) {
               newProps.layers[key].fields[idx].value =
                 curType !== 'undefined' ? toBool(curVal) : false;
             }
-            if (newProps.layers[key].fields[idx].type === 'system-defined') {
+            if (newProps.layers[key].fields[idx].type === FieldTypes.F_SYSTEM_DEFINED) {
               const units = genUnits(
-                newProps.layers[key].fields[idx].option_layers,
-                ext
+                newProps.layers[key].fields[idx].option_layers
               );
               const vs = units.find(
                 u =>
@@ -119,7 +115,7 @@ class GenericDSDetails extends Component {
             <ButtonToolbar className="gap-2 pull-right">
               <LTooltip idf="reload_temp">
                 <Button
-                  className="btn-gxs"
+                  size="sm"
                   variant="danger"
                   onClick={() => this.handleReload()}
                 >

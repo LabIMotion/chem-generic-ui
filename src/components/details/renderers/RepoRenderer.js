@@ -1,11 +1,10 @@
 import React from 'react';
-import ButtonTooltip from '../../fields/ButtonTooltip';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
 
-const RepoRenderer = params => {
+const RepoRenderer = (params) => {
   const { data, fnApi, node } = params;
-  const fa = ['faArrowsRotate'];
 
-  const onCall = e => {
+  const onCall = (e) => {
     node.setSelected(true, true);
     fnApi(e);
   };
@@ -13,8 +12,8 @@ const RepoRenderer = params => {
   return (
     <span>
       <ButtonTooltip
-        tip="Fetch this template from hub"
-        fa={fa[0]}
+        idf="tpl_fetch"
+        fa="faArrowsRotate"
         element={data}
         fnClick={onCall}
       />

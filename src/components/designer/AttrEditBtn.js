@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import AttrModal from '../elements/AttrModal';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import AttrModal from '@components/elements/AttrModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const AttrEditBtn = (props) => {
-  const { data, fnSelect, fnDelete, fnEdit, genericType, klasses } = props;
+  const { data, fnSelect, fnDelete, fnEdit, genericType } = props;
   const [show, setShow] = useState(false);
 
   const onSelect = () => {
@@ -20,7 +20,7 @@ const AttrEditBtn = (props) => {
   return (
     <>
       <LTooltip idf={`edit_attr.${genericType.toLowerCase()}`}>
-        <Button variant="light" className="btn-sm" onClick={onSelect}>
+        <Button variant="light" size="sm" onClick={onSelect}>
           {FIcons.faPencil}
         </Button>
       </LTooltip>
@@ -33,7 +33,6 @@ const AttrEditBtn = (props) => {
         editable={false}
         fnAction={fnEdit}
         genericType={genericType}
-        klasses={klasses}
         showProps={{ show, setShow }}
       />
     </>
@@ -50,9 +49,8 @@ AttrEditBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  klasses: PropTypes.array, // required for Segment
 };
 
-AttrEditBtn.defaultProps = { klasses: [] };
+AttrEditBtn.defaultProps = {};
 
 export default AttrEditBtn;

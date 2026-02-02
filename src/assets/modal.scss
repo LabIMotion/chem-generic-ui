@@ -64,6 +64,40 @@
 }
 
 .gu_modal-68w {
-  width: 68%;
+  width: 68% !important;
   max-width: none !important;
+}
+
+.gu-full-width-panel {
+  white-space: normal;
+  width: 100%;
+  // height: 100%;
+  padding: 5px;
+  border: 2px solid red;
+  border-style: ridge;
+  box-sizing: border-box;
+  background-color: #99999944;
+  font-family: inherit;
+}
+
+.gu-full-width-center {
+  // overflow-y: scroll;
+  border: 1px solid grey;
+  padding: 2px;
+  // height: 100%;
+  box-sizing: border-box;
+  font-family: cursive;
+  background-color: #99999944;
+  font-family: inherit;
+}
+
+// Nested modal styling for ElementSelectModal
+.element-select-modal {
+  // High z-index for deeply nested modals
+  z-index: 9999 !important;
+
+  // Backdrop z-index
+  .modal-backdrop {
+    z-index: 9998 !important;
+  }
 }

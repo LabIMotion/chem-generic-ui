@@ -4,10 +4,11 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { GenPropertiesDate } from '../fields/GenPropertiesFields';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
-import { LWf } from '../shared/LCom';
+import { GenPropertiesDate } from '@components/fields/GenPropertiesFields';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import { LWf } from '@components/shared/LCom';
+import fbc from '@components/tools/ui-styles';
 
 const orderSource = {
   canDrag(props) {
@@ -29,6 +30,8 @@ const PanelDnD = (props) => {
     onAttrChange,
     // bs,
     hasAi,
+    editMode,
+    grouped,
   } = props;
 
   const [{ isDraggingSource }, drag] = useDrag(() => {
@@ -66,6 +69,8 @@ const PanelDnD = (props) => {
   }${isDraggingSource ? ' is-dragging' : ''}`;
 
   const { style, label, wf = false, key, timeRecord } = layer;
+  const isSys = key.startsWith(Constants.SYS_REACTION);
+
   const dndKlz = wf ? `dnd-none` : `dnd`;
 
   const klz = style || 'panel_generic_heading';
@@ -110,7 +115,7 @@ const PanelDnD = (props) => {
 
   const btnRemove = createButton(
     FIcons.faMinus,
-    'Remove layer',
+    isSys ? 'Remove this reaction' : 'Remove layer',
     '_tooltip_remove_layer',
     (event) => handleChange(event, id, layer, 'layer-remove')
   );
@@ -132,60 +137,46 @@ const PanelDnD = (props) => {
     </div>
   );
 
-  const splitKey = key.split('.');
-  const isSys = key.startsWith(Constants.SYS_REACTION);
+  const layerHeader = () => {
+    const splitKey = key.split('.');
+    return (
+      splitKey.length > 1 ? <span>{`Repetition ${splitKey[1]}`}</span> : null
+    )
+  }
 
-  const extHead =
-    splitKey.length > 1 ? <span>{`Repetition ${splitKey[1]}`}</span> : null;
-
-  const btnLayer = wf ? (
-    <>
-      {isSys ? null : (
-        <ButtonGroup key={`${layer.key}-group1`}>
-          {GenPropertiesDate({
-            isSpCall: false,
-            isAtLayer: true,
-            label: undefined,
-            value: timeRecord || '',
-            onChange: onAttrChange,
-          })}
-        </ButtonGroup>
-      )}
-      <ButtonGroup className="me-2" key={`${layer.key}-group2`}>
-        {btnReaction}
-        {btnLinkAna}
-        {isSys ? null : btnAdd}
+  const layerWithButton = () => {
+    const dateButton = (
+      <ButtonGroup key={`${layer.key}-group1`}>
+        {GenPropertiesDate({
+          isSpCall: false,
+          isAtLayer: true,
+          label: undefined,
+          value: timeRecord || '',
+          onChange: onAttrChange,
+          readOnly: !editMode,
+        })}
       </ButtonGroup>
-    </>
-  ) : (
-    <>
-      {isSys ? null : (
-        <ButtonGroup key={`${layer.key}-group3`}>
-          {GenPropertiesDate({
-            isSpCall: false,
-            isAtLayer: true,
-            label: undefined,
-            value: timeRecord || '',
-            onChange: onAttrChange,
-          })}
+    );
+    if (!editMode) return dateButton;
+    const shouldEnableRemove = !wf && (/\.\d+$/.test(key) || isSys);
+    return (
+      <>
+        {isSys ? null : dateButton}
+        <ButtonGroup className="me-2" key={`${layer.key}-group2`}>
+          {btnReaction}
+          {btnLinkAna}
+          {isSys ? null : btnAdd}
+          {shouldEnableRemove ? btnRemove : null}
         </ButtonGroup>
-      )}
-      <ButtonGroup className="me-1" key={`${layer.key}-group4`}>
-        {btnReaction}
-        {btnLinkAna}
-        {isSys ? null : btnAdd}
-        {btnRemove}
-      </ButtonGroup>
-      {/* {moveDiv} */}
-      {/* <ButtonGroup className={className}>{moveIcon}</ButtonGroup> */}
-    </>
-  );
+      </>
+    );
+  };
 
   const accordionDiv = (
-    <div className="d-flex justify-content-between align-items-center">
+    <div className={fbc}>
       <LWf wf={wf} />
-      {extHead}
-      {btnLayer}
+      {layerHeader()}
+      {layerWithButton()}
     </div>
   );
 

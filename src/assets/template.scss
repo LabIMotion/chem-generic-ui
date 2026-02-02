@@ -1,7 +1,7 @@
 @use "color" as *;
 
 .gu-designer-template-bar {
-  margin: 10px 0px;
+  margin: 20px 0px 0px 0px;
   display: inline-flex;
   width: 100%;
   align-items: stretch;
@@ -24,3 +24,13 @@
   }
 }
 
+.lu-link {
+  color: $color-bs-link !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lu-link:hover {
+  color: $color-bs-link-hover !important;
+  text-decoration: underline;
+}

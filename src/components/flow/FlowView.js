@@ -7,8 +7,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
 } from 'reactflow';
-import LayerNode from './LayerNode';
-import { buildFlowElements } from '../../utils/flow/build-flow-elements';
+import LayerNode from '@components/flow/LayerNode';
+import { buildFlowElements } from '@utils/flow/build-flow-elements';
 
 const nodeTypes = { selectorNode: LayerNode };
 

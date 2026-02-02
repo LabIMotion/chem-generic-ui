@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:layers",
+  "title": "Layers Schema",
+  "description": "Schema for layers configuration with field references.",
+  "type": "object",
+  "propertyNames": {
+    "type": "string"
+  },
+  "minProperties": 0,
+  "patternProperties": {
+    "^.*$": {
+      "type": "object",
+      "properties": {
+        "wf": {
+          "type": "boolean",
+          "default": false
+        },
+        "key": {
+          "type": "string"
+        },
+        "cols": {
+          "type": "integer",
+          "default": 1
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "none",
+            "warning",
+            "primary",
+            "info",
+            "danger",
+            "success",
+            "default"
+          ],
+          "default": "default"
+        },
+        "label": {
+          "type": "string"
+        },
+        "label_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "panel_generic_heading",
+            "panel_generic_heading_bu",
+            "panel_generic_heading_bui"
+          ],
+          "default": "panel_generic_heading"
+        },
+        "position": {
+          "type": "integer",
+          "default": -1
+        },
+        "wf_position": {
+          "type": "integer"
+        },
+        "wf_uuid": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "urn:labimotion:schemas:field-base"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "hasOwnRow": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "key",
+        "cols",
+        "color",
+        "position"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

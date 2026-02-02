@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../assets/pill-toggle.scss';
+import '@assets/pill-toggle.scss';
 
 const LPillToggle = ({ leftText, rightText, isRight, onChange, disabled }) => {
   return (
@@ -18,7 +18,7 @@ const LPillToggle = ({ leftText, rightText, isRight, onChange, disabled }) => {
         <span className="text-white pill-toggle-text">
           {isRight ? rightText : leftText}
         </span>
-        <div className="bg-white border border-primary pill-toggle-circle" />
+        <div className="lu-bg-white border border-primary pill-toggle-circle" />
       </div>
     </button>
   );

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
-import DnDNodes from './DnDNodes';
+import DnDNodes from '@components/flow/DnDNodes';
 
 const DnDSidebar = (props) => {
   const { element } = props;

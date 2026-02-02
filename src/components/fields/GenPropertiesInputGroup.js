@@ -1,11 +1,8 @@
 import React from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
-import { genUnit } from 'generic-ui-core';
-import FieldHeader from './FieldHeader';
-import { fieldCls, genUnitSup } from '../tools/utils';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { genUnit, FieldTypes } from 'generic-ui-core';
+import FieldHeader from '@components/fields/FieldHeader';
+import { fieldCls, genUnitSup } from '@components/tools/utils';
 
 const GenPropertiesInputGroup = (opt) => {
   const handleSubChange = React.useCallback(
@@ -18,13 +15,13 @@ const GenPropertiesInputGroup = (opt) => {
   const klz = fieldCls(opt.isSpCall);
 
   const subs = opt.f_obj?.sub_fields?.map((e) => {
-    if (e.type === 'label') {
+    if (e.type === FieldTypes.F_LABEL) {
       return (
         <InputGroup.Text key={`_label_${e.id}`}>{e.value}</InputGroup.Text>
       );
     }
 
-    if (e.type === 'system-defined') {
+    if (e.type === FieldTypes.F_SYSTEM_DEFINED) {
       return (
         <React.Fragment key={`_fra_${e.id}`}>
           <Form.Control
@@ -38,7 +35,7 @@ const GenPropertiesInputGroup = (opt) => {
             onClick={() => opt.onSubChange(e, e.id, opt.f_obj)}
             variant="success"
           >
-            {genUnitSup(genUnit(e.option_layers, e.value_system, ext).label) || ''}
+            {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
           </Button>
         </React.Fragment>
       );

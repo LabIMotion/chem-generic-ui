@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:field-base",
+  "title": "Field Base Schema",
+  "description": "Base schema for dynamic field definitions with valid field types from FieldTypes enum.",
+  "type": "object",
+  "properties": {
+    "cols": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "checkbox",
+        "date",
+        "datetime",
+        "datetime-range",
+        "drag",
+        "drag_element",
+        "drag_molecule",
+        "drag_sample",
+        "drag_reaction",
+        "dummy",
+        "formula-field",
+        "input-group",
+        "integer",
+        "label",
+        "number",
+        "ontology-select",
+        "select",
+        "select-multi",
+        "sys-reaction",
+        "system-defined",
+        "table",
+        "text",
+        "textarea",
+        "text-formula",
+        "upload",
+        "wf-next"
+      ]
+    },
+    "field": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "default": {
+      "type": "string"
+    },
+    "position": {
+      "type": "integer"
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "cond_operator": {
+      "type": "integer",
+      "default": 1
+    },
+    "cond_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "layer": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "field",
+          "layer",
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sub_fields": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "option_layers": {
+      "type": "string"
+    },
+    "text_sub_fields": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "type",
+    "field"
+  ],
+  "additionalProperties": true
+}

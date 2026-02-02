@@ -2,13 +2,15 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Col, Row } from 'react-bootstrap';
-import PropLayers from './PropLayers';
-import SelectOptionLayer from '../../admin/SelectOptionLayer';
-import ButtonTooltip from '../../fields/ButtonTooltip';
-import WorkflowDesignBtn from '../WorkflowDesignBtn';
-import UploadTemplateBtn from '../UploadTemplateBtn';
-import Constants from '../../tools/Constants';
+import { Card } from 'react-bootstrap';
+import PropLayers from '@components/designer/template/PropLayers';
+import SelectOptionLayer from '@components/admin/SelectOptionLayer';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import WorkflowDesignBtn from '@components/designer/WorkflowDesignBtn';
+import UploadTemplateBtn from '@components/designer/UploadTemplateBtn';
+import ResizablePanel from '@components/shared/ResizablePanel';
+import Constants from '@components/tools/Constants';
+import fbc from '@components/tools/ui-styles';
 
 const headerText = (genericType, data) => {
   const { name, label, desc } = data;
@@ -37,8 +39,7 @@ const TemplateProps = (props) => {
     <div>
       <Card>
         <Card.Header
-          as="h5"
-          className="d-flex justify-content-between align-items-center"
+          className={`fs-5 fw-bold ${fbc}`}
         >
           {headerText(genericType, data)}
           <span className="button-right d-flex gap-1">
@@ -90,20 +91,27 @@ const TemplateProps = (props) => {
           </span>
         </Card.Header>
         <Card.Body>
-          <Row style={{ maxWidth: '2000px', margin: 'auto' }}>
-            <Col xs={8} className="ps-0">
-              <PropLayers
-                data={data}
-                vocabularies={vocabularies}
-                fnDerive={innerAction}
-                fnUpdate={innerAction}
-                genericType={genericType}
-              />
-            </Col>
-            <Col xs={4} className="border-start pe-0">
-              <SelectOptionLayer generic={data} fnChange={innerAction} />
-            </Col>
-          </Row>
+          <div style={{ maxWidth: '2000px', margin: 'auto', height: '100%' }}>
+            <ResizablePanel
+              defaultLeftWidth={66.67}
+              minLeftWidth={50}
+              minRightWidth={20}
+              leftPanel={
+                <PropLayers
+                  data={data}
+                  vocabularies={vocabularies}
+                  fnDerive={innerAction}
+                  fnUpdate={innerAction}
+                  genericType={genericType}
+                />
+              }
+              rightPanel={
+                <div>
+                  <SelectOptionLayer generic={data} fnChange={innerAction} />
+                </div>
+              }
+            />
+          </div>
         </Card.Body>
       </Card>
     </div>

@@ -7,13 +7,13 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import cloneDeep from 'lodash/cloneDeep';
 // import LoadingActions from 'src/stores/alt/actions/LoadingActions';
-import { downloadFile } from 'generic-ui-core';
-import ButtonTooltip from '../../fields/ButtonTooltip';
-import GenInterface from '../../details/GenInterface';
-import { responseExt } from '../../../utils/template/action-handler';
-import { notifySuccess } from '../../../utils/template/designer-message';
-import VersionBlock from './VersionBlock';
-import { buildString } from '../../tools/utils';
+import { downloadFile, FieldTypes } from 'generic-ui-core';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
+import GenInterface from '@components/details/GenInterface';
+import { responseExt } from '@utils/template/action-handler';
+import { notifySuccess } from '@utils/template/designer-message';
+import VersionBlock from '@components/designer/preview/VersionBlock';
+import { buildString } from '@utils/pureUtils';
 
 export default class Preview extends Component {
   constructor(props) {
@@ -91,15 +91,18 @@ export default class Preview extends Component {
   dlRevision(params) {
     const { data, revisions } = this.props;
     const revision = revisions.find((r) => r.id === params.id);
-    const props = revision.properties_release;
-    props.klass = revision.properties_release.klass;
-    props.released_at = revision.released_at || '';
+
+    const exportData = cloneDeep(revision.properties_release);
+    exportData.klass = revision.properties_release.klass;
+    exportData.released_at = revision.released_at || '';
+    exportData.metadata = revision.metadata || {};
+
     const href = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(revision.properties_release)
+      JSON.stringify(exportData)
     )}`;
     downloadFile({
       contents: href,
-      name: `${props.klass}_${data.label}_${revision.uuid}.json`,
+      name: `${exportData.klass}_${data.label}_${revision.uuid}.json`,
     });
   }
 
@@ -119,7 +122,7 @@ export default class Preview extends Component {
     if (selected.name) {
       options.push({
         generic: selected,
-        type: 'text',
+        type: FieldTypes.F_TEXT,
         isEditable: true,
         isRequire: false,
         field: 'name',

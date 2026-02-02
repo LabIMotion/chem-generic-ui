@@ -3,12 +3,12 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
-import FieldOrderContent from './FieldOrderContent';
-import ArrangeModal from '../../actions/ArrangeModal';
-import Constants from '../../tools/Constants';
-import FIcons from '../../icons/FIcons';
-import Response from '../../../utils/response';
-import { notifySuccess } from '../../../utils/template/designer-message';
+import FieldOrderContent from '@components/designer/template/FieldOrderContent';
+import ArrangeModal from '@components/actions/ArrangeModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import Response from '@utils/response';
+import { notifySuccess } from '@utils/template/designer-message';
 
 const FieldOrderBtn = ({
   layer = {},

@@ -1,7 +1,7 @@
 const successLevel = 'success';
 const errorLevel = 'error';
 
-export const notifyError = (msg = 'operation error', title = 'Error') => {
+export const notifyError = (msg = 'Operation error.', title = 'Error') => {
   return {
     msg,
     title,
@@ -53,7 +53,7 @@ export const notifyLayerUpdate = (
           `Cannot change the attribute 'used in Workflow?'`,
           `because this layer [${layerKey}] is currently used in workflow.`,
         ].join(' '),
-        title
+        title,
       );
     case 'checkRestriction':
       return notifyError(
@@ -61,9 +61,20 @@ export const notifyLayerUpdate = (
           'Cannot be used in Workflow',
           `because the Layer Restriction of this layer [${layerKey}] has been set.`,
         ].join(' '),
-        title
+        title,
+      );
+    case 'checkGroup':
+      return notifyError(
+        [
+          'Cannot be used in Workflow',
+          `because this layer  [${layerKey}] is part of a group.`,
+        ].join(' '),
+        title,
       );
     default:
       return notifySuccess(msg, title);
   }
 };
+
+export const notifySave = (isSuccess = true, msg = 'Save data successfully') =>
+  isSuccess ? notifySuccess(msg) : notifyError(msg);

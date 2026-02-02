@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import cloneDeep from 'lodash/cloneDeep';
-import Constants from '../tools/Constants';
-import WorkflowModal from '../elements/WorkflowModal';
-import FlowDesigner from '../flow/FlowDesigner';
-import FIcons from '../icons/FIcons';
-import { LWf } from '../shared/LCom';
-import LTooltip from '../shared/LTooltip';
+import Constants from '@components/tools/Constants';
+import WorkflowModal from '@components/elements/WorkflowModal';
+import FlowDesigner from '@components/flow/FlowDesigner';
+import FIcons from '@components/icons/FIcons';
+import { LWf } from '@components/shared/LCom';
+import LTooltip from '@components/shared/LTooltip';
 
 const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
   const [show, setShow] = useState(false);

@@ -1,19 +1,22 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import {
   verifyConditionLayer,
   handleLayerConditionChange,
-} from '../../../utils/template/condition-handler';
-import FieldCondEditModal from '../../elements/FieldCondEditModal';
-import FIcons from '../../icons/FIcons';
+} from '@utils/template/condition-handler';
+import RestrictionModal from '@ui/modals/RestrictionModal';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import TAs from '@components/tools/TAs';
 
-const ConditionLayerBtn = props => {
-  const { element, fnUpdate, layer, sortedLayers } = props;
+const ConditionLayerBtn = (props) => {
+  const { element, fnUpdate, layer, sortedLayers, as } = props;
   const [show, setShow] = useState(false);
 
-  const onClick = () => {
+  const onClick = (e) => {
+    // e.stopPropagation(); // mark it to close the menu item automactically when the modal is open
     const result = verifyConditionLayer(element, layer.key);
     const { notify } = result;
     if (notify.isSuccess) {
@@ -35,28 +38,33 @@ const ConditionLayerBtn = props => {
 
   const conditionBtn =
     layer?.cond_fields?.length > 0 || false ? (
-      <Button bsStyle="warning" bsSize="sm" onClick={onClick}>
+      <Button variant="warning" size="sm" onClick={onClick}>
         {FIcons.faGears}
       </Button>
     ) : (
-      <Button bsSize="sm" onClick={onClick}>
+      <Button size="sm" onClick={onClick}>
         {FIcons.faGears}
       </Button>
     );
 
+  const conditionMenu = (
+    <Dropdown.Item
+      eventKey="_lyr_cond_menu_item"
+      onClick={onClick}
+      className={layer?.cond_fields?.length > 0 ? 'gu-menu-item-cond' : ''}
+    >
+      {FIcons.faGears}&nbsp;&nbsp;{TAs.restriction_setting}
+    </Dropdown.Item>
+  );
+
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_restriction_setting">
-            Restriction Setting
-          </Tooltip>
-        }
-      >
-        {conditionBtn}
-      </OverlayTrigger>
-      <FieldCondEditModal
+      {as === 'menu' ? (
+        conditionMenu
+      ) : (
+        <LTooltip idf="restriction_setting">{conditionBtn}</LTooltip>
+      )}
+      <RestrictionModal
         showModal={show}
         layer={layer}
         allLayers={sortedLayers}
@@ -76,6 +84,9 @@ ConditionLayerBtn.propTypes = {
   fnUpdate: PropTypes.func.isRequired,
   layer: PropTypes.object.isRequired,
   sortedLayers: PropTypes.array.isRequired,
+  as: PropTypes.string,
 };
+
+ConditionLayerBtn.defaultProps = { as: 'menu' };
 
 export default ConditionLayerBtn;

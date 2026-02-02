@@ -5,10 +5,11 @@ import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import round from 'lodash/round';
 import moment from 'moment';
 import 'moment-precise-range-plugin';
-import { genUnit, genUnits, unitConversion } from 'generic-ui-core';
-import GenericSubField from '../models/GenericSubField';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import { genUnit, genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
+import GenericSubField from '@components/models/GenericSubField';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import { editable } from '@/utils/pureUtils';
 
 const DateTimeRangeFields = [
   'timeStart',
@@ -31,7 +32,7 @@ const DurationLabel = {
 };
 
 const DateTimeRange = props => {
-  const { layer, opt, onInputChange } = props;
+  const { layer, opt, onInputChange, editMode } = props;
   const timePlaceholder = 'DD/MM/YYYY hh:mm:ss';
 
   let subFields = opt.f_obj.sub_fields || [];
@@ -39,14 +40,14 @@ const DateTimeRange = props => {
     subFields = DateTimeRangeFields.map(e => {
       if (e === 'duration') {
         return new GenericSubField({
-          type: 'text',
+          type: FieldTypes.F_TEXT,
           value: '',
           col_name: e,
           option_layers: 'duration',
           value_system: 'd',
         });
       }
-      return new GenericSubField({ type: 'text', value: '', col_name: e });
+      return new GenericSubField({ type: FieldTypes.F_TEXT, value: '', col_name: e });
     });
   }
   const timeStart = subFields.find(f => f.col_name === 'timeStart') || '';
@@ -119,6 +120,7 @@ const DateTimeRange = props => {
   };
 
   const calc = durationDiff(timeStart.value, timeStop.value, true);
+  const canEdit = editable(editMode, !(timeStart.readonly ?? false));
 
   return (
     <Row>
@@ -131,6 +133,7 @@ const DateTimeRange = props => {
               value={timeStart.value}
               placeholder={timePlaceholder}
               onChange={(event) => dataChange({ field: 'timeStart', event })}
+              readOnly={!canEdit}
             />
             <Button
               variant="light"
@@ -138,6 +141,7 @@ const DateTimeRange = props => {
               onClick={() =>
                 dataChange({ field: 'timeStart', event: 'setCurrent' })
               }
+              disabled={!canEdit}
             >
               {FIcons.faClock}
             </Button>
@@ -153,6 +157,7 @@ const DateTimeRange = props => {
               value={timeStop.value}
               placeholder={timePlaceholder}
               onChange={(event) => dataChange({ field: 'timeStop', event })}
+              readOnly={!canEdit}
             />
             <Button
               variant="light"
@@ -160,6 +165,7 @@ const DateTimeRange = props => {
               onClick={() =>
                 dataChange({ field: 'timeStop', event: 'setCurrent' })
               }
+              disabled={!canEdit}
             >
               {FIcons.faClock}
             </Button>
@@ -175,6 +181,7 @@ const DateTimeRange = props => {
               value={calc}
               disabled
               placeholder="Duration"
+              readOnly={!canEdit}
             />
             <LTooltip idf="clipboard">
               <Button
@@ -182,6 +189,7 @@ const DateTimeRange = props => {
                 onClick={() => {
                   navigator.clipboard.writeText(calc);
                 }}
+                disabled={!canEdit}
               >
                 {FIcons.faPaste}
               </Button>
@@ -193,6 +201,7 @@ const DateTimeRange = props => {
                 onClick={() =>
                   dataChange({ field: 'duration', event: 'copyTo' })
                 }
+                disabled={!canEdit}
               >
                 {FIcons.faArrowRight}
               </Button>
@@ -209,12 +218,14 @@ const DateTimeRange = props => {
               value={duration.value || ''}
               placeholder="Input Duration..."
               onChange={(event) => dataChange({ field: 'duration', event })}
+              readOnly={!canEdit}
             />
             <Button
               variant="success"
               onClick={() =>
                 dataChange({ field: 'duration', event: 'changeUnit' })
               }
+              disabled={!canEdit}
             >
               {DurationLabel[genUnit('duration', duration.value_system).key] ||
                 ''}
@@ -230,6 +241,7 @@ DateTimeRange.propTypes = {
   opt: PropTypes.object.isRequired,
   layer: PropTypes.object.isRequired,
   onInputChange: PropTypes.func.isRequired,
+  editMode: PropTypes.bool.isRequired,
 };
 
 export default DateTimeRange;

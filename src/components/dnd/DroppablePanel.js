@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
 import { FieldTypes } from 'generic-ui-core';
 
+// Use for reaction drop panel
 const DroppablePanel = ({
   children,
   type,
@@ -13,38 +14,36 @@ const DroppablePanel = ({
 }) => {
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: type,
-    canDrop: item => {
-      if (type === 'element') {
-        // only allow drop reaction to sys-reaction field
-        return (
-          item.element.type === 'reaction' &&
-          rid.key === FieldTypes.F_SYS_REACTION
-        );
-      }
-      return item.fid.field !== fid.field && item.rid.key === rid.key;
+    canDrop: (item) => {
+      // only allow drop reaction to sys-reaction field
+      const isAccepted = (
+        item.element.type === 'reaction' &&
+        rid.key === FieldTypes.F_SYS_REACTION
+      );
+      return isAccepted;
+      // return item.fid.field !== fid.field && item.rid.key === rid.key;
     },
-    drop: item => {
-      fnCb({ source: item, target: fid, rid });
-    },
-    collect: monitor => {
-      return {
-        isOver: !!monitor.isOver(),
-        isOverValidTarget: !!monitor.canDrop(),
-      };
-    },
+    drop: (item) => fnCb({ source: item, target: fid, rid }),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      isOverValidTarget: !!monitor.canDrop(),
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+    }),
   });
 
-  const dropClass = `panel-heading template_panel_heading_reset ${
-    isOver ? ' gu_is-over' : ''
-  }${isOverValidTarget ? ' gu_can-drop' : ''}`;
+  const dropClass = [
+    // 'panel-heading',
+    // 'template_panel_heading_reset',
+    // 'd-flex justify-content-between align-items-center',
+    isOver && 'gu_is-over',
+    isOverValidTarget && 'gu_can-drop',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div
-      ref={drop}
-      className={dropClass}
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div ref={drop} className={dropClass}>
       {children}
     </div>
   );
@@ -55,7 +54,7 @@ DroppablePanel.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.array.isRequired,
   fnCb: PropTypes.func.isRequired,
   field: PropTypes.object.isRequired,
   rowValue: PropTypes.object.isRequired,

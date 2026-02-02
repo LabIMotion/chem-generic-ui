@@ -1,0 +1,18 @@
+$gu-spacer: 1rem;
+$gu-spacers: (
+  0: 0,
+  1: $gu-spacer * .25,
+  2: $gu-spacer * .5,
+  3: $gu-spacer,
+  4: $gu-spacer * 1.5,
+  5: $gu-spacer * 3,
+);
+
+:root {
+  // Define the keys and margin types
+  @each $spacer-key, $value in $gu-spacers {
+    --gu-ml-#{$spacer-key}: #{$value};
+    --gu-mr-#{$spacer-key}: #{$value};
+    --gu-mb-#{$spacer-key}: #{$value};
+  }
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
 
 export const LHText = ({ title, children }) => {
   return (

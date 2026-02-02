@@ -30,6 +30,12 @@
   background-color: $color-bs-info !important;
 }
 
+.gu-ontology-text-link a {
+  font-size: unset;
+  line-height: unset;
+  padding: unset;
+}
+
 .gu-xsmall-input-group.gu-xsmall-input-group {
   > input, > span {
     min-height: calc(1.5em + .5rem + calc(var(--bs-border-width) * 2));
@@ -39,9 +45,22 @@
   }
 }
 
-.gu-drop-zone {
+.lu-drop-zone {
   border: 3px dashed $color-lightgray;
   color: $color-grey;
   text-align: center;
   width: 100%;
 }
+
+.gu-editable {
+  background-color: $color-editable !important;
+}
+
+.gu-readonly {
+  background-color: $color-readonly !important;
+}
+
+.gu-required {
+  background-color: $color-required !important;
+}
+

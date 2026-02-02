@@ -1,4 +1,4 @@
-import GenericSubField from './GenericSubField';
+import GenericSubField from '@components/models/GenericSubField';
 
 export default class Field extends GenericSubField {
   constructor(args) {

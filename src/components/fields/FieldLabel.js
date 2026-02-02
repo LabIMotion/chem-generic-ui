@@ -3,13 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
-import TermLink from './TermLink';
+import TermLink from '@components/fields/TermLink';
 
-const FieldLabel = props => {
+const FieldLabel = (props) => {
   const { label, desc, isSpCall, ontology } = props;
   const klz = isSpCall
-    ? 'gu_sp_label gu_field_label'
-    : 'gu_sp_label_none gu_field_label';
+    ? 'gu_sp_label fw-bold d-inline-block mt-2 mb-1'
+    : 'gu_sp_label_none fw-bold d-inline-block mt-2 mb-1';
   return desc && desc !== '' && !isSpCall ? (
     <>
       <OverlayTrigger

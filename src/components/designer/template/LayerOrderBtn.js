@@ -3,15 +3,15 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
-import LayerOrderContent from './LayerOrderContent';
-import ArrangeModal from '../../actions/ArrangeModal';
-import Constants from '../../tools/Constants';
-import FIcons from '../../icons/FIcons';
-import LTooltip from '../../shared/LTooltip';
-import Response from '../../../utils/response';
-import { notifySuccess } from '../../../utils/template/designer-message';
+import LayerOrderContent from '@components/designer/template/LayerOrderContent';
+import ArrangeModal from '@components/actions/ArrangeModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import Response from '@utils/response';
+import { notifySuccess } from '@utils/template/designer-message';
 
-const LayerOrderBtn = ({ generic = {}, genericType, fnSave = () => {} }) => {
+function LayerOrderBtn({ generic = {}, genericType, fnSave = () => {} }) {
   const [show, setShow] = useState(false);
   const arrangeContentRef = useRef(null);
 
@@ -49,7 +49,7 @@ const LayerOrderBtn = ({ generic = {}, genericType, fnSave = () => {} }) => {
       </ArrangeModal>
     </>
   );
-};
+}
 
 LayerOrderBtn.propTypes = {
   generic: PropTypes.object,

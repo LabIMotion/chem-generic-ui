@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
-import FieldHeader from './FieldHeader';
-import { fieldCls, frmSelSty } from '../tools/utils';
+import FieldHeader from '@components/fields/FieldHeader';
+import { fieldCls, frmSelSty } from '@components/tools/utils';
 
 const GenPropSelectMulti = (opt) => {
   const {
@@ -46,6 +46,7 @@ const GenPropSelectMulti = (opt) => {
           isClearable
           isMulti
           isDisabled={readOnly}
+          menuPlacement="auto"
           menuPortalTarget={document.body}
           name={field}
           options={selectOpts}

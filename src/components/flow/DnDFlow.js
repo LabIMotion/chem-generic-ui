@@ -12,13 +12,13 @@ import ReactFlow, {
 } from 'reactflow';
 import { Button } from 'react-bootstrap';
 import { useDrop } from 'react-dnd';
-import FIcons from '../icons/FIcons';
-import DnDSidebar from './DnDSidebar';
-import LayerNode from './LayerNode';
+import FIcons from '@components/icons/FIcons';
+import DnDSidebar from '@components/flow/DnDSidebar';
+import LayerNode from '@components/flow/LayerNode';
 import {
   buildDefaultNode,
   buildFlowElements,
-} from '../../utils/flow/build-flow-elements';
+} from '@utils/flow/build-flow-elements';
 
 const nodeTypes = { selectorNode: LayerNode };
 
@@ -141,7 +141,7 @@ const DnDFlow = props => {
               fitView
             >
               <div className="save__controls">
-                <Button bsSize="sm" onClick={onSave}>
+                <Button size="sm" onClick={onSave}>
                   {FIcons.faFloppyDisk}&nbsp;Save to draft
                 </Button>
               </div>

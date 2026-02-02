@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy';
-import Constants from '../../components/tools/Constants';
-import createLayerNodeIcon from '../../components/flow/NodeIcon';
-import { flowInputNode, flowOutputNode } from './initial-flow';
+import Constants from '@components/tools/Constants';
+import createLayerNodeIcon from '@components/flow/NodeIcon';
+import { flowInputNode, flowOutputNode } from '@utils/flow/initial-flow';
 
 /**
  * arrangedFlowElements, to add extra nodes and edges

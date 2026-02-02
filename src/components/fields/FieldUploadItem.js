@@ -4,9 +4,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { downloadFile } from 'generic-ui-core';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
 
 const FieldUploadItem = ({ opt, attachment }) => {
   const [secondImgSrc, setSecondImgSrc] = useState('');
@@ -47,8 +47,9 @@ const FieldUploadItem = ({ opt, attachment }) => {
 
   const delBtn = (
     <Button
+      size="sm"
       id={attachment.uid}
-      className="button-right btn-gxs"
+      className="button-right"
       onClick={() =>
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
@@ -82,8 +83,8 @@ const FieldUploadItem = ({ opt, attachment }) => {
         <div>{delBtn}</div>
         <div className="generic_grid_row file_text">{filename}</div>
         <div className="generic_grid_row">
-          <FormGroup bsSize="sm">
-            <FormControl
+          <Form.Group size="sm">
+            <Form.Control
               type="text"
               value={attachment.label || ''}
               onChange={e =>
@@ -95,24 +96,24 @@ const FieldUploadItem = ({ opt, attachment }) => {
                 })
               }
             />
-          </FormGroup>
+          </Form.Group>
         </div>
       </div>
       <div style={{ flexDirection: 'column', alignItems: 'center' }}>
         {secondImgSrc && (
           <>
             <div style={{ alignSelf: 'flex-end', display: 'inline-flex' }}>
-              <InputGroup bsSize="sm" className="gu-xsmall-input-group">
-                <FormControl
+              <InputGroup size="sm" className="gu-xsmall-input-group">
+                <Form.Control
                   type="number"
                   step="any"
                   value={parseFloat(imgWidth)}
                   onChange={handleInputChange}
                 />
-                <InputGroup.Addon>%</InputGroup.Addon>
+                <InputGroup.Text>%</InputGroup.Text>
               </InputGroup>
               <Button
-                className="btn-gxs"
+                size="sm"
                 onClick={() => window.open(secondImgSrc, '_blank')}
               >
                 Original

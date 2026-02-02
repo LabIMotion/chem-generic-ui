@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:package",
+  "title": "Package Configuration Schema",
+  "description": "Schema for package configuration including LabIMotion and compatible ELN version information.",
+  "type": "object",
+  "properties": {
+    "eln": {
+      "type": "object",
+      "required": [
+        "version",
+        "base_revision",
+        "current_revision"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "ELN version"
+        },
+        "base_revision": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Base revision hash"
+        },
+        "current_revision": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Current revision hash"
+        }
+      },
+      "additionalProperties": true
+    },
+    "name": {
+      "const": "chem-generic-ui",
+      "description": "Package name"
+    },
+    "version": {
+      "type": "string",
+      "description": "Package version"
+    },
+    "labimotion": {
+      "type": "string",
+      "description": "LabIMotion version compatibility"
+    }
+  },
+  "required": [
+    "eln",
+    "name",
+    "version",
+    "labimotion"
+  ],
+  "additionalProperties": true
+}

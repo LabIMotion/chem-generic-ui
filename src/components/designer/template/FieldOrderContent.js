@@ -1,24 +1,15 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import sortBy from 'lodash/sortBy';
 import { FieldTypes, moveField } from 'generic-ui-core';
-import DnD from '../../dnd/DnD';
-import DnDs from '../../dnd/DnDs';
-import FIcons from '../../icons/FIcons';
-import FieldConditionsDisplay from './ConditionsDisplay';
-import { LHText } from '../../shared/LCom';
-
-const defaultContent = <h1>No fields to arrange</h1>;
-const definedHeader = (label, field, type) => {
-  const isDummy = FieldTypes.F_DUMMY === type;
-  const content = isDummy ? '(dummy field)' : `${label}(${field})`;
-  return (
-    <span className="fw-bold d-flex justify-content-between align-items-center">
-      {content}
-    </span>
-  );
-};
+import DragLayer from '@components/dnd/DragLayer';
+import DnD from '@components/dnd/DnD';
+import DnDs from '@components/dnd/DnDs';
+import FIcons from '@components/icons/FIcons';
+import FieldConditionsDisplay from '@components/designer/template/ConditionsDisplay';
+import { LHText } from '@components/shared/LCom';
+import { defaultFieldsContent, definedFieldHeader } from '@components/shared/arrangeUtils';
 
 const FieldOrderContent = forwardRef(({ layer }, ref) => {
   // Initialize state with empty object or layers
@@ -26,12 +17,15 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
   // Initialize state with the original layers
   const [newFields, setNewFields] = useState(fields);
 
+  // Create ref for scrollable container
+  const scrollableContainerRef = useRef(null);
+
   // Expose method to get current newFields value
   useImperativeHandle(ref, () => ({
     getUpdates: () => newFields,
   }));
 
-  if (fields.length === 0) return defaultContent;
+  if (fields.length === 0) return defaultFieldsContent;
 
   const handleMove = (sourceKey, targetKey) => {
     const updatedFields = moveField(newFields, sourceKey, targetKey);
@@ -51,7 +45,7 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
 
     const content = (
       <div className={contentStyle}>
-        {definedHeader(label, field, type)}
+        {definedFieldHeader(label, field, FieldTypes.F_DUMMY === type ? 'dummy' : type)}
         <FieldConditionsDisplay conditions={obj} />
       </div>
     );
@@ -102,6 +96,7 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
         </Col>
       </Row>
       <div
+        ref={scrollableContainerRef}
         className="flex-grow-1"
         style={{
           overflowY: 'auto',
@@ -129,6 +124,7 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
           </Col>
         </Row>
       </div>
+      <DragLayer scrollableContainerRef={scrollableContainerRef} />
     </div>
   );
 });

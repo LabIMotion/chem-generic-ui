@@ -9,11 +9,15 @@ import {
   faArrowRightToBracket,
   faArrowsRotate,
   faArrowUp,
+  faArrowUpRightFromSquare,
+  faArrowsLeftRight,
   faArrowsUpDownLeftRight,
   faBan,
   faBars,
   faBookOpen,
   faCaretDown,
+  faCaretLeft,
+  faCaretRight,
   faCaretUp,
   faChartDiagram,
   faCheck,
@@ -28,6 +32,7 @@ import {
   faDownLeftAndUpRightToCenter,
   faDownload,
   faEllipsis,
+  faEllipsisVertical,
   faExclamationCircle,
   faEye,
   faFlask,
@@ -37,22 +42,29 @@ import {
   faFileWord,
   faGears,
   faGlobe,
+  faGripLinesVertical,
   faLayerGroup,
   faLink,
   faList,
+  faMagnifyingGlass,
   faMinus,
+  faObjectGroup,
   faPaintbrush,
   faPaperclip,
+  faPaperPlane,
   faPencil,
   faPlus,
   faReply,
   faRotate,
   faSpellCheck,
+  faSpinner,
   faSquare,
   faT,
+  faTag,
   faTableCells,
   faTableCellsLarge,
   faTimes,
+  faTriangleExclamation,
   faUpRightAndDownLeftFromCenter,
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -74,11 +86,15 @@ const icons = {
   faArrowRightToBracket,
   faArrowsRotate,
   faArrowUp,
+  faArrowUpRightFromSquare,
+  faArrowsLeftRight,
   faArrowsUpDownLeftRight,
   faBan,
   faBars,
   faBookOpen,
   faCaretDown,
+  faCaretLeft,
+  faCaretRight,
   faCaretUp,
   faChartDiagram,
   faCheck,
@@ -96,6 +112,7 @@ const icons = {
   faDownLeftAndUpRightToCenter,
   faDownload,
   faEllipsis,
+  faEllipsisVertical,
   faExclamationCircle,
   faEye,
   faFlask,
@@ -106,12 +123,16 @@ const icons = {
   faFloppyDisk,
   faGears,
   faGlobe,
+  faGripLinesVertical,
   faLayerGroup,
   faLink,
   faList,
+  faMagnifyingGlass,
   faMinus,
+  faObjectGroup,
   faPaintbrush,
   faPaperclip,
+  faPaperPlane,
   faPaste,
   faPencil,
   faPlus,
@@ -121,19 +142,43 @@ const icons = {
   faSquare,
   faSquareCaretDown,
   faT,
+  faTag,
   faTableCells,
   faTableCellsLarge,
   faTimes,
   faTrashCan,
+  faTriangleExclamation,
   faUpRightAndDownLeftFromCenter,
 };
 
-export default Object.freeze(
+const iconAnimated = {
+  faSpinner,
+};
+
+// Main icons object
+const iconsObject = Object.freeze(
   Object.fromEntries(
     Object.entries(icons).map(([key, value]) => [
       key,
       // eslint-disable-next-line react/jsx-key
       <FontAwesomeIcon icon={value} />,
-    ])
-  )
+    ]),
+  ),
 );
+
+// Animated icons object
+const animatedIconsObject = Object.freeze(
+  Object.fromEntries(
+    Object.entries(iconAnimated).map(([key, value]) => [
+      key,
+      // eslint-disable-next-line react/jsx-key
+      <FontAwesomeIcon icon={value} spin />,
+    ]),
+  ),
+);
+
+// Final export
+export default {
+  ...iconsObject,
+  ...animatedIconsObject,
+};

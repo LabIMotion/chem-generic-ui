@@ -3,13 +3,13 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
-import ArrangeContent from './ArrangeContent';
-import ArrangeModal from './ArrangeModal';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import ArrangeContent from '@components/actions/ArrangeContent';
+import ArrangeModal from '@components/actions/ArrangeModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
-const ButtonArrange = ({ generic = {}, genericType, fnSave = () => {} }) => {
+function ButtonArrange({ generic = {}, genericType, fnSave = () => {} }) {
   const [show, setShow] = useState(false);
   const arrangeContentRef = useRef(null);
   if (generic?.is_new) return null;
@@ -19,10 +19,19 @@ const ButtonArrange = ({ generic = {}, genericType, fnSave = () => {} }) => {
   )
     return null;
 
-  const handleSave = (updatedLayers) => {
-    // Save changes
+  const handleSave = (updatedData) => {
     const updates = cloneDeep(generic);
-    updates.properties.layers = updatedLayers;
+    updates.properties.layers = updatedData.layers;
+
+    const groups = updatedData.metadata?.groups || [];
+    if (groups.length === 0) {
+      updates.metadata = {};
+    } else {
+      updates.metadata = {
+        groups,
+        restrict: updatedData.metadata?.restrict || {},
+      };
+    }
     updates.changed = true;
     fnSave(updates);
   };
@@ -46,7 +55,7 @@ const ButtonArrange = ({ generic = {}, genericType, fnSave = () => {} }) => {
       </ArrangeModal>
     </>
   );
-};
+}
 
 ButtonArrange.propTypes = {
   generic: PropTypes.object,

@@ -2,13 +2,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import Constants from '../tools/Constants';
-import { LWf } from '../shared/LCom';
-import LTooltip from '../shared/LTooltip';
-import WorkflowModal from '../elements/WorkflowModal';
-import DnDFlow from '../flow/DnDFlow';
-import Response from '../../utils/response';
-import { notifySuccess } from '../../utils/template/designer-message';
+import Constants from '@components/tools/Constants';
+import { LWf } from '@components/shared/LCom';
+import LTooltip from '@components/shared/LTooltip';
+import WorkflowModal from '@components/elements/WorkflowModal';
+import DnDFlow from '@components/flow/DnDFlow';
+import Response from '@utils/response';
+import { notifySuccess } from '@utils/template/designer-message';
 
 const WorkflowDesignBtn = (props) => {
   const { element, fnSave, genericType, btnCls } = props;

@@ -2,12 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
-import Constants from '../tools/Constants';
+import Constants from '@components/tools/Constants';
 
 const NoDataModal = props => {
   const { show, title, fnHide } = props;
   return (
-    <Modal show={show} bsSize="sm" onHide={fnHide}>
+    <Modal centered show={show} size="sm" onHide={fnHide}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -41,16 +41,18 @@ const GenAnaModal = props => {
       <div className="generic_grid_row generic_grid_row_left">{_ai.name}</div>
       <div className="generic_grid_row generic_grid_row_left">
         <Button
-          bsStyle="success"
-          className="gu_button_right btn-gxs"
+          size="sm"
+          variant="success"
+          className="gu_button_right"
           onClick={() => fnLink(_ai.id, layer, Constants.BTN_AI_LINK)}
           disabled={layerAi.includes(_ai.id)}
         >
           {Constants.BTN_AI_LINK}
         </Button>
         <Button
-          bsStyle="danger"
-          className="gu_button_right btn-gxs"
+          size="sm"
+          variant="danger"
+          className="gu_button_right"
           onClick={() => fnLink(_ai.id, layer, Constants.BTN_AI_UNLINK)}
           disabled={!layerAi.includes(_ai.id)}
         >
@@ -66,7 +68,7 @@ const GenAnaModal = props => {
   });
 
   return (
-    <Modal show={show} onHide={fnHide}>
+    <Modal centered size="lg" show={show} onHide={fnHide}>
       <Modal.Header closeButton>
         <Modal.Title>
           <b>{name}</b> Analyses

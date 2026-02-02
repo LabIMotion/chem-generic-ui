@@ -1,42 +1,23 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useRef,
+} from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import sortBy from 'lodash/sortBy';
 import { moveLayer } from 'generic-ui-core';
-import DnD from '../../dnd/DnD';
-import Constants from '../../tools/Constants';
-import { bgColor } from '../../tools/format-utils';
-import FIcons from '../../icons/FIcons';
-import ConditionsDisplay from './ConditionsDisplay';
-import { LHText } from '../../shared/LCom';
-
-const extHeaderInfo = (splitKey) => {
-  return splitKey.length > 1 ? (
-    <span>{`Repetition ${splitKey[1]}`}</span>
-  ) : null;
-};
-
-const sysHeaderInfo = (fields) => {
-  const preText = 'Reaction:';
-  if (!fields || !fields.length) return preText;
-  const { value = {} } = fields[0];
-  return value.el_label ? `${preText} ${value.el_label}` : preText;
-};
-
-const defaultContent = <h1>No layers to arrange</h1>;
-const definedHeader = (className, label, key, fields) => {
-  const isSys = key.startsWith(Constants.SYS_REACTION);
-  const content = isSys ? sysHeaderInfo(fields) : `${label}(${key})`;
-  const splitKey = key.split('.');
-  return (
-    <span
-      className={`d-flex justify-content-between align-items-center ${className}`}
-    >
-      {content}
-      {extHeaderInfo(splitKey)}
-    </span>
-  );
-};
+import DragLayer from '@components/dnd/DragLayer';
+import DnD from '@components/dnd/DnD';
+import { bgColor } from '@components/tools/format-utils';
+import FIcons from '@components/icons/FIcons';
+import ConditionsDisplay from '@components/designer/template/ConditionsDisplay';
+import { LHText } from '@components/shared/LCom';
+import {
+  defaultLayersContent,
+  definedLayerHeader,
+} from '@components/shared/arrangeUtils';
 
 const LayerOrderContent = forwardRef(({ element }, ref) => {
   // Initialize state with empty object or layers
@@ -44,15 +25,18 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
   // Initialize state with the original layers
   const [newLayers, setNewLayers] = useState(layers);
 
+  // Create ref for scrollable container
+  const scrollableContainerRef = useRef(null);
+
   // Expose method to get current newLayers value
   useImperativeHandle(ref, () => ({
     getUpdates: () => newLayers,
   }));
 
-  if (!element?.properties_template?.layers) return defaultContent;
+  if (!element?.properties_template?.layers) return defaultLayersContent;
 
   const layerValues = Object.values(layers);
-  if (layerValues.length === 0) return defaultContent;
+  if (layerValues.length === 0) return defaultLayersContent;
 
   const handleMove = (sourceKey, targetKey) => {
     const updatedLayers = moveLayer(newLayers, sourceKey, targetKey);
@@ -73,8 +57,8 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
     } `;
 
     const content = (
-      <div className={`${bgColor(color)} ${contentStyle}`}>
-        {definedHeader(style, label, key, fields)}
+      <div className={`${bgColor()} ${contentStyle}`}>
+        {definedLayerHeader(style, label, key, fields)}
         <ConditionsDisplay conditions={obj} />
       </div>
     );
@@ -84,7 +68,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
       return (
         <div
           key={`${key}-${isNew ? 'new' : 'current'}`}
-          className="w-100 p-2 m-2"
+          // className="w-100 p-2 m-2"
         >
           <div>{content}</div>
         </div>
@@ -125,6 +109,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
         </Col>
       </Row>
       <div
+        ref={scrollableContainerRef}
         className="flex-grow-1"
         style={{
           overflowY: 'auto',
@@ -152,6 +137,7 @@ const LayerOrderContent = forwardRef(({ element }, ref) => {
           </Col>
         </Row>
       </div>
+      <DragLayer scrollableContainerRef={scrollableContainerRef} />
     </div>
   );
 });

@@ -1,5 +1,5 @@
-import { notifyError, notifySuccess } from './designer-message';
-import Response from '../response';
+import { notifyError, notifySuccess } from '@utils/template/designer-message';
+import Response from '@utils/response';
 
 /**
  * The response object for condition creation.
@@ -64,7 +64,7 @@ export const handleFieldSubChange = (
   const { fields } = layer;
   if (layer != null) {
     const fieldObj = (fields || []).find(o => o.field === field.field);
-    if (fieldObj && Object.keys(fieldObj).length > 0) {
+    if (fieldObj && Object.keys(fieldObj || {}).length > 0) {
       const idx = (fields || []).findIndex(o => o.field === field.field);
       fields.splice(idx, 1, field);
       element.properties_template.layers[layerKey].fields = fields;

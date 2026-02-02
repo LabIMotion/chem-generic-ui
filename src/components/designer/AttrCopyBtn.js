@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import AttrModal from '../elements/AttrModal';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import AttrModal from '@components/elements/AttrModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const AttrCopyBtn = (props) => {
-  const { data, fnCopy, fnSelect, genericType, klasses } = props;
+  const { data, fnCopy, fnSelect, genericType } = props;
   const [show, setShow] = useState(false);
 
   const onSelect = () => {
@@ -20,7 +20,7 @@ const AttrCopyBtn = (props) => {
   return (
     <>
       <LTooltip idf={`copy.${genericType.toLowerCase()}`}>
-        <Button variant="light" className="btn-sm" onClick={onSelect}>
+        <Button variant="light" size="sm" onClick={onSelect}>
           {FIcons.faClone}
         </Button>
       </LTooltip>
@@ -30,7 +30,6 @@ const AttrCopyBtn = (props) => {
         editable
         fnAction={fnCopy}
         genericType={genericType}
-        klasses={klasses}
         showProps={{ show, setShow }}
       />
     </>
@@ -46,9 +45,8 @@ AttrCopyBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  klasses: PropTypes.array, // required for Segment
 };
 
-AttrCopyBtn.defaultProps = { klasses: [] };
+AttrCopyBtn.defaultProps = {};
 
 export default AttrCopyBtn;

@@ -1,32 +1,26 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { buildTS } from 'generic-ui-core';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
-const TermLink = _ontology => {
+const TermLink = (_ontology, _text = '') => {
   const toUrl = buildTS(_ontology);
   if (!toUrl) return null;
   const { label } = _ontology;
   return (
-    <OverlayTrigger
-      placement="top"
-      delayShow={1000}
-      overlay={
-        <Tooltip id="_tooltip_what_is_this">
-          {label} <br /> What is this?
-        </Tooltip>
-      }
-    >
+    <LTooltip idf={`link_term.${label}`}>
       <Button
-        bsStyle="link"
+        className="p-0"
+        variant="link"
         href={toUrl}
         target="_blank"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
-        {FIcons.faCircleQuestion}
+        {!_text ? FIcons.faCircleQuestion : _text}
       </Button>
-    </OverlayTrigger>
+    </LTooltip>
   );
 };
 

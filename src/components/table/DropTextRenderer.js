@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
-import LTooltip from '../shared/LTooltip';
+import LTooltip from '@components/shared/LTooltip';
 
 const DropTextRenderer = (props) => {
   const { attr, sField, node } = props;

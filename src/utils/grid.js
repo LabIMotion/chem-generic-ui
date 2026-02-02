@@ -1,4 +1,4 @@
-import Constants from '../components/tools/Constants';
+import Constants from '@components/tools/Constants';
 
 const getPageSizeForTheme = themeName => {
   const theme = Object.values(Constants.GRID_THEME).find(

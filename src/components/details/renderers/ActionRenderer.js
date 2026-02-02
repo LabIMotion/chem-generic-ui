@@ -1,7 +1,8 @@
 import React from 'react';
-import AttrEditBtn from '../../designer/AttrEditBtn';
-import AttrCopyBtn from '../../designer/AttrCopyBtn';
-import ButtonTooltipFA from '../../fields/ButtonTooltipFA';
+import AttrEditBtn from '@components/designer/AttrEditBtn';
+import AttrCopyBtn from '@components/designer/AttrCopyBtn';
+import TooltipButton from '@ui/common/TooltipButton';
+import FIcons from '@components/icons/FIcons';
 
 const ActionRenderer = (params) => {
   const {
@@ -10,7 +11,6 @@ const ActionRenderer = (params) => {
     fnDelete,
     fnEdit,
     fnDownload,
-    klasses,
     node,
     genericType,
   } = params;
@@ -31,7 +31,6 @@ const ActionRenderer = (params) => {
         fnSelect={onSelect}
         fnCopy={fnCopy}
         genericType={genericType}
-        klasses={klasses || []}
       />
       <AttrEditBtn
         data={data}
@@ -39,13 +38,18 @@ const ActionRenderer = (params) => {
         fnDelete={fnDelete}
         fnEdit={fnEdit}
         genericType={genericType}
-        klasses={klasses || []}
       />
-      <ButtonTooltipFA
-        tip={`Export ${genericType} and its template`}
-        fnClick={onDownload}
-        element={data}
-      />
+      <TooltipButton
+        tooltip={`Export ${genericType} and its template`}
+        placement="top"
+        delay={1000}
+        overlayClassName="pre_line_tooltip"
+        size="sm"
+        variant="light"
+        onClick={() => onDownload(data)}
+      >
+        {FIcons.faFileExport}
+      </TooltipButton>
     </span>
   );
 };

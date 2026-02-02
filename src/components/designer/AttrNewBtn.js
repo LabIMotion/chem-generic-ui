@@ -1,35 +1,28 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import AttrModal from '../elements/AttrModal';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
+import { Button } from 'react-bootstrap';
+import AttrModal from '@components/elements/AttrModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
-const AttrNewBtn = props => {
-  const { fnCreate, genericType, klasses } = props;
+const AttrNewBtn = (props) => {
+  const { fnCreate, genericType } = props;
   const [show, setShow] = useState(false);
 
   if (genericType === Constants.GENERIC_TYPES.DATASET) return null;
 
   return (
     <>
-      <OverlayTrigger
-        placement="top"
-        overlay={
-          <Tooltip id="_tooltip_element_new">
-            Create a new {genericType}
-          </Tooltip>
-        }
-      >
-        <Button onClick={() => setShow(true)}>
-          {FIcons.faPlus}&nbsp;New {genericType}
+      <LTooltip idf={`create.${genericType.toLowerCase()}`}>
+        <Button onClick={() => setShow(true)} variant="outline-secondary" className="gu-btn-outline-secondary">
+          {FIcons.faPlus}&nbsp;New
         </Button>
-      </OverlayTrigger>
+      </LTooltip>
       <AttrModal
         actions={[{ action: 'c', fnAction: fnCreate }]}
         genericType={genericType}
-        klasses={klasses}
         showProps={{ show, setShow }}
       />
     </>
@@ -43,9 +36,8 @@ AttrNewBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  klasses: PropTypes.array, // required for Segment
 };
 
-AttrNewBtn.defaultProps = { klasses: [] };
+AttrNewBtn.defaultProps = {};
 
 export default AttrNewBtn;

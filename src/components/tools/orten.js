@@ -1,8 +1,8 @@
 import cloneDeep from 'lodash/cloneDeep';
 import sortBy from 'lodash/sortBy';
 import { v4 as uuid } from 'uuid';
-import splitFlowElements from '../../utils/flow/split-flow-elements';
-
+import { orgLayerObject, FieldTypes } from 'generic-ui-core';
+import splitFlowElements from '@utils/flow/split-flow-elements';
 
 const getWFNode = (_flow, nodeId) => _flow.nodes?.filter(e => e.id === nodeId)[0];
 
@@ -21,29 +21,12 @@ const getFlowLayer = (templateFlow, nodeId, sourceLayer, sIdx) => {
   if (wfOpts.length > 0) {
     const position = (layer.fields || []).length + 1;
     layer.fields.push({
-      type: 'wf-next', default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
+      type: FieldTypes.F_WF_NEXT, default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
     });
   }
   layer.wf_info = { node_id: nodeId, source_layer: sourceLayer };
   layer.wf_position = sIdx + 1;
   return layer;
-};
-
-const orgLayerObject = (_layers = []) => {
-  const layers = _layers;
-  return layers.reduce((alles, name) => {
-    const all = alles;
-    const ok = Object.keys(all);
-    if (ok.includes(name.key)) {
-      const cnt = ok.filter(e => e === name.key || e.startsWith(`${name.key}.`)).length;
-      const nName = `${name.key}.${cnt}`;
-      name.key = nName;
-      all[nName] = name;
-    } else {
-      all[name.key] = name;
-    }
-    return all;
-  }, {});
 };
 
 const reformCondFields = (_layer, _oKey) => {
@@ -154,7 +137,7 @@ const buildInitWF = (template) => {
           const wfOpts = ns.filter(n => nextOptions.includes(n.id)).map(e => ({ key: e.id, label: `${e.data.layer.label}(${e.data.layer.key})` })); // next nodes
           if (wfOpts.length > 0) {
             fLayer.fields.push({
-              type: 'wf-next', default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
+              type: FieldTypes.F_WF_NEXT, default: '', field: '_wf_next', label: 'Next', required: false, sub_fields: [], text_sub_fields: [], position, wf_options: wfOpts
             });
           }
           fLayer.wf_info = { node_id: pas.id };
@@ -175,6 +158,10 @@ const buildInitWF = (template) => {
 };
 
 export {
-  getWFNode, getFlowLayer, orgLayerObject,
-  addToObject, removeFromObject, reformCondFields, buildInitWF
+  getWFNode,
+  getFlowLayer,
+  addToObject,
+  removeFromObject,
+  reformCondFields,
+  buildInitWF,
 };

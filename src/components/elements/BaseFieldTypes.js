@@ -12,6 +12,11 @@ const BaseFieldTypes = [
     name: FieldTypes.F_DATETIME_RANGE,
     label: 'Datetime range',
   },
+  {
+    value: FieldTypes.F_DRAG_ELEMENT,
+    name: FieldTypes.F_DRAG_ELEMENT,
+    label: 'Link Element',
+  },
   { value: FieldTypes.F_TEXT, name: FieldTypes.F_TEXT, label: 'Text' },
   {
     value: FieldTypes.F_TEXTAREA,
@@ -19,7 +24,7 @@ const BaseFieldTypes = [
     label: 'Text area',
   },
   { value: FieldTypes.F_SELECT, name: FieldTypes.F_SELECT, label: 'Select' },
-  { value: 'select-multi', name: 'select-multi', label: 'Select (Multiple)' },
+  { value: FieldTypes.F_SELECT_MULTI, name: FieldTypes.F_SELECT_MULTI, label: 'Select (Multiple)' },
   {
     value: FieldTypes.F_CHECKBOX,
     name: FieldTypes.F_CHECKBOX,

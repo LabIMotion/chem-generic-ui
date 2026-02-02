@@ -1,15 +1,13 @@
 import React from 'react';
-import { Checkbox, FormGroup } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 const GenFormGroupCb = (props) => {
-  const {
-    label, value, name, onChange
-  } = props;
+  const { label, value, name, onChange } = props;
   return (
-    <FormGroup className="text_generic_properties">
-      {label || '' }
-      <Checkbox checked={value} onChange={e => onChange(e, name)} />
-    </FormGroup>
+    <Form.Group className="props_text">
+      {label || ''}
+      <Form.Check checked={value} onChange={(e) => onChange(e, name)} />
+    </Form.Group>
   );
 };
 

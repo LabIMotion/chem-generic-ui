@@ -1,11 +1,14 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import ActionRenderer from './renderers/ActionRenderer';
-import ActiveRenderer from './renderers/ActiveRenderer';
-import TemplateRenderer from './renderers/TemplateRenderer';
-import GenGrid from './GenGrid';
-import Constants from '../tools/Constants';
+import ActionRenderer from '@components/details/renderers/ActionRenderer';
+import ActiveRenderer from '@components/details/renderers/ActiveRenderer';
+import InfoRenderer from '@components/details/renderers/InfoRenderer';
+import TemplateRenderer from '@components/details/renderers/TemplateRenderer';
+import GenGrid from '@components/details/GenGrid';
+import Constants from '@components/tools/Constants';
+
+const GTYPE = Constants.GENERIC_TYPES.ELEMENT;
 
 const IconRenderer = (params) => {
   const { value, iconStyle } = params;
@@ -18,7 +21,7 @@ const IconRenderer = (params) => {
   );
 };
 
-const GenGridEl = props => {
+const GenGridEl = (props) => {
   const {
     gridData,
     pageSize,
@@ -26,10 +29,13 @@ const GenGridEl = props => {
     fnCopyKlass,
     fnDeleteKlass,
     fnEditKlass,
-    genericType,
     fnDeActivateKlass,
     fnDownloadKlass,
     fnShowProp,
+    rowSelected,
+    filterText,
+    onSetAutoHeight,
+    onClearSelection,
   } = props;
 
   const columnDefs = useMemo(
@@ -48,7 +54,7 @@ const GenGridEl = props => {
           fnDelete: fnDeleteKlass,
           fnEdit: fnEditKlass,
           fnDownload: fnDownloadKlass,
-          genericType,
+          genericType: GTYPE,
         },
         sortable: false,
       },
@@ -63,7 +69,7 @@ const GenGridEl = props => {
         field: 'name',
       },
       { headerName: 'Prefix', field: 'klass_prefix', width: 100 },
-      { headerName: 'Element label', field: 'label' },
+      { headerName: 'Element label', field: 'label', flex: 1 },
       {
         headerName: 'Icon',
         field: 'icon_name',
@@ -71,7 +77,7 @@ const GenGridEl = props => {
         sortable: false,
         cellRenderer: IconRenderer,
       },
-      { headerName: 'Description', field: 'desc', width: 150 },
+      { headerName: 'Description', field: 'desc', flex: 1 },
       {
         headerName: 'Template',
         cellRenderer: TemplateRenderer,
@@ -79,11 +85,13 @@ const GenGridEl = props => {
         cellRendererParams: { fnShow: fnShowProp }, // , fnShowJson: fnShowPropJson
         sortable: false,
       },
-      { headerName: 'Version', field: 'version', width: 100 },
-      { headerName: 'Released at', field: 'released_at' },
-      { headerName: 'Updated at', field: 'updated_at' },
-      { headerName: 'Id', field: 'uuid' },
-      { headerName: 'Sync Time', field: 'sync_time' },
+      {
+        headerName: 'Ver. Info',
+        cellRenderer: InfoRenderer,
+        width: 100,
+        cellRendererParams: { genericType: GTYPE },
+        sortable: false,
+      },
     ],
     [
       fnCopyKlass,
@@ -92,7 +100,6 @@ const GenGridEl = props => {
       fnDownloadKlass,
       fnDeActivateKlass,
       fnShowProp,
-      genericType,
     ]
   );
 
@@ -102,6 +109,10 @@ const GenGridEl = props => {
       gridData={gridData}
       pageSize={pageSize}
       theme={theme}
+      rowSelected={rowSelected}
+      filterText={filterText}
+      onSetAutoHeight={onSetAutoHeight}
+      onClearSelection={onClearSelection}
     />
   );
 };
@@ -113,16 +124,19 @@ GenGridEl.propTypes = {
   fnDownloadKlass: PropTypes.func.isRequired,
   fnDeleteKlass: PropTypes.func.isRequired,
   fnEditKlass: PropTypes.func.isRequired,
-  genericType: PropTypes.string.isRequired,
   fnShowProp: PropTypes.func.isRequired,
   // fnShowPropJson: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
   theme: PropTypes.string,
+  filterText: PropTypes.string,
+  rowSelected: PropTypes.bool,
+  onSetAutoHeight: PropTypes.func,
+  onClearSelection: PropTypes.func,
 };
 
 GenGridEl.defaultProps = {
   pageSize: 10,
-  theme: Constants.GRID_THEME.BALHAM.VALUE,
+  theme: Constants.GRID_THEME.QUARTZ.VALUE,
 };
 
 export default GenGridEl;

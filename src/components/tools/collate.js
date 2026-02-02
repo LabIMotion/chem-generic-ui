@@ -1,9 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { unitConversion } from 'generic-ui-core';
-import GenericSubField from '../models/GenericSubField';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import { unitConversion, FieldTypes } from 'generic-ui-core';
+import GenericSubField from '@components/models/GenericSubField';
 
 const collateValues = (currentFields, previousFields, previousValues) => {
   const result = [];
@@ -14,7 +11,7 @@ const collateValues = (currentFields, previousFields, previousValues) => {
   const notInCurrent = previousValueKeys.filter(e => !currentValuKeys.includes(e));
   const currObj = {};
   currentFields.map(c => {
-    if (c.type === 'text') return Object.assign(currObj, { [c.id]: '' });
+    if (c.type === FieldTypes.F_TEXT) return Object.assign(currObj, { [c.id]: '' });
     return Object.assign(currObj, { [c.id]: { value: '', value_system: c.value_system } });
   });
   previousValues.forEach(e => {
@@ -25,27 +22,27 @@ const collateValues = (currentFields, previousFields, previousValues) => {
       if (newSub[preKey] === undefined || preKey === 'id') return;
       const curr = currentFields.find(f => f.id === preKey);
       const prev = previousFields.find(f => f.id === preKey);
-      if (curr.type === 'drag_molecule') {
-        if (['text', 'system-defined', 'drag_sample'].includes(prev.type)) {
+      if (curr.type === FieldTypes.F_DRAG_MOLECULE) {
+        if ([FieldTypes.F_TEXT, FieldTypes.F_SYSTEM_DEFINED, FieldTypes.F_DRAG_SAMPLE].includes(prev.type)) {
           newSub[preKey] = { value: undefined };
         }
       }
-      if (curr.type === 'text') {
-        if (prev.type === 'system-defined') {
+      if (curr.type === FieldTypes.F_TEXT) {
+        if (prev.type === FieldTypes.F_SYSTEM_DEFINED) {
           newSub[preKey] = newSub[preKey].value;
         }
-        if (['drag_molecule', 'drag_sample'].includes(prev.type)) {
+        if ([FieldTypes.F_DRAG_MOLECULE, FieldTypes.F_DRAG_SAMPLE].includes(prev.type)) {
           newSub[preKey] = '';
         }
       }
-      if (curr.type === 'system-defined') {
-        if (prev.type === 'system-defined' && (curr.option_layers !== prev.option_layers)) {
+      if (curr.type === FieldTypes.F_SYSTEM_DEFINED) {
+        if (prev.type === FieldTypes.F_SYSTEM_DEFINED && (curr.option_layers !== prev.option_layers)) {
           newSub[preKey].value_system = curr.value_system;
         }
-        if (['text', 'drag_molecule', 'drag_sample'].includes(prev.type)) {
+        if ([FieldTypes.F_TEXT, FieldTypes.F_DRAG_MOLECULE, FieldTypes.F_DRAG_SAMPLE].includes(prev.type)) {
           newSub[preKey] = { value: '', value_system: curr.value_system };
         }
-        newSub[preKey].value = unitConversion(curr.option_layers, newSub[preKey].value_system, newSub[preKey].value, ext);
+        newSub[preKey].value = unitConversion(curr.option_layers, newSub[preKey].value_system, newSub[preKey].value);
       }
     });
     result.push(newSub);

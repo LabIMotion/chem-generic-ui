@@ -2,10 +2,11 @@ import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import filter from 'lodash/filter';
 import { FieldTypes } from 'generic-ui-core';
-import FieldHeader from './FieldHeader';
-import { fieldCls, toBool, toNullOrInt } from '../tools/utils';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
+import FieldHeader from '@components/fields/FieldHeader';
+import { fieldCls } from '@components/tools/utils';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import { toBool, toNullOrInt } from '@utils/pureUtils';
 
 const PropCalculate = (opt) => {
   const {
@@ -17,6 +18,7 @@ const PropCalculate = (opt) => {
     placeholder,
     type,
     value,
+    isEditable,
   } = opt;
   let { canAdjust, decimal } = fObj;
   canAdjust = toBool(canAdjust);
@@ -65,7 +67,7 @@ const PropCalculate = (opt) => {
       value={showTxt}
       onChange={onChange}
       className="readonly"
-      readOnly="readonly"
+      readOnly={!isEditable}
       required={false}
       placeholder={placeholder}
       min={0}
@@ -85,7 +87,7 @@ const PropCalculate = (opt) => {
             value={showTxt}
             onChange={onChange}
             className="readonly"
-            readOnly="readonly"
+            readOnly={!isEditable}
             required={false}
             placeholder={placeholder}
             min={0}
@@ -95,6 +97,7 @@ const PropCalculate = (opt) => {
               variant="light"
               className="clipboardBtn"
               onClick={() => onChange(showTxt)}
+              disabled={!isEditable}
             >
               {FIcons.faArrowRight}
             </Button>
@@ -106,6 +109,7 @@ const PropCalculate = (opt) => {
             required={false}
             placeholder={placeholder}
             min={0}
+            readOnly={!isEditable}
           />
         </InputGroup>
       )}

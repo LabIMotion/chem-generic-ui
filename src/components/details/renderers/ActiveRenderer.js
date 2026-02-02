@@ -1,5 +1,5 @@
 import React from 'react';
-import ButtonTooltip from '../../fields/ButtonTooltip';
+import ButtonTooltip from '@components/fields/ButtonTooltip';
 
 const attrs = {
   true: {
@@ -30,7 +30,8 @@ const ActiveRenderer = (params) => {
       fnClick={onActivate}
       element={data}
       fa={attrs[value].fa}
-      btnCls={`${attrs[value].cls} btn-sm`}
+      size="sm"
+      btnCls={attrs[value].cls}
       bs={attrs[value].bs}
     />
   );

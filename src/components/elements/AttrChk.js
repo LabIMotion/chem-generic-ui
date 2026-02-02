@@ -6,7 +6,7 @@ import { Form } from 'react-bootstrap';
 const AttrChk = (props) => {
   const { chkAttr, node, attrOpts } = props;
   return (
-    <Form>
+    <>
       {attrOpts.map((e) => (
         <Form.Check
           key={e.value}
@@ -20,7 +20,7 @@ const AttrChk = (props) => {
           className="generic_attr_chks"
         />
       ))}
-    </Form>
+    </>
   );
 };
 

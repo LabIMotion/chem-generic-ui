@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:property-base",
+  "title": "Property Base Schema",
+  "description": "Base schema for properties with package, layers, and select options references.",
+  "type": "object",
+  "properties": {
+    "pkg": {
+      "$ref": "urn:labimotion:schemas:package"
+    },
+    "uuid": {
+      "type": "string"
+    },
+    "klass": {
+      "type": "string",
+      "enum": [
+        "Element",
+        "Segment",
+        "Dataset",
+        "Layer",
+        "Vocabulary",
+        "ElementKlass",
+        "SegmentKlass",
+        "DatasetKlass"
+      ]
+    },
+    "layers": {
+      "$ref": "urn:labimotion:schemas:layers"
+    },
+    "version": {
+      "type": "string"
+    },
+    "identifier": {
+      "type": "string"
+    },
+    "released_at": {
+      "type": "string"
+    },
+    "select_options": {
+      "$ref": "urn:labimotion:schemas:select-options"
+    },
+    "metadata": {
+      "$ref": "urn:labimotion:schemas:metadata"
+    }
+  },
+  "required": [
+    "pkg",
+    "uuid",
+    "klass",
+    "layers",
+    "version",
+    "identifier"
+  ],
+  "additionalProperties": true
+}

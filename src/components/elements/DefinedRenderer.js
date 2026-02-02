@@ -1,8 +1,8 @@
 import React from 'react';
 import { FieldTypes } from 'generic-ui-core';
-import SystemSelect from './SystemSelect';
-import { molOptions, samOptions } from '../tools/utils';
-import AttrChk from './AttrChk';
+import SystemSelect from '@components/elements/SystemSelect';
+import { molOptions, samOptions } from '@components/tools/utils';
+import AttrChk from '@components/elements/AttrChk';
 
 const DefinedRenderer = props => {
   const { unitConfig, node, selDefined, chkAttr, selectOptions } = props;

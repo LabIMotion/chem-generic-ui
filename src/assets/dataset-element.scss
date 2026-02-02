@@ -1,0 +1,15 @@
+.lu-ds-element-accordion-header .accordion-button::after {
+  display: none !important;
+}
+.lu-ds-element-accordion-header .accordion-button {
+  box-shadow: none !important;
+  height: 2.7rem !important;
+  border: none !important;
+  background-color: transparent !important;
+  color: #000 !important;
+  padding: 0rem 1rem !important;
+}
+.lu-ds-element-accordion-header .accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  color: #000 !important;
+}

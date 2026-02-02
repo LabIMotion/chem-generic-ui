@@ -2,20 +2,19 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import TemplateBar from './TemplateBar';
-import TemplateProps from './TemplateProps';
-import Constants from '../../tools/Constants';
-import Preview from '../preview/Preview';
-import { handleSaveSorting } from '../../../utils/template/sorting-handler';
+import TemplateBar from '@components/designer/template/TemplateBar';
+import TemplateProps from '@components/designer/template/TemplateProps';
+import Constants from '@components/tools/Constants';
+import PreviewFunctional from '@components/designer/preview/PreviewFunctional';
+import { handleSaveSorting } from '@utils/template/sorting-handler';
 
 const Template = (props) => {
   const {
     data: inputData,
     vocabularies,
-    fnUpdate,
     fnSubmit,
     genericType,
-    preview,
+    refSource,
   } = props;
 
   const [opData, setOpData] = useState({
@@ -59,9 +58,6 @@ const Template = (props) => {
   };
 
   const onSwitch = (_page) => {
-    if (_page === 'p') {
-      preview.fnRevisions(opData.data);
-    }
     setOpData((prevState) => {
       return {
         ...prevState,
@@ -83,24 +79,29 @@ const Template = (props) => {
         active={opData.active}
         fnSwitch={onSwitch}
       />
-      {opData.active === 'w' ? (
-        <TemplateProps
-          data={opData.data}
-          vocabularies={vocabularies}
-          // fnUpdate={fnUpdate}
-          genericType={genericType}
-          innerAction={innerAction}
-          fnSubmit={handleSubmit}
-        />
-      ) : (
-        <Preview
-          revisions={preview.revisions}
-          data={opData.data}
-          fnRetrieve={innerAction}
-          fnDelete={preview.fnDelRevisions}
-          canDL
-        />
-      )}
+      <div
+        className="mt-3"
+        style={{ overflowY: 'auto', maxHeight: '58vh', height: '58vh' }}
+      >
+        {opData.active === 'w' && (
+          <TemplateProps
+            data={opData.data}
+            vocabularies={vocabularies}
+            genericType={genericType}
+            innerAction={innerAction}
+            fnSubmit={handleSubmit}
+          />
+        )}
+        {opData.active === 'p' && (
+          <PreviewFunctional
+            genericType={genericType}
+            data={opData.data}
+            refSource={refSource}
+            fnRetrieve={innerAction}
+            canDL
+          />
+        )}
+      </div>
     </div>
   );
 };
@@ -108,29 +109,18 @@ const Template = (props) => {
 Template.propTypes = {
   data: PropTypes.object,
   fnSubmit: PropTypes.func.isRequired,
-  fnUpdate: PropTypes.func.isRequired, // update element with new element
   genericType: PropTypes.oneOf([
     Constants.GENERIC_TYPES.ELEMENT,
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
-  preview: PropTypes.shape({
-    fnDelRevisions: PropTypes.func,
-    fnRetrieve: PropTypes.func,
-    fnRevisions: PropTypes.func,
-    revisions: PropTypes.array,
-  }),
   vocabularies: PropTypes.array,
+  refSource: PropTypes.object,
 };
 
 Template.defaultProps = {
   vocabularies: [],
-  preview: {
-    fnDelRevisions: () => {},
-    fnRetrieve: () => {},
-    fnRevisions: () => {},
-    revisions: [],
-  },
+  refSource: {},
 };
 
 export default Template;

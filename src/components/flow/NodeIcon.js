@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import FIcons from '../icons/FIcons';
+import FIcons from '@components/icons/FIcons';
 
 const NodeIcon = ({ nodeClass, nodeIcon }) => (
   <div className={nodeClass}>{nodeIcon}</div>

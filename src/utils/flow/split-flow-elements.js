@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { MarkerType } from 'reactflow';
-import { initialNodes, initialViewport } from './initial-flow';
+import { initialNodes, initialViewport } from '@utils/flow/initial-flow';
 
 /**
  * splitFlowElements, to construct flow into nodes, edges, viewport.

@@ -19,25 +19,25 @@ import Select from 'react-select';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import { downloadFile, genUnit, FieldTypes } from 'generic-ui-core';
-import DateTimeRange from './DateTimeRange';
-import FieldHeader from './FieldHeader';
-import { fieldCls, frmSelSty, genUnitSup } from '../tools/utils';
-import GenericElDropTarget from '../dnd/GenericElDropTarget';
-import TableRecord from '../table/TableRecord';
-import FieldUploadItem from './FieldUploadItem';
-import DropReaction from '../dnd/DropReaction';
-import ButtonDatePicker from './ButtonDatePicker';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
-import TAs from '../tools/TAs';
-import mergeExt from '../../utils/ext-utils';
-
-const ext = mergeExt();
+import Constants from '@components/tools/Constants';
+import DateTimeRange from '@components/fields/DateTimeRange';
+import FieldHeader from '@components/fields/FieldHeader';
+import { fieldCls, frmSelSty, genUnitSup } from '@components/tools/utils';
+import GenericElDropTarget from '@components/dnd/GenericElDropTarget';
+import TableRecord from '@components/table/TableRecord';
+import FieldUploadItem from '@components/fields/FieldUploadItem';
+import DropReaction from '@components/dnd/DropReaction';
+import ButtonDatePicker from '@components/fields/ButtonDatePicker';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import TAs from '@components/tools/TAs';
+import TextLabel from '@ui/common/TextLabel';
+import { modeClass } from '@/utils/pureUtils';
 
 const GenPropertiesCheckbox = (opt) => {
   if (opt.isSpCall) {
     return (
-      <Form.Group className="text_generic_properties gu_sp_form">
+      <Form.Group className="props_text gu_sp_form">
         {FieldHeader(opt)}
         <Form.Check
           type="checkbox"
@@ -62,7 +62,7 @@ const GenPropertiesCheckbox = (opt) => {
         // style={{ marginTop: '5px' }}
       >
         <Form.Check.Input
-          className="mt-2"
+          // className="mt-2"
           type="checkbox"
           name={opt.field}
           checked={opt.value}
@@ -87,9 +87,6 @@ const GenPropertiesDate = (opt) => {
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
   // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
 
-  let readOnly = opt.readOnly || false;
-  const { f_obj: fObj } = opt;
-  if (fObj?.is_voc === true && fObj?.opid >= 7) readOnly = true;
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
@@ -97,7 +94,7 @@ const GenPropertiesDate = (opt) => {
         <ButtonDatePicker
           onChange={opt.onChange}
           val={newVal}
-          readOnly={readOnly ?? false}
+          readOnly={opt.readOnly}
         />
       </div>
     </Form.Group>
@@ -159,7 +156,7 @@ const GenPropertiesDrop = (opt) => {
     );
   }
   const defaultIcon =
-    opt.type === 'drag_element' ? (
+    opt.type === FieldTypes.F_DRAG_ELEMENT ? (
       <span className="indicator">{FIcons.faLink}</span>
     ) : (
       <span className="icon-sample indicator" />
@@ -168,7 +165,11 @@ const GenPropertiesDrop = (opt) => {
     opt.isPreview === true ? (
       <div className="target">{defaultIcon}</div>
     ) : (
-      <GenericElDropTarget opt={opt} onDrop={opt.onChange} />
+      <GenericElDropTarget
+        opt={opt}
+        onDrop={opt.onChange}
+        readOnly={opt.readOnly}
+      />
     );
 
   return (
@@ -178,17 +179,21 @@ const GenPropertiesDrop = (opt) => {
         <div className={className}>
           {dragTarget}
           {createOpt}
-          <div style={{ zIndex: '3' }}>
-            <LTooltip idf="remove">
-              <Button
-                className="btn_del btn-gxs"
-                variant="danger"
-                onClick={() => opt.onChange({})}
-              >
-                {FIcons.faTrashCan}
-              </Button>
-            </LTooltip>
-          </div>
+          {opt.isEditable && (
+            <div style={{ zIndex: '3' }}>
+              <LTooltip idf="remove">
+                <Button
+                  size="sm"
+                  className="btn_del"
+                  variant="danger"
+                  onClick={() => opt.onChange({})}
+                  disabled={!opt.isEditable}
+                >
+                  {FIcons.faTrashCan}
+                </Button>
+              </LTooltip>
+            </div>
+          )}
         </div>
       </div>
     </Form.Group>
@@ -196,29 +201,27 @@ const GenPropertiesDrop = (opt) => {
 };
 
 const GenDummy = () => (
-  <Form.Group className="text_generic_properties">
+  <Form.Group className="props_text">
     <Form.Control type="text" className="dummy" readOnly />
   </Form.Group>
 );
 
 const GenDropReaction = (opt) => (
-  <DropReaction field={opt.f_obj} onNavi={opt.onNavi} onChange={opt.onChange} />
-);
-
-const GenLabel = (opt, value) => (
-  <Form.Group className="text_generic_properties">
-    {FieldHeader(opt)}
-    <div>{value}</div>
-  </Form.Group>
+  <DropReaction
+    field={opt.f_obj}
+    onNavi={opt.onNavi}
+    onChange={opt.onChange}
+    isEditable={opt.isEditable}
+  />
 );
 
 const GenPropertiesInputGroup = (opt) => {
-  const { f_obj: fObj, isSpCall, onSubChange } = opt;
+  const { f_obj: fObj, isSpCall, onSubChange, readOnly } = opt;
   const handleSubChange = useCallback(
     (event, id) => {
       onSubChange(event, id, fObj);
     },
-    [onSubChange, fObj]
+    [onSubChange, fObj],
   );
   const klz = fieldCls(isSpCall);
   const subs = fObj?.sub_fields?.map((e) => {
@@ -234,25 +237,31 @@ const GenPropertiesInputGroup = (opt) => {
             type="number"
             name={e.id}
             value={e.value}
+            className={`gu-${modeClass(readOnly, false)}`}
             onChange={(o) => handleSubChange(o, e.id, fObj)}
             min={1}
+            readOnly={readOnly}
           />
           <Button
             onClick={() => handleSubChange(e, e.id, fObj)}
             variant="success"
+            disabled={readOnly}
           >
-            {genUnitSup(genUnit(e.option_layers, e.value_system, ext).label) || ''}
+            {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
           </Button>
         </React.Fragment>
       );
     }
+
     return (
       <Form.Control
         key={e.id}
         type={e.type}
         name={e.id}
         value={e.value || ''}
+        className={`gu-${modeClass(readOnly, false)}`}
         onChange={(o) => handleSubChange(o, e.id, fObj)}
+        readOnly={readOnly}
       />
     );
   });
@@ -265,8 +274,7 @@ const GenPropertiesInputGroup = (opt) => {
 };
 
 const GenPropertiesNumber = (opt) => {
-  let className = opt.isEditable ? 'editable' : 'readonly';
-  className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
   return (
     <Form.Group className={klz[0]}>
@@ -293,14 +301,8 @@ const GenPropertiesSelect = (opt) => {
       label: op.label,
     };
   });
-  let className = opt.isEditable
-    ? 'select_generic_properties_editable'
-    : 'select_generic_properties_readonly';
-  className =
-    opt.isRequired && opt.isEditable
-      ? 'select_generic_properties_required'
-      : className;
-  // className = `${className} status-select`;
+  let className = modeClass(opt.readOnly, opt.isRequired);
+  className = `select_generic_properties_${className}`;
   const val = options.find((o) => o.value === opt.value) || null;
   const klz = fieldCls(opt.isSpCall);
 
@@ -321,6 +323,7 @@ const GenPropertiesSelect = (opt) => {
           onChange={opt.onChange}
           className={className}
           isDisabled={opt.readOnly}
+          menuPlacement="auto"
           menuPortalTarget={document.body}
           styles={{ ...frmSelSty, ...customStyles }}
         />
@@ -330,10 +333,9 @@ const GenPropertiesSelect = (opt) => {
 };
 
 const GenPropertiesSystemDefined = (opt) => {
-  let className = opt.isEditable ? 'editable' : 'readonly';
-  className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
-  const hasUT = !!genUnit(opt.option_layers, opt.value_system, ext).unit_type;
+  const hasUT = !!genUnit(opt.option_layers, opt.value_system).unit_type;
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
@@ -346,20 +348,19 @@ const GenPropertiesSystemDefined = (opt) => {
               : ''
           }
           onChange={opt.onChange}
-          className={`${className} ${klz[1]}`}
+          className={`gu-${className} ${klz[1]}`}
           readOnly={opt.readOnly}
           required={opt.isRequired}
           placeholder={opt.placeholder}
         />
         <Button
+          size="sm"
           disabled={opt.readOnly}
           onClick={opt.onClick}
           variant="success"
           title={hasUT ? TAs.no_unit_conversion : undefined}
         >
-          {genUnitSup(
-            genUnit(opt.option_layers, opt.value_system, ext).label
-          ) || ''}
+          {genUnitSup(genUnit(opt.option_layers, opt.value_system).label) || ''}
         </Button>
       </InputGroup>
     </Form.Group>
@@ -377,19 +378,18 @@ const GenPropertiesText = (opt) => {
   const [id] = useState(uuid());
   const { f_obj: fObj } = opt;
   const showVal = opt.value;
-  if (fObj?.readonly) return GenLabel(opt, fObj.placeholder);
-  let className = opt.isEditable ? 'editable' : 'readonly';
-  className = opt.isRequired && opt.isEditable ? 'required' : className;
+  if (fObj?.readonly) return <TextLabel opt={opt} value={fObj.placeholder} />;
+
   const klz = fieldCls(opt.isSpCall);
 
+  let className = modeClass(opt.readOnly, opt.isRequired);
   let readOnly = opt.readOnly || false;
-  if (fObj?.is_voc === true && fObj?.opid >= 7) {
-    readOnly = true;
+  if (readOnly) {
     className = 'readonly';
   }
 
   return (
-    <Form.Group className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`props_text ${klz[0]}`}>
       {FieldHeader(opt)}
       <Form.Control
         id={id}
@@ -407,11 +407,10 @@ const GenPropertiesText = (opt) => {
 
 const GenPropertiesTextArea = (opt) => {
   const [id] = useState(uuid());
-  let className = opt.isEditable ? 'editable' : 'readonly';
-  className = opt.isRequired && opt.isEditable ? 'required' : className;
+  const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
   return (
-    <Form.Group className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`props_text ${klz[0]}`}>
       {FieldHeader(opt)}
       <Form.Control
         id={id}
@@ -434,11 +433,11 @@ const GenTextFormula = (opt) => {
   (opt.f_obj?.text_sub_fields || []).map((e) => {
     const { layer, field, separator } = e;
     if (field && field !== '') {
-      if (field.includes('[@@]')) {
-        const fds = field.split('[@@]');
+      if (field.includes(`[${Constants.SEPARATOR_TAG}]`)) {
+        const fds = field.split(`[${Constants.SEPARATOR_TAG}]`);
         if (fds && fds.length === 2) {
           const fdt = ((layers[layer] || {}).fields || []).find(
-            (f) => f.field === fds[0] && f.type === 'table'
+            (f) => f.field === fds[0] && f.type === FieldTypes.F_TABLE,
           );
           ((fdt && fdt.sub_values) || []).forEach((svv) => {
             if (svv && svv[fds[1]] && svv[fds[1]] !== '') {
@@ -449,7 +448,7 @@ const GenTextFormula = (opt) => {
         }
       } else {
         const fd = ((layers[layer] || {}).fields || []).find(
-          (f) => f.field === field
+          (f) => f.field === field,
         );
         if (fd && fd.value && fd.value !== '') {
           subs.push(fd.value);
@@ -461,7 +460,7 @@ const GenTextFormula = (opt) => {
   });
   const klz = fieldCls(opt.isSpCall);
   return (
-    <Form.Group className={`text_generic_properties ${klz[0]}`}>
+    <Form.Group className={`props_text ${klz[0]}`}>
       {FieldHeader(opt)}
       <Form.Control
         id={id}
@@ -479,7 +478,8 @@ const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
     <Button
       id={attachment.uid}
-      className="button-right btn-gxs"
+      size="sm"
+      className="button-right"
       onClick={() =>
         opt.onChange({ ...opt.value, action: 'd', uid: attachment.uid })
       }
@@ -540,32 +540,34 @@ const GenPropertiesUpload = (opt) => {
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return <div>(This is an upload)</div>;
   return (
-    <Form.Group className="text_generic_properties">
+    <Form.Group className="props_text">
       {FieldHeader(opt)}
-      <div style={{ paddingBottom: '0px', paddingTop: '0px' }}>
-        <Dropzone
-          id="dropzone"
-          onDrop={(e) =>
-            opt.onChange({
-              ...opt.value,
-              action: 'f',
-              val: e,
-            })
-          }
-          className="gu-drop-zone"
-          style={{ height: 34 }}
-        >
-          <div
-            style={{
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              whiteSpace: 'nowrap',
-            }}
+      {!opt.readOnly ? (
+        <div style={{ paddingBottom: '0px', paddingTop: '0px' }}>
+          <Dropzone
+            id="dropzone"
+            onDrop={(e) =>
+              opt.onChange({
+                ...opt.value,
+                action: 'f',
+                val: e,
+              })
+            }
+            className="lu-drop-zone"
+            style={{ height: 34 }}
           >
-            Drop File, or Click to Select.
-          </div>
-        </Dropzone>
-      </div>
+            <div
+              style={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Drop File, or Click to Select.
+            </div>
+          </Dropzone>
+        </div>
+      ) : null}
       <ListGroup>
         {attachments.map((attachment) => (
           <ListGroupItem key={attachment.uid} className="generic_files">
@@ -587,14 +589,9 @@ const GenWFNext = (opt) => {
       label: label[1] === '' ? label[0] : label[1],
     };
   });
-  let className = opt.isEditable
-    ? 'select_generic_properties_editable'
-    : 'select_generic_properties_readonly';
-  className =
-    opt.isRequired && opt.isEditable
-      ? 'select_generic_properties_required'
-      : className;
-  // className = `${className} status-select`;
+  let className = modeClass(opt.readOnly, opt.isRequired);
+  className = `select_generic_properties_${className}`;
+
   const val = options.find((o) => o.value === opt.value) || null;
   return (
     <Form.Group>

@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import Constants from '../tools/Constants';
-import FIcons from '../icons/FIcons';
-import LTooltip from '../shared/LTooltip';
-import UploadKlassModal from '../elements/UploadKlassModal';
+import Constants from '@components/tools/Constants';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
+import UploadKlassModal from '@components/elements/UploadKlassModal';
 
 const AttrUploadBtn = (props) => {
   const { fnUpload, genericType } = props;
@@ -16,7 +16,7 @@ const AttrUploadBtn = (props) => {
   return (
     <>
       <LTooltip idf={`imp_${genericType.toLowerCase()}_n_temp`}>
-        <Button onClick={() => setShow(true)} variant="light">
+        <Button onClick={() => setShow(true)} variant="outline-secondary" className="gu-btn-outline-secondary">
           {FIcons.faFileImport}&nbsp;Import
         </Button>
       </LTooltip>

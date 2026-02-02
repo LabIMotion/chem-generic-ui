@@ -1,0 +1,12 @@
+// custom-datepicker.scss
+.gu-datepicker .react-datepicker {
+  display: flex !important;
+}
+
+.gu-datepicker .react-datepicker__header {
+  padding-top: 0.8rem !important; // Reset padding
+}
+
+.gu-datepicker .react-datepicker-wrapper {
+  width: unset !important; // Reset width
+}

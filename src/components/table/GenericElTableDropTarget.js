@@ -2,13 +2,14 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { v4 as uuid } from 'uuid';
 import { useDrop } from 'react-dnd';
-import { Tooltip, OverlayTrigger, Popover, Button } from 'react-bootstrap';
-import Constants from '../tools/Constants';
-import { KlzIcon } from '../tools/utils';
-import buildTableSource from '../../utils/table/build-table-source';
-import FIcons from '../icons/FIcons';
+import { OverlayTrigger, Popover, Button } from 'react-bootstrap';
+import { FieldTypes } from 'generic-ui-core';
+import Constants from '@components/tools/Constants';
+import { KlzIcon, searchTargets } from '@components/tools/utils';
+import buildTableSource from '@utils/table/build-table-source';
+import FIcons from '@components/icons/FIcons';
+import LTooltip from '@components/shared/LTooltip';
 
 const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
   if (opt.value && opt.value.el_id) {
@@ -30,13 +31,13 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         <img src={elSvg} style={{ height: '26vh', width: '26vh' }} alt="" />
       </Popover>
     );
-    const asShown = path =>
+    const asShown = (path) =>
       path === Constants.IMG_NOT_AVAILABLE_SVG ? (
         KlzIcon(`icon-${iconClass}`, { width: '4vw', fontSize: 'x-large' })
       ) : (
         <OverlayTrigger
           delayShow={1000}
-          trigger={['hover']}
+          trigger={['hover', 'focus']}
           placement="top"
           rootClose
           onHide={null}
@@ -50,19 +51,16 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
         <div className="s-img">
           {asShown(path)}
           <div className="del_btn">
-            <OverlayTrigger
-              delayShow={1000}
-              placement="top"
-              overlay={<Tooltip id={uuid()}>remove this molecule</Tooltip>}
-            >
+            <LTooltip idf="remove_molecule">
               <Button
                 variant="danger"
-                className="btn_del btn-gxs"
+                size="xsm"
+                className="btn_del"
                 onClick={() => onDrop({}, params)}
               >
                 {FIcons.faTrashCan}
               </Button>
-            </OverlayTrigger>
+            </LTooltip>
           </div>
         </div>
       ) : (
@@ -79,7 +77,7 @@ const base = (opt, iconClass, onDrop = () => {}, params = {}) => {
 };
 
 const show = (opt, iconClass, onDrop) => {
-  if (opt.type === 'table') {
+  if (opt.type === FieldTypes.F_TABLE) {
     const sField = opt.sField || {};
     const subVal = opt.data[sField.id];
     const { data } = opt;
@@ -88,18 +86,18 @@ const show = (opt, iconClass, onDrop) => {
   return base(opt, iconClass);
 };
 
-const GenericElTableDropTarget = props => {
-  const { opt, onDrop } = props;
+const GenericElTableDropTarget = (props) => {
+  const { opt, onDrop, genericType } = props;
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
-    accept: opt.dndItems,
+    accept: searchTargets(opt.dndItems),
     drop: (targetProps, monitor) => {
       const sourceProps = monitor.getItem().element;
       const type = opt.sField.type.split('_')[1];
       const { id } = opt;
-      const sourceTag = buildTableSource(type, sourceProps, id);
+      const sourceTag = buildTableSource(type, sourceProps, id, genericType);
       onDrop(sourceTag, opt);
     },
-    collect: monitor => {
+    collect: (monitor) => {
       return {
         isOver: monitor.isOver(),
         isOverValidTarget: monitor.canDrop(),

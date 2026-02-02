@@ -2,36 +2,12 @@
 import { AgGridReact } from 'ag-grid-react';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import GenericSubField from '../models/GenericSubField';
-import LayerSelect from './LayerSelect';
-import FieldSelect from './FieldSelect';
-import FIcons from '../icons/FIcons';
-
-const AddRowBtn = ({ addRow }) => (
-  <Button onClick={() => addRow()} className="btn-gxs" bsStyle="primary">
-    {FIcons.faPlus}
-  </Button>
-);
-
-AddRowBtn.propTypes = { addRow: PropTypes.func.isRequired };
-
-const DelRowBtn = ({ delRow, node }) => {
-  const { data } = node;
-  const btnClick = () => {
-    delRow(data);
-  };
-  return (
-    <Button onClick={btnClick} className="btn-gxs">
-      {FIcons.faMinus}
-    </Button>
-  );
-};
-
-DelRowBtn.propTypes = {
-  delRow: PropTypes.func.isRequired,
-  node: PropTypes.object.isRequired,
-};
+import { FieldTypes } from 'generic-ui-core';
+import GenericSubField from '@components/models/GenericSubField';
+import { AddRowBtn, DelRowBtn } from '@components/table/GridBtn';
+import LayerSelect from '@components/elements/LayerSelect';
+import FieldSelect from '@components/elements/FieldSelect';
+import Constants from '@components/tools/Constants';
 
 export default class TextFormula extends React.Component {
   constructor(props) {
@@ -44,6 +20,7 @@ export default class TextFormula extends React.Component {
     this.selField = this.selField.bind(this);
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
+    this.savedColumnState = null;
   }
 
   componentDidUpdate(prevProps) {
@@ -59,6 +36,32 @@ export default class TextFormula extends React.Component {
       this.gridApi.setGridOption('rowData', sub);
     }
     // this.gridApi && this.gridApi.setRowData(sub);
+  }
+
+  // Helper method to safely get and save column state
+  saveColumnState() {
+    if (this.gridColumnApi && typeof this.gridColumnApi.getColumnState === 'function') {
+      try {
+        this.savedColumnState = this.gridColumnApi.getColumnState();
+        return true;
+      } catch (error) {
+        console.warn('Failed to save column state:', error);
+      }
+    }
+    return false;
+  }
+
+  // Helper method to safely restore column state
+  restoreColumnState() {
+    if (this.gridColumnApi && this.savedColumnState) {
+      try {
+        this.gridColumnApi.applyColumnState({ state: this.savedColumnState });
+        return true;
+      } catch (error) {
+        console.warn('Failed to restore column state:', error);
+      }
+    }
+    return false;
   }
 
   onGridReady(e) {
@@ -96,7 +99,7 @@ export default class TextFormula extends React.Component {
         cellRendererParams: {
           allLayers,
           selField: this.selField,
-          types: ['text'],
+          types: [FieldTypes.F_TEXT],
           tableText: true,
         },
       },
@@ -117,8 +120,8 @@ export default class TextFormula extends React.Component {
         cellRendererParams: { delRow: this.delRow },
         editable: false,
         filter: false,
-        minWidth: 48,
-        width: 48,
+        minWidth: 60,
+        width: 60,
         suppressSizeToFit: true,
         pinned: 'left',
       },
@@ -130,26 +133,29 @@ export default class TextFormula extends React.Component {
   onCellValueChanged(params) {
     const { oldValue, newValue } = params;
     if (oldValue === newValue) return;
+    this.saveColumnState();
     this.refresh();
   }
 
   delRow() {
+    this.saveColumnState();
     const selectedData = this.gridApi.getSelectedRows();
     this.gridApi.applyTransaction({ remove: selectedData });
     this.refresh();
   }
 
   addRow() {
+    this.saveColumnState();
     const { allLayers } = this.props;
     const lys = allLayers.filter(
-      e => (e.fields || []).filter(f => f.type === 'text').length > 0
+      e => (e.fields || []).filter(f => f.type === FieldTypes.F_TEXT).length > 0
     );
     const ly = (lys.length > 0 && lys[0].key) || '';
     const fd =
       ly === ''
         ? ''
         : ((allLayers.find(e => e.key === ly) || {}).fields || []).filter(
-            e => e.type === 'text'
+            e => e.type === FieldTypes.F_TEXT
           )[0].field;
     const newSub = new GenericSubField({
       layer: ly,
@@ -166,12 +172,13 @@ export default class TextFormula extends React.Component {
     if (e.target.value === data.layer) {
       return;
     }
+    this.saveColumnState();
     data.layer = e.target.value;
     const { allLayers } = this.props;
     const ly = data.layer;
     const fdf =
       ((allLayers.find(l => l.key === ly) || {}).fields || []).filter(
-        l => l.type === 'text'
+        l => l.type === FieldTypes.F_TEXT
       ) || [];
     const fd = (fdf.length > 0 && fdf[0].field) || '';
     data.field = fd;
@@ -182,7 +189,9 @@ export default class TextFormula extends React.Component {
     });
     field.text_sub_fields = rows;
     this.gridApi.setGridOption('rowData', rows);
-    updSub(layerKey, field, () => {});
+    updSub(layerKey, field, () => {
+      this.restoreColumnState();
+    });
   }
 
   selField(e, node) {
@@ -190,6 +199,7 @@ export default class TextFormula extends React.Component {
     if (e.target.value === data.field) {
       return;
     }
+    this.saveColumnState();
     data.field = e.target.value;
     this.refresh();
   }
@@ -201,7 +211,11 @@ export default class TextFormula extends React.Component {
       rows.push(nd.data);
     });
     field.text_sub_fields = rows;
-    updSub(layerKey, field, () => {});
+    updSub(layerKey, field, () => {
+      if (rows.length > 0) {
+        this.restoreColumnState();
+      }
+    });
   }
 
   autoSizeAll() {
@@ -220,7 +234,7 @@ export default class TextFormula extends React.Component {
       <div>
         <div
           style={{ width: '100%', height: '100%' }}
-          className="ag-theme-balham"
+          className={Constants.GRID_THEME.QUARTZ.VALUE}
         >
           <AgGridReact
             enableColResize
@@ -234,9 +248,9 @@ export default class TextFormula extends React.Component {
             rowData={sub}
             singleClickEdit
             stopEditingWhenCellsLoseFocus
+            domLayout="autoHeight"
             rowDragManaged
             onRowDragEnd={this.refresh}
-            domLayout="autoHeight"
           />
         </div>
       </div>

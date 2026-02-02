@@ -1,9 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import RepoRenderer from './renderers/RepoRenderer';
-import GenGrid from './GenGrid';
-import Constants from '../tools/Constants';
+import RepoRenderer from '@components/details/renderers/RepoRenderer';
+import GenGrid from '@components/details/GenGrid';
+import Constants from '@components/tools/Constants';
 
 const RepoGridDs = props => {
   const { fnApi, gridData } = props;

@@ -1,18 +1,20 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import GridSelect from './GridSelect';
+import { FieldTypes } from 'generic-ui-core';
+import Constants from '@components/tools/Constants';
+import GridSelect from '@components/elements/GridSelect';
 
 const FieldSelect = (props) => {
   const { allLayers, selField, types, node, tableText } = props;
-  const allFileds = ((allLayers.find(e => e.key === node.data.layer) || {}).fields || []).filter(e => (types || ['text']).includes(e.type));
+  const allFileds = ((allLayers.find(e => e.key === node.data.layer) || {}).fields || []).filter(e => (types || [FieldTypes.F_TEXT]).includes(e.type));
   const all = allFileds.map(e => ({ key: e.field, val: e.field, lab: e.field }));
 
   if (tableText && tableText === true) {
-    const tableFileds = ((allLayers.find(e => e.key === node.data.layer) || {}).fields || []).filter(e => e.type === 'table');
+    const tableFileds = ((allLayers.find(e => e.key === node.data.layer) || {}).fields || []).filter(e => e.type === FieldTypes.F_TABLE);
     tableFileds.forEach((tbl) => {
-      ((tbl.sub_fields || []).filter(e => e.type === 'text') || []).forEach((sf) => {
-        const tfl = { key: `${tbl.field}${sf.id}`, val: `${tbl.field}[@@]${sf.id}`, lab: `${tbl.field}.${sf.col_name}` };
+      ((tbl.sub_fields || []).filter(e => e.type === FieldTypes.F_TEXT) || []).forEach((sf) => {
+        const tfl = { key: `${tbl.field}${sf.id}`, val: `${tbl.field}[${Constants.SEPARATOR_TAG}]${sf.id}`, lab: `${tbl.field}.${sf.col_name}` };
         all.push(tfl);
       });
     });

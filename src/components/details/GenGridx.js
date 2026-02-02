@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import toPairs from 'lodash/toPairs';
-import Constants from '../tools/Constants';
+import Constants from '@components/tools/Constants';
 
 const defaultColDef = {
   editable: false,

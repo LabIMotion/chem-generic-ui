@@ -1,7 +1,7 @@
 import React from 'react';
 import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
-import Constants from '../../components/tools/Constants';
-import createLayerNodeIcon from '../../components/flow/NodeIcon';
+import Constants from '@components/tools/Constants';
+import createLayerNodeIcon from '@components/flow/NodeIcon';
 
 /**
  * extendFlowElements, to add extra nodes and edges

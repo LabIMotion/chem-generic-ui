@@ -1,17 +1,40 @@
-/* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import RepoRenderer from '../details/renderers/RepoRenderer';
-import GenGrid from '../details/GenGrid';
-import Constants from '../tools/Constants';
+import { AgGridReact } from 'ag-grid-react';
+import RepoRenderer from '@components/details/renderers/RepoRenderer';
+import Constants from '@components/tools/Constants';
+import ExternalManager from '@utils/extMgr';
 
-const RepoGridEl = props => {
-  const { fnApi, gridData } = props;
+const RepoGridEl = ({ fnApi }) => {
+  const [rowData, setRowData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const defaultColDef = useMemo(() => {
+    return {
+      minWidth: 100,
+      flex: 1,
+    };
+  }, []);
+
+  const onGridReady = useCallback(() => {
+    const fetchTemplates = async () => {
+      setLoading(true);
+      const res = await ExternalManager.getAllTemplates(
+        Constants.GENERIC_TYPES.ELEMENT,
+      );
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        setRowData(res.element?.data || []);
+      }
+      setLoading(false);
+    };
+    fetchTemplates();
+  }, []);
+
   const columnDefs = [
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     {
@@ -22,39 +45,42 @@ const RepoGridEl = props => {
     {
       headerName: 'Name',
       field: 'name',
-      minWidth: 100,
-      flex: 3,
     },
     {
       headerName: 'Element Label',
       field: 'label',
-      minWidth: 100,
-      flex: 3,
+      flex: 2,
     },
-    { headerName: 'Version', field: 'version' },
-    { headerName: 'Released at', field: 'released_at' },
-    { headerName: 'Identifier', field: 'identifier' },
     {
       headerName: 'Description',
       field: 'description',
-      minWidth: 150,
-      flex: 3,
+      flex: 2,
     },
+    { headerName: 'Version', field: 'version' },
+    { headerName: 'Released at', field: 'released_at', flex: 2 },
+    { headerName: 'Identifier', field: 'identifier' },
   ];
 
   return (
-    <GenGrid
-      columnDefs={columnDefs}
-      gridData={gridData}
-      pageSize={Constants.GRID_THEME.BALHAM.PAGE_SIZE}
-      theme={Constants.GRID_THEME.BALHAM.VALUE}
-    />
+    <div
+      className={Constants.GRID_THEME.QUARTZ.VALUE}
+      style={{ height: '600px', width: '100%', overflow: 'auto' }}
+    >
+      <AgGridReact
+        loading={loading}
+        onGridReady={onGridReady}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        rowData={rowData}
+        domLayout="normal"
+        suppressAutoSize
+      />
+    </div>
   );
 };
 
 RepoGridEl.propTypes = {
   fnApi: PropTypes.func.isRequired,
-  gridData: PropTypes.array.isRequired,
 };
 
 export default RepoGridEl;

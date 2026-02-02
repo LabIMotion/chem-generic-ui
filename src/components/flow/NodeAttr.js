@@ -1,5 +1,5 @@
-import { createEnum } from '../tools/utils';
-import { initialNodes } from '../../utils/flow/initial-flow';
+import { createEnum } from '@utils/pureUtils';
+import { initialNodes } from '@utils/flow/initial-flow';
 
 export const NodeTypes = createEnum(
   ['Input', 'Output', 'Default'],

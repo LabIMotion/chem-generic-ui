@@ -1,0 +1,41 @@
+{
+  "groups": [
+    {
+      "id": "uuid-measurement-electrodes",
+      "label": "Measurement & Electrodes",
+      "position": 10,
+      "layers": [
+        "measurement_type",
+        "electrodes"
+      ]
+    },
+    {
+      "id": "uuid-set-setscreen",
+      "label": "Set & Set Screen",
+      "position": 20,
+      "layers": [
+        "set",
+        "set_screen"
+      ]
+    }
+  ],
+  "restrict": {
+    "uuid-measurement-electrodes": {
+      "op": 0,
+      "cond": [
+        {
+          "id": "uuid1",
+          "field": "link",
+          "layer": "cell",
+          "value": "single"
+        },
+        {
+          "id": "uuid2",
+          "field": "anode_type",
+          "layer": "cell",
+          "value": "plate"
+        }
+      ]
+    }
+  }
+}

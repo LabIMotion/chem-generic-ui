@@ -1,51 +1,67 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
-import FIcons from '../icons/FIcons';
+import { Button } from 'react-bootstrap';
+import FIcons from '@components/icons/FIcons';
+import LPopover from '@components/shared/LPopover';
 
-const ButtonConfirm = props => {
-  const { msg, size, bs, fnClick, fnParams, place, fa, disabled } = props;
-  const popover = (
-    <Popover id="popover-button-confirm">
-      {msg} <br />
-      <div className="btn-toolbar">
+function ButtonConfirm(props) {
+  const { msg, cls, fnClick, size, fnParams, place, fa, disabled } = props;
+  const onClick = (event) => {
+    fnClick(fnParams);
+    event.stopPropagation();
+  };
+  const popoverContent = (
+    <div
+      className="bg-white border rounded shadow-sm p-3"
+      style={{ maxWidth: '400px' }}
+    >
+      <h6 className="mb-2">Confirm Action</h6>
+      <p className="mb-3">
+        {FIcons.faTriangleExclamation} {msg || 'Confirm'}
+      </p>
+      <div className="d-flex justify-content-end gap-2">
         <Button
-          bsSize="sm"
-          bsStyle="danger"
-          aria-hidden="true"
-          onClick={() => fnClick(fnParams)}
+          size="sm"
+          variant="secondary"
+          onClick={(e) => e.stopPropagation()}
+          data-testid="confirm-btn-no"
+        >
+          No
+        </Button>
+        <Button
+          size="sm"
+          variant="danger"
+          onClick={onClick}
+          data-testid="confirm-btn-yes"
         >
           Yes
         </Button>
-        <span>&nbsp;&nbsp;</span>
-        <Button bsSize="sm" bsStyle="warning">
-          No
-        </Button>
       </div>
-    </Popover>
+    </div>
   );
-
   return (
-    <OverlayTrigger
-      animation
-      placement={place}
-      root
-      trigger="focus"
-      overlay={popover}
-    >
-      <Button bsSize={size} bsStyle={bs} disabled={disabled}>
+    <LPopover content={popoverContent} trigger={['focus']} placement={place}>
+      <Button
+        size={size || undefined}
+        className={cls}
+        disabled={disabled}
+        data-testid="confirm-btn"
+        variant="light"
+        onClick={(e) => e.stopPropagation()}
+        type="button"
+      >
         {FIcons[fa]}
       </Button>
-    </OverlayTrigger>
+    </LPopover>
   );
-};
+}
 
 ButtonConfirm.propTypes = {
   msg: PropTypes.string.isRequired,
   fnParams: PropTypes.object.isRequired,
   fnClick: PropTypes.func.isRequired,
-  bs: PropTypes.string,
+  cls: PropTypes.string,
   size: PropTypes.string,
   place: PropTypes.string,
   fa: PropTypes.string,
@@ -53,9 +69,9 @@ ButtonConfirm.propTypes = {
 };
 
 ButtonConfirm.defaultProps = {
-  bs: 'danger',
-  size: 'sm',
-  place: 'right',
+  cls: 'btn-none',
+  size: undefined,
+  place: 'top',
   fa: 'faTrashCan',
   disabled: false,
 };

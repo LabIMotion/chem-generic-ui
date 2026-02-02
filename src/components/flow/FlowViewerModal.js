@@ -1,10 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Panel } from 'react-bootstrap';
+import { Button, Card, Modal } from 'react-bootstrap';
 import Draggable from 'react-draggable';
-import FlowView from './FlowView';
-import FIcons from '../icons/FIcons';
+import FlowView from '@components/flow/FlowView';
+import FIcons from '@components/icons/FIcons';
 
 const FlowViewerModal = (props) => {
   const { show, data, fnHide } = props;
@@ -28,7 +28,7 @@ const FlowViewerModal = (props) => {
 
   if (!hasFlow && !hasFlowObject) {
     return (
-      <Modal show={show} bsSize="sm" onHide={fnHide}>
+      <Modal centered show={show} size="sm" onHide={fnHide}>
         <Modal.Header closeButton>
           <Modal.Title>{`${shortLabel} workflow`}</Modal.Title>
         </Modal.Header>
@@ -40,18 +40,19 @@ const FlowViewerModal = (props) => {
   return (
     <Draggable handle=".layer_header" bounds="body">
       <div className="flow_view_draggable">
-        <Panel bsStyle="primary">
-          <Panel.Heading className="layer_header">
+        <Card variant="info">
+          <Card.Header className="layer_header">
             {`${shortLabel} workflow`}
             <Button
-              bsStyle="danger"
-              className="gu_button_right btn-gxs"
+              size="sm"
+              variant="danger"
+              className="gu_button_right"
               onClick={fnHide}
             >
               {FIcons.faTimes}
             </Button>
-          </Panel.Heading>
-          <Panel.Body>
+          </Card.Header>
+          <Card.Body>
             <div className="body_bg">
               <div className="body_canvas">
                 <FlowView
@@ -61,8 +62,8 @@ const FlowViewerModal = (props) => {
                 />
               </div>
             </div>
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       </div>
     </Draggable>
   );

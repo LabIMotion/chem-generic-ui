@@ -3,23 +3,25 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import Constants from '../tools/Constants';
-import ButtonArrange from '../actions/ButtonArrange';
-import ButtonDraw from '../actions/ButtonDraw';
-import FlowViewerBtn from '../flow/FlowViewerBtn';
-import ButtonExport from '../actions/ButtonExport';
-import VersionListBtn from '../designer/preview/VersionListBtn';
-import ButtonReload from './ButtonReload';
-import FIcons from '../icons/FIcons';
+import Constants from '@components/tools/Constants';
+import ButtonArrange from '@components/actions/ButtonArrange';
+import ButtonDraw from '@components/actions/ButtonDraw';
+import FlowViewerBtn from '@components/flow/FlowViewerBtn';
+import FileExportButton from '@ui/common/FileExportButton';
+import VersionListBtn from '@components/designer/preview/VersionListBtn';
+// import SourceBtn from '@components/fields/SourceBtn';
+import ButtonReload from '@components/fields/ButtonReload';
+import FIcons from '@components/icons/FIcons';
+import { editable } from '@/utils/pureUtils';
 
 const LToolbar = ({
   generic,
   genericType,
   klass,
-  fnExport,
   fnReload,
   fnRetrieve,
   onExpandAll,
+  editMode,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -38,12 +40,14 @@ const LToolbar = ({
   )
     return null;
 
+  const canEdit = editable(editMode, true);
+
   if (genericType === Constants.GENERIC_TYPES.DATASET) {
-    return (
+    return canEdit ? (
       <ButtonToolbar className="p-1 gap-1">
         <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
       </ButtonToolbar>
-    );
+    ) : null;
   }
 
   return (
@@ -58,22 +62,31 @@ const LToolbar = ({
         {isExpanded ? FIcons.faAnglesUp : FIcons.faAnglesDown}{' '}
         {isExpanded ? 'Collapse' : 'Expand'}
       </Button>
-      <ButtonArrange
-        generic={generic}
-        genericType={genericType}
-        fnSave={fnReload}
-      />
-      {Constants.GENERIC_TYPES.ELEMENT && (
+      {canEdit && (
+        <ButtonArrange
+          generic={generic}
+          genericType={genericType}
+          fnSave={fnReload}
+        />
+      )}
+      {Constants.GENERIC_TYPES.ELEMENT && canEdit && (
         <ButtonDraw
           generic={generic}
           genericType={genericType}
           fnSave={fnReload}
         />
       )}
-      <FlowViewerBtn generic={generic} />
-      <ButtonExport generic={generic} fnExport={fnExport} />
-      <VersionListBtn generic={generic} fnRetrieve={fnRetrieve} />
-      <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
+      {canEdit && <FlowViewerBtn generic={generic} />}
+      <FileExportButton generic={generic} />
+      <VersionListBtn
+        generic={generic}
+        fnRetrieve={fnRetrieve}
+        genericType={genericType}
+      />
+      {canEdit && (
+        <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
+      )}
+      {/* <SourceBtn generic={generic} fnRetrieve={fnRetrieve} /> */}
     </ButtonToolbar>
   );
 };
@@ -86,17 +99,17 @@ LToolbar.propTypes = {
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
   klass: PropTypes.object.isRequired,
-  fnExport: PropTypes.func,
   fnReload: PropTypes.func,
   fnRetrieve: PropTypes.func,
   onExpandAll: PropTypes.func,
+  editMode: PropTypes.bool,
 };
 
 LToolbar.defaultProps = {
-  fnExport: () => {},
   fnReload: () => {},
   fnRetrieve: () => {},
   onExpandAll: () => {},
+  editMode: true,
 };
 
 export default LToolbar;

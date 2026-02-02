@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "urn:labimotion:schemas:system-unit",
+  "title": "System Unit Schema",
+  "description": "Schema for system-defined unit fields with measurable quantities.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "system-defined"
+    },
+    "measurable_quantity": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "values": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "type",
+    "measurable_quantity"
+  ]
+}

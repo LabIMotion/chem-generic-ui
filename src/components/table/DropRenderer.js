@@ -2,11 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
-import GenericElTableDropTarget from './GenericElTableDropTarget';
+import { FieldTypes } from 'generic-ui-core';
+import GenericElTableDropTarget from '@components/table/GenericElTableDropTarget';
 
 const DropRenderer = (props) => {
-  const { opt, sField, onChange, node } = props;
-  if (!['drag_molecule', 'drag_sample'].includes(sField.type)) return null;
+  const { opt, sField, onChange, node, genericType } = props;
+  if (![FieldTypes.F_DRAG_MOLECULE, FieldTypes.F_DRAG_SAMPLE].includes(sField.type)) return null;
   const { data } = node;
   opt.dndItems = [sField.type.split('_')[1]];
   opt.sField = sField;
@@ -14,7 +15,7 @@ const DropRenderer = (props) => {
   const oopt = cloneDeep(opt);
   return (
     <div className="drop_generic_properties drop_generic_table_wrap">
-      <GenericElTableDropTarget opt={oopt} onDrop={onChange} />
+      <GenericElTableDropTarget opt={oopt} onDrop={onChange} genericType={genericType}  />
     </div>
   );
 };

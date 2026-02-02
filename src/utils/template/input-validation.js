@@ -4,9 +4,9 @@ import {
   notifyFieldAdd,
   notifyLayerUpdate,
   notifySuccess,
-} from './designer-message';
+} from '@utils/template/designer-message';
 
-export const isValidKlass = klass => /\b[a-z]{3,5}\b/.test(klass);
+export const isValidKlass = klass => /\b[a-z]{3,10}\b/.test(klass);
 export const isValidField = field => /^[a-zA-Z0-9_]*$/.test(field);
 
 export const validateFieldName = _fieldKey => {
@@ -23,20 +23,20 @@ export const validateFieldName = _fieldKey => {
 };
 
 export const validateElementKlassInput = element => {
-  if (element.name === '') {
-    return notifyError('Please input Element.', `Element [${element.name}]`);
+  if (!isValidKlass(element.name)) {
+    return notifyError('Invalid Element Name.', `Element [${element.name}]`);
   }
   if (element.klass_prefix === '') {
-    return notifyError('Please input Prefix.', `Element [${element.name}]`);
+    return notifyError('Invalid Prefix.', `Element [${element.name}]`);
   }
   if (element.label === '') {
     return notifyError(
-      'Please input Element Label.',
+      'Invalid Element Label.',
       `Element [${element.name}]`
     );
   }
   if (element.icon_name === '') {
-    return notifyError('Please input Icon.', `Element [${element.name}]`);
+    return notifyError('Invalid Icon.', `Element [${element.name}]`);
   }
   return notifySuccess();
 };
@@ -44,13 +44,13 @@ export const validateElementKlassInput = element => {
 export const validateSegmentKlassInput = element => {
   if (element.label === '') {
     return notifyError(
-      'Please input Segment Label.',
+      'Invalid Segment Label.',
       `Segment [${element.label}]`
     );
   }
   if (element.klass_element === '') {
     return notifyError(
-      'Please assign to an Element.',
+      'Invalid Element Assignment.',
       `Segment [${element.label}]`
     );
   }
@@ -102,6 +102,12 @@ export const validateLayerUpdate = (_element, _updates) => {
   if (wf && layers[key] && (layers[key].cond_fields || []).length > 0) {
     return notifyLayerUpdate({ type: 'checkRestriction', layerKey: key });
   }
+  // check if layer is in a group
+  const { metadata = {} } = _element;
+  const group = metadata.groups?.find((g) => g.layers?.includes(key));
+  if (wf && group) {
+    return notifyLayerUpdate({ type: 'checkGroup', layerKey: key });
+  }
   return notifyLayerUpdate();
 };
 
@@ -116,7 +122,7 @@ export const validateSelectList = (_element, _name) => {
       `Select List [${selectName}]`
     );
   }
-  if (_element?.properties_template.select_options[`${selectName}`]) {
+  if (_element?.properties_template?.select_options?.[`${selectName}`]) {
     return notifyError(
       'This name of Select List is already in use. Please choose another one.',
       `Select List [${selectName}]`

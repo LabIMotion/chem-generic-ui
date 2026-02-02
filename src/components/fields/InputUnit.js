@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import { Button, Col, Form, OverlayTrigger, Popover } from 'react-bootstrap';
 import { v4 as uuid } from 'uuid';
 import { genUnit, getUnitSystem } from 'generic-ui-core';
-import { getFieldProps, genUnitSup } from '../tools/utils';
-import LLabel from '../shared/LLabel';
-import mergeExt from '../../utils/ext-utils';
+import { getFieldProps, genUnitSup } from '@components/tools/utils';
+import LLabel from '@components/shared/LLabel';
 
 const getNextUnit = (currentUnit, units) => {
   // Find the index of the current unit in the units array
@@ -53,14 +52,12 @@ const PopUnits = (si = []) => {
 const InputUnit = (props) => {
   const { fObj, fnUnitChange } = props;
   const { option_layers: si, value_system: valueSystem } = fObj;
-  let ext = mergeExt(false);
-  const sis = getUnitSystem(ext);
+  const sis = getUnitSystem();
   const fSi = sis.filter((e) => e.field === si)[0];
   if (!fSi || Object.keys(fSi).length === 0) return null; // return if SI is not found
 
   const defaultUnit = fSi?.units[0];
-  ext = mergeExt();
-  const unit = genUnit(fSi.field, (valueSystem || defaultUnit?.key), ext);
+  const unit = genUnit(fSi.field, valueSystem || defaultUnit?.key);
   if (!unit || Object.keys(unit).length === 0) return null; // return if unit is not found
 
   const onClick = () => {

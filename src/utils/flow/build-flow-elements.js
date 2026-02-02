@@ -1,16 +1,29 @@
 import cloneDeep from 'lodash/cloneDeep';
 import findKey from 'lodash/findKey';
 import { v4 as uuid } from 'uuid';
-import Constants from '../../components/tools/Constants';
-import createLayerNodeIcon from '../../components/flow/NodeIcon';
-import splitFlowElements from './split-flow-elements';
-// import extendFlowElements from './ext-flow-elements';
-import arrangedFlowElements from './arranged-flow-elements';
+import Constants from '@components/tools/Constants';
+import createLayerNodeIcon from '@components/flow/NodeIcon';
+import splitFlowElements from '@utils/flow/split-flow-elements';
+// import extendFlowElements from '@utils/flow/ext-flow-elements';
+import arrangedFlowElements from '@utils/flow/arranged-flow-elements';
 
 export const removeReactionLayers = (_layers) => {
   const layers = cloneDeep(_layers || {});
   return Object.keys(layers).reduce((acc, key) => {
     if (!key.startsWith(Constants.SYS_REACTION)) {
+      acc[key] = layers[key];
+    }
+    return acc;
+  }, {});
+};
+
+export const removeGroupedLayers = (_layers, metadata) => {
+  const layers = cloneDeep(_layers || {});
+  const groups = metadata?.groups || [];
+  const groupedLayerKeys = groups.flatMap((group) => group.layers || []);
+
+  return Object.keys(layers).reduce((acc, key) => {
+    if (!groupedLayerKeys.includes(key)) {
       acc[key] = layers[key];
     }
     return acc;

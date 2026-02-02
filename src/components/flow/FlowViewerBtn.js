@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
-import { LWf } from '../shared/LCom';
-import LTooltip from '../shared/LTooltip';
-import WorkflowModal from '../elements/WorkflowModal';
-import FlowView from './FlowView';
+import { LWf } from '@components/shared/LCom';
+import LTooltip from '@components/shared/LTooltip';
+import WorkflowModal from '@components/elements/WorkflowModal';
+import FlowView from '@components/flow/FlowView';
 
 const FlowViewerBtn = ({ generic }) => {
   const [show, setShow] = useState(false);
