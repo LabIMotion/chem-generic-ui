@@ -7,7 +7,7 @@ const renderDeleteButton = (
   delKey,
   delRoot,
   fnConfirm,
-  as = 'button'
+  as = 'button',
 ) => (
   <ButtonDelField
     generic={generic}

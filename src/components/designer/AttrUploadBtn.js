@@ -7,7 +7,7 @@ import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 import UploadKlassModal from '@components/elements/UploadKlassModal';
 
-const AttrUploadBtn = (props) => {
+function AttrUploadBtn(props) {
   const { fnUpload, genericType } = props;
   const [show, setShow] = useState(false);
 
@@ -16,7 +16,11 @@ const AttrUploadBtn = (props) => {
   return (
     <>
       <LTooltip idf={`imp_${genericType.toLowerCase()}_n_temp`}>
-        <Button onClick={() => setShow(true)} variant="outline-secondary" className="gu-btn-outline-secondary">
+        <Button
+          onClick={() => setShow(true)}
+          variant="outline-secondary"
+          className="gu-btn-outline-secondary"
+        >
           {FIcons.faFileImport}&nbsp;Import
         </Button>
       </LTooltip>
@@ -27,7 +31,7 @@ const AttrUploadBtn = (props) => {
       />
     </>
   );
-};
+}
 
 AttrUploadBtn.propTypes = {
   genericType: PropTypes.oneOf([

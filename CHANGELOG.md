@@ -1,5 +1,15 @@
 # Chem-Generic-UI Changelog
 
+## [2.1.1]
+
+### Security
+- Replaced `eval()` usage to resolve CSP issues.
+
+### Chores
+- Refactored: extracted `ElementLink` to prevent unnecessary re-renders.
+- Refactored: converted React function components to function declarations.
+- Bumped `webpack` (dev dependency).
+
 ## [2.1.0]
 
 ### Features and Enhancements

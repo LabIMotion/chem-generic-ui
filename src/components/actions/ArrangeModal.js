@@ -1,14 +1,12 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 
-const ArrangeModal = ({ onSave, showProps, children }) => {
+function ArrangeModal({ onSave, showProps, children }) {
   const { show, setShow } = showProps;
   if (!show) return null;
 
   const handleSave = () => {
-    // Get the current value from ArrangeContent via ref
     const updates = children.ref?.current?.getUpdates();
     if (updates) {
       onSave(updates);
@@ -43,7 +41,7 @@ const ArrangeModal = ({ onSave, showProps, children }) => {
       </Modal.Footer>
     </Modal>
   );
-};
+}
 
 ArrangeModal.propTypes = {
   onSave: PropTypes.func.isRequired,

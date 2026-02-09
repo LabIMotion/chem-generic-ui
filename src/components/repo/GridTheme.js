@@ -4,5 +4,5 @@ export default Object.freeze({
   },
   'ag-theme-alpine': {
     pageSize: 6,
-  }
+  },
 });

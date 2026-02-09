@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form } from 'react-bootstrap';
 import Constants from '@components/tools/Constants';
 import ElementSelectButton from '@components/shared/ElementSelectButton';
@@ -13,14 +14,62 @@ const DUMMY_BUTTON = (
   </Button>
 );
 
-const SelectElement = (props) => {
-  const { onChange, readOnly, isEditable, isPreview, onNavi, type, value } =
-    props;
+function ElementLink({
+  elId,
+  elTip,
+  iconName,
+  elLabel,
+  elKlass,
+  onNavi,
+  onChange,
+  isEditable,
+}) {
+  if (!elId) return <span />;
+  const [, eName] = (elTip || '').split(Constants.SEPARATOR_TAG);
+  return (
+    <span className="d-flex align-items-center gap-3">
+      <a role="link" onClick={() => onNavi(elKlass, elId)} className="lu-link">
+        <i className={iconName} />{' '}
+        <span className="reaction-material-link">{elLabel || eName}</span>{' '}
+        {FIcons.faArrowUpRightFromSquare}
+      </a>
+      <Button
+        size="sm"
+        variant="danger"
+        onClick={() => onChange({})}
+        disabled={!isEditable}
+      >
+        {FIcons.faTrashCan}
+      </Button>
+    </span>
+  );
+}
+
+ElementLink.propTypes = {
+  elId: PropTypes.string,
+  elTip: PropTypes.string,
+  iconName: PropTypes.string,
+  elLabel: PropTypes.string,
+  elKlass: PropTypes.string,
+  onNavi: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  isEditable: PropTypes.bool,
+};
+
+ElementLink.defaultProps = {
+  elId: null,
+  elTip: '',
+  iconName: '',
+  elLabel: '',
+  elKlass: '',
+  isEditable: false,
+};
+
+function SelectElement(props) {
+  const { onChange, isEditable, isPreview, onNavi, value } = props;
   const {
     el_id: elId,
     el_label: elLabel,
-    el_name: elName,
-    el_type: elType,
     el_klass: elKlass,
     icon_name: iconName,
     el_tip: elTip,
@@ -40,32 +89,6 @@ const SelectElement = (props) => {
     onChange(newValue);
   };
 
-  const ElementLink = () => {
-    if (!elId) return <span />;
-    const [, eName] = (elTip || '').split(Constants.SEPARATOR_TAG);
-    return (
-      <span className="d-flex align-items-center gap-3">
-        <a
-          role="link"
-          onClick={() => onNavi(elKlass, elId)}
-          className="lu-link"
-        >
-          <i className={iconName} />{' '}
-          <span className="reaction-material-link">{elLabel || eName}</span>{' '}
-          {FIcons.faArrowUpRightFromSquare}
-        </a>
-        <Button
-          size="sm"
-          variant="danger"
-          onClick={() => onChange({})}
-          disabled={!isEditable}
-        >
-          {FIcons.faTrashCan}
-        </Button>
-      </span>
-    );
-  };
-
   if (isPreview) {
     return (
       <Form.Group>
@@ -80,14 +103,23 @@ const SelectElement = (props) => {
       {FieldHeader(props)}
       <div>
         {elId ? (
-          <ElementLink />
+          <ElementLink
+            elId={elId}
+            elTip={elTip}
+            iconName={iconName}
+            elLabel={elLabel}
+            elKlass={elKlass}
+            onNavi={onNavi}
+            onChange={onChange}
+            isEditable={isEditable}
+          />
         ) : (
           <ElementSelectButton onSelect={handleElementSelect} />
         )}
       </div>
     </Form.Group>
   );
-};
+}
 
 SelectElement.fnId = FN_ID.FN_DRAG_EL_CHEMOTION;
 

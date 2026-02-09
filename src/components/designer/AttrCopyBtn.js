@@ -8,7 +8,7 @@ import Constants from '@components/tools/Constants';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const AttrCopyBtn = (props) => {
+function AttrCopyBtn(props) {
   const { data, fnCopy, fnSelect, genericType } = props;
   const [show, setShow] = useState(false);
 
@@ -34,7 +34,7 @@ const AttrCopyBtn = (props) => {
       />
     </>
   );
-};
+}
 
 AttrCopyBtn.propTypes = {
   data: PropTypes.object,

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Card, Col, Form, InputGroup } from 'react-bootstrap';
 import renderDeleteButton from '@components/admin/renderDeleteButton';
 
-const OptionComponent = ({ name, label, generic, root, fnInputChg, fnDel }) => {
+function OptionComponent({ name, label, generic, root, fnInputChg, fnDel }) {
   const [inputValue, setInputValue] = useState(label);
 
   React.useEffect(() => {
@@ -31,12 +31,12 @@ const OptionComponent = ({ name, label, generic, root, fnInputChg, fnDel }) => {
       </InputGroup>
     </Form.Group>
   );
-};
+}
 
 const Option = React.memo(OptionComponent);
 Option.displayName = 'SelectOption';
 
-const SelectOptionList = (props) => {
+function SelectOptionList(props) {
   const { generic, root, fnInputChg, fnDel } = props;
 
   const options =
@@ -61,7 +61,7 @@ const SelectOptionList = (props) => {
       </Card.Body>
     </Col>
   );
-};
+}
 
 SelectOptionList.propTypes = {
   generic: PropTypes.object.isRequired,

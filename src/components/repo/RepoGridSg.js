@@ -5,7 +5,7 @@ import RepoRenderer from '@components/details/renderers/RepoRenderer';
 import Constants from '@components/tools/Constants';
 import ExternalManager from '@utils/extMgr';
 
-const BelongsToRenderer = (params) => {
+function BelongsToRenderer(params) {
   const { data } = params;
   return (
     <>
@@ -14,17 +14,18 @@ const BelongsToRenderer = (params) => {
       <i className={data.element_klass?.icon_name} aria-hidden="true" />
     </>
   );
-};
+}
 
-const RepoGridSg = ({ fnApi }) => {
+function RepoGridSg({ fnApi }) {
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const defaultColDef = useMemo(() => {
-    return {
+  const defaultColDef = useMemo(
+    () => ({
       minWidth: 100,
       flex: 1,
-    };
-  }, []);
+    }),
+    [],
+  );
 
   const onGridReady = useCallback(() => {
     const fetchTemplates = async () => {
@@ -85,7 +86,7 @@ const RepoGridSg = ({ fnApi }) => {
       />
     </div>
   );
-};
+}
 
 RepoGridSg.propTypes = {
   fnApi: PropTypes.func.isRequired,

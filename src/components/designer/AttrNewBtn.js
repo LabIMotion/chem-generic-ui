@@ -7,7 +7,7 @@ import Constants from '@components/tools/Constants';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const AttrNewBtn = (props) => {
+function AttrNewBtn(props) {
   const { fnCreate, genericType } = props;
   const [show, setShow] = useState(false);
 
@@ -16,7 +16,11 @@ const AttrNewBtn = (props) => {
   return (
     <>
       <LTooltip idf={`create.${genericType.toLowerCase()}`}>
-        <Button onClick={() => setShow(true)} variant="outline-secondary" className="gu-btn-outline-secondary">
+        <Button
+          onClick={() => setShow(true)}
+          variant="outline-secondary"
+          className="gu-btn-outline-secondary"
+        >
           {FIcons.faPlus}&nbsp;New
         </Button>
       </LTooltip>
@@ -27,7 +31,7 @@ const AttrNewBtn = (props) => {
       />
     </>
   );
-};
+}
 
 AttrNewBtn.propTypes = {
   fnCreate: PropTypes.func.isRequired,

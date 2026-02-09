@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import filter from 'lodash/filter';
+import { evaluate } from 'mathjs';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from '@components/fields/FieldHeader';
 import { fieldCls } from '@components/tools/utils';
@@ -20,14 +21,13 @@ const PropCalculate = (opt) => {
     value,
     isEditable,
   } = opt;
-  let { canAdjust, decimal } = fObj;
+  let { canAdjust = false, decimal = 5 } = fObj;
   canAdjust = toBool(canAdjust);
   decimal = toNullOrInt(decimal) || 5;
 
   const fields = layer?.fields || [];
   let showVal = 0;
   let showTxt = null;
-  let newFormula = formula;
 
   const calFields = filter(fields, (o) =>
     [FieldTypes.F_INTEGER, FieldTypes.F_SYSTEM_DEFINED].includes(o.type)
@@ -38,6 +38,8 @@ const PropCalculate = (opt) => {
     formula && formula.match(regF)
       ? formula.match(regF).sort((a, b) => b.length - a.length)
       : [];
+
+  let newFormula = formula?.replace(/\*\*/g, '^');
 
   varFields.forEach((fi) => {
     if (!isNaN(fi)) return;
@@ -52,12 +54,10 @@ const PropCalculate = (opt) => {
 
   if (type === FieldTypes.F_FORMULA_FIELD) {
     try {
-      showVal = eval(newFormula);
+      showVal = evaluate(newFormula);
       showTxt = !isNaN(showVal) ? parseFloat(showVal.toFixed(decimal)) : 0;
     } catch (e) {
-      if (e instanceof SyntaxError) {
-        showTxt = e.message;
-      }
+      showTxt = e.message;
     }
   }
 
@@ -65,9 +65,9 @@ const PropCalculate = (opt) => {
     <Form.Control
       type="text"
       value={showTxt}
-      onChange={onChange}
       className="readonly"
-      readOnly={!isEditable}
+      readOnly
+      disabled={!isEditable}
       required={false}
       placeholder={placeholder}
       min={0}
@@ -82,16 +82,7 @@ const PropCalculate = (opt) => {
         comp
       ) : (
         <InputGroup className={klz[1]}>
-          <Form.Control
-            type="text"
-            value={showTxt}
-            onChange={onChange}
-            className="readonly"
-            readOnly={!isEditable}
-            required={false}
-            placeholder={placeholder}
-            min={0}
-          />
+          {comp}
           <LTooltip idf="adjust_calculation">
             <Button
               variant="light"

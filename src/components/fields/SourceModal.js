@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 import LoadingSpinner from '@components/icons/LoadingSpinner';
 
-const SourceModal = ({
+function SourceModal({
   show,
   fnClose,
   fnRetrieve,
@@ -12,7 +12,7 @@ const SourceModal = ({
   // fetcher,
   // fetcherFn,
   // fnDelete,
-}) => {
+}) {
   const [loading, setLoading] = useState(false);
 
   const handleClose = () => {
@@ -30,10 +30,7 @@ const SourceModal = ({
       <Modal.Header closeButton>
         <Modal.Title>Sources Overview</Modal.Title>
       </Modal.Header>
-      <Modal.Body
-        className="d-flex flex-column"
-        style={{ height: '70vh' }}
-      >
+      <Modal.Body className="d-flex flex-column" style={{ height: '70vh' }}>
         {loading ? (
           <div className="d-flex justify-content-center align-items-center flex-grow-1">
             <LoadingSpinner />
@@ -66,8 +63,8 @@ const SourceModal = ({
                       <td>Link Molecule</td>
                       <td>10111</td>
                       <td>Molecule</td>
-                      <td>{' '}</td>
-                      <td>{' '}</td>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
                     </tr>
                     <tr>
                       <td>Link Element</td>
@@ -112,7 +109,7 @@ const SourceModal = ({
       </Modal.Body>
     </Modal>
   );
-};
+}
 
 SourceModal.propTypes = {
   show: PropTypes.bool.isRequired,

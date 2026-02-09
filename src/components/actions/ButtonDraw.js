@@ -10,7 +10,7 @@ import FIcons from '@components/icons/FIcons';
 import { LWf } from '@components/shared/LCom';
 import LTooltip from '@components/shared/LTooltip';
 
-const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
+function ButtonDraw({ generic = {}, genericType, fnSave = () => {} }) {
   const [show, setShow] = useState(false);
   if (generic?.is_new) return null;
   if (
@@ -54,7 +54,7 @@ const ButtonDraw = ({ generic = {}, genericType, fnSave = () => {} }) => {
       </WorkflowModal>
     </>
   );
-};
+}
 
 ButtonDraw.propTypes = {
   generic: PropTypes.object,

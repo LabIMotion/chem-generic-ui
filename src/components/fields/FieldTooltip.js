@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import FIcons from '@components/icons/FIcons';
 
-const FieldTooltip = ({ link }) => {
+function FieldTooltip({ link }) {
   if (!link) return null;
   return (
     <OverlayTrigger
@@ -23,7 +23,7 @@ const FieldTooltip = ({ link }) => {
       </Button>
     </OverlayTrigger>
   );
-};
+}
 
 FieldTooltip.propTypes = { link: PropTypes.string.isRequired };
 

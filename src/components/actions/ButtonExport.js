@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const ButtonExport = (props) => {
+function ButtonExport(props) {
   const { generic, fnExport } = props;
   if (generic?.is_new) return null;
 
@@ -20,7 +20,7 @@ const ButtonExport = (props) => {
       </Button>
     </LTooltip>
   );
-};
+}
 
 ButtonExport.propTypes = {
   generic: PropTypes.object,

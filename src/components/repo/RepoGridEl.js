@@ -5,15 +5,16 @@ import RepoRenderer from '@components/details/renderers/RepoRenderer';
 import Constants from '@components/tools/Constants';
 import ExternalManager from '@utils/extMgr';
 
-const RepoGridEl = ({ fnApi }) => {
+function RepoGridEl({ fnApi }) {
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const defaultColDef = useMemo(() => {
-    return {
+  const defaultColDef = useMemo(
+    () => ({
       minWidth: 100,
       flex: 1,
-    };
-  }, []);
+    }),
+    [],
+  );
 
   const onGridReady = useCallback(() => {
     const fetchTemplates = async () => {
@@ -77,7 +78,7 @@ const RepoGridEl = ({ fnApi }) => {
       />
     </div>
   );
-};
+}
 
 RepoGridEl.propTypes = {
   fnApi: PropTypes.func.isRequired,

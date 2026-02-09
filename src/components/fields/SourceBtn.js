@@ -6,7 +6,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import SourceModal from '@components/fields/SourceModal';
 import FIcons from '@components/icons/FIcons';
 
-const SourceBtn = ({ generic, fnRetrieve }) => {
+function SourceBtn({ generic, fnRetrieve }) {
   const [show, setShow] = useState(false);
 
   if (generic?.is_new)
@@ -42,7 +42,7 @@ const SourceBtn = ({ generic, fnRetrieve }) => {
       )}
     </>
   );
-};
+}
 
 SourceBtn.propTypes = {
   generic: PropTypes.object.isRequired,

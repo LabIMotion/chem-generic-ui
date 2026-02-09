@@ -114,7 +114,6 @@ const ElementSelectModal = ({ show, onHide, onSelect }) => {
         selected_klass: selectedElement,
         limit: 20,
       });
-      console.log('Search elements result:', res);
       if (res.notify?.isSuccess) {
         setFilteredElements(res.element?.data?.elements || []);
       } else {

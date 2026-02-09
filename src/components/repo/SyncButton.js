@@ -9,7 +9,7 @@ import ExternalManager from '@utils/extMgr';
 import Response from '@utils/response';
 import { notifyError } from '@utils/template/designer-message';
 
-const SyncBtn = (props) => {
+function SyncBtn(props) {
   const { fnRefresh, genericType, fnCallback } = props;
   const [show, setShow] = useState(false);
 
@@ -27,7 +27,9 @@ const SyncBtn = (props) => {
       }
     } catch (error) {
       console.error('Error creating template:', error);
-      fnCallback(new Response(notifyError(`Error creating template: ${error}`), []));
+      fnCallback(
+        new Response(notifyError(`Error creating template: ${error}`), []),
+      );
     } finally {
       setShow(false);
     }
@@ -48,7 +50,7 @@ const SyncBtn = (props) => {
       />
     </>
   );
-};
+}
 
 SyncBtn.propTypes = {
   fnRefresh: PropTypes.func.isRequired,

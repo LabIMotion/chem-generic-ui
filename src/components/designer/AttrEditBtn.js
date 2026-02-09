@@ -8,7 +8,7 @@ import Constants from '@components/tools/Constants';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const AttrEditBtn = (props) => {
+function AttrEditBtn(props) {
   const { data, fnSelect, fnDelete, fnEdit, genericType } = props;
   const [show, setShow] = useState(false);
 
@@ -37,7 +37,7 @@ const AttrEditBtn = (props) => {
       />
     </>
   );
-};
+}
 
 AttrEditBtn.propTypes = {
   data: PropTypes.object,

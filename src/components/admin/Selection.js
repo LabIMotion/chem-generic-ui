@@ -7,7 +7,7 @@ import SelectOption from '@components/admin/SelectOption';
 import SelectOptionList from '@components/admin/SelectOptionList';
 import renderDeleteButton from '@components/admin/renderDeleteButton';
 
-const Selection = (props) => {
+function Selection(props) {
   const { generic, root, fnAdd, fnChange, fnInputChg } = props;
   const [expand, setExpand] = useState(false);
 
@@ -43,7 +43,7 @@ const Selection = (props) => {
       )}
     </Row>
   );
-};
+}
 
 Selection.propTypes = {
   generic: PropTypes.object.isRequired,

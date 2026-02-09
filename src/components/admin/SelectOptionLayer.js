@@ -12,7 +12,7 @@ import {
 } from '@utils/template/action-handler';
 import fbc from '@components/tools/ui-styles';
 
-const SelectOptionLayer = (props) => {
+function SelectOptionLayer(props) {
   const { generic, fnChange } = props;
 
   const [showAddSelect, setShowAddSelect] = useState(false);
@@ -40,10 +40,7 @@ const SelectOptionLayer = (props) => {
   return (
     <div>
       <Card className="border-0">
-        <Card.Header
-          as="h5"
-          className={`${fbc} lu-bg-white`}
-        >
+        <Card.Header as="h5" className={`${fbc} lu-bg-white`}>
           Selection Lists
           <ButtonTooltip
             idf="sel_add"
@@ -68,7 +65,7 @@ const SelectOptionLayer = (props) => {
                   fnInputChg={onOptionInputChange}
                 />
               );
-            }
+            },
           )}
         </Card.Body>
       </Card>
@@ -79,7 +76,7 @@ const SelectOptionLayer = (props) => {
       />
     </div>
   );
-};
+}
 
 SelectOptionLayer.propTypes = {
   generic: PropTypes.object.isRequired,

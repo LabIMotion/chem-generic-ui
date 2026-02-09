@@ -11,7 +11,7 @@ const contentComponents = {
   Element: RepoGridEl,
 };
 
-const RepoNewModal = ({ showModal, fnClose, fnCreate, content }) => {
+function RepoNewModal({ showModal, fnClose, fnCreate, content }) {
   const ContentComponent = contentComponents[content];
   if (!ContentComponent) return null;
 
@@ -34,7 +34,7 @@ const RepoNewModal = ({ showModal, fnClose, fnCreate, content }) => {
       </Modal.Body>
     </Modal>
   );
-};
+}
 
 RepoNewModal.propTypes = {
   showModal: PropTypes.bool.isRequired,

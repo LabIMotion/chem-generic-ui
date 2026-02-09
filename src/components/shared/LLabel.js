@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const LLabel = ({ children, tooltip, isCheckLabel }) => {
+function LLabel({ children, tooltip, isCheckLabel }) {
   const LabelComponent = isCheckLabel ? Form.Check.Label : Form.Label;
 
-  const label = <LabelComponent className="fw-bold mb-0">{children}</LabelComponent>;
+  const label = (
+    <LabelComponent className="fw-bold mt-2">{children}</LabelComponent>
+  );
 
   if (tooltip == null || React.Children.count(tooltip) === 0) {
     return label;
@@ -20,7 +22,7 @@ const LLabel = ({ children, tooltip, isCheckLabel }) => {
       {label}
     </OverlayTrigger>
   );
-};
+}
 
 LLabel.propTypes = {
   children: PropTypes.node.isRequired,
