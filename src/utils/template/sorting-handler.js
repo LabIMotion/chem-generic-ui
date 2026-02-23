@@ -112,7 +112,7 @@ export const handleSaveSorting = (_element) => {
 
   const reordered = reorderPositions(
     element.properties_template.layers,
-    element.metadata,
+    element.metadata || {},
   );
   element.metadata = reordered.metadata;
   element.properties_template.layers = reordered.layers;

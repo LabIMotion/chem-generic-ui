@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Badge } from 'react-bootstrap';
+import { Card, Badge, Collapse } from 'react-bootstrap';
 import GenPropertiesLayer from '@components/layers/GenPropertiesLayer';
 import FIcons from '@components/icons/FIcons';
 import ConditionView from '@components/designer/template/ConditionView';
 import { isItemEffectivelyVisible } from '@utils/template/visibility-handler';
 import { useGenInterfaceContext } from '@components/details/GenInterfaceContext';
+import { isFirstLayer } from '@components/details/handler';
 
 /**
  * Renders a group of layers with optional restrictions
@@ -33,9 +34,20 @@ function GenPropertiesGroup({
   expandAll,
   editMode,
   genericType,
+  groups,
 }) {
   const { refSource } = useGenInterfaceContext();
-  const [expanded, setExpanded] = useState(expandAll || false);
+  const [isInitialExpansion, setIsInitialExpansion] = useState(true);
+  const [expanded, setExpanded] = useState(() => {
+    if (expandAll != null) {
+      return expandAll;
+    }
+    // Check if any layer in the group is the first layer
+    const hasFirstLayer = (groupLayers || []).some((layer) =>
+      isFirstLayer(allLayers, layer.key, groups),
+    );
+    return hasFirstLayer;
+  });
   const [showRestrictions, setShowRestrictions] = useState(false);
 
   const hasRestrictions =
@@ -54,6 +66,14 @@ function GenPropertiesGroup({
 
   // Sort layers by position within the group (use array order from metadata)
   const sortedLayers = groupLayers || [];
+
+  // Determine effective expandAll for child layers
+  let effectiveExpandAll = expandAll;
+  if (effectiveExpandAll === undefined) {
+    if (!isInitialExpansion) {
+      effectiveExpandAll = false;
+    }
+  }
 
   // Render layers considering their conditions
   const layerElements = sortedLayers
@@ -84,10 +104,11 @@ function GenPropertiesGroup({
             isSpCall={isSpCall}
             hasAi={hasAi}
             aiComp={aiComp}
-            expandAll={expandAll}
+            expandAll={effectiveExpandAll}
             editMode={editMode}
             genericType={genericType}
             grouped
+            groups={groups}
           />
         );
       }
@@ -113,10 +134,11 @@ function GenPropertiesGroup({
             isSpCall={isSpCall}
             hasAi={hasAi}
             aiComp={aiComp}
-            expandAll={expandAll}
+            expandAll={effectiveExpandAll}
             editMode={editMode}
             genericType={genericType}
             grouped
+            groups={groups}
           />
         );
       }
@@ -126,10 +148,13 @@ function GenPropertiesGroup({
     .filter(Boolean);
 
   return (
-    <Card className="mb-3 border-2 border-info">
+    <Card className="mb-3 border-2 border-info" id={`group-anchor-${groupId}`}>
       <Card.Header
         className="d-flex align-items-center justify-content-between cursor-pointer"
-        onClick={() => setExpanded(!expanded)}
+        onClick={() => {
+          setExpanded(!expanded);
+          setIsInitialExpansion(false);
+        }}
         style={{ cursor: 'pointer' }}
       >
         <div className="d-flex align-items-center">
@@ -168,7 +193,7 @@ function GenPropertiesGroup({
           />
         </Card.Body>
       )}
-      {expanded && (
+      <Collapse in={expanded} unmountOnExit>
         <Card.Body className="p-2">
           {layerElements.length > 0 ? (
             layerElements
@@ -178,7 +203,7 @@ function GenPropertiesGroup({
             </div>
           )}
         </Card.Body>
-      )}
+      </Collapse>
     </Card>
   );
 }
@@ -205,6 +230,11 @@ GenPropertiesGroup.propTypes = {
   expandAll: PropTypes.bool,
   editMode: PropTypes.bool,
   genericType: PropTypes.string,
+  groups: PropTypes.array,
+};
+
+GenPropertiesGroup.defaultProps = {
+  groups: [],
 };
 
 export default GenPropertiesGroup;

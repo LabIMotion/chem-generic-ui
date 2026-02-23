@@ -5,7 +5,7 @@ import SysUnitButton from '@ui/common/SysUnitButton';
 import { genUnitSup } from '@components/tools/utils';
 import TAs from '@components/tools/TAs';
 
-jest.mock('generic-ui-core', () => ({
+vi.mock('generic-ui-core', () => ({
   genUnits: jest.fn(),
   genUnit: jest.fn(),
   unitConversion: jest.fn(),
@@ -14,7 +14,7 @@ jest.mock('generic-ui-core', () => ({
   }
 }));
 
-jest.mock('@components/tools/utils', () => ({
+vi.mock('@components/tools/utils', () => ({
   genUnitSup: jest.fn()
 }));
 

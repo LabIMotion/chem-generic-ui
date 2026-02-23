@@ -1,7 +1,7 @@
 import { showProperties } from 'generic-ui-core';
 import { isFieldEffectivelyVisible, isItemEffectivelyVisible } from '@utils/template/visibility-handler';
 
-jest.mock('generic-ui-core', () => ({
+vi.mock('generic-ui-core', () => ({
   showProperties: jest.fn(),
 }));
 

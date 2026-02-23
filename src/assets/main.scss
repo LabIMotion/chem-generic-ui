@@ -7,6 +7,7 @@
 @use 'upgrade' as *;
 @use 'layer' as *;
 @use 'dataset-element' as *;
+@use 'progress' as *;
 // @use 'lib';
 
 @mixin dnd-state($borderColor, $textColor, $opacity: 1) {
@@ -669,4 +670,49 @@
   color: white !important;
   background-color: #0d6efd !important;
   border-color: #0d6efd !important;
+}
+
+.prog-overview-dashboard {
+  background-image: radial-gradient(#aaa 1px, transparent 0);
+  background-size: 16px 16px;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.lu_square-progress {
+  border-radius: 0 !important;
+  .progress-bar {
+    border-radius: 0 !important;
+  }
+}
+
+.lu_details-marked {
+  background-color: rgba($color-bs-primary, 0.05);
+  border-radius: 4px;
+  padding-right: 8px !important;
+  font-weight: 600;
+  &:hover {
+    background-color: rgba($color-bs-primary, 0.1);
+  }
+}
+
+@keyframes lu-border-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 251, 221, 0);
+  }
+  15% {
+    box-shadow: 0 0 0 6px rgba(255, 231, 51, 0.9), 0 0 25px 8px rgba(255, 251, 221, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 251, 221, 0);
+  }
+}
+
+.lu_jump-highlight {
+  position: relative;
+  z-index: 10;
+  border-radius: 4px;
+  animation: lu-border-flash 4s cubic-bezier(0.19, 1, 0.22, 1);
 }

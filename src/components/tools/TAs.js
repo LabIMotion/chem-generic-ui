@@ -112,7 +112,7 @@ export default Object.freeze({
     </>
   ),
   tpl_save_draft: 'Save as Draft',
-  record_time: 'Record the time',
+  record_time: 'Record time',
   reload_temp: 'Click to reload the template',
   remove: 'Remove',
   remove_molecule: 'Remove this molecule',

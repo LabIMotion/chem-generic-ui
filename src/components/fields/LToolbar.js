@@ -12,7 +12,8 @@ import VersionListBtn from '@components/designer/preview/VersionListBtn';
 // import SourceBtn from '@components/fields/SourceBtn';
 import ButtonReload from '@components/fields/ButtonReload';
 import FIcons from '@components/icons/FIcons';
-import { editable } from '@/utils/pureUtils';
+import { editable } from '@utils/pureUtils';
+import { useGenUIContext } from '@components/details/GenUIContext';
 
 const LToolbar = ({
   generic,
@@ -23,6 +24,7 @@ const LToolbar = ({
   onExpandAll,
   editMode,
 }) => {
+  const { showOverview, toggleOverview, isProviderPresent } = useGenUIContext();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleExpandToggle = () => {
@@ -52,6 +54,17 @@ const LToolbar = ({
 
   return (
     <ButtonToolbar className="p-1 gap-1 d-flex">
+      {isProviderPresent && (
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={toggleOverview}
+          title={showOverview ? 'Hide Overview Map' : 'Show Overview Map'}
+        >
+          {FIcons.faChartBar}{' '}
+          {showOverview ? 'Hide Overview' : 'Show Overview'}
+        </Button>
+      )}
       <Button
         variant="primary"
         size="sm"

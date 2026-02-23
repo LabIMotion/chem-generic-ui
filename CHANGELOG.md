@@ -1,5 +1,22 @@
 # Chem-Generic-UI Changelog
 
+## [2.2.0]
+> 2026-03-25
+
+### Features and Enhancements
+- `Overview Map`: provides a visual dashboard at the top of your form to track data entry progress and streamline navigation
+- Auto-expand the first group by default.
+- Refined wording across the UI for clarity.
+
+### Bug Fixes
+- Fixed an issue where templates could not be saved as drafts after being imported into the Work Area.
+
+### Chores
+- Migrated build tooling to **Vite**.
+- Configured external dependencies with conditional minify and sourcemap options for builds.
+- Bumped GitHub Actions versions to resolve the Node.js 20 deprecation warnings.
+- Dependency upgrades.
+
 ## [2.1.1]
 
 ### Security

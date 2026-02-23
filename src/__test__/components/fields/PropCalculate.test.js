@@ -1,17 +1,21 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import PropCalculate from '@/components/fields/PropCalculate';
+import PropCalculate from '@components/fields/PropCalculate';
 import { FieldTypes } from 'generic-ui-core';
 
 // Mocking dependencies that might break the test environment
-jest.mock('@components/fields/FieldHeader', () => () => <div data-testid="field-header" />);
-jest.mock('@components/tools/utils', () => ({
+vi.mock('@components/fields/FieldHeader', () => ({
+  default: () => <div data-testid="field-header" />,
+}));
+vi.mock('@components/tools/utils', () => ({
   fieldCls: () => ['group-cls', 'control-cls'],
 }));
-jest.mock('@components/icons/FIcons', () => ({
+vi.mock('@components/icons/FIcons', () => ({
   faArrowRight: 'ArrowRight',
 }));
-jest.mock('@components/shared/LTooltip', () => ({ children }) => <div>{children}</div>);
+vi.mock('@components/shared/LTooltip', () => ({
+  default: ({ children }) => <div>{children}</div>,
+}));
 
 describe('PropCalculate', () => {
   const mockLayer = {

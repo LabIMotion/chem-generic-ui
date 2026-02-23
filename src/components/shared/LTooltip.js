@@ -1,4 +1,4 @@
-import React, { useState, cloneElement, isValidElement } from 'react';
+import React, { useState, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';

@@ -6,7 +6,7 @@ import {
 } from '@utils/template/label-handler';
 import { isFieldEffectivelyVisible } from '@utils/template/visibility-handler';
 
-jest.mock('@utils/template/visibility-handler', () => ({
+vi.mock('@utils/template/visibility-handler', () => ({
   isFieldEffectivelyVisible: jest.fn(),
 }));
 

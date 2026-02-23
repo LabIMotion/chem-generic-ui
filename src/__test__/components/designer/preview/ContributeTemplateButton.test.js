@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import ContributeTemplateButton from '@components/designer/preview/ContributeTemplateButton';
 
 // Mock the fnToggle to bypass feature flags in tests
-jest.mock('@ui/common/fnToggle', () => ({
+vi.mock('@ui/common/fnToggle', () => ({
   fnToggle: (Component) => Component,
 }));
 

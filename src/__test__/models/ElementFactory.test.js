@@ -4,7 +4,7 @@ import { showProperties } from 'generic-ui-core';
 import { organizeLayersForDisplay } from '@utils/template/group-handler';
 
 // Mock generic-ui-core
-jest.mock('generic-ui-core', () => ({
+vi.mock('generic-ui-core', () => ({
   showProperties: jest.fn(),
   resetProperties: jest.fn(p => p),
   FieldTypes: {
@@ -14,7 +14,7 @@ jest.mock('generic-ui-core', () => ({
 }));
 
 // Mock group-handler
-jest.mock('@utils/template/group-handler', () => ({
+vi.mock('@utils/template/group-handler', () => ({
   organizeLayersForDisplay: jest.fn(),
 }));
 

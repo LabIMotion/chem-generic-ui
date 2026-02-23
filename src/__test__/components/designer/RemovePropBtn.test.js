@@ -4,7 +4,7 @@ import { render, fireEvent, act, waitFor } from '@testing-library/react';
 import RemovePropBtn from '@components/designer/template/RemovePropBtn';
 
 // Mock the handleDelete function since it's not provided in the test
-// jest.mock('./path/to/handleDelete', () => ({
+// vi.mock('./path/to/handleDelete', () => ({
 //   handleDelete: jest.fn(() => 'deletedResult'),
 // }));
 

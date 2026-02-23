@@ -6,6 +6,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css'; // Optional theme CSS
 import '@assets/main.scss';
 import '@assets/field.scss';
 import '@assets/template.scss';
+
 import {
   absOlsTermId,
   absOlsTermLabel,
@@ -26,6 +27,7 @@ export { buildInitWF } from '@components/tools/orten';
 export { createDataset } from '@models/DatasetFactory';
 export { createElement } from '@models/ElementFactory';
 export { createSegment } from '@models/SegmentFactory';
+export { GenUIProvider } from '@components/details/GenUIContext';
 export { default as GenericElCriteriaModal } from '@components/elements/GenericElCriteriaModal';
 export { default as SegmentCriteria } from '@components/elements/SegmentCriteria';
 export { default as InlineMetadata } from '@components/addon/DatasetMetadata';

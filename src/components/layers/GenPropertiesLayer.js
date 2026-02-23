@@ -250,6 +250,7 @@ export default class GenPropertiesLayer extends Component {
       expandAll,
       editMode,
       grouped,
+      groups,
     } = this.props;
     const { color = 'default', style, label } = layer;
     // const ai = layer.ai || [];
@@ -316,6 +317,7 @@ export default class GenPropertiesLayer extends Component {
         extClass={bgColorClass}
         layers={layers}
         expandAll={expandAll}
+        groups={groups}
       >
         {this.views()}
         {aiComp && aiComp[layer.key]}
@@ -346,6 +348,7 @@ GenPropertiesLayer.propTypes = {
   editMode: PropTypes.bool.isRequired,
   genericType: PropTypes.string.isRequired,
   grouped: PropTypes.bool.isRequired,
+  groups: PropTypes.array,
 };
 
 GenPropertiesLayer.defaultProps = {
@@ -361,4 +364,5 @@ GenPropertiesLayer.defaultProps = {
   hasAi: false,
   aiComp: null,
   expandAll: undefined,
+  groups: [],
 };

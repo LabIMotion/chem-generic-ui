@@ -264,7 +264,7 @@ export default class TableRecord extends React.Component {
         moveRow: this.moveRow,
         field: opt.f_obj.field,
         type: dtype,
-        isEditable, isEditable,
+        isEditable,
       },
       width: 'unset',
     };
