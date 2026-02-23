@@ -37,6 +37,10 @@ or Yarn:
 yarn add chem-generic-ui
 ```
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, coding standards, commit conventions, and the pull request workflow.
+
 ## Support and Community
 
 If you have questions, comments, or suggestions, the best place to share them is in the [Discussions](https://github.com/LabIMotion/chem-generic-ui/discussions) section. We welcome your feedback and participation!

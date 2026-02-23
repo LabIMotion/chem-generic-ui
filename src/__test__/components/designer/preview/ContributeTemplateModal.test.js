@@ -3,7 +3,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import ContributeTemplateModal from '@components/designer/preview/ContributeTemplateModal';
 
 // Mock the API module
-jest.mock('@utils/api', () => ({
+vi.mock('@utils/api', () => ({
   execApiData: jest.fn(),
 }));
 

@@ -2,6 +2,7 @@ import sortBy from 'lodash/sortBy';
 import { orgLayerObject, FieldTypes } from 'generic-ui-core';
 import Layer from '@components/layers/Layer';
 import { reorderPositions } from '@utils/template/sorting-handler';
+import { organizeLayersForDisplay } from '@utils/template/group-handler';
 
 export const addLayer = (_generic, _source, _key) => {
   const [generic, source, key] = [_generic, _source, _key];
@@ -47,14 +48,24 @@ export const layerDropReaction = (_generic, _field, _layerKey) => {
   }
 };
 
-export const isFirstLayer = (layers, layerKey) => {
+export const isFirstLayer = (layers, layerKey, groups = []) => {
   if (!layers || typeof layers !== 'object' || !layerKey) {
     return false;
   }
 
-  const sortedLayers = sortBy(Object.values(layers), [
-    'position',
-    'wf_position',
-  ]);
-  return sortedLayers.length > 0 && sortedLayers[0].key === layerKey;
+  // Get organized display items to accurately determine the first layer
+  const displayItems = organizeLayersForDisplay(layers, groups);
+  if (displayItems.length === 0) return false;
+
+  const firstItem = displayItems[0];
+  if (firstItem.type === 'layer') {
+    return firstItem.key === layerKey;
+  }
+
+  if (firstItem.type === 'group') {
+    // If it's a group, the first layer is the first one in the group's layers array
+    return firstItem.layers?.[0]?.key === layerKey;
+  }
+
+  return false;
 };

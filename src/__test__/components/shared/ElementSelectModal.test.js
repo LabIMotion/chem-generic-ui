@@ -5,9 +5,9 @@ import ElementSelectModal from '@components/shared/ElementSelectModal';
 import VerManager from '@utils/verMgr';
 
 // Mock dependencies
-jest.mock('@utils/verMgr');
+vi.mock('@utils/verMgr');
 
-jest.mock('ag-grid-react', () => ({
+vi.mock('ag-grid-react', () => ({
   AgGridReact: ({ rowData, columnDefs, onRowClicked }) => (
     <div data-testid="ag-grid">
       {rowData?.map((row) => (
@@ -33,8 +33,8 @@ jest.mock('ag-grid-react', () => ({
   ),
 }));
 
-jest.mock('react-select', () => {
-  return function MockSelect({ options, value, onChange, placeholder }) {
+vi.mock('react-select', () => ({
+  default: function MockSelect({ options, value, onChange, placeholder }) {
     return (
       <select
         data-testid="element-select"
@@ -52,8 +52,8 @@ jest.mock('react-select', () => {
         ))}
       </select>
     );
-  };
-});
+  },
+}));
 
 const mockSearchResults = [
   {

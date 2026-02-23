@@ -86,6 +86,7 @@ const LayersLayout = (props) => {
     expandAll,
     editMode: editable(editMode, true),
     genericType,
+    groups,
   };
 
   displayItems.forEach((item, idx) => {

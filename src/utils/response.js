@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
-const { name, version } = require('@root/package.json');
+import { name, version } from '@root/package.json';
 
 export default class Response {
   constructor(_notify, _element) {

@@ -15,6 +15,7 @@ import {
 } from 'generic-ui-core';
 import GenAnaModal from '@components/details/GenAnaModal';
 import LayersLayout from '@components/layers/LayersLayout';
+import ProgressFlowWrapper from '@components/flow/ProgressFlowWrapper';
 import LayerModal from '@/ui/modals/LayerModal';
 import Constants from '@components/tools/Constants';
 import {
@@ -67,7 +68,6 @@ const GenInterface = (props) => {
 
   const { container, metadata = {} } = generic;
   const genericType = propGenericType || genericVariant(generic);
-
   const layerReactionDrop = (_field, _layerKey) => {
     layerDropReaction(generic, _field, _layerKey);
     fnChange(generic);
@@ -205,7 +205,6 @@ const GenInterface = (props) => {
         ).value = value;
         generic.properties = properties;
         generic.changed = true;
-        // this.props.onChange(segment, () => renderFlowModal(segment, false));
         fnChange(generic); // cb move to e.g. SampleDetails.js
       }
     }
@@ -531,6 +530,10 @@ const GenInterface = (props) => {
 
   return (
     <GenInterfaceProvider value={{ refSource }}>
+      <ProgressFlowWrapper
+        generic={generic}
+        refElement={refSource?.element}
+      />
       {genericType === Constants.GENERIC_TYPES.DATASET && (
         <GeneralDescriptionFields
           disabled={false}

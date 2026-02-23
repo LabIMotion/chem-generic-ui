@@ -43,7 +43,7 @@ const readVoc = (field, readonly) => {
 
 const GenProperties = (opt) => {
   const fieldProps = { ...opt, dndItems: [], readOnly: readVoc(opt.f_obj, opt.readOnly), isEditable: !readVoc(opt.f_obj, !opt.isEditable) };
-  const [mainType, custom] = fieldProps.type.split('_');
+  let [mainType, custom] = fieldProps.type.split('_');
   if (opt.isSearch && mainType === FieldTypes.F_DRAG) mainType = FieldTypes.F_TEXT;
   // if (opt.isPreview && (mainType === 'drag' || mainType === 'upload')) mainType = 'text';
   switch (mainType) {

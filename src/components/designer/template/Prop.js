@@ -60,17 +60,18 @@ const Prop = ({
   propHeader,
   layers,
   expandAll,
+  groups,
   children,
 }) => {
   const [initialized, setInitialized] = useState(true);
   const isSys = layerKey.startsWith(Constants.SYS_REACTION);
-  const isFirst = isFirstLayer(layers, layerKey);
+  const isFirst = isFirstLayer(layers, layerKey, groups);
   const [expand, setExpand] = useState(() => {
-    if (initialized && isFirst) {
-      return true;
-    }
     if (expandAll != null) {
       return expandAll;
+    }
+    if (initialized && isFirst) {
+      return true;
     }
     return false;
   });
@@ -126,6 +127,7 @@ Prop.propTypes = {
   propHeader: PropTypes.node.isRequired,
   layers: PropTypes.object,
   expandAll: PropTypes.bool,
+  groups: PropTypes.array,
   children: PropTypes.node.isRequired,
 };
 
@@ -134,6 +136,7 @@ Prop.defaultProps = {
   extClass: '',
   layers: {},
   expandAll: undefined,
+  groups: [],
 };
 
 export default Prop;

@@ -1,0 +1,44 @@
+@use 'color' as *;
+
+.lu_dot-progress-container {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.lu_dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+
+  &.shape-dot {
+    border-radius: 50%;
+  }
+
+  &.shape-square {
+    border-radius: 20%;
+    width: 9px;
+    height: 9px;
+  }
+
+  &.filled {
+    border-color: transparent;
+
+    &.variant-success { background-color: $color-green; }
+    &.variant-warning { background-color: $color-bs-warning; }
+    &.variant-danger { background-color: $color-red; }
+    &.variant-primary { background-color: $color-bs-primary; }
+    &.variant-info { background-color: $color-bs-info; }
+  }
+
+  &.empty {
+    background-color: transparent;
+
+    &.variant-success { border-color: rgba($color-green, 0.4); }
+    &.variant-warning { border-color: rgba($color-bs-warning, 0.4); }
+    &.variant-danger { border-color: rgba($color-red, 0.4); }
+    &.variant-primary { border-color: rgba($color-bs-primary, 0.4); }
+    &.variant-info { border-color: rgba($color-bs-info, 0.4); }
+  }
+}

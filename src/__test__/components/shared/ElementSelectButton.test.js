@@ -4,8 +4,8 @@ import '@testing-library/jest-dom';
 import ElementSelectButton from '@components/shared/ElementSelectButton';
 
 // Mock the modal component
-jest.mock('@components/shared/ElementSelectModal', () => {
-  return function MockElementSelectModal({ show, onSelect, onHide }) {
+vi.mock('@components/shared/ElementSelectModal', () => ({
+  default: function MockElementSelectModal({ show, onSelect, onHide }) {
     if (!show) return null;
     return (
       <div data-testid="element-select-modal">
@@ -19,8 +19,8 @@ jest.mock('@components/shared/ElementSelectModal', () => {
         <button onClick={onHide}>Close</button>
       </div>
     );
-  };
-});
+  },
+}));
 
 describe('ElementSelectButton', () => {
   it('renders with default label', () => {
