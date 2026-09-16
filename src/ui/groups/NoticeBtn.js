@@ -23,7 +23,9 @@ function NoticeBtn() {
       >
         <span className="me-2">{FIcons.faExclamationCircle}</span>
         Important Note
-        <span className={`fa fa-chevron-${showNotice ? 'up' : 'down'} ms-2`} />
+        <span className="ms-2">
+          {showNotice ? FIcons.faChevronUp : FIcons.faChevronDown}
+        </span>
       </Button>
       {showNotice && (
         <Alert

@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ActionRenderer from '@components/details/renderers/ActionRenderer';
@@ -7,25 +6,29 @@ import InfoRenderer from '@components/details/renderers/InfoRenderer';
 import TemplateRenderer from '@components/details/renderers/TemplateRenderer';
 import GenGrid from '@components/details/GenGrid';
 import Constants from '@components/tools/Constants';
+import ElIcon from '@components/icons/ElIcon';
+import RegCellRenderer from '@components/details/renderers/RegCellRenderer';
+import { listRegComps } from '@components/regComps/regCompStatusPackage';
+import { useDesignerContext } from '@components/designer/DesignerContext';
 
 const GTYPE = Constants.GENERIC_TYPES.SEGMENT;
 
-const BelongsToRenderer = (params) => {
+function BelongsToRenderer(params) {
   const { data } = params;
   return (
     <>
       {data.element_klass?.label}
       &nbsp;
-      <i className={data.element_klass?.icon_name} aria-hidden="true" />
+      <ElIcon iconName={data.element_klass?.icon_name} />
     </>
   );
-};
+}
 
-const GenGridSg = (props) => {
+function GenGridSg(props) {
   const {
     gridData,
     pageSize,
-    theme,
+    themeKey,
     fnCopyKlass,
     fnDeleteKlass,
     fnEditKlass,
@@ -37,6 +40,8 @@ const GenGridSg = (props) => {
     onSetAutoHeight,
     onClearSelection,
   } = props;
+
+  const { regComp } = useDesignerContext();
 
   const columnDefs = useMemo(
     () => [
@@ -77,7 +82,7 @@ const GenGridSg = (props) => {
         headerName: 'Template',
         cellRenderer: TemplateRenderer,
         width: 100,
-        cellRendererParams: { fnShow: fnShowProp },
+        cellRendererParams: { fnShow: fnShowProp, genericType: GTYPE },
         sortable: false,
       },
       {
@@ -87,6 +92,13 @@ const GenGridSg = (props) => {
         cellRendererParams: { genericType: GTYPE },
         sortable: false,
       },
+      ...listRegComps(regComp).map((rc) => ({
+        headerName: rc.label,
+        cellRenderer: RegCellRenderer,
+        cellRendererParams: { regCompName: rc.name },
+        width: 100,
+        sortable: false,
+      })),
     ],
     [
       fnCopyKlass,
@@ -95,7 +107,8 @@ const GenGridSg = (props) => {
       fnDownloadKlass,
       fnDeActivateKlass,
       fnShowProp,
-    ]
+      regComp,
+    ],
   );
 
   return (
@@ -103,14 +116,14 @@ const GenGridSg = (props) => {
       columnDefs={columnDefs}
       gridData={gridData}
       pageSize={pageSize}
-      theme={theme}
+      themeKey={themeKey}
       rowSelected={rowSelected}
       filterText={filterText}
       onSetAutoHeight={onSetAutoHeight}
       onClearSelection={onClearSelection}
     />
   );
-};
+}
 
 GenGridSg.propTypes = {
   gridData: PropTypes.array.isRequired,
@@ -122,7 +135,7 @@ GenGridSg.propTypes = {
   fnShowProp: PropTypes.func.isRequired,
   // fnShowPropJson: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
-  theme: PropTypes.string,
+  themeKey: PropTypes.string,
   filterText: PropTypes.string,
   rowSelected: PropTypes.bool,
   onSetAutoHeight: PropTypes.func,
@@ -131,7 +144,7 @@ GenGridSg.propTypes = {
 
 GenGridSg.defaultProps = {
   pageSize: 10,
-  theme: Constants.GRID_THEME.QUARTZ.VALUE,
+  themeKey: 'QUARTZ',
 };
 
 export default GenGridSg;

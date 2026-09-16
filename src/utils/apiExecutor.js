@@ -18,7 +18,12 @@ class ApiExecutor {
   };
 
   // Execute an API call and return the raw fetch response without JSON parsing
-  static execRaw = async (endpoint, method = 'GET', data = null, params = {}) => {
+  static execRaw = async (
+    endpoint,
+    method = 'GET',
+    data = null,
+    params = {},
+  ) => {
     const fullEndpoint = endpoint;
     const res = data
       ? await Api.execApiDataRaw(data, fullEndpoint)

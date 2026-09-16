@@ -11,11 +11,12 @@ import FileExportButton from '@ui/common/FileExportButton';
 import VersionListBtn from '@components/designer/preview/VersionListBtn';
 // import SourceBtn from '@components/fields/SourceBtn';
 import ButtonReload from '@components/fields/ButtonReload';
+import VersionInfoLabel from '@components/fields/VersionInfoLabel';
 import FIcons from '@components/icons/FIcons';
 import { editable } from '@utils/pureUtils';
 import { useGenUIContext } from '@components/details/GenUIContext';
 
-const LToolbar = ({
+function LToolbar({
   generic,
   genericType,
   klass,
@@ -23,8 +24,15 @@ const LToolbar = ({
   fnRetrieve,
   onExpandAll,
   editMode,
-}) => {
-  const { showOverview, toggleOverview, isProviderPresent } = useGenUIContext();
+}) {
+  const {
+    showOverview,
+    toggleOverview,
+    showConsumer,
+    toggleConsumer,
+    isProviderPresent,
+  } = useGenUIContext();
+  const hasRegKey = !!generic?.metadata?.registries?.[0];
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleExpandToggle = () => {
@@ -45,11 +53,18 @@ const LToolbar = ({
   const canEdit = editable(editMode, true);
 
   if (genericType === Constants.GENERIC_TYPES.DATASET) {
-    return canEdit ? (
+    return (
       <ButtonToolbar className="p-1 gap-1">
-        <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
+        <VersionInfoLabel
+          className="ms-auto"
+          version={generic?.properties?.version}
+          identifier={generic?.properties?.identifier}
+        />
+        {canEdit && (
+          <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
+        )}
       </ButtonToolbar>
-    ) : null;
+    );
   }
 
   return (
@@ -61,8 +76,18 @@ const LToolbar = ({
           onClick={toggleOverview}
           title={showOverview ? 'Hide Overview Map' : 'Show Overview Map'}
         >
-          {FIcons.faChartBar}{' '}
-          {showOverview ? 'Hide Overview' : 'Show Overview'}
+          {FIcons.faChartBar} {showOverview ? 'Hide Overview' : 'Show Overview'}
+        </Button>
+      )}
+      {isProviderPresent && hasRegKey && (
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={toggleConsumer}
+          title={showConsumer ? 'Hide Layer Stack' : 'Show Layer Stack'}
+        >
+          {FIcons.faCubesStacked}{' '}
+          {showConsumer ? 'Hide Layer Stack' : 'Show Layer Stack'}
         </Button>
       )}
       <Button
@@ -82,7 +107,7 @@ const LToolbar = ({
           fnSave={fnReload}
         />
       )}
-      {Constants.GENERIC_TYPES.ELEMENT && canEdit && (
+      {genericType === Constants.GENERIC_TYPES.ELEMENT && canEdit && (
         <ButtonDraw
           generic={generic}
           genericType={genericType}
@@ -96,13 +121,18 @@ const LToolbar = ({
         fnRetrieve={fnRetrieve}
         genericType={genericType}
       />
+      <VersionInfoLabel
+        className="ms-auto"
+        version={generic?.properties?.version}
+        identifier={generic?.properties?.identifier}
+      />
       {canEdit && (
         <ButtonReload klass={klass} generic={generic} fnReload={fnReload} />
       )}
       {/* <SourceBtn generic={generic} fnRetrieve={fnRetrieve} /> */}
     </ButtonToolbar>
   );
-};
+}
 
 LToolbar.propTypes = {
   generic: PropTypes.object.isRequired,

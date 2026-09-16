@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
-const DnD = (props) => {
+function DnD(props) {
   const { canDrag, type, layer, field, handleMove, children } = props;
   const containerRef = useRef(null);
 
@@ -11,11 +11,9 @@ const DnD = (props) => {
     type,
     item: { type, layer, field, label: layer?.label || children.props?.label }, // pass label for preview
     canDrag: () => canDrag,
-    collect: (monitor) => {
-      return {
-        isDraggingSource: monitor.isDragging(),
-      };
-    },
+    collect: (monitor) => ({
+      isDraggingSource: monitor.isDragging(),
+    }),
   });
 
   // Hide the default drag preview since we're using a custom DragLayer
@@ -32,14 +30,11 @@ const DnD = (props) => {
         handleMove(item.layer.key, layer.key);
       }
     },
-    collect: (monitor) => {
-      return {
-        isOver: monitor.isOver(),
-        isOverValidTarget: monitor.canDrop(),
-      };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverValidTarget: monitor.canDrop(),
+    }),
   });
-
 
   let dndClass = 'generic_grid_dnd';
   if (isOver) dndClass += ' is-over';
@@ -51,11 +46,12 @@ const DnD = (props) => {
     position: 'relative',
     zIndex: isDraggingSource ? 9000 : 1,
     transition: 'all 0.2s ease',
-    ...(isOver && isOverValidTarget && {
-      backgroundColor: 'rgba(0, 123, 255, 0.1)',
-      borderColor: '#007bff',
-      transform: 'scale(1.02)',
-    }),
+    ...(isOver &&
+      isOverValidTarget && {
+        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+        borderColor: '#007bff',
+        transform: 'scale(1.02)',
+      }),
   };
 
   return (
@@ -71,7 +67,7 @@ const DnD = (props) => {
       <div className="dnd">{children}</div>
     </div>
   );
-};
+}
 
 DnD.propTypes = {
   canDrag: PropTypes.bool,

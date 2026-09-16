@@ -3,13 +3,14 @@ import findIndex from 'lodash/findIndex';
 import { FieldTypes } from 'generic-ui-core';
 import { validateFieldName } from '@utils/template/input-validation';
 import { mergeOptions } from '@utils/template/remodel-handler';
-import { notifyFieldAdd, notifySuccess } from '@utils/template/designer-message';
+import {
+  notifyFieldAdd,
+  notifySuccess,
+} from '@utils/template/designer-message';
 import Response from '@utils/response';
 
 const resetPosition = (_fields) => {
-  const updatedFields = _fields.map((f, idx) => {
-    return { ...f, position: idx + 1 };
-  });
+  const updatedFields = _fields.map((f, idx) => ({ ...f, position: idx + 1 }));
   return updatedFields;
 };
 
@@ -33,9 +34,9 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
     return new Response(
       notifyFieldAdd(
         false,
-        `Field (${selected.name}) ${selected.label} is already exist.`
+        `Field (${selected.name}) ${selected.label} is already exist.`,
       ),
-      element
+      element,
     );
   }
   // move "select_options" to another constant
@@ -67,7 +68,7 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
     // Merge selectOptions with existing select_options
     element.properties_template.select_options = mergeOptions(
       selectOptions,
-      element.properties_template.select_options
+      element.properties_template.select_options,
     );
   }
   // Check if "select_options" is empty, if so, delete it
@@ -79,9 +80,9 @@ export const handleAddVocabulary = (_element, _layer, _selected) => {
   return new Response(
     notifyFieldAdd(
       true,
-      `New field (from Lab-Voc) has been added successfully.`
+      `New field (from Lab-Voc) has been added successfully.`,
     ),
-    element
+    element,
   );
 };
 
@@ -104,9 +105,9 @@ export const handleCreateField = (_newFieldKey, _element, _layer) => {
     return new Response(
       notifyFieldAdd(
         false,
-        `Field [${newFieldKey}] is already in use, please choose a different field name.`
+        `Field [${newFieldKey}] is already in use, please choose a different field name.`,
       ),
-      element
+      element,
     );
   }
   const newField = {
@@ -120,7 +121,7 @@ export const handleCreateField = (_newFieldKey, _element, _layer) => {
   element.properties_template.layers[layer.key].fields = fields;
   return new Response(
     notifyFieldAdd(true, `Field [${newFieldKey}] has been added successfully.`),
-    element
+    element,
   );
 };
 
@@ -176,7 +177,7 @@ export const handleLayerPositionChange = (_element, _target, _source) => {
   const layers = { ...element.properties_template.layers }; // Create a copy of layers
 
   const layerKeys = Object.keys(layers).sort(
-    (a, b) => layers[a].position - layers[b].position
+    (a, b) => layers[a].position - layers[b].position,
   );
   const sourceIdx = layerKeys.indexOf(source.key);
   const targetIdx = layerKeys.indexOf(target.key);

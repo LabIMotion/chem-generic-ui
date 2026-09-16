@@ -6,24 +6,20 @@ const baseOptions = {
   },
 };
 
-const fetchOptions = (method) => {
-  return {
-    ...baseOptions,
-    method,
-  };
-};
+const fetchOptions = (method) => ({
+  ...baseOptions,
+  method,
+});
 
-const fetchBody = (data, method) => {
-  return {
-    ...baseOptions,
-    method,
-    headers: {
-      ...baseOptions.headers,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  };
-};
+const fetchBody = (data, method) => ({
+  ...baseOptions,
+  method,
+  headers: {
+    ...baseOptions.headers,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+});
 
 const handleResponse = async (response) => {
   if (!response.ok) {
@@ -32,7 +28,11 @@ const handleResponse = async (response) => {
   }
   const data = await response.json();
   if (!('mc' in data)) {
-    return { mc: 'se01' };
+    return {
+      ...data,
+      mc: 'se01',
+      msg: data.error || data.msg || 'Unknown error',
+    };
   }
   return data;
 };
@@ -55,12 +55,10 @@ export default class Api {
   /**
    * Get headers for API requests
    */
-  static getHeaders = () => {
-    return {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    };
-  };
+  static getHeaders = () => ({
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  });
 
   static execApi = async (path, method = 'GET', params = {}) => {
     const searchParams = new URLSearchParams(params);

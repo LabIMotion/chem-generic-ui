@@ -9,22 +9,24 @@ import LTooltip from '@components/shared/LTooltip';
 import { fnToggle } from '@ui/common/fnToggle';
 import { FN_ID } from '@ui/common/fnConstants';
 
-const AddRowBtn = ({ addRow, isEditable = true }) => (
-  <LTooltip idf="add_entry">
-    <Button
-      onClick={() => addRow()}
-      size="xsm"
-      variant="primary"
-      disabled={!isEditable}
-    >
-      {FIcons.faPlus}
-    </Button>
-  </LTooltip>
-);
+function AddRowBtn({ addRow, isEditable = true }) {
+  return (
+    <LTooltip idf="add_entry">
+      <Button
+        onClick={() => addRow()}
+        size="xsm"
+        variant="primary"
+        disabled={!isEditable}
+      >
+        {FIcons.faPlus}
+      </Button>
+    </LTooltip>
+  );
+}
 
 AddRowBtn.propTypes = { addRow: PropTypes.func.isRequired };
 
-const DelRowBtn = ({ delRow, node, isEditable = true }) => {
+function DelRowBtn({ delRow, node, isEditable = true }) {
   const { data } = node;
   return (
     <LTooltip idf="remove">
@@ -38,26 +40,28 @@ const DelRowBtn = ({ delRow, node, isEditable = true }) => {
       </Button>
     </LTooltip>
   );
-};
+}
 
 DelRowBtn.propTypes = {
   delRow: PropTypes.func.isRequired,
   node: PropTypes.object.isRequired,
 };
 
-const NullRowBtn = () => (
-  <div className="grid-btn-none">{FIcons.faArrowsUpDownLeftRight}</div>
-);
+function NullRowBtn() {
+  return <div className="grid-btn-none">{FIcons.faArrowsUpDownLeftRight}</div>;
+}
 
-const DnDRowBtn = ({ moveRow, field, type, isEditable, node }) => (
-  <GridDnD
-    field={field}
-    type={type}
-    rowValue={node.data}
-    handleMove={moveRow}
-    isEditable={isEditable}
-  />
-);
+function DnDRowBtn({ moveRow, field, type, isEditable, node }) {
+  return (
+    <GridDnD
+      field={field}
+      type={type}
+      rowValue={node.data}
+      handleMove={moveRow}
+      isEditable={isEditable}
+    />
+  );
+}
 
 DnDRowBtn.propTypes = {
   moveRow: PropTypes.func.isRequired,
@@ -66,7 +70,7 @@ DnDRowBtn.propTypes = {
   node: PropTypes.object.isRequired,
 };
 
-const DownloadGridBtn = ({ download, opt, loading = false }) => {
+function DownloadGridBtn({ download, opt, loading = false }) {
   const { isEditable } = opt;
 
   return (
@@ -81,7 +85,7 @@ const DownloadGridBtn = ({ download, opt, loading = false }) => {
       </Button>
     </LTooltip>
   );
-};
+}
 
 DownloadGridBtn.fnId = FN_ID.FN_TABLE_EXPORT;
 
@@ -93,7 +97,7 @@ DownloadGridBtn.propTypes = {
 
 const DownloadGridBtnToggled = fnToggle(DownloadGridBtn);
 
-const DLGridBtn = (props) => {
+function DLGridBtn(props) {
   const { opt } = props;
   const { id, genericType } = opt || {};
 
@@ -111,7 +115,7 @@ const DLGridBtn = (props) => {
 
   // fnToggle returns null when feature is disabled, fallback to NullRowBtn
   return <DownloadGridBtnToggled {...props} /> || <NullRowBtn />;
-};
+}
 
 DLGridBtn.propTypes = {
   download: PropTypes.func,

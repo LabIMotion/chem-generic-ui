@@ -22,14 +22,15 @@ function GroupLayerOrderBtn({ generic = {}, genericType, fnSave = () => {} }) {
     updates.properties_template.layers = updatedData.layers;
 
     const groups = updatedData.metadata?.groups || [];
+    const nextMetadata = { ...(generic.metadata || {}) };
     if (groups.length === 0) {
-      updates.metadata = {};
+      delete nextMetadata.groups;
+      delete nextMetadata.restrict;
     } else {
-      updates.metadata = {
-        groups,
-        restrict: updatedData.metadata?.restrict || {},
-      };
+      nextMetadata.groups = groups;
+      nextMetadata.restrict = updatedData.metadata?.restrict || {};
     }
+    updates.metadata = nextMetadata;
 
     updates.changed = true;
     fnSave(new Response(notifySuccess(), updates));

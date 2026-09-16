@@ -22,7 +22,7 @@ const FULL_SCREEN_CONFIG = new Map([
   ],
 ]);
 
-const FullScreenToggle = ({ isFullScreen, onToggle }) => {
+function FullScreenToggle({ isFullScreen, onToggle }) {
   const config = FULL_SCREEN_CONFIG.get(isFullScreen);
 
   return (
@@ -30,7 +30,7 @@ const FullScreenToggle = ({ isFullScreen, onToggle }) => {
       {FIcons[config?.fa]} {config?.label}
     </Button>
   );
-};
+}
 
 FullScreenToggle.propTypes = {
   isFullScreen: PropTypes.bool.isRequired,

@@ -1,5 +1,9 @@
 import { GRID_CONFIG } from '@ui/diff/diffConstants.js';
-import { KeyCellRenderer, OldValueCellRenderer, NewValueCellRenderer } from '@ui/diff/CellRenderers.js';
+import {
+  KeyCellRenderer,
+  OldValueCellRenderer,
+  NewValueCellRenderer,
+} from '@ui/diff/CellRenderers.js';
 
 /**
  * Create column definitions for the diff grid

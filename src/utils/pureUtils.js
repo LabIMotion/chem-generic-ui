@@ -168,6 +168,15 @@ const layerLabelFor = (availableLayers, layerKey) => {
   return layer?.label || layerKey;
 };
 
+/**
+ * Comparable identity of an `ontology_term`: its `.value` for the usual
+ * `{label, value}` object, otherwise the bare string itself. Type-checked
+ * instead of `term?.value || term` so an empty `.value` never falls back to
+ * comparing the object by reference.
+ */
+const ontologyTermKey = (term) =>
+  typeof term === 'object' && term !== null ? term.value : term;
+
 const getConditionDisplay = (cond, availableLayers, klasses = []) => {
   if (cond.layer === 'SRC-EL') {
     const klass = klasses.find((k) => k.name === cond.value);
@@ -194,6 +203,7 @@ export {
   toBool,
   toNum,
   toNullOrInt,
+  ontologyTermKey,
   parseTextWithLinks,
   editable,
   modeClass,

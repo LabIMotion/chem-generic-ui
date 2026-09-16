@@ -7,7 +7,7 @@ import Constants from '@components/tools/Constants';
 import VersionModal from '@components/designer/preview/VersionModal';
 import FIcons from '@components/icons/FIcons';
 
-const VisionListBtn = ({ generic, genericType, fnRetrieve }) => {
+function VisionListBtn({ generic, genericType, fnRetrieve }) {
   const [show, setShow] = useState(false);
 
   if (
@@ -53,7 +53,7 @@ const VisionListBtn = ({ generic, genericType, fnRetrieve }) => {
       )}
     </>
   );
-};
+}
 
 VisionListBtn.propTypes = {
   generic: PropTypes.object.isRequired,

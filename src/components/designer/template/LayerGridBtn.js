@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import LayersGrid from '@components/designer/template/LayerGrid';
 import LayerGridView from '@components/designer/template/LayerGridView';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
+import GModal from '@ui/modals/GModal';
 
-const LayerGridBtn = ({ fnCreate, fnDelete }) => {
+function LayerGridBtn({ fnCreate, fnDelete }) {
   const [showModal, setShowModal] = useState(false);
   const [viewLayer, setViewLayer] = useState(null);
 
@@ -72,16 +73,15 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
           {FIcons.faGlobe}&nbsp;Standard Layers
         </Button>
       </LTooltip>
-      <Modal
-        centered
+      <GModal
         show={showModal}
         onHide={handleClose}
         dialogClassName="gu_modal-68w"
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Standard Layer List</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <GModal.Header>
+          <GModal.Title>Standard Layer List</GModal.Title>
+        </GModal.Header>
+        <GModal.Body>
           {viewLayer ? (
             <LayerGridView _layer={viewLayer} />
           ) : (
@@ -91,8 +91,8 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
               onLayerView={handleViewLayer}
             />
           )}
-        </Modal.Body>
-        <Modal.Footer className="justify-content-start">
+        </GModal.Body>
+        <GModal.Footer>
           {viewLayer && (
             <LTooltip idf="return_to_list">
               <Button className="gu-mr-1" onClick={handleCloseView}>
@@ -105,10 +105,10 @@ const LayerGridBtn = ({ fnCreate, fnDelete }) => {
               Close
             </Button>
           </LTooltip>
-        </Modal.Footer>
-      </Modal>
+        </GModal.Footer>
+      </GModal>
     </>
   );
-};
+}
 
 export default LayerGridBtn;

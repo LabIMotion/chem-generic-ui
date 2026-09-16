@@ -7,6 +7,7 @@ import { Card, Button, ButtonToolbar } from 'react-bootstrap';
 import { FieldTypes, genUnits, absOlsTermLabel } from 'generic-ui-core';
 import GenInterface from '@components/details/GenInterface';
 import LTooltip from '@components/shared/LTooltip';
+import VersionInfoLabel from '@components/fields/VersionInfoLabel';
 import { toBool, toNum } from '@utils/pureUtils';
 
 class GenericDSDetails extends Component {
@@ -20,28 +21,32 @@ class GenericDSDetails extends Component {
     if (klass.properties_release) {
       const newProps = cloneDeep(klass.properties_release);
       newProps.klass_uuid = klass.uuid;
-      Object.keys(newProps.layers).forEach(key => {
+      Object.keys(newProps.layers).forEach((key) => {
         const newLayer = newProps.layers[key] || {};
         const curFields =
           (genericDS.properties.layers[key] &&
             genericDS.properties.layers[key].fields) ||
           [];
         (newLayer.fields || []).forEach((f, idx) => {
-          const curIdx = findIndex(curFields, o => o.field === f.field);
+          const curIdx = findIndex(curFields, (o) => o.field === f.field);
           if (curIdx >= 0) {
             const curVal =
               genericDS.properties.layers[key].fields[curIdx].value;
             const curType = typeof curVal;
             if (
-              [FieldTypes.F_SELECT, FieldTypes.F_TEXT, FieldTypes.F_TEXTAREA, FieldTypes.F_FORMULA_FIELD].includes(
-                newProps.layers[key].fields[idx].type
-              )
+              [
+                FieldTypes.F_SELECT,
+                FieldTypes.F_TEXT,
+                FieldTypes.F_TEXTAREA,
+                FieldTypes.F_FORMULA_FIELD,
+              ].includes(newProps.layers[key].fields[idx].type)
             ) {
               newProps.layers[key].fields[idx].value =
                 curType !== 'undefined' ? curVal.toString() : '';
             }
-            if (newProps.layers[key].fields[idx].type === FieldTypes.F_INTEGER) {
-              // eslint-disable-next-line no-restricted-globals
+            if (
+              newProps.layers[key].fields[idx].type === FieldTypes.F_INTEGER
+            ) {
               newProps.layers[key].fields[idx].value =
                 curType === 'undefined' ||
                 curType === 'boolean' ||
@@ -49,18 +54,23 @@ class GenericDSDetails extends Component {
                   ? 0
                   : parseInt(curVal, 10);
             }
-            if (newProps.layers[key].fields[idx].type === FieldTypes.F_CHECKBOX) {
+            if (
+              newProps.layers[key].fields[idx].type === FieldTypes.F_CHECKBOX
+            ) {
               newProps.layers[key].fields[idx].value =
                 curType !== 'undefined' ? toBool(curVal) : false;
             }
-            if (newProps.layers[key].fields[idx].type === FieldTypes.F_SYSTEM_DEFINED) {
+            if (
+              newProps.layers[key].fields[idx].type ===
+              FieldTypes.F_SYSTEM_DEFINED
+            ) {
               const units = genUnits(
-                newProps.layers[key].fields[idx].option_layers
+                newProps.layers[key].fields[idx].option_layers,
               );
               const vs = units.find(
-                u =>
+                (u) =>
                   u.key ===
-                  genericDS.properties.layers[key].fields[curIdx].value_system
+                  genericDS.properties.layers[key].fields[curIdx].value_system,
               );
               newProps.layers[key].fields[idx].value_system =
                 (vs && vs.key) || units[0].key;
@@ -110,7 +120,11 @@ class GenericDSDetails extends Component {
               <br />
               Selected analysis type: {absOlsTermLabel(kind)}
               <br />
-              Content is designed for: {genericDS.klass_label}
+              Content is designed for: {genericDS.klass_label}{' '}
+              <VersionInfoLabel
+                version={genericDS.properties?.version}
+                identifier={genericDS.properties?.identifier}
+              />
             </span>
             <ButtonToolbar className="gap-2 pull-right">
               <LTooltip idf="reload_temp">

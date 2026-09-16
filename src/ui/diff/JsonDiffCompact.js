@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { create } from "jsondiffpatch";
-import { diffChars } from "diff";
+import React, { useState } from 'react';
+import { create } from 'jsondiffpatch';
+import { diffChars } from 'diff';
 
 // Initialize jsondiffpatch with array handling
 const jsondiffpatch = create({
@@ -9,13 +9,13 @@ const jsondiffpatch = create({
 });
 
 const colorMap = {
-  added: "#d4edda",
-  removed: "#f8d7da",
-  modified: "#fff3cd",
+  added: '#d4edda',
+  removed: '#f8d7da',
+  modified: '#fff3cd',
 };
 
 // Inline string diff
-const InlineDiff = ({ oldStr = "", newStr = "" }) => {
+function InlineDiff({ oldStr = '', newStr = '' }) {
   const changes = diffChars(oldStr, newStr);
   return (
     <span>
@@ -24,8 +24,8 @@ const InlineDiff = ({ oldStr = "", newStr = "" }) => {
           backgroundColor: part.added
             ? colorMap.added
             : part.removed
-            ? colorMap.removed
-            : "transparent",
+              ? colorMap.removed
+              : 'transparent',
         };
         return (
           <span key={index} style={style}>
@@ -35,21 +35,21 @@ const InlineDiff = ({ oldStr = "", newStr = "" }) => {
       })}
     </span>
   );
-};
+}
 
 // Single row renderer
-const DiffRow = ({
+function DiffRow({
   keyName,
   oldValue,
   newValue,
   delta,
   level = 0,
   showOnlyChanges,
-}) => {
+}) {
   const [collapsed, setCollapsed] = useState(false);
   const toggleCollapse = () => setCollapsed(!collapsed);
 
-  const isComplex = (val) => val && typeof val === "object";
+  const isComplex = (val) => val && typeof val === 'object';
 
   const changed = oldValue !== newValue || !!delta;
   if (showOnlyChanges && !changed) return null;
@@ -58,15 +58,16 @@ const DiffRow = ({
   if (!isComplex(oldValue) && !isComplex(newValue)) {
     return (
       <tr>
-        <td style={{ paddingLeft: level * 16, padding: "8px" }}>{keyName}</td>
+        <td style={{ paddingLeft: level * 16, padding: '8px' }}>{keyName}</td>
         <td
           style={{
-            backgroundColor: oldValue !== newValue ? colorMap.removed : "transparent",
-            padding: "8px",
-            wordBreak: "break-word"
+            backgroundColor:
+              oldValue !== newValue ? colorMap.removed : 'transparent',
+            padding: '8px',
+            wordBreak: 'break-word',
           }}
         >
-          {typeof oldValue === "string" && oldValue !== newValue ? (
+          {typeof oldValue === 'string' && oldValue !== newValue ? (
             <InlineDiff oldStr={oldValue} newStr="" />
           ) : (
             JSON.stringify(oldValue)
@@ -74,12 +75,13 @@ const DiffRow = ({
         </td>
         <td
           style={{
-            backgroundColor: oldValue !== newValue ? colorMap.added : "transparent",
-            padding: "8px",
-            wordBreak: "break-word"
+            backgroundColor:
+              oldValue !== newValue ? colorMap.added : 'transparent',
+            padding: '8px',
+            wordBreak: 'break-word',
           }}
         >
-          {typeof newValue === "string" && oldValue !== newValue ? (
+          {typeof newValue === 'string' && oldValue !== newValue ? (
             <InlineDiff oldStr="" newStr={newValue} />
           ) : (
             JSON.stringify(newValue)
@@ -99,7 +101,7 @@ const DiffRow = ({
   const allKeys = Array.from(new Set([...oldKeys, ...newKeys]));
 
   const hasNestedChanges = allKeys.some(
-    (key) => oldValue?.[key] !== newValue?.[key]
+    (key) => oldValue?.[key] !== newValue?.[key],
   );
   if (showOnlyChanges && !hasNestedChanges) return null;
 
@@ -109,15 +111,17 @@ const DiffRow = ({
         <td
           style={{
             paddingLeft: level * 16,
-            fontWeight: "bold",
-            cursor: "pointer",
-            padding: "8px"
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            padding: '8px',
           }}
           onClick={toggleCollapse}
         >
-          {collapsed ? "▶" : "▼"} {keyName}
+          {collapsed ? '▶' : '▼'} {keyName}
         </td>
-        <td colSpan={2} style={{ padding: "8px" }}></td>
+        {/* presentational spacer cell, not an interactive control */}
+        {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+        <td colSpan={2} style={{ padding: '8px' }} />
       </tr>
       {!collapsed &&
         allKeys.map((key) => (
@@ -133,25 +137,53 @@ const DiffRow = ({
         ))}
     </>
   );
-};
+}
 
-const JsonDiffCompact = ({ oldJson, newJson, showOnlyChanges = false }) => {
+function JsonDiffCompact({ oldJson, newJson, showOnlyChanges = false }) {
   const delta = jsondiffpatch.diff(oldJson, newJson);
 
   return (
-    <div style={{
-      overflow: "auto",
-      fontFamily: "monospace",
-      maxHeight: "100%",
-      border: "1px solid #dee2e6",
-      borderRadius: "0.375rem"
-    }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead style={{ position: "sticky", top: 0, backgroundColor: "#f8f9fa" }}>
+    <div
+      style={{
+        overflow: 'auto',
+        fontFamily: 'monospace',
+        maxHeight: '100%',
+        border: '1px solid #dee2e6',
+        borderRadius: '0.375rem',
+      }}
+    >
+      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+        <thead
+          style={{ position: 'sticky', top: 0, backgroundColor: '#f8f9fa' }}
+        >
           <tr>
-            <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "8px" }}>Key</th>
-            <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "8px" }}>Old</th>
-            <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: "8px" }}>New</th>
+            <th
+              style={{
+                textAlign: 'left',
+                borderBottom: '1px solid #ccc',
+                padding: '8px',
+              }}
+            >
+              Key
+            </th>
+            <th
+              style={{
+                textAlign: 'left',
+                borderBottom: '1px solid #ccc',
+                padding: '8px',
+              }}
+            >
+              Old
+            </th>
+            <th
+              style={{
+                textAlign: 'left',
+                borderBottom: '1px solid #ccc',
+                padding: '8px',
+              }}
+            >
+              New
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -169,6 +201,6 @@ const JsonDiffCompact = ({ oldJson, newJson, showOnlyChanges = false }) => {
       </table>
     </div>
   );
-};
+}
 
 export default JsonDiffCompact;

@@ -1,16 +1,30 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ActiveRenderer from '@components/details/renderers/ActiveRenderer';
 import InfoRenderer from '@components/details/renderers/InfoRenderer';
 import TemplateRenderer from '@components/details/renderers/TemplateRenderer';
+import RegCellRenderer from '@components/details/renderers/RegCellRenderer';
+import { listRegComps } from '@components/regComps/regCompStatusPackage';
+import { useDesignerContext } from '@components/designer/DesignerContext';
 import GenGrid from '@components/details/GenGrid';
 import Constants from '@components/tools/Constants';
 
 const GTYPE = Constants.GENERIC_TYPES.DATASET;
 
-const GenGridDs = (props) => {
-  const { gridData, pageSize, theme, fnDeActivateKlass, fnShowProp, rowSelected, filterText, onSetAutoHeight, onClearSelection } = props;
+function GenGridDs(props) {
+  const {
+    gridData,
+    pageSize,
+    themeKey,
+    fnDeActivateKlass,
+    fnShowProp,
+    rowSelected,
+    filterText,
+    onSetAutoHeight,
+    onClearSelection,
+  } = props;
+
+  const { regComp } = useDesignerContext();
   const columnDefs = useMemo(
     () => [
       {
@@ -45,8 +59,15 @@ const GenGridDs = (props) => {
         cellRendererParams: { genericType: GTYPE },
         sortable: false,
       },
+      ...listRegComps(regComp).map((rc) => ({
+        headerName: rc.label,
+        cellRenderer: RegCellRenderer,
+        cellRendererParams: { regCompName: rc.name },
+        width: 100,
+        sortable: false,
+      })),
     ],
-    [fnDeActivateKlass, fnShowProp]
+    [fnDeActivateKlass, fnShowProp, regComp],
   );
 
   return (
@@ -54,14 +75,14 @@ const GenGridDs = (props) => {
       columnDefs={columnDefs}
       gridData={gridData}
       pageSize={pageSize}
-      theme={theme}
+      themeKey={themeKey}
       rowSelected={rowSelected}
       filterText={filterText}
       onSetAutoHeight={onSetAutoHeight}
       onClearSelection={onClearSelection}
     />
   );
-};
+}
 
 GenGridDs.propTypes = {
   gridData: PropTypes.array.isRequired,
@@ -69,7 +90,7 @@ GenGridDs.propTypes = {
   fnShowProp: PropTypes.func.isRequired,
   // fnShowPropJson: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
-  theme: PropTypes.string,
+  themeKey: PropTypes.string,
   filterText: PropTypes.string,
   rowSelected: PropTypes.bool,
   onSetAutoHeight: PropTypes.func,
@@ -78,7 +99,7 @@ GenGridDs.propTypes = {
 
 GenGridDs.defaultProps = {
   pageSize: 10,
-  theme: Constants.GRID_THEME.QUARTZ.VALUE,
+  themeKey: 'QUARTZ',
 };
 
 export default GenGridDs;

@@ -8,7 +8,7 @@ export default class Response {
     // If _element is an object, we copy it and merge the pkg info.
     if (_element && typeof _element === 'object' && !Array.isArray(_element)) {
       this.element = cloneDeep(_element);
-      this.element.pkg = Object.assign({}, this.element.pkg, { name, version });
+      this.element.pkg = { ...this.element.pkg, name, version };
     } else {
       this.element = _element;
     }

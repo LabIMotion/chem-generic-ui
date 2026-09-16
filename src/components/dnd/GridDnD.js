@@ -4,33 +4,29 @@ import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
 import FIcons from '@components/icons/FIcons';
 
-const GridDnD = ({ field, rowValue, handleMove, isEditable }) => {
+function GridDnD({ field, rowValue, handleMove, isEditable }) {
   const [{ isDraggingSource }, drag] = useDrag({
     type: 'GRID',
     item: { fid: field, rId: rowValue.id, type: 'GRID' },
     canDrag: () => isEditable,
-    collect: monitor => {
-      return {
-        isDraggingSource: monitor.isDragging(),
-      };
-    },
+    collect: (monitor) => ({
+      isDraggingSource: monitor.isDragging(),
+    }),
   });
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: 'GRID',
     canDrop: () => isEditable,
-    drop: item => {
+    drop: (item) => {
       const tar = { fid: field, rId: rowValue.id };
       const src = item;
       if (tar.fid === src.fid && tar.rId !== src.rId) {
         handleMove(src.rId, tar.rId);
       }
     },
-    collect: monitor => {
-      return {
-        isOver: monitor.isOver(),
-        isOverValidTarget: monitor.canDrop(),
-      };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverValidTarget: monitor.canDrop(),
+    }),
   });
   const className = `generic_grid_dnd${isOver ? ' is-over' : ''}${
     isOverValidTarget ? ' can-drop' : ''
@@ -44,7 +40,7 @@ const GridDnD = ({ field, rowValue, handleMove, isEditable }) => {
       </div>
     </div>
   );
-};
+}
 
 GridDnD.propTypes = {
   field: PropTypes.string.isRequired,

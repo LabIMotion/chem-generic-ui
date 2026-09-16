@@ -4,12 +4,15 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import GenInterface from '@components/details/GenInterface';
 
-const SegmentCriteria = (props) => {
+function SegmentCriteria(props) {
   const { segment, onChange } = props;
   if (!segment) return null;
   const title = (
     <Row key="criteria_init">
-      <Col md={12} style={{ fontWeight: 'bold', fontStyle: 'italic', fontSize: 'large' }}>
+      <Col
+        md={12}
+        style={{ fontWeight: 'bold', fontStyle: 'italic', fontSize: 'large' }}
+      >
         {segment.label} ({segment.desc})
       </Col>
     </Row>
@@ -29,11 +32,17 @@ const SegmentCriteria = (props) => {
     />
   );
   return (
-    <div style={{ margin: '15px' }}>{title}{layersLayout}</div>
+    <div style={{ margin: '15px' }}>
+      {title}
+      {layersLayout}
+    </div>
   );
-};
+}
 
-SegmentCriteria.propTypes = { segment: PropTypes.object, onChange: PropTypes.func };
+SegmentCriteria.propTypes = {
+  segment: PropTypes.object,
+  onChange: PropTypes.func,
+};
 SegmentCriteria.defaultProps = { segment: {}, onChange: () => {} };
 
 export default SegmentCriteria;

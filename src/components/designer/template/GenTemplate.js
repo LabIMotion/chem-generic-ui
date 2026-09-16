@@ -6,8 +6,16 @@ import Constants from '@components/tools/Constants';
 import TemplateToolbar from '@components/designer/TemplateToolbar';
 import TemplateProps from '@components/designer/template/TemplateProps';
 
-const GenTemplate = props => {
-  const { data, fnDelete, fnDerive, fnUpdate, fnUpload, genericType, vocabularies } = props;
+function GenTemplate(props) {
+  const {
+    data,
+    fnDelete,
+    fnDerive,
+    fnUpdate,
+    fnUpload,
+    genericType,
+    vocabularies,
+  } = props;
 
   return (
     <>
@@ -23,7 +31,7 @@ const GenTemplate = props => {
       />
     </>
   );
-};
+}
 
 GenTemplate.propTypes = {
   data: PropTypes.object,

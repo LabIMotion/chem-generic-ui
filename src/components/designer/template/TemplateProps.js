@@ -31,16 +31,14 @@ const headerText = (genericType, data) => {
   return txt;
 };
 
-const TemplateProps = (props) => {
+function TemplateProps(props) {
   // const { data, vocabularies, fnUpdate, fnSubmit, genericType, innerAction } = props;
   const { data, vocabularies, fnSubmit, genericType, innerAction } = props;
 
   return (
     <div>
       <Card>
-        <Card.Header
-          className={`fs-5 fw-bold ${fbc}`}
-        >
+        <Card.Header className={`fs-5 fw-bold ${fbc}`}>
           {headerText(genericType, data)}
           <span className="button-right d-flex gap-1">
             <UploadTemplateBtn
@@ -116,7 +114,7 @@ const TemplateProps = (props) => {
       </Card>
     </div>
   );
-};
+}
 
 TemplateProps.propTypes = {
   data: PropTypes.object,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
 
-const GenFormGroup = (props) => {
+function GenFormGroup(props) {
   const { label, value, onChange, name } = props;
   return (
     <Form.Group className="props_text">
@@ -14,9 +14,9 @@ const GenFormGroup = (props) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenFormGroupSel = (props) => {
+function GenFormGroupSel(props) {
   const { label, name, onChange, options, value } = props;
   return (
     <Form.Group className="props_text">
@@ -33,9 +33,9 @@ const GenFormGroupSel = (props) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenFormGroupCb = (props) => {
+function GenFormGroupCb(props) {
   const { label, name, onChange, value } = props;
   return (
     <Form.Group className="props_text">
@@ -43,6 +43,6 @@ const GenFormGroupCb = (props) => {
       <Form.Check checked={value} onChange={(e) => onChange(e, name)} />
     </Form.Group>
   );
-};
+}
 
 export { GenFormGroup, GenFormGroupCb, GenFormGroupSel };

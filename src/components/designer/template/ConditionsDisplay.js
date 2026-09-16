@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { getCondOperator } from 'generic-ui-core';
 
-const ConditionsDisplay = ({ conditions }) => {
+function ConditionsDisplay({ conditions }) {
   const { cond_fields: condFields = [], cond_operator: matchOp = 1 } =
     conditions;
 
@@ -37,7 +37,7 @@ const ConditionsDisplay = ({ conditions }) => {
       </Table>
     </>
   );
-};
+}
 
 ConditionsDisplay.propTypes = {
   conditions: PropTypes.shape({

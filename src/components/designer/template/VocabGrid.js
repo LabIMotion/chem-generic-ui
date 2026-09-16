@@ -13,6 +13,7 @@ import LTooltip from '@components/shared/LTooltip';
 import VocabManager from '@utils/vocMgr';
 import ButtonConfirm from '@components/fields/ButtonConfirm';
 import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
 const editableSource = [
   Constants.GENERIC_TYPES.ELEMENT,
@@ -26,7 +27,8 @@ const defaultColDef = {
   sortable: true,
 };
 
-const VocabGrid = ({ onVocSelect, onVocDelete }) => {
+function VocabGrid({ onVocSelect, onVocDelete }) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   const gridRef = useRef();
   const qfRef = useRef();
   const gridStyle = useMemo(() => ({ height: '600px', width: '100%' }), []);
@@ -128,9 +130,10 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
           />
         </div>
       </div>
-      <div className={Constants.GRID_THEME.QUARTZ.VALUE} style={gridStyle}>
+      <div className={wrapperClassName} style={gridStyle}>
         <AgGridReact
           ref={gridRef}
+          {...themeProps}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           rowData={rowData}
@@ -138,7 +141,7 @@ const VocabGrid = ({ onVocSelect, onVocDelete }) => {
       </div>
     </div>
   );
-};
+}
 
 VocabGrid.propTypes = {
   onVocSelect: PropTypes.func.isRequired,

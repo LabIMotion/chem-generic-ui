@@ -2,8 +2,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable no-eval */
-/* eslint-disable no-restricted-globals */
 
 import React, { useState } from 'react';
 import { Button, Col, Form, InputGroup, ListGroup } from 'react-bootstrap';
@@ -29,15 +27,15 @@ import LTooltip from '@components/shared/LTooltip';
 import LLabel from '@components/shared/LLabel';
 import { renderBlank } from '@components/elements/Fields';
 
-const LFieldLabel = ({ label, description, isCheckLabel = false }) => {
+function LFieldLabel({ label, description, isCheckLabel = false }) {
   return (
     <LLabel tooltip={description} isCheckLabel={isCheckLabel}>
       {label}
     </LLabel>
   );
-};
+}
 
-const GenPropertiesCheckbox = (opt) => {
+function GenPropertiesCheckbox(opt) {
   return (
     <Form.Group as={Col}>
       <LLabel>&nbsp;</LLabel>
@@ -57,14 +55,11 @@ const GenPropertiesCheckbox = (opt) => {
       </Form.Check.Input>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDate = (opt) => {
+function GenPropertiesDate(opt) {
   const klz = fieldCls(opt.isSpCall);
-  const klzLayer =
-    opt.isAtLayer || false
-      ? 'gu_date_picker gu_date_picker_layer'
-      : 'gu_date_picker';
+  const klzLayer = opt.isAtLayer || false ? 'gu_date_picker_layer' : '';
   const newVal =
     opt.value &&
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
@@ -81,9 +76,9 @@ const GenPropertiesDate = (opt) => {
       </div>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDateTimeRange = (opt) => {
+function GenPropertiesDateTimeRange(opt) {
   const klz = fieldCls(opt.isSpCall);
   return (
     <Form.Group className={`${klz[0]}`}>
@@ -91,9 +86,9 @@ const GenPropertiesDateTimeRange = (opt) => {
       <DateTimeRange key={`grid_${opt.f_obj.field}`} opt={opt} />
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDrop = (opt) => {
+function GenPropertiesDrop(opt) {
   const className = opt.isRequired
     ? 'drop_generic_properties field_required'
     : 'drop_generic_properties';
@@ -175,25 +170,33 @@ const GenPropertiesDrop = (opt) => {
       </div>
     </Form.Group>
   );
-};
+}
 
 // blank field
 const GenDummy = () => renderBlank();
 
 // FieldHeader has hover tooltip if hover(desc) is not empty
 // read-only label field
-const GenLabel = (opt, value) => (
-  <Form.Group as={Col}>
-    <LFieldLabel label={opt.label} description={opt.description} />
-    <Form.Control plaintext readOnly defaultValue={value} />
-  </Form.Group>
-);
+function GenLabel(opt, value) {
+  return (
+    <Form.Group as={Col}>
+      <LFieldLabel label={opt.label} description={opt.description} />
+      <Form.Control plaintext readOnly defaultValue={value} />
+    </Form.Group>
+  );
+}
 
-const GenDropReaction = (opt) => (
-  <DropReaction field={opt.f_obj} onNavi={opt.onNavi} onChange={opt.onChange} />
-);
+function GenDropReaction(opt) {
+  return (
+    <DropReaction
+      field={opt.f_obj}
+      onNavi={opt.onNavi}
+      onChange={opt.onChange}
+    />
+  );
+}
 
-const GenPropertiesInputGroup = (opt) => {
+function GenPropertiesInputGroup(opt) {
   const fLab = (e) => (
     <div key={uuid()} className="form-control g_input_group_label">
       {e.value}
@@ -250,9 +253,9 @@ const GenPropertiesInputGroup = (opt) => {
       <InputGroup style={{ display: 'flex' }}>{subs}</InputGroup>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesNumber = (opt) => {
+function GenPropertiesNumber(opt) {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   return (
@@ -271,16 +274,14 @@ const GenPropertiesNumber = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesSelect = (opt) => {
-  const options = opt.options.map((op) => {
-    return {
-      value: op.key,
-      name: op.key,
-      label: op.label,
-    };
-  });
+function GenPropertiesSelect(opt) {
+  const options = opt.options.map((op) => ({
+    value: op.key,
+    name: op.key,
+    label: op.label,
+  }));
   let className = opt.isEditable
     ? 'select_generic_properties_editable'
     : 'select_generic_properties_readonly';
@@ -294,7 +295,7 @@ const GenPropertiesSelect = (opt) => {
     <Form.Group as={Col}>
       <LFieldLabel label={opt.label} description={opt.description} />
       <div style={{ display: 'flex' }}>
-                <span style={{ width: '100%' }}>
+        <span style={{ width: '100%' }}>
           <Select
             multi={false}
             isClearable
@@ -311,9 +312,9 @@ const GenPropertiesSelect = (opt) => {
       </div>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesSystemDefined = (opt) => {
+function GenPropertiesSystemDefined(opt) {
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
   const klz = fieldCls(opt.isSpCall);
@@ -340,16 +341,18 @@ const GenPropertiesSystemDefined = (opt) => {
       </InputGroup>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesTable = (opt) => (
-  <Form.Group as={Col}>
-    <LFieldLabel label={opt.label} description={opt.description} />
-    <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
-  </Form.Group>
-);
+function GenPropertiesTable(opt) {
+  return (
+    <Form.Group as={Col}>
+      <LFieldLabel label={opt.label} description={opt.description} />
+      <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
+    </Form.Group>
+  );
+}
 
-const GenPropertiesText = (opt) => {
+function GenPropertiesText(opt) {
   const [id] = useState(uuid());
   const { f_obj: fObj } = opt;
   const showVal = opt.value;
@@ -380,9 +383,9 @@ const GenPropertiesText = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesTextArea = (opt) => {
+function GenPropertiesTextArea(opt) {
   const [id] = useState(uuid());
   let className = opt.isEditable ? 'editable' : 'readonly';
   className = opt.isRequired && opt.isEditable ? 'required' : className;
@@ -403,9 +406,9 @@ const GenPropertiesTextArea = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenTextFormula = (opt) => {
+function GenTextFormula(opt) {
   const [id] = useState(uuid());
   const { layers } = opt;
   const subs = [];
@@ -416,7 +419,7 @@ const GenTextFormula = (opt) => {
         const fds = field.split(`[${Constants.SEPARATOR_TAG}]`);
         if (fds && fds.length === 2) {
           const fdt = ((layers[layer] || {}).fields || []).find(
-            (f) => f.field === fds[0] && f.type === FieldTypes.F_TABLE
+            (f) => f.field === fds[0] && f.type === FieldTypes.F_TABLE,
           );
           ((fdt && fdt.sub_values) || []).forEach((svv) => {
             if (svv && svv[fds[1]] && svv[fds[1]] !== '') {
@@ -427,7 +430,7 @@ const GenTextFormula = (opt) => {
         }
       } else {
         const fd = ((layers[layer] || {}).fields || []).find(
-          (f) => f.field === field
+          (f) => f.field === field,
         );
         if (fd && fd.value && fd.value !== '') {
           subs.push(fd.value);
@@ -451,7 +454,7 @@ const GenTextFormula = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
 const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
@@ -515,7 +518,7 @@ const renderListGroupItem = (opt, attachment) => {
   );
 };
 
-const GenPropertiesUpload = (opt) => {
+function GenPropertiesUpload(opt) {
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return <div>(This is an upload)</div>;
   return (
@@ -555,9 +558,9 @@ const GenPropertiesUpload = (opt) => {
       </ListGroup>
     </Form.Group>
   );
-};
+}
 
-const GenWFNext = (opt) => {
+function GenWFNext(opt) {
   const options = (opt.f_obj.wf_options || []).map((op) => {
     const label = op.label.match(/(.*)\(.*\)/);
     return {
@@ -592,7 +595,7 @@ const GenWFNext = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
 export {
   GenDummy,

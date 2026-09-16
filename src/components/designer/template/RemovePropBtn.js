@@ -8,13 +8,11 @@ import FIcons from '@components/icons/FIcons';
 import LPopover from '@components/shared/LPopover';
 
 // replace renderDeleteButton
-const RemovePropBtn = (props) => {
+function RemovePropBtn(props) {
   const { delStr, delKey, delRoot, element, fnDelete } = props;
   let allowed = Object.entries(FieldTypes)
     .filter(([key]) => key.startsWith('DEL_'))
-    .reduce((acc, [key, value]) => {
-      return { ...acc, [key]: value };
-    }, {});
+    .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
   allowed = Object.values(allowed);
   if (!allowed.includes(delStr)) return <></>;
 
@@ -69,7 +67,7 @@ const RemovePropBtn = (props) => {
       </Button>
     </LPopover>
   );
-};
+}
 
 RemovePropBtn.propTypes = {
   delStr: PropTypes.string.isRequired,

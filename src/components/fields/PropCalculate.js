@@ -1,15 +1,18 @@
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import filter from 'lodash/filter';
-import { evaluate } from 'mathjs';
 import { FieldTypes } from 'generic-ui-core';
 import FieldHeader from '@components/fields/FieldHeader';
 import { fieldCls } from '@components/tools/utils';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
-import { toBool, toNullOrInt } from '@utils/pureUtils';
+import { toBool } from '@utils/pureUtils';
+import {
+  buildLayerFormula,
+  evalFormulaText,
+  resolveFormulaDecimals,
+} from '@utils/formulaUtils';
 
-const PropCalculate = (opt) => {
+function PropCalculate(opt) {
   const {
     f_obj: fObj,
     formula,
@@ -23,51 +26,24 @@ const PropCalculate = (opt) => {
   } = opt;
   let { canAdjust = false, decimal = 5 } = fObj;
   canAdjust = toBool(canAdjust);
-  decimal = toNullOrInt(decimal) || 5;
+  decimal = resolveFormulaDecimals(decimal);
 
   const fields = layer?.fields || [];
-  let showVal = 0;
   let showTxt = null;
 
-  const calFields = filter(fields, (o) =>
-    [FieldTypes.F_INTEGER, FieldTypes.F_SYSTEM_DEFINED].includes(o.type)
-  );
-
-  const regF = /[a-zA-Z0-9_]+/gm;
-  const varFields =
-    formula && formula.match(regF)
-      ? formula.match(regF).sort((a, b) => b.length - a.length)
-      : [];
-
-  let newFormula = formula?.replace(/\*\*/g, '^');
-
-  varFields.forEach((fi) => {
-    if (!isNaN(fi)) return;
-
-    const tmpField = calFields.find((e) => e.field === fi);
-    if (typeof tmpField === 'undefined' || tmpField == null) {
-      newFormula = newFormula?.replace(fi, 0);
-    } else {
-      newFormula = newFormula?.replace(fi, parseFloat(tmpField.value || 0));
-    }
-  });
+  const newFormula = buildLayerFormula(formula, fields);
 
   if (type === FieldTypes.F_FORMULA_FIELD) {
-    try {
-      showVal = evaluate(newFormula);
-      showTxt = !isNaN(showVal) ? parseFloat(showVal.toFixed(decimal)) : 0;
-    } catch (e) {
-      showTxt = e.message;
-    }
+    showTxt = evalFormulaText(newFormula, decimal);
   }
 
   const comp = (
     <Form.Control
       type="text"
       value={showTxt}
-      className="readonly"
+      className="text-end"
       readOnly
-      disabled={!isEditable}
+      disabled
       required={false}
       placeholder={placeholder}
       min={0}
@@ -96,6 +72,7 @@ const PropCalculate = (opt) => {
           <Form.Control
             type="text"
             value={value}
+            className="text-end"
             onChange={onChange}
             required={false}
             placeholder={placeholder}
@@ -106,6 +83,6 @@ const PropCalculate = (opt) => {
       )}
     </Form.Group>
   );
-};
+}
 
 export default PropCalculate;

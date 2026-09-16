@@ -10,7 +10,7 @@ import { downloadResponseAsFile } from '@utils/fileUtils';
 /**
  * FileExportButton - A button component that exports a generic object as a file
  */
-const FileExportButton = ({ generic, variant, size }) => {
+function FileExportButton({ generic, variant, size }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (generic?.is_new) return null;
@@ -52,7 +52,7 @@ const FileExportButton = ({ generic, variant, size }) => {
       {isLoading ? FIcons.faSpinner : FIcons.faFileWord} Export
     </TooltipButton>
   );
-};
+}
 
 FileExportButton.propTypes = {
   generic: PropTypes.object,

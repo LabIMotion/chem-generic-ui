@@ -9,6 +9,7 @@ import { KlzIcon, searchTargets } from '@components/tools/utils';
 import FIcons from '@components/icons/FIcons';
 import buildSourceFromElement from '@components/tools/build-source-form';
 import iconFinder from '@components/tools/icon-finder';
+import ElIcon from '@components/icons/ElIcon';
 
 const show = (opt, iconClass, onNavi) => {
   if (opt.value?.el_id) {
@@ -21,7 +22,8 @@ const show = (opt, iconClass, onNavi) => {
     }
     if (elSvg && !elSvg.endsWith('.svg'))
       elSvg = Constants.IMG_NOT_AVAILABLE_SVG;
-    const tips = opt.value.el_tip && opt.value.el_tip.split(Constants.SEPARATOR_TAG);
+    const tips =
+      opt.value.el_tip && opt.value.el_tip.split(Constants.SEPARATOR_TAG);
     const tip1 = (tips && tips.length >= 1 && tips[0]) || '';
     const tip2 = (tips && tips.length >= 2 && tips[1]) || '';
     const tit = (
@@ -41,7 +43,7 @@ const show = (opt, iconClass, onNavi) => {
       </Popover>
     );
     let label = elementLabel;
-    const asShown = path =>
+    const asShown = (path) =>
       path === Constants.IMG_NOT_AVAILABLE_SVG ? null : (
         <OverlayTrigger
           delayShow={1000}
@@ -95,7 +97,7 @@ const show = (opt, iconClass, onNavi) => {
           onClick={() => onNavi(opt.value.el_klass, opt.value.el_id)}
           className="lu-link"
         >
-          <i className={iconName} />{' '}
+          <ElIcon iconName={iconName} />{' '}
           <span className="reaction-material-link">{elementLabel}</span>
         </a>
       );
@@ -108,34 +110,36 @@ const show = (opt, iconClass, onNavi) => {
   return KlzIcon(`icon-${iconClass} indicator`, { width: '4vw' });
 };
 
-const source = (type, props, id, classStr) => {
-  return buildSourceFromElement(type, props, id, classStr);
-};
+const source = (type, props, id, classStr) =>
+  buildSourceFromElement(type, props, id, classStr);
 
-const GenericElDropTarget = (props) => {
+function GenericElDropTarget(props) {
   const { opt, onDrop, readOnly } = props;
   const { onNavi } = opt;
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     // accept: opt.dndItems,
     accept: searchTargets(opt.dndItems),
-    canDrop: (item) => {
-      return !readOnly;
-    },
-    drop: item => {
+    canDrop: () => !readOnly,
+    drop: (item) => {
       const sourceProps = item.element;
-      const sourceTag = source(opt.type.split('_')[1], sourceProps, opt.id, opt.classStr); // opt.type: drag_sample, drag_molecule, drag_element
+      const sourceTag = source(
+        opt.type.split('_')[1],
+        sourceProps,
+        opt.id,
+        opt.classStr,
+      ); // opt.type: drag_sample, drag_molecule, drag_element
       onDrop(sourceTag);
     },
-    collect: monitor => {
-      return {
-        isOver: monitor.isOver(),
-        isOverValidTarget: monitor.canDrop(),
-      };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverValidTarget: monitor.canDrop(),
+    }),
   });
 
   const iconClass =
-    opt.dndItems && opt.dndItems[0] === Constants.PERMIT_TARGET.MOLECULE ? Constants.PERMIT_TARGET.SAMPLE : opt.dndItems[0];
+    opt.dndItems && opt.dndItems[0] === Constants.PERMIT_TARGET.MOLECULE
+      ? Constants.PERMIT_TARGET.SAMPLE
+      : opt.dndItems[0];
   const className = `target${isOver ? ' is-over' : ''}${
     isOverValidTarget ? ' can-drop' : ''
   }`;
@@ -145,7 +149,7 @@ const GenericElDropTarget = (props) => {
       {show(opt, iconClass, onNavi)}
     </div>
   );
-};
+}
 
 GenericElDropTarget.propTypes = {
   opt: PropTypes.object.isRequired,

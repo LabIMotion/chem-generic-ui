@@ -7,7 +7,7 @@ import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 import TAs from '@components/tools/TAs';
 
-const LayerAttrEditBtn = (props) => {
+function LayerAttrEditBtn(props) {
   const { fnUpdate, isAttrOnWF, layer, as } = props;
   const [show, setShow] = useState(false);
 
@@ -46,7 +46,7 @@ const LayerAttrEditBtn = (props) => {
       />
     </>
   );
-};
+}
 
 LayerAttrEditBtn.propTypes = {
   fnUpdate: PropTypes.func.isRequired,

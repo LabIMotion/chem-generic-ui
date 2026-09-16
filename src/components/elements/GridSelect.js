@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-const GridSelect = (props) => {
+function GridSelect(props) {
   const { all, onChange, node, dVal } = props;
   return (
     <Form.Group>
@@ -22,7 +22,7 @@ const GridSelect = (props) => {
       </Form.Control>
     </Form.Group>
   );
-};
+}
 
 GridSelect.propTypes = {
   all: PropTypes.arrayOf(
@@ -30,7 +30,7 @@ GridSelect.propTypes = {
       key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       val: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       lab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    })
+    }),
   ).isRequired,
   onChange: PropTypes.func.isRequired,
   node: PropTypes.object.isRequired,

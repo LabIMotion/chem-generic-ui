@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-bootstrap';
 
-const AttrChk = (props) => {
+function AttrChk(props) {
   const { chkAttr, node, attrOpts } = props;
   return (
     <>
@@ -22,7 +22,7 @@ const AttrChk = (props) => {
       ))}
     </>
   );
-};
+}
 
 AttrChk.propTypes = {
   chkAttr: PropTypes.func.isRequired,

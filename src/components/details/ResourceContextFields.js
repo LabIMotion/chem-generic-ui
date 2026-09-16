@@ -13,7 +13,12 @@ function ResourceContextFields() {
   const elementType = element?.type?.toLowerCase();
 
   // Don't render if not a sample or no resources
-  if (elementType !== 'sample' || !resources || !Array.isArray(resources) || resources.length === 0) {
+  if (
+    elementType !== 'sample' ||
+    !resources ||
+    !Array.isArray(resources) ||
+    resources.length === 0
+  ) {
     return null;
   }
 
@@ -34,29 +39,27 @@ function ResourceContextFields() {
     {
       key: 'resource_context_identifier',
       label: 'Resource Context Identifier',
-    }
+    },
   ];
 
   // Helper function to get field value from resources
-  const getFieldValue = (fieldKey) => {
-    return resources[0]?.[fieldKey] || '';
-  };
+  const getFieldValue = (fieldKey) => resources[0]?.[fieldKey] || '';
 
   // Group fields into a single row of 4
   const row = fields;
 
   return (
-    <Accordion
-      defaultActiveKey="0"
-      className="mb-4"
-    >
+    <Accordion defaultActiveKey="0" className="mb-4">
       <Accordion.Item eventKey="0" style={{ border: 'none' }}>
         <Accordion.Header
           as="div"
           className={`lu-ds-element-accordion-header flex-grow-1 ${bgColor()}`}
           style={{ boxShadow: 'none' }}
         >
-          <span className="panel_generic_heading" style={{ pointerEvents: 'none' }}>
+          <span
+            className="panel_generic_heading"
+            style={{ pointerEvents: 'none' }}
+          >
             Contextual Information/Origin of the sample
           </span>
         </Accordion.Header>
@@ -65,9 +68,7 @@ function ResourceContextFields() {
             <div className="row mb-3">
               {row.map((field) => (
                 <div className="col-md-3" key={field.key}>
-                  <Form.Label>
-                    {field.label}
-                  </Form.Label>
+                  <Form.Label>{field.label}</Form.Label>
                   {field.key === 'resource_context_identifier' ? (
                     renderIdentifierField(field, element)
                   ) : (

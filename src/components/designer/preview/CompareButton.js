@@ -4,11 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { fnToggle } from '@ui/common/fnToggle';
 import { FN_ID } from '@ui/common/fnConstants';
 
-const CompareButton = ({
-  onClick,
-  disabled = false,
-  selectedCount = 0
-}) => {
+function CompareButton({ onClick, disabled = false, selectedCount = 0 }) {
   return (
     <Button
       variant="primary"
@@ -24,7 +20,7 @@ const CompareButton = ({
       Compare ({selectedCount})
     </Button>
   );
-};
+}
 
 CompareButton.fnId = FN_ID.FN_DIFF;
 

@@ -19,7 +19,7 @@ const orderSource = {
   },
 };
 
-const PanelDnD = (props) => {
+function PanelDnD(props) {
   const {
     type,
     layer,
@@ -34,35 +34,27 @@ const PanelDnD = (props) => {
     grouped,
   } = props;
 
-  const [{ isDraggingSource }, drag] = useDrag(() => {
-    return {
-      type,
-      canDrag: () => orderSource.canDrag(props),
-      item: () => orderSource.beginDrag(props),
-      collect: (monitor) => {
-        return {
-          isDraggingSource: monitor.isDragging(),
-        };
-      },
-    };
-  });
+  const [{ isDraggingSource }, drag] = useDrag(() => ({
+    type,
+    canDrag: () => orderSource.canDrag(props),
+    item: () => orderSource.beginDrag(props),
+    collect: (monitor) => ({
+      isDraggingSource: monitor.isDragging(),
+    }),
+  }));
 
-  const [{ isOver, isOverValidTarget }, drop] = useDrop(() => {
-    return {
-      accept: type,
-      canDrop: (item) => !layer.wf || !item.layer.wf,
-      drop: (item) => {
-        if (field === item.field && layer.key !== item.layer.key)
-          handleMove(item.layer.key, layer.key);
-      },
-      collect: (monitor) => {
-        return {
-          isOver: monitor.isOver(),
-          isOverValidTarget: monitor.canDrop(),
-        };
-      },
-    };
-  });
+  const [{ isOver, isOverValidTarget }, drop] = useDrop(() => ({
+    accept: type,
+    canDrop: (item) => !layer.wf || !item.layer.wf,
+    drop: (item) => {
+      if (field === item.field && layer.key !== item.layer.key)
+        handleMove(item.layer.key, layer.key);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverValidTarget: monitor.canDrop(),
+    }),
+  }));
 
   const className = `generic_grid_dnd${isOver ? ' is-over' : ''}${
     isOverValidTarget ? ' can-drop' : ''
@@ -75,27 +67,32 @@ const PanelDnD = (props) => {
 
   const klz = style || 'panel_generic_heading';
 
-  const createButton = (icon, tooltip, tooltipId, handleClick) => {
-    return (
-      <OverlayTrigger
-        key={`${layer.key}-${tooltipId}`}
-        delayShow={1000}
-        placement="top"
-        overlay={<Tooltip id={`tooltip-${layer.key}-${tooltipId}`}>{tooltip}</Tooltip>}
+  const createButton = (icon, tooltip, tooltipId, handleClick) => (
+    <OverlayTrigger
+      key={`${layer.key}-${tooltipId}`}
+      delayShow={1000}
+      placement="top"
+      overlay={
+        <Tooltip id={`tooltip-${layer.key}-${tooltipId}`}>{tooltip}</Tooltip>
+      }
+    >
+      <Button
+        key={`btn-${layer.key}-${tooltipId}`}
+        variant="light"
+        size="sm"
+        onClick={handleClick}
       >
-        <Button key={`btn-${layer.key}-${tooltipId}`} variant="light" size="sm" onClick={handleClick}>
-          {icon}
-        </Button>
-      </OverlayTrigger>
-    );
-  };
+        {icon}
+      </Button>
+    </OverlayTrigger>
+  );
 
   const btnLinkAna = hasAi
     ? createButton(
         FIcons.faPaperclip,
         'link analysis',
         '_tooltip_link_ana',
-        (event) => handleChange(event, id, layer, 'ana-modal')
+        (event) => handleChange(event, id, layer, 'ana-modal'),
       )
     : null;
 
@@ -103,21 +100,21 @@ const PanelDnD = (props) => {
     FIcons.faFlask,
     'Add reaction',
     '_tooltip_layer_add_reaction',
-    (event) => handleChange(event, id, layer, 'layer-add-reaction')
+    (event) => handleChange(event, id, layer, 'layer-add-reaction'),
   );
 
   const btnAdd = createButton(
     FIcons.faPlus,
     'Add layer',
     '_tooltip_add_layer',
-    (event) => handleChange(event, id, layer, 'layer-modal')
+    (event) => handleChange(event, id, layer, 'layer-modal'),
   );
 
   const btnRemove = createButton(
     FIcons.faMinus,
     isSys ? 'Remove this reaction' : 'Remove layer',
     '_tooltip_remove_layer',
-    (event) => handleChange(event, id, layer, 'layer-remove')
+    (event) => handleChange(event, id, layer, 'layer-remove'),
   );
 
   const moveIcon = (
@@ -139,10 +136,10 @@ const PanelDnD = (props) => {
 
   const layerHeader = () => {
     const splitKey = key.split('.');
-    return (
-      splitKey.length > 1 ? <span>{`Repetition ${splitKey[1]}`}</span> : null
-    )
-  }
+    return splitKey.length > 1 ? (
+      <span>{`Repetition ${splitKey[1]}`}</span>
+    ) : null;
+  };
 
   const layerWithButton = () => {
     const dateButton = (
@@ -181,6 +178,6 @@ const PanelDnD = (props) => {
   );
 
   return <div>{accordionDiv}</div>;
-};
+}
 
 export default PanelDnD;

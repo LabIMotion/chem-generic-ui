@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonTooltip from '@components/fields/ButtonTooltip';
 
-const VocabularyRenderer = (params) => {
+function VocabularyRenderer(params) {
   const { data, fnApi, node } = params;
   const fa = ['fa fa-laptop'];
 
@@ -20,6 +20,6 @@ const VocabularyRenderer = (params) => {
       />
     </span>
   );
-};
+}
 
 export default VocabularyRenderer;

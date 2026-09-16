@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
@@ -6,7 +5,7 @@ import LayerAttrModal from '@components/elements/LayerAttrModal';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const LayerAttrNewBtn = (props) => {
+function LayerAttrNewBtn(props) {
   const { fnCreate, isAttrOnWF } = props;
   const [show, setShow] = useState(false);
 
@@ -29,7 +28,7 @@ const LayerAttrNewBtn = (props) => {
       />
     </>
   );
-};
+}
 
 LayerAttrNewBtn.propTypes = {
   fnCreate: PropTypes.func.isRequired,

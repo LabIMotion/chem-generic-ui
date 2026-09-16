@@ -1,4 +1,5 @@
 import { createEnum } from '@utils/pureUtils';
+import { themeAlpine, themeBalham, themeQuartz } from 'ag-grid-community';
 
 export default Object.freeze({
   BTN_AI_LINK: 'link',
@@ -18,9 +19,9 @@ export default Object.freeze({
     'DatasetKlass',
   ]),
   GRID_THEME: {
-    ALPINE: { VALUE: 'ag-theme-alpine', PAGE_SIZE: 6 },
-    BALHAM: { VALUE: 'ag-theme-balham', PAGE_SIZE: 10 },
-    QUARTZ: { VALUE: 'ag-theme-quartz', PAGE_SIZE: 6 },
+    ALPINE: { VALUE: 'ag-theme-alpine', THEME: themeAlpine, PAGE_SIZE: 6 },
+    BALHAM: { VALUE: 'ag-theme-balham', THEME: themeBalham, PAGE_SIZE: 10 },
+    QUARTZ: { VALUE: 'ag-theme-quartz', THEME: themeQuartz, PAGE_SIZE: 6 },
   },
   MODEL_TYPES: createEnum(['GenericEl', 'Segment', 'Container']),
   SYS_REACTION: 'REACTION-',

@@ -114,7 +114,11 @@ function GenPropertiesGroup({
       }
 
       // Layer has conditions, check if it should be shown
-      const [showLayer] = isItemEffectivelyVisible(layer, allLayers, refSource?.element);
+      const [showLayer] = isItemEffectivelyVisible(
+        layer,
+        allLayers,
+        refSource?.element,
+      );
       if (showLayer) {
         return (
           <GenPropertiesLayer

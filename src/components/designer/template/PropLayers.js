@@ -1,25 +1,19 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Card, Dropdown } from 'react-bootstrap';
-import { FieldTypes } from 'generic-ui-core';
+import { ButtonGroup, Card } from 'react-bootstrap';
 import Prop from '@components/designer/template/Prop';
 import LayerHeader from '@components/designer/template/LayerHeader';
 import GroupLayerOrderBtn from '@components/designer/template/GroupLayerOrderBtn';
-import LayerAttrEditBtn from '@components/designer/LayerAttrEditBtn';
 import LayerAttrNewBtn from '@components/designer/LayerAttrNewBtn';
 import LayerGridBtn from '@components/designer/template/LayerGridBtn';
 import Constants from '@components/tools/Constants';
-import ButtonTooltip from '@components/fields/ButtonTooltip';
 import GroupButton from '@components/actions/GroupButton';
 import PropFields from '@components/designer/template/PropFields';
 import NewFieldBtn from '@components/designer/template/NewFieldBtn';
 import LayerSaveBtn from '@components/designer/template/LayerSaveBtn';
-import ButtonDelField from '@components/fields/ButtonDelField';
-import ButtonEllipse from '@components/fields/ButtonEllipse';
+import LayerActionsBtn from '@components/designer/LayerActionsBtn';
 import VocabularyListBtn from '@components/designer/template/VocabularyListBtn';
-import FieldOrderBtn from '@components/designer/template/FieldOrderBtn';
 import fbc from '@components/tools/ui-styles';
 import LayerManager from '@utils/desMgr';
 import {
@@ -157,38 +151,17 @@ function PropLayers(props) {
         <ButtonGroup className="me-2">
           <LayerSaveBtn layer={layer} data={data} />
         </ButtonGroup>
-        <ButtonGroup>
-          <ButtonEllipse condSet={false}>
-            <LayerAttrEditBtn
-              fnUpdate={onLayerUpdate}
-              isAttrOnWF={isAttrOnWF}
-              layer={layer}
-              as="menu"
-            />
-            <ButtonTooltip
-              idf="fld_dum_add"
-              fnClick={onDummyAdd}
-              element={{ layerKey, field: null }}
-              fa="faSquare"
-              place="top"
-              as="menu"
-            />
-            <FieldOrderBtn
-              layer={layer}
-              generic={data}
-              genericType={genericType}
-              fnSave={fnUpdate}
-            />
-            <Dropdown.Divider />
-            <ButtonDelField
-              delType={FieldTypes.DEL_LAYER}
-              delKey={layerKey}
-              generic={data}
-              fnConfirm={onLayerDelete}
-              as="menu"
-            />
-          </ButtonEllipse>
-        </ButtonGroup>
+        <LayerActionsBtn
+          layer={layer}
+          layerKey={layerKey}
+          data={data}
+          genericType={genericType}
+          fnUpdate={fnUpdate}
+          onLayerUpdate={onLayerUpdate}
+          onDummyAdd={onDummyAdd}
+          onLayerDelete={onLayerDelete}
+          isAttrOnWF={isAttrOnWF}
+        />
       </div>
     );
 
@@ -205,6 +178,7 @@ function PropLayers(props) {
         layerKey={layerKey}
         toggleExpand={toggleExpandLayer}
         propHeader={customHeader}
+        unmountCollapsed
       >
         {fields}
       </Prop>

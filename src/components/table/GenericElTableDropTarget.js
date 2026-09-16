@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -86,7 +85,7 @@ const show = (opt, iconClass, onDrop) => {
   return base(opt, iconClass);
 };
 
-const GenericElTableDropTarget = (props) => {
+function GenericElTableDropTarget(props) {
   const { opt, onDrop, genericType } = props;
   const [{ isOver, isOverValidTarget }, drop] = useDrop({
     accept: searchTargets(opt.dndItems),
@@ -97,12 +96,10 @@ const GenericElTableDropTarget = (props) => {
       const sourceTag = buildTableSource(type, sourceProps, id, genericType);
       onDrop(sourceTag, opt);
     },
-    collect: (monitor) => {
-      return {
-        isOver: monitor.isOver(),
-        isOverValidTarget: monitor.canDrop(),
-      };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      isOverValidTarget: monitor.canDrop(),
+    }),
   });
   const className = `target${isOver ? ' is-over' : ''}${
     isOverValidTarget ? ' can-drop' : ''
@@ -116,7 +113,7 @@ const GenericElTableDropTarget = (props) => {
       {show(opt, 'sample', onDrop)}
     </div>
   );
-};
+}
 
 GenericElTableDropTarget.propTypes = {
   opt: PropTypes.object.isRequired,

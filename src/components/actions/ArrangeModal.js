@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import GModal from '@ui/modals/GModal';
 
 function ArrangeModal({ onSave, showProps, children }) {
   const { show, setShow } = showProps;
@@ -15,31 +16,30 @@ function ArrangeModal({ onSave, showProps, children }) {
   };
 
   return (
-    <Modal
-      centered
+    <GModal
       show={show}
       onHide={() => setShow(false)}
       fullscreen
       backdrop="static"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Arrange the order</Modal.Title>
-      </Modal.Header>
-      <Modal.Body
+      <GModal.Header>
+        <GModal.Title>Arrange the order</GModal.Title>
+      </GModal.Header>
+      <GModal.Body
         className="d-flex flex-column p-0"
         style={{ overflow: 'hidden' }}
       >
         {children}
-      </Modal.Body>
-      <Modal.Footer className="justify-content-start">
+      </GModal.Body>
+      <GModal.Footer>
         <Button variant="secondary" onClick={() => setShow(false)}>
           Cancel
         </Button>
         <Button variant="success" onClick={handleSave}>
           Save
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </GModal.Footer>
+    </GModal>
   );
 }
 

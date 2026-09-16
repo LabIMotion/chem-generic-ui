@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import TAs from '@components/tools/TAs';
 
-const LTooltip = ({ idf, children, placement }) => {
+function LTooltip({ idf, children, placement }) {
   const idfs = idf.split('.');
   const [uId] = useState(`ltt_${idfs[0]}_${uuidv4()}`);
   const message =
@@ -41,7 +41,7 @@ const LTooltip = ({ idf, children, placement }) => {
       {wrappedChildren}
     </OverlayTrigger>
   );
-};
+}
 
 LTooltip.propTypes = {
   idf: PropTypes.string,

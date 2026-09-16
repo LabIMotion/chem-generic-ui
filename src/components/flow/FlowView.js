@@ -12,11 +12,11 @@ import { buildFlowElements } from '@utils/flow/build-flow-elements';
 
 const nodeTypes = { selectorNode: LayerNode };
 
-const FlowView = ({ properties, propertiesRelease }) => {
+function FlowView({ properties, propertiesRelease }) {
   const reactFlowWrapper = useRef(null);
   const [, setReactFlowInstance] = useState(null);
   const [elements, setElements] = useState(() =>
-    buildFlowElements({ properties, propertiesRelease })
+    buildFlowElements({ properties, propertiesRelease }),
   );
   const [nodes, , onNodesChange] = useNodesState(elements.nodes);
   const [edges, , onEdgesChange] = useEdgesState(elements.edges || []);
@@ -44,7 +44,7 @@ const FlowView = ({ properties, propertiesRelease }) => {
       </ReactFlowProvider>
     </div>
   );
-};
+}
 
 FlowView.propTypes = {
   properties: PropTypes.object.isRequired,

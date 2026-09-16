@@ -3,6 +3,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import LFormGroup from '@components/shared/LFormGroup';
+import ElIcon from '@components/icons/ElIcon';
 
 const KlassAttrForm = forwardRef(({ element, editable }, ref) => {
   const kName = useRef();
@@ -66,7 +67,7 @@ const KlassAttrForm = forwardRef(({ element, editable }, ref) => {
           <InputGroup.Text>Icon</InputGroup.Text>
           {element.icon_name ? (
             <InputGroup.Text>
-              <i className={element.icon_name} />
+              <ElIcon iconName={element.icon_name} />
             </InputGroup.Text>
           ) : null}
           <Form.Control
@@ -81,12 +82,13 @@ const KlassAttrForm = forwardRef(({ element, editable }, ref) => {
           <Button
             variant="link"
             size="sm"
-            href="https://fontawesome.com/v4.7/icons/"
+            href="https://fontawesome.com/v7/search?ip=classic&s=solid%2Cregular&ic=free-collection"
             target="_blank"
           >
-            Font Awesome 4
+            Font Awesome (classic collection with solid and regular styles)
           </Button>
-          . The icon code format is like &lsquo; fa fa-abc &rsquo;.
+          . The icon code format is like &lsquo; fa-solid fa-abc &rsquo; or
+          &lsquo; fa-regular fa-abc &rsquo;.
         </div>
       </LFormGroup>
       <LFormGroup controlId="formControlDescription">

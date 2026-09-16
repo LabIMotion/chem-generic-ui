@@ -36,9 +36,8 @@ export const buildResourceLink = (resources) => {
  * @param {Object} element - The element object
  * @returns {string} The constructed element URL
  */
-export const buildElementLink = (element) => {
-  return buildLink(element?.type, element?.id);
-};
+export const buildElementLink = (element) =>
+  buildLink(element?.type, element?.id);
 
 /**
  * Get identifier label for display
@@ -55,7 +54,7 @@ export const getIdentifierLabel = (field, element) => {
     if (!resources || !Array.isArray(resources) || resources.length === 0) {
       return '';
     }
-    return resources[0]?.['resource_context_id'] || '';
+    return resources[0]?.resource_context_id || '';
   }
   return '';
 };
@@ -118,7 +117,7 @@ export const renderIdentifierField = (field, element) => {
           color: '#0d6efd',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
+          whiteSpace: 'nowrap',
         }}
       >
         {label}

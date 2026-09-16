@@ -27,11 +27,15 @@ describe('RemovePropBtn', () => {
     await act(async () => {
       callback();
       // Allow React to process the event
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 0);
+      });
     });
     // Wait for any async overlay updates (popper positioning, etc.)
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
     });
   };
 
@@ -42,14 +46,16 @@ describe('RemovePropBtn', () => {
   afterEach(async () => {
     // Ensure all pending updates are flushed after each test
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
     });
   });
 
   describe('Rendering', () => {
     test('should not render the button if delStr is not allowed', () => {
       const { queryByTestId } = render(
-        <RemovePropBtn {...props} delStr="DEL_NOT_ALLOWED" />
+        <RemovePropBtn {...props} delStr="DEL_NOT_ALLOWED" />,
       );
       const button = queryByTestId('template-remove-props-btn');
       expect(button).not.toBeInTheDocument();
@@ -71,7 +77,7 @@ describe('RemovePropBtn', () => {
 
       await waitFor(() => {
         const popover = getByText(
-          'remove this option: [option1] from select [select1] ?'
+          'remove this option: [option1] from select [select1] ?',
         );
         expect(popover).toBeInTheDocument();
       });

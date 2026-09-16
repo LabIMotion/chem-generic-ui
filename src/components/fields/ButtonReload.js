@@ -7,6 +7,7 @@ import sortBy from 'lodash/sortBy';
 import { orgLayerObject } from 'generic-ui-core';
 import { importReaction, remodel } from '@utils/template/remodel-handler';
 import { reorderPositions } from '@utils/template/sorting-handler';
+import { filterRegistrySlotsByLayerKeys } from '@utils/template/prune-references';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
@@ -29,7 +30,21 @@ function ButtonReload(props) {
     if (output[1]) {
       outGeneric.properties = output[1];
       outGeneric.properties_release = klass.properties_release;
-      outGeneric.metadata = klass.metadata || {};
+      // Preserve registries + extra slot data across reload —
+      // authorization and instance data stay with the document.
+      const keepRegistries = generic?.metadata?.registries;
+      const origMetadata = generic?.metadata || {};
+      outGeneric.metadata = { ...(klass.metadata || {}) };
+      if (keepRegistries) {
+        outGeneric.metadata.registries = keepRegistries;
+        keepRegistries.forEach((r) => {
+          const encKey =
+            typeof r === 'string' && r.includes(':') ? r.split(':')[1] : null;
+          if (encKey && Array.isArray(origMetadata[encKey])) {
+            outGeneric.metadata[encKey] = origMetadata[encKey];
+          }
+        });
+      }
       outGeneric.changed = true;
 
       // Import reaction layers from original if they exist
@@ -50,6 +65,10 @@ function ButtonReload(props) {
         outGeneric.properties.layers = reordered.layers;
         outGeneric.metadata = reordered.metadata;
       }
+
+      // Drop registry-slot entries whose layer keys didn't survive remodel.
+      const surviving = new Set(Object.keys(outGeneric.properties.layers));
+      filterRegistrySlotsByLayerKeys(outGeneric.metadata, surviving);
     } else {
       outGeneric = output[1];
     }
@@ -58,7 +77,7 @@ function ButtonReload(props) {
 
   return (
     <LTooltip idf="reload_temp">
-      <Button size="sm" variant="primary" onClick={() => handleReload()}>
+      <Button size="sm" variant="info" onClick={() => handleReload()}>
         {FIcons.faArrowsRotate} Reload
       </Button>
     </LTooltip>

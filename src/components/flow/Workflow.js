@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DnDFlow from '@components/flow/DnDFlow';
 
-const Workflow = props => {
+function Workflow(props) {
   const { element, fnSaveFlow } = props;
   if (Object.keys(element).length < 1) return null;
   return <DnDFlow element={element} fnSave={fnSaveFlow} />;
-};
+}
 
 Workflow.propTypes = {
   element: PropTypes.object.isRequired,

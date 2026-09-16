@@ -16,7 +16,7 @@ const attrs = {
   },
 };
 
-const ActiveRenderer = (params) => {
+function ActiveRenderer(params) {
   const { data, fnDeActivate, node, value } = params;
 
   const onActivate = (e) => {
@@ -35,6 +35,6 @@ const ActiveRenderer = (params) => {
       bs={attrs[value].bs}
     />
   );
-};
+}
 
 export default ActiveRenderer;

@@ -1,14 +1,15 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { handleAddVocabulary } from '@utils/template/field-handler';
 import LTooltip from '@components/shared/LTooltip';
 import FIcons from '@components/icons/FIcons';
 import VocabGrid from '@components/designer/template/VocabGrid';
 import VocabManager from '@utils/vocMgr';
+import GModal from '@ui/modals/GModal';
 
-const VocabularyListBtn = (props) => {
+function VocabularyListBtn(props) {
   const { element, fnUpdate, layer } = props;
   const [show, setShow] = useState(false);
 
@@ -41,22 +42,17 @@ const VocabularyListBtn = (props) => {
         </Button>
       </LTooltip>
 
-      <Modal
-        centered
-        show={show}
-        onHide={handleClose}
-        dialogClassName="gu_modal-68w"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>LabIMotion Vocabulary (Lab-Vocab) List</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <GModal show={show} onHide={handleClose} dialogClassName="gu_modal-68w">
+        <GModal.Header>
+          <GModal.Title>LabIMotion Vocabulary (Lab-Vocab) List</GModal.Title>
+        </GModal.Header>
+        <GModal.Body>
           <VocabGrid
             onVocSelect={handleSelectVoc}
             onVocDelete={handleDeleteVoc}
           />
-        </Modal.Body>
-        <Modal.Footer className="justify-content-start">
+        </GModal.Body>
+        <GModal.Footer>
           <LTooltip idf="close">
             <Button
               variant="secondary"
@@ -68,11 +64,11 @@ const VocabularyListBtn = (props) => {
               Close
             </Button>
           </LTooltip>
-        </Modal.Footer>
-      </Modal>
+        </GModal.Footer>
+      </GModal>
     </>
   );
-};
+}
 
 VocabularyListBtn.propTypes = {
   element: PropTypes.object.isRequired,

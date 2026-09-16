@@ -1,5 +1,34 @@
 # Chem-Generic-UI Changelog
 
+## [2.3.0]
+
+### Breaking Changes
+- Host applications must now register AG Grid modules themselves before rendering any grid; see the README for setup.
+
+### Features and Enhancements
+- The layer menu is now a dialog instead of a dropdown, so its actions stay reachable no matter where the layer sits on the page.
+- All dialogs are now vertically centered with consistent spacing.
+- The field menu is also now a dialog, matching the layer menu.
+- Date-Time Range fields support years as a duration unit.
+
+### Bug Fixes
+- Fixed the Link Element drag-and-drop list wrongly accepting an unsupported target type.
+- Fixed modal footer spacing being overridden by the host application's styles.
+- Fixed multi-select chips collapsing to a count after only two instead of filling the row.
+- Fixed a crash clicking the Default Unit button on a system-defined sub-field.
+- Fixed a system-defined table column losing its entered value when its default unit changed.
+- Fixed temperature columns relabeling their unit without converting the value.
+- Fixed restriction conditions on ontology-select fields not accepting an empty value.
+- Fixed a stale value remaining after re-assigning an Ontology Select field's source term.
+- Fixed the Work Area and Preview staying open after their template was deleted.
+- Fixed a crash editing a table field when a row was missing stored data for a column.
+- Fixed noticeable typing lag in the Work Area on large templates.
+- Fixed Reload shifting a table cell's unit even when the template had not changed.
+- Fixed a crash closing a column editor or restriction dialog before its grid finished loading.
+
+### Chores
+- Dependency upgrades.
+
 ## [2.2.0]
 > 2026-03-25
 

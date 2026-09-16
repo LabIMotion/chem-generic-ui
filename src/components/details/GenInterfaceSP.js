@@ -1,10 +1,9 @@
-/* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import GenInterface from '@components/details/GenInterface';
 
-const GenInterfaceSP = (props) => {
+function GenInterfaceSP(props) {
   const { generic, fnChange } = props;
   if (Object.keys(generic).length === 0) return null;
   return (
@@ -19,7 +18,7 @@ const GenInterfaceSP = (props) => {
       isSpCall
     />
   );
-};
+}
 
 GenInterfaceSP.propTypes = {
   generic: PropTypes.object.isRequired,

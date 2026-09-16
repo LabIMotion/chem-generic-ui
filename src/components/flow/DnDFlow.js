@@ -22,7 +22,7 @@ import {
 
 const nodeTypes = { selectorNode: LayerNode };
 
-const DnDFlow = props => {
+function DnDFlow(props) {
   const { element, fnSave } = props;
   const propertiesTemplate = element.properties_template;
   const reactFlowWrapper = useRef(null);
@@ -30,15 +30,15 @@ const DnDFlow = props => {
     buildFlowElements({
       properties: propertiesTemplate,
       propertiesRelease: propertiesTemplate,
-    })
+    }),
   );
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(elements.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(elements.edges);
 
   const onConnect = useCallback(
-    params =>
-      setEdges(eds =>
+    (params) =>
+      setEdges((eds) =>
         addEdge(
           {
             ...params,
@@ -47,10 +47,10 @@ const DnDFlow = props => {
             label: 'next',
             // labelStyle: { fill: 'red', fontWeight: 700 },
           },
-          eds
-        )
+          eds,
+        ),
       ),
-    []
+    [],
   );
 
   const onSave = useCallback(() => {
@@ -78,7 +78,7 @@ const DnDFlow = props => {
         //   // y: clientOffset.y - reactFlowBounds.top - 230,
         // },
       });
-      setNodes(nds => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode));
     }
   };
 
@@ -109,9 +109,10 @@ const DnDFlow = props => {
       //   setNodes(nds => nds.concat(newNode));
       // }
     },
-    collect: monitor => {
-      return { isOver: monitor.isOver(), canDrop: monitor.canDrop() };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
   });
 
   useEffect(() => {
@@ -119,41 +120,39 @@ const DnDFlow = props => {
       buildFlowElements({
         properties: propertiesTemplate,
         propertiesRelease: propertiesTemplate,
-      })
+      }),
     );
   }, [propertiesTemplate]);
 
   return (
-    <>
-      <div ref={drop} className="dndflow">
-        <ReactFlowProvider>
-          <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onConnect={onConnect}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onInit={setReactFlowInstance}
-              connectionMode={ConnectionMode.Loose}
-              nodeTypes={nodeTypes}
-              deleteKeyCode={['Delete', 'Backspace']}
-              fitView
-            >
-              <div className="save__controls">
-                <Button size="sm" onClick={onSave}>
-                  {FIcons.faFloppyDisk}&nbsp;Save to draft
-                </Button>
-              </div>
-              <Controls />
-            </ReactFlow>
-          </div>
-          <DnDSidebar element={element} />
-        </ReactFlowProvider>
-      </div>
-    </>
+    <div ref={drop} className="dndflow">
+      <ReactFlowProvider>
+        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onConnect={onConnect}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onInit={setReactFlowInstance}
+            connectionMode={ConnectionMode.Loose}
+            nodeTypes={nodeTypes}
+            deleteKeyCode={['Delete', 'Backspace']}
+            fitView
+          >
+            <div className="save__controls">
+              <Button size="sm" onClick={onSave}>
+                {FIcons.faFloppyDisk}&nbsp;Save to draft
+              </Button>
+            </div>
+            <Controls />
+          </ReactFlow>
+        </div>
+        <DnDSidebar element={element} />
+      </ReactFlowProvider>
+    </div>
   );
-};
+}
 
 DnDFlow.propTypes = {
   element: PropTypes.object.isRequired,

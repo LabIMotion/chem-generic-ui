@@ -106,11 +106,39 @@
     "option_layers": {
       "type": "string"
     },
+    "value_system": {
+      "type": "string"
+    },
+    "value_system_base": {
+      "type": "string"
+    },
     "text_sub_fields": {
       "type": "array",
       "items": {
         "type": "object"
       }
+    },
+    "numeric": {
+      "type": "object",
+      "properties": {
+        "decimals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "min": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "max": {
+          "type": [
+            "number",
+            "string"
+          ]
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [

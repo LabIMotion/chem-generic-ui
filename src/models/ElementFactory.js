@@ -9,6 +9,7 @@ import {
   isFieldEffectivelyVisible,
   isItemEffectivelyVisible,
 } from '@utils/template/visibility-handler';
+import { isNumberFieldValid } from '@utils/numberUtils';
 
 /**
  * Factory function to create a Generic Element class with injected dependencies
@@ -244,7 +245,10 @@ export function createElement(Element, Container, Segment) {
         if (item.type === 'group') {
           const groupRestriction = restrictions[item.id];
           if (groupRestriction && groupRestriction.cond?.length > 0) {
-            const [isVisible] = isItemEffectivelyVisible(groupRestriction, layers);
+            const [isVisible] = isItemEffectivelyVisible(
+              groupRestriction,
+              layers,
+            );
             if (!isVisible) continue;
           }
 
@@ -256,14 +260,10 @@ export function createElement(Element, Container, Segment) {
             }
 
             if (
-              !this.validateFields(
-                layer.fields,
-                layer,
-                (f, l) => {
-                  const [visible] = isFieldEffectivelyVisible(f, l, layers);
-                  return visible;
-                },
-              )
+              !this.validateFields(layer.fields, layer, (f, l) => {
+                const [visible] = isFieldEffectivelyVisible(f, l, layers);
+                return visible;
+              })
             ) {
               return false;
             }
@@ -276,14 +276,10 @@ export function createElement(Element, Container, Segment) {
           }
 
           if (
-            !this.validateFields(
-              layer.fields,
-              layer,
-              (f, l) => {
-                const [visible] = isFieldEffectivelyVisible(f, l, layers);
-                return visible;
-              },
-            )
+            !this.validateFields(layer.fields, layer, (f, l) => {
+              const [visible] = isFieldEffectivelyVisible(f, l, layers);
+              return visible;
+            })
           ) {
             return false;
           }
@@ -301,12 +297,27 @@ export function createElement(Element, Container, Segment) {
         ) {
           // Only validate if field is effectively visible
           if (visibilityCheck(f, layer)) {
-            const value = f.value;
+            const { value } = f;
             const isEmptyStr =
               value === null ||
               value === undefined ||
               value.toString().trim() === '';
             if (isEmptyStr) return false;
+          }
+        }
+        if (
+          f.type === FieldTypes.F_NUMBER &&
+          f.value !== undefined &&
+          f.value !== null &&
+          f.value !== ''
+        ) {
+          if (visibilityCheck(f, layer)) {
+            const isValid = isNumberFieldValid(f.value, {
+              decimals: f.numeric?.decimals,
+              min: f.numeric?.min,
+              max: f.numeric?.max,
+            });
+            if (!isValid) return false;
           }
         }
       }

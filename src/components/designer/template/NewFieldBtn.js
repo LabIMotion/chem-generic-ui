@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Form, InputGroup } from 'react-bootstrap';
 import ButtonTooltip from '@components/fields/ButtonTooltip';
 
-const NewFieldBtn = ({ fnUpdate, layer, children }) => {
+function NewFieldBtn({ fnUpdate, layer, children }) {
   const [newFieldKey, setNewFieldKey] = useState('');
 
   const onInputNewField = (_e) => {
@@ -43,7 +43,7 @@ const NewFieldBtn = ({ fnUpdate, layer, children }) => {
       </InputGroup>
     </div>
   );
-};
+}
 
 NewFieldBtn.propTypes = {
   fnUpdate: PropTypes.func.isRequired,

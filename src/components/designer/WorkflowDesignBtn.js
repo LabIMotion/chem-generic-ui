@@ -10,7 +10,7 @@ import DnDFlow from '@components/flow/DnDFlow';
 import Response from '@utils/response';
 import { notifySuccess } from '@utils/template/designer-message';
 
-const WorkflowDesignBtn = (props) => {
+function WorkflowDesignBtn(props) {
   const { element, fnSave, genericType, btnCls } = props;
   const [show, setShow] = useState(false);
 
@@ -25,7 +25,7 @@ const WorkflowDesignBtn = (props) => {
 
   const handleSaveFlow = (_flowObject) => {
     const flow = _flowObject.flowObject;
-    flow['nodes'] = flow['nodes'].map((_node) => {
+    flow.nodes = flow.nodes.map((_node) => {
       if (!_node.data) return _node;
       if (_node.type === 'default') delete _node.data.label;
       return _node;
@@ -54,7 +54,7 @@ const WorkflowDesignBtn = (props) => {
       </WorkflowModal>
     </>
   );
-};
+}
 
 WorkflowDesignBtn.propTypes = {
   element: PropTypes.object.isRequired,

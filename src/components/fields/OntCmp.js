@@ -4,7 +4,7 @@ import { buildTS } from 'generic-ui-core';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const OntCmp = (_ontology, _sharp = 'link') => {
+function OntCmp(_ontology, _sharp = 'link') {
   const toUrl = buildTS(_ontology);
   if (!toUrl) return null;
   const { label } = _ontology;
@@ -24,6 +24,6 @@ const OntCmp = (_ontology, _sharp = 'link') => {
       </Button>
     </LTooltip>
   );
-};
+}
 
 export default OntCmp;

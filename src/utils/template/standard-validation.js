@@ -1,20 +1,20 @@
 import { isLayerInWF } from 'generic-ui-core';
 import { notifyError, notifySuccess } from '@utils/template/designer-message';
 
-export const isValidKlass = klass => /\b[a-z]{3,5}\b/.test(klass);
-export const isValidField = field => /^[a-zA-Z0-9_]*$/.test(field);
+export const isValidKlass = (klass) => /\b[a-z]{3,5}\b/.test(klass);
+export const isValidField = (field) => /^[a-zA-Z0-9_]*$/.test(field);
 
-export const validateSegmentKlassInput = element => {
+export const validateSegmentKlassInput = (element) => {
   if (element.label === '') {
     return notifyError(
       'Please input Segment Label.',
-      `Segment [${element.label}]`
+      `Segment [${element.label}]`,
     );
   }
   if (element.klass_element === '') {
     return notifyError(
       'Please assign to an Element.',
-      `Segment [${element.label}]`
+      `Segment [${element.label}]`,
     );
   }
   return notifySuccess();
@@ -24,14 +24,14 @@ export const validateLayerDeletion = (_element, _delKey) => {
   if (isLayerInWF(_element, _delKey)) {
     return notifyError(
       `This layer [${_delKey}] can not be removed because it is currently used in workflow.`,
-      `Layer [${_delKey}]`
+      `Layer [${_delKey}]`,
     );
   }
   return notifySuccess(
     [
       'Operation successfully.',
       "Remember to save once you've finished editing.",
-    ].join(' ')
+    ].join(' '),
   );
 };
 
@@ -46,14 +46,14 @@ export const validateLayerDeletion = (_element, _delKey) => {
  * @param {*} act
  * @returns {Object} notifySuccess or notifyError
  */
-export const validateLayerInput = layer => {
+export const validateLayerInput = (layer) => {
   if (layer.key === '') {
     return notifyError('Please input Name.', `Layer [${layer.key}]`);
   }
   if (!/^[a-z][a-z_]+[a-z]$/g.test(layer.key)) {
     return notifyError(
       'This Name is invalid, please try a different one.',
-      `Layer [${layer.key}]`
+      `Layer [${layer.key}]`,
     );
   }
   return notifySuccess();

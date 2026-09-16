@@ -3,15 +3,17 @@
 [![Downloads](https://img.shields.io/npm/dm/chem-generic-ui)](https://www.npmjs.com/package/chem-generic-ui)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8305319.svg)](https://doi.org/10.5281/zenodo.8305319)
 
-A React component for dynamically building user interfaces.
+**chem-generic-ui** is a React component library for building schema-driven scientific and laboratory applications. It provides dynamic form and table builders for complex data-driven interfaces.
 
-This library is purely written in JavaScript and is based on the [React](https://reactjs.org/) library.
+It is used in the Chemotion LabIMotion ecosystem for constructing structured datasets, element forms, and table-based layouts.
 
 ## Project Showcase
 
 ### [LabIMotion](https://www.chemotion.net/docs/labimotion)
 
 <img src="https://labimotion.github.io/assets/images/labimotion_logo.png" alt="LabIMotion Logo" width="300" />
+
+A scientific data management application built using chem-generic-ui.
 
 #### Flexible Layout Designs
 
@@ -37,9 +39,19 @@ or Yarn:
 yarn add chem-generic-ui
 ```
 
-## Contributing
+## Host application setup
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, coding standards, commit conventions, and the pull request workflow.
+### AG Grid module registration
+
+`ag-grid-community` and `ag-grid-react` (`>=33.0.0 <34.0.0`) are peer dependencies — the host application provides them. Since version 2.3.0, chem-generic-ui no longer registers AG Grid modules itself. Register them once in your application entry point, before rendering any chem-generic-ui component that contains a grid:
+
+```js
+import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([AllCommunityModule]);
+```
+
+Without this, AG Grid throws error #200 ("unable to use … as the module is not registered") when a grid component mounts.
 
 ## Support and Community
 

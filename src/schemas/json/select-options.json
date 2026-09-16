@@ -26,6 +26,9 @@
             ],
             "additionalProperties": false
           }
+        },
+        "desc": {
+          "type": "string"
         }
       },
       "additionalProperties": false

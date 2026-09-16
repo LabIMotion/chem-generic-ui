@@ -1,8 +1,9 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import LayerAttrForm from '@components/elements/LayerAttrForm';
+import GModal from '@ui/modals/GModal';
 
 function LayerAttrModal(props) {
   const { actions, isAttrOnWF, layer, showProps } = props;
@@ -95,17 +96,16 @@ function LayerAttrModal(props) {
   };
 
   return (
-    <Modal
-      centered
+    <GModal
       size="lg"
       backdrop="static"
       show={show}
       onHide={() => setShow(false)}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>{addTitles()}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ maxHeight: '70vh', overflow: 'auto' }}>
+      <GModal.Header>
+        <GModal.Title>{addTitles()}</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ maxHeight: '70vh', overflow: 'auto' }}>
         <div className="col-md-12">
           <LayerAttrForm
             ref={formRef}
@@ -114,14 +114,14 @@ function LayerAttrModal(props) {
             isCreateMode={actions.some((a) => a.action === 'c')}
           />
         </div>
-      </Modal.Body>
-      <Modal.Footer className="justify-content-start">
+      </GModal.Body>
+      <GModal.Footer>
         <Button variant="secondary" onClick={() => setShow(false)}>
           Cancel
         </Button>
         {addActions()}
-      </Modal.Footer>
-    </Modal>
+      </GModal.Footer>
+    </GModal>
   );
 }
 

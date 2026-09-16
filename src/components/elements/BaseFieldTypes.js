@@ -1,7 +1,12 @@
 import { FieldTypes } from 'generic-ui-core';
 
 const BaseFieldTypes = [
-  { value: FieldTypes.F_INTEGER, name: FieldTypes.F_INTEGER, label: 'Integer' },
+  { value: FieldTypes.F_NUMBER, name: FieldTypes.F_NUMBER, label: 'Number' },
+  // {
+  //   value: FieldTypes.F_INTEGER,
+  //   name: FieldTypes.F_INTEGER,
+  //   label: 'Integer (deprecated, use Number)',
+  // },
   {
     value: FieldTypes.F_DATETIME,
     name: FieldTypes.F_DATETIME,
@@ -24,7 +29,11 @@ const BaseFieldTypes = [
     label: 'Text area',
   },
   { value: FieldTypes.F_SELECT, name: FieldTypes.F_SELECT, label: 'Select' },
-  { value: FieldTypes.F_SELECT_MULTI, name: FieldTypes.F_SELECT_MULTI, label: 'Select (Multiple)' },
+  {
+    value: FieldTypes.F_SELECT_MULTI,
+    name: FieldTypes.F_SELECT_MULTI,
+    label: 'Select (Multiple)',
+  },
   {
     value: FieldTypes.F_CHECKBOX,
     name: FieldTypes.F_CHECKBOX,

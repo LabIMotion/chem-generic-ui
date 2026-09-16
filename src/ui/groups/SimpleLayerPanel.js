@@ -116,7 +116,8 @@ function SimpleLayerPanel({
                 disabled={layerData.wf}
                 style={layerData.wf ? { pointerEvents: 'none' } : {}}
               >
-                <span>{FIcons.faGears}</span> {conditions.length > 0 && `(${conditions.length})`}
+                <span>{FIcons.faGears}</span>{' '}
+                {conditions.length > 0 && `(${conditions.length})`}
               </Button>
             </span>
           )}
@@ -136,10 +137,10 @@ function SimpleLayerPanel({
                 disabled={layerData.wf}
                 style={layerData.wf ? { pointerEvents: 'none' } : {}}
               >
-                {showAssignForm ? 'Close' : (
-                  <>
-                    {FIcons.faLayerGroup} Assign to a group
-                  </>
+                {showAssignForm ? (
+                  'Close'
+                ) : (
+                  <>{FIcons.faLayerGroup} Assign to a group</>
                 )}
               </Button>
             </span>

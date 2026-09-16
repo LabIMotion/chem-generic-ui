@@ -1,14 +1,13 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import GModal from '@ui/modals/GModal';
 
-const LayerSaveModal = ({ acts, title, showProps, close, children }) => {
+function LayerSaveModal({ acts, title, showProps, close, children }) {
   const { show } = showProps;
   if (!show) return null;
 
   return (
-    <Modal centered show={show} onHide={close} dialogClassName="gu_modal-68w">
+    <GModal show={show} onHide={close} dialogClassName="gu_modal-68w">
       <div
         onClick={(e) => {
           e.stopPropagation();
@@ -18,15 +17,15 @@ const LayerSaveModal = ({ acts, title, showProps, close, children }) => {
         role="button"
         tabIndex={0}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{children}</Modal.Body>
-        <Modal.Footer className="justify-content-start">{acts.map((act) => act)}</Modal.Footer>
+        <GModal.Header>
+          <GModal.Title>{title}</GModal.Title>
+        </GModal.Header>
+        <GModal.Body>{children}</GModal.Body>
+        <GModal.Footer>{acts.map((act) => act)}</GModal.Footer>
       </div>
-    </Modal>
+    </GModal>
   );
-};
+}
 
 LayerSaveModal.propTypes = {
   acts: PropTypes.arrayOf(PropTypes.node),

@@ -2,9 +2,9 @@ import React from 'react';
 import { permitFN } from '@ui/common/fnCfg';
 
 export function fnToggle(Component) {
-  const fnId = Component.fnId;
+  const { fnId } = Component;
 
-  return (props) => {
+  return function FnToggled(props) {
     if (!fnId) {
       return <Component {...props} />;
     }

@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FIcons from '@components/icons/FIcons';
 
-const NodeIcon = ({ nodeClass, nodeIcon }) => (
-  <div className={nodeClass}>{nodeIcon}</div>
-);
+function NodeIcon({ nodeClass, nodeIcon }) {
+  return <div className={nodeClass}>{nodeIcon}</div>;
+}
 
 NodeIcon.propTypes = {
   nodeClass: PropTypes.string.isRequired,
@@ -16,7 +16,7 @@ const createLayerNodeIcon = (
   layer,
   checked,
   nodeClass = 'chk',
-  extCSS = ''
+  extCSS = '',
 ) => {
   const nodeIcon =
     nodeClass === 'chk' ? FIcons.faCircleCheck : FIcons.faCirclePlus;

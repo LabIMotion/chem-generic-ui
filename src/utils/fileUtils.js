@@ -48,7 +48,7 @@ export const getFileName = (response, defaultFileName = 'download') => {
       }
     }
 
-    const url = response.url;
+    const { url } = response;
     if (url) {
       const urlParts = url.split('/');
       const potentialFilename = urlParts[urlParts.length - 1];

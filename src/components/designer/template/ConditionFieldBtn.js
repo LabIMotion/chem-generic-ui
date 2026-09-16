@@ -20,9 +20,13 @@ function ConditionFieldBtn(props) {
     disabled,
   } = props;
   const [show, setShow] = useState(false);
+  // Mounted only on first open: a closed modal still runs its hooks and
+  // effects on every re-render of the field.
+  const [opened, setOpened] = useState(false);
 
   const onClick = () => {
     if (disabled) return;
+    setOpened(true);
     setShow(true);
   };
 
@@ -67,17 +71,19 @@ function ConditionFieldBtn(props) {
           {conditionBtn}
         </LTooltip>
       )}
-      <FieldRestrictionModal
-        showModal={show}
-        field={field}
-        layer={layer}
-        sortedLayers={sortedLayers}
-        onUpdate={handleUpdate}
-        onClose={onClose}
-        groupedLayerKeys={groupedLayerKeys}
-        sameGroupLayerKeys={sameGroupLayerKeys}
-        selectOptions={selectOptions}
-      />
+      {opened && (
+        <FieldRestrictionModal
+          showModal={show}
+          field={field}
+          layer={layer}
+          sortedLayers={sortedLayers}
+          onUpdate={handleUpdate}
+          onClose={onClose}
+          groupedLayerKeys={groupedLayerKeys}
+          sameGroupLayerKeys={sameGroupLayerKeys}
+          selectOptions={selectOptions}
+        />
+      )}
     </>
   );
 }

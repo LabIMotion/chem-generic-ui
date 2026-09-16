@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 /**
  * A progress bar that uses dots/circles to indicate progress.
  */
-const DotProgressBar = ({
+function DotProgressBar({
   now,
   maxDots = 10,
   variant = 'primary',
   shape = 'dot',
   className = '',
-}) => {
+}) {
   const filledDots = Math.round((now / 100) * maxDots);
   const dots = Array.from({ length: maxDots });
 
@@ -26,7 +26,7 @@ const DotProgressBar = ({
       ))}
     </div>
   );
-};
+}
 
 DotProgressBar.propTypes = {
   now: PropTypes.number.isRequired,

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import DnDNodes from '@components/flow/DnDNodes';
 
-const DnDSidebar = (props) => {
+function DnDSidebar(props) {
   const { element } = props;
 
   if (element?.properties_template == null) {
@@ -12,7 +12,7 @@ const DnDSidebar = (props) => {
   }
   const sortedLayers = sortBy(
     element.properties_template.layers || [],
-    l => l.position
+    (l) => l.position,
   );
   const inputs = sortedLayers.filter((e) => e.wf);
 
@@ -29,7 +29,7 @@ const DnDSidebar = (props) => {
       <DnDNodes nodes={inputs} />
     </aside>
   );
-};
+}
 
 DnDSidebar.propTypes = { element: PropTypes.object.isRequired };
 

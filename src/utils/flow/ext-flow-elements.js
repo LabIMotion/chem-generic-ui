@@ -1,5 +1,4 @@
 import React from 'react';
-import { faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import Constants from '@components/tools/Constants';
 import createLayerNodeIcon from '@components/flow/NodeIcon';
 
@@ -12,7 +11,7 @@ import createLayerNodeIcon from '@components/flow/NodeIcon';
  */
 const extendFlowElements = (nodes, layers, properties) => {
   const defaultNodes = nodes.filter(
-    n => n.type === Constants.NODE_TYPES.DEFAULT
+    (n) => n.type === Constants.NODE_TYPES.DEFAULT,
   );
   if (defaultNodes.length < 1) return { nodes: [], edges: [] };
 
@@ -20,14 +19,14 @@ const extendFlowElements = (nodes, layers, properties) => {
   const returnEdges = [];
   const { layers: layersProperties } = properties;
 
-  defaultNodes.forEach(node => {
+  defaultNodes.forEach((node) => {
     const { type, data, position, style } = node;
-    const associatedLayerKeys = Object.keys(layersProperties).filter(key =>
-      key.startsWith(`${data.lKey}.`)
+    const associatedLayerKeys = Object.keys(layersProperties).filter((key) =>
+      key.startsWith(`${data.lKey}.`),
     );
     if (associatedLayerKeys.length < 1) return;
     const associatedLayers = associatedLayerKeys.map(
-      key => layersProperties[key]
+      (key) => layersProperties[key],
     );
 
     associatedLayers.forEach((associatedLayer, index) => {

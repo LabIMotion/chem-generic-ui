@@ -26,10 +26,12 @@ describe('ContributeTemplateModal', () => {
 
   it('renders modal when show is true', () => {
     const { getByText } = render(
-      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />
+      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />,
     );
 
-    expect(getByText('Contribute this template to Template Hub')).toBeInTheDocument();
+    expect(
+      getByText('Contribute this template to Template Hub'),
+    ).toBeInTheDocument();
     expect(getByText('Registered Name')).toBeInTheDocument();
     expect(getByText('Registered E-Mail')).toBeInTheDocument();
     expect(getByText('Contact E-Mail')).toBeInTheDocument();
@@ -40,15 +42,17 @@ describe('ContributeTemplateModal', () => {
   it('does not render when show is false', () => {
     const hiddenShowProps = { ...mockShowProps, show: false };
     const { queryByText } = render(
-      <ContributeTemplateModal showProps={hiddenShowProps} data={mockData} />
+      <ContributeTemplateModal showProps={hiddenShowProps} data={mockData} />,
     );
 
-    expect(queryByText('Contribute this template to Template Hub')).not.toBeInTheDocument();
+    expect(
+      queryByText('Contribute this template to Template Hub'),
+    ).not.toBeInTheDocument();
   });
 
   it('displays template information', () => {
     const { getByText } = render(
-      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />
+      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />,
     );
 
     expect(getByText(/ID:/)).toBeInTheDocument();
@@ -59,7 +63,7 @@ describe('ContributeTemplateModal', () => {
 
   it('shows validation error when required fields are empty', async () => {
     const { getByText, queryByText } = render(
-      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />
+      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />,
     );
 
     const submitButton = getByText('Submit to Template Hub');
@@ -78,7 +82,7 @@ describe('ContributeTemplateModal', () => {
 
   it('closes modal when cancel button is clicked', () => {
     const { getByText } = render(
-      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />
+      <ContributeTemplateModal showProps={mockShowProps} data={mockData} />,
     );
 
     const cancelButton = getByText('Cancel');

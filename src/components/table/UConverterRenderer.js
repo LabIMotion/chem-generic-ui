@@ -5,8 +5,8 @@ import { Button } from 'react-bootstrap';
 import { genUnit, FieldTypes } from 'generic-ui-core';
 import { genUnitSup } from '@components/tools/utils';
 
-const UConverterRenderer = props => {
-  const { sField, onChange, node } = props;
+function UConverterRenderer(props) {
+  const { sField, onChange, node, isPreview } = props;
   if (sField.type !== FieldTypes.F_SYSTEM_DEFINED) return null;
   const { data } = node;
   return (
@@ -15,18 +15,24 @@ const UConverterRenderer = props => {
       onClick={() => onChange(sField, node)}
       variant="success"
       size="sm"
+      disabled={isPreview}
     >
       {genUnitSup(
-        genUnit(sField.option_layers, data[sField.id].value_system).label
+        genUnit(sField.option_layers, data[sField.id]?.value_system).label,
       ) || ''}
     </Button>
   );
-};
+}
 
 UConverterRenderer.propTypes = {
   sField: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
   node: PropTypes.object.isRequired,
+  isPreview: PropTypes.bool,
+};
+
+UConverterRenderer.defaultProps = {
+  isPreview: false,
 };
 
 export default UConverterRenderer;

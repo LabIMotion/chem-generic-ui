@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
@@ -24,7 +23,6 @@ const extractOptionsFromField = (_field, _data) => {
       // Add the entire matching object to the result
       options.select_options[optionLayerKey] =
         data.properties_template.select_options[optionLayerKey];
-      options.select_options[optionLayerKey].desc = optionLayerKey;
     }
   }
   // Check if any options, otherwise return null
@@ -57,7 +55,7 @@ const reducer = (state, action) => {
   }
 };
 
-const VocabSaveBtn = (props) => {
+function VocabSaveBtn(props) {
   const {
     field: initialField,
     data: initialData,
@@ -167,6 +165,6 @@ const VocabSaveBtn = (props) => {
       </LayerSaveModal>
     </>
   );
-};
+}
 
 export default VocabSaveBtn;

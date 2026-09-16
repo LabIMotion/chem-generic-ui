@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { buildTS } from 'generic-ui-core';

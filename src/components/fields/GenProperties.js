@@ -18,6 +18,7 @@ import {
   GenPropertiesText,
   GenDropReaction,
 } from '@components/fields/GenPropertiesFields';
+import GenPropertiesOlsSelect from '@components/fields/GenPropertiesOlsSelect';
 // import Constants from '@components/tools/Constants';
 import PropCalculate from '@components/fields/PropCalculate';
 import PropDrop from '@components/fields/PropDrop';
@@ -42,9 +43,15 @@ const readVoc = (field, readonly) => {
 };
 
 const GenProperties = (opt) => {
-  const fieldProps = { ...opt, dndItems: [], readOnly: readVoc(opt.f_obj, opt.readOnly), isEditable: !readVoc(opt.f_obj, !opt.isEditable) };
+  const fieldProps = {
+    ...opt,
+    dndItems: [],
+    readOnly: readVoc(opt.f_obj, opt.readOnly),
+    isEditable: !readVoc(opt.f_obj, !opt.isEditable),
+  };
   let [mainType, custom] = fieldProps.type.split('_');
-  if (opt.isSearch && mainType === FieldTypes.F_DRAG) mainType = FieldTypes.F_TEXT;
+  if (opt.isSearch && mainType === FieldTypes.F_DRAG)
+    mainType = FieldTypes.F_TEXT;
   // if (opt.isPreview && (mainType === 'drag' || mainType === 'upload')) mainType = 'text';
   switch (mainType) {
     case FieldTypes.F_CHECKBOX:
@@ -66,6 +73,8 @@ const GenProperties = (opt) => {
       return PropDrop(fieldProps);
     case FieldTypes.F_INTEGER:
       return GenPropertiesNumber(fieldProps);
+    case FieldTypes.F_NUMBER:
+      return GenPropertiesNumber(fieldProps);
     case FieldTypes.F_SYSTEM_DEFINED:
       return GenPropertiesSystemDefined(fieldProps);
     case FieldTypes.F_INPUT_GROUP:
@@ -74,6 +83,8 @@ const GenProperties = (opt) => {
       return GenPropertiesTextArea(fieldProps);
     case FieldTypes.F_UPLOAD:
       return GenPropertiesUpload(fieldProps);
+    case FieldTypes.F_ONTOLOGY_SELECT:
+      return GenPropertiesOlsSelect(fieldProps);
     case FieldTypes.F_DUMMY:
       return GenDummy();
     case FieldTypes.F_SYS_REACTION:

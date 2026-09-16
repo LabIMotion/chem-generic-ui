@@ -6,9 +6,12 @@ import TemplateBar from '@components/designer/template/TemplateBar';
 import TemplateProps from '@components/designer/template/TemplateProps';
 import Constants from '@components/tools/Constants';
 import PreviewFunctional from '@components/designer/preview/PreviewFunctional';
-import { handleSaveSorting } from '@utils/template/sorting-handler';
+import {
+  handleSaveSorting,
+  migrateIntegerFields,
+} from '@utils/template/sorting-handler';
 
-const Template = (props) => {
+function Template(props) {
   const {
     data: inputData,
     vocabularies,
@@ -24,14 +27,19 @@ const Template = (props) => {
   });
 
   useEffect(() => {
-    setOpData((prevOpData) => {
-      return {
-        ...prevOpData,
-        data: inputData,
-        notify: null,
-        active: 'w',
-      };
-    });
+    const migratedData =
+      inputData && Object.keys(inputData).length > 0
+        ? migrateIntegerFields({
+            ...inputData,
+            properties_template: { ...inputData.properties_template },
+          })
+        : inputData;
+    setOpData((prevOpData) => ({
+      ...prevOpData,
+      data: migratedData,
+      notify: null,
+      active: 'w',
+    }));
   }, [inputData]);
 
   if (!inputData || Object.keys(inputData).length === 0) return null;
@@ -39,31 +47,25 @@ const Template = (props) => {
   const innerAction = (_result) => {
     const { element: newElement, notify: newNotify, additional } = _result;
     if (newNotify.isSuccess) {
-      setOpData((prevState) => {
-        return {
-          ...prevState,
-          data: newElement,
-          notify: newNotify,
-          active: additional?.active ? additional?.active : prevState.active,
-        };
-      });
+      setOpData((prevState) => ({
+        ...prevState,
+        data: newElement,
+        notify: newNotify,
+        active: additional?.active ? additional?.active : prevState.active,
+      }));
     } else {
-      setOpData((prevState) => {
-        return {
-          ...prevState,
-          notify: newNotify,
-        };
-      });
+      setOpData((prevState) => ({
+        ...prevState,
+        notify: newNotify,
+      }));
     }
   };
 
   const onSwitch = (_page) => {
-    setOpData((prevState) => {
-      return {
-        ...prevState,
-        active: _page,
-      };
-    });
+    setOpData((prevState) => ({
+      ...prevState,
+      active: _page,
+    }));
   };
 
   const handleSubmit = (_e) => {
@@ -104,7 +106,7 @@ const Template = (props) => {
       </div>
     </div>
   );
-};
+}
 
 Template.propTypes = {
   data: PropTypes.object,

@@ -2,12 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { Modal } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
 import Constants from '@components/tools/Constants';
 import { handleTemplateUploading } from '@utils/template/action-handler';
+import GModal from '@ui/modals/GModal';
 
-const UploadTemplateModal = (props) => {
+function UploadTemplateModal(props) {
   const { data, fnUpload, genericType, showProps } = props;
   const { show, setShow } = showProps;
   const handleReaderLoaded = (e) => {
@@ -15,8 +15,13 @@ const UploadTemplateModal = (props) => {
     if (verify.notify.isSuccess) {
       const newData = cloneDeep(data);
 
+      // Preserve registries across upload — authorization stays with the document
+      const keepRegistries = data?.metadata?.registries;
       if (Object.prototype.hasOwnProperty.call(verify.element, 'metadata')) {
         newData.metadata = cloneDeep(verify.element.metadata);
+        if (keepRegistries) newData.metadata.registries = keepRegistries;
+      } else if (keepRegistries) {
+        newData.metadata = { registries: keepRegistries };
       } else {
         delete newData.metadata;
       }
@@ -38,11 +43,11 @@ const UploadTemplateModal = (props) => {
   };
 
   return (
-    <Modal centered show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Upload template to Work Area</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ overflow: 'auto' }}>
+    <GModal show={show} onHide={() => setShow(false)}>
+      <GModal.Header>
+        <GModal.Title>Upload template to Work Area</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ overflow: 'auto' }}>
         <Dropzone
           onDrop={(attach) => handleUploadTemplate(attach)}
           className="lu-drop-zone"
@@ -50,10 +55,10 @@ const UploadTemplateModal = (props) => {
         >
           <div style={{ paddingTop: 12 }}>Drop File, or Click to Select.</div>
         </Dropzone>
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
-};
+}
 
 UploadTemplateModal.propTypes = {
   data: PropTypes.object.isRequired,

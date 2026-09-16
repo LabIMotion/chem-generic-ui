@@ -10,22 +10,23 @@ import {
   ElementBase,
   SegmentBase,
 } from '@components/elements/BaseFields';
-import { toBool, toNum } from '@utils/pureUtils';
+import { toBool, toNum, ontologyTermKey } from '@utils/pureUtils';
+import { parseNumberInput } from '@utils/numberUtils';
+import { recomputeFormulaCells } from '@utils/formulaUtils';
 
-export const mergeOptions = (A, B) => {
-  return mergeWith({}, A, B, (objValue, srcValue) => {
+export const mergeOptions = (A, B) =>
+  mergeWith({}, A, B, (objValue, srcValue) => {
     if (isArray(objValue) && isArray(srcValue)) {
       // Merge arrays and remove duplicates based on 'key' property
       const combined = [...objValue, ...srcValue];
       return combined.filter(
         (option, index, self) =>
-          index === self.findIndex((o) => o.key === option.key)
+          index === self.findIndex((o) => o.key === option.key),
       );
     }
     // Return undefined for lodash to handle the default merging
     return undefined;
   });
-};
 
 // current generic value, new klass value
 export const remodel = (generic, klass) => {
@@ -106,19 +107,26 @@ export const remodel = (generic, klass) => {
               const cSubs =
                 generic.properties.layers[key].fields[curIdx].sub_fields || [];
               newProps.layers[key].fields[idx].sub_fields = cSubs.filter((sf) =>
-                newOptionsKeys.has(sf.value)
+                newOptionsKeys.has(sf.value),
               );
             }
           }
         }
         if (newFieldType === FieldTypes.F_INTEGER) {
-          const notInteger =
-            curType === FieldTypes.V_UNDEFINED ||
-            curType === FieldTypes.V_BOOLEAN ||
-            isNaN(curVal);
-          newProps.layers[key].fields[idx].value = notInteger
-            ? 0
-            : parseInt(curVal, 10);
+          const parsed = parseNumberInput(curVal, 0, {});
+          if (parsed !== null) {
+            newProps.layers[key].fields[idx].value = parsed;
+          }
+        }
+        if (newFieldType === FieldTypes.F_NUMBER) {
+          const newField = newProps.layers[key].fields[idx];
+          const parsed = parseNumberInput(curVal, newField.numeric?.decimals, {
+            min: newField.numeric?.min,
+            max: newField.numeric?.max,
+          });
+          if (parsed !== null) {
+            newProps.layers[key].fields[idx].value = parsed;
+          }
         }
         if (newFieldType === FieldTypes.F_CHECKBOX) {
           if (curVal === undefined || curVal === null) {
@@ -144,12 +152,12 @@ export const remodel = (generic, klass) => {
         }
         if (newFieldType === FieldTypes.F_SYSTEM_DEFINED) {
           const units = genUnits(
-            newProps.layers[key].fields[idx].option_layers
+            newProps.layers[key].fields[idx].option_layers,
           );
           const vs = units.find(
             (u) =>
               u.key ===
-              generic.properties.layers[key].fields[curIdx].value_system
+              generic.properties.layers[key].fields[curIdx].value_system,
           );
           newProps.layers[key].fields[idx].value_system =
             (vs && vs.key) || units[0].key;
@@ -187,7 +195,7 @@ export const remodel = (generic, klass) => {
                 }
                 if (
                   [FieldTypes.F_NUMBER, FieldTypes.F_SYSTEM_DEFINED].includes(
-                    nSub.type
+                    nSub.type,
                   )
                 ) {
                   const nvl =
@@ -221,6 +229,19 @@ export const remodel = (generic, klass) => {
             newProps.layers[key].fields[idx].value = {};
           }
         }
+        if (newFieldType === FieldTypes.F_ONTOLOGY_SELECT) {
+          const prevField = generic.properties.layers[key].fields[curIdx];
+          const prevKey = ontologyTermKey(prevField.ontology_term);
+          const newKey = ontologyTermKey(
+            newProps.layers[key].fields[idx].ontology_term,
+          );
+          // Keep the answer only if the field was ontology-select with the
+          // same scope; otherwise it belongs to a different ontology tree.
+          newProps.layers[key].fields[idx].value =
+            prevField.type === newFieldType && prevKey === newKey
+              ? curVal || ''
+              : '';
+        }
         if (newFieldType === FieldTypes.F_TABLE) {
           if (
             generic.properties.layers[key].fields[curIdx].type !== newFieldType
@@ -229,8 +250,14 @@ export const remodel = (generic, klass) => {
           } else {
             newProps.layers[key].fields[idx].sub_values = organizeSubValues(
               newProps.layers[key].fields[idx],
-              generic.properties.layers[key].fields[curIdx]
+              generic.properties.layers[key].fields[curIdx],
+              newPropsSelectOptions,
             );
+            // Reload is a structural change: stored formula cells may
+            // reflect the old template's formulas, so recompute write-through
+            // values for every row (display computes live, but export reads
+            // the stored sub_values).
+            recomputeFormulaCells(newProps.layers[key].fields[idx]);
           }
         }
       }
@@ -248,7 +275,7 @@ export const importReaction = (source, target) => {
     const srcLayers = srcProps.layers;
 
     const reactionLayers = Object.keys(srcLayers).filter((key) =>
-      key.startsWith(Constants.SYS_REACTION)
+      key.startsWith(Constants.SYS_REACTION),
     );
 
     // add these reaction layers to the target generic
@@ -288,15 +315,12 @@ export const mergeSelections = (source, target) => {
       source[key].options.forEach((newOption) => {
         if (
           !newTarget[key].options.some(
-            (existingOption) => existingOption.key === newOption.key
+            (existingOption) => existingOption.key === newOption.key,
           )
         ) {
           newTarget[key].options.push(newOption);
         }
       });
-
-      // // Optionally, merge descriptions if necessary
-      newTarget[key].desc = source[key].desc || newTarget[key].desc;
     }
   });
   return newTarget;

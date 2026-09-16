@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import copy from 'copy-to-clipboard';
 import LTooltip from '@components/shared/LTooltip';
 
-const DropTextRenderer = (props) => {
+function DropTextRenderer(props) {
   const { attr, sField, node } = props;
   let displayValue =
     ((node.data[sField.id] || {}).value || {})[`el_${attr.value}`] || '';
@@ -31,7 +31,7 @@ const DropTextRenderer = (props) => {
       </div>
     </LTooltip>
   );
-};
+}
 DropTextRenderer.propTypes = {
   attr: PropTypes.object.isRequired,
   sField: PropTypes.object.isRequired,

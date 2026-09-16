@@ -16,7 +16,12 @@ export const PROPS_TO_REMOVE = [
 ];
 
 // Layer-specific removal
-export const LAYER_PROPS_TO_REMOVE = ['key', 'wf_position', 'wf_uuid', 'timeRecord'];
+export const LAYER_PROPS_TO_REMOVE = [
+  'key',
+  'wf_position',
+  'wf_uuid',
+  'timeRecord',
+];
 
 // Global renaming map
 export const PROPS_TO_RENAME = {
@@ -85,15 +90,19 @@ const TYPE_SPECIFIC_REQUIRED_PROPS = {
 const generateFinalRequiredProps = (base, typeSpecific) => {
   const result = {};
   Object.entries(typeSpecific).forEach(([type, specificProps]) => {
-    const merged = ['field', ...base, ...specificProps]
-      .filter((item, index, self) => self.indexOf(item) === index); // remove duplicates
+    const merged = ['field', ...base, ...specificProps].filter(
+      (item, index, self) => self.indexOf(item) === index,
+    ); // remove duplicates
     result[type] = merged;
   });
   return result;
 };
 
 // Pre-computed final required properties for each field type
-export const REQUIRED_PROPS = generateFinalRequiredProps(BASE_REQUIRED_PROPS, TYPE_SPECIFIC_REQUIRED_PROPS);
+export const REQUIRED_PROPS = generateFinalRequiredProps(
+  BASE_REQUIRED_PROPS,
+  TYPE_SPECIFIC_REQUIRED_PROPS,
+);
 
 // Transformations for display
 export const TYPE_TRANSFORMS = {
@@ -109,18 +118,18 @@ export const TYPE_TRANSFORMS = {
 };
 
 export const HEADER_COLOR_TRANSFORMS = {
-  'primary': 'Ocean Blue',
-  'info': 'Sky Blue',
-  'success': 'Fresh Green',
-  'default': 'Grey',
-  'danger': 'Crimson',
-  'warning': 'Amber',
+  primary: 'Ocean Blue',
+  info: 'Sky Blue',
+  success: 'Fresh Green',
+  default: 'Grey',
+  danger: 'Crimson',
+  warning: 'Amber',
 };
 
 export const HEADER_TEXT_STYLE_TRANSFORMS = {
-  'panel_generic_heading': 'bold',
-  'panel_generic_heading_bu': 'bold + underline',
-  'panel_generic_heading_bui': 'bold + underline + italic',
+  panel_generic_heading: 'bold',
+  panel_generic_heading_bu: 'bold + underline',
+  panel_generic_heading_bui: 'bold + underline + italic',
 };
 
 // Grid configuration
@@ -129,7 +138,6 @@ export const GRID_CONFIG = {
     sortable: false,
     filter: false,
   },
-  animateRows: true,
   height: 500,
   indentSize: 20, // pixels per level for tree indentation
 };

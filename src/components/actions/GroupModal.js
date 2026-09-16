@@ -1,9 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import SimpleGroupLayer from '@/ui/groups/SimpleGroupLayer';
 import NoticeBtn from '@ui/groups/NoticeBtn';
+import GModal from '@ui/modals/GModal';
 
 function GroupModal({ generic, onSave, showProps }) {
   const { show, setShow } = showProps;
@@ -23,6 +24,11 @@ function GroupModal({ generic, onSave, showProps }) {
           JSON.stringify(generic?.metadata || { groups: [], restrict: {} }),
         ),
       );
+      setUpdatedMetadata(null);
+    } else {
+      // Clear working state when modal is closed
+      setWorkingKlass(null);
+      setWorkingMetadata(null);
       setUpdatedMetadata(null);
     }
   }, [show, generic]);
@@ -69,20 +75,18 @@ function GroupModal({ generic, onSave, showProps }) {
   }
 
   return (
-    <Modal
-      centered
+    <GModal
       show={show}
       onHide={() => setShow(false)}
       size="xl"
       backdrop="static"
       scrollable
-      style={{ maxWidth: '90%', margin: '0 auto' }}
-      dialogClassName="h-auto"
+      dialogClassName="gu-modal-90 h-auto"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Group Layers and Set Conditions</Modal.Title>
-      </Modal.Header>
-      <Modal.Body
+      <GModal.Header>
+        <GModal.Title>Group Layers and Set Conditions</GModal.Title>
+      </GModal.Header>
+      <GModal.Body
         className="d-flex flex-column p-3"
         style={{ overflowY: 'auto', maxHeight: '70vh' }}
       >
@@ -94,8 +98,8 @@ function GroupModal({ generic, onSave, showProps }) {
           klassMetadata={workingMetadata}
           onMetadataChange={handleMetadataChange}
         />
-      </Modal.Body>
-      <Modal.Footer className="justify-content-start">
+      </GModal.Body>
+      <GModal.Footer>
         <Button variant="secondary" onClick={handleCancel}>
           Cancel
         </Button>
@@ -106,8 +110,8 @@ function GroupModal({ generic, onSave, showProps }) {
         >
           Save
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </GModal.Footer>
+    </GModal>
   );
 }
 

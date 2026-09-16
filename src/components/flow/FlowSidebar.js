@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 import { sortBy } from 'lodash';
 import { Button } from 'react-bootstrap';
 
-const FlowSidebar = props => {
+function FlowSidebar(props) {
   const { propertiesTemplate, fnAdd } = props;
   if (!propertiesTemplate) {
     return null;
   }
   const sortedLayers =
     propertiesTemplate?.layers &&
-    sortBy(propertiesTemplate.layers, l => l.position);
+    sortBy(propertiesTemplate.layers, (l) => l.position);
 
-  const addNode = node => {
+  const addNode = (node) => {
     // console.log('addNode', node);
     fnAdd(node);
   };
@@ -29,7 +29,7 @@ const FlowSidebar = props => {
         &apos;Del&apos; button.
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {(sortedLayers.filter(e => e.wf) || []).map(layer => (
+        {(sortedLayers.filter((e) => e.wf) || []).map((layer) => (
           <>
             <Button key={layer.key} onClick={() => addNode(layer.key)}>
               <div className="gu_flow_dnd_sidebar">
@@ -43,7 +43,7 @@ const FlowSidebar = props => {
       </div>
     </aside>
   );
-};
+}
 
 FlowSidebar.propTypes = {
   fnAdd: PropTypes.func.isRequired,

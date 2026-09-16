@@ -1,29 +1,25 @@
 import Api from '@utils/api';
+import { ROUTES } from '@utils/apiCfg';
+import { EPS } from '@utils/eps';
 
-const API_DS = 'generic_dataset';
-const API_LA = 'layers';
+class ApiManager {
+  static #exec = async (route, endpoint, params = {}, method = 'GET') => {
+    const fullEndpoint = `${route}/${endpoint}`;
+    const data = method === 'GET' ? null : params;
+    const queryParams = method === 'GET' ? params : {};
 
-export default class ApiManager extends Api {
-  static execApi = (path, method = 'GET') => {
-    return super.execApi(`${API_DS}/${path}`, method);
+    return data
+      ? await Api.execApiData(data, fullEndpoint, method)
+      : await Api.execApi(fullEndpoint, method, queryParams);
   };
 
-  static execApiData = (data, path, method = 'POST') => {
-    return super.execApiData(data, path, method);
-  };
+  static getDSKlasses = (params = {}) =>
+    ApiManager.#exec(ROUTES.GENERIC_DATASET, EPS.GET.DS_KLASSES, params);
 
-  static updateDSTemplate = (data, id) => {
-    //
-  };
+  static getUsers = (params = {}) =>
+    ApiManager.#exec(ROUTES.USER, EPS.GET.USERS, params);
 
-  static listDSKlass = (params = {}) => {
-    const api =
-      params.is_active === undefined
-        ? 'list_dataset_klass.json'
-        : `list_dataset_klass.json?is_active=${params.is_active}`;
-    return ApiManager.execApi(api);
-  };
-
-  static saveStdLayer = (params = {}) =>
-    ApiManager.execApiData(params, `${API_LA}/save_standard_layer`);
+  static getUser = (id) => ApiManager.#exec(ROUTES.USER, id);
 }
+
+export default ApiManager;

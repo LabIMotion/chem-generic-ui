@@ -2,14 +2,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import GenGrid from '@components/details/GenGrid';
+import Constants from '@components/tools/Constants';
 
-const GenGridVocab = props => {
-  const { gridData, pageSize, theme } = props;
+function GenGridVocab(props) {
+  const { gridData, pageSize, themeKey } = props;
   const columnDefs = [
     {
       hide: true,
       headerName: '#',
-      valueFormatter: params => `${parseInt(params.node.id, 10) + 1}`,
+      valueFormatter: (params) => `${parseInt(params.node.id, 10) + 1}`,
       sortable: false,
     },
     { headerName: 'Field Type', field: 'field_type' },
@@ -24,19 +25,19 @@ const GenGridVocab = props => {
       columnDefs={columnDefs}
       gridData={gridData}
       pageSize={pageSize}
-      theme={theme}
+      themeKey={themeKey}
     />
   );
-};
+}
 
 GenGridVocab.propTypes = {
   gridData: PropTypes.array.isRequired,
   fnDeActivateKlass: PropTypes.func.isRequired,
   fnShowProp: PropTypes.func.isRequired,
   pageSize: PropTypes.number,
-  theme: PropTypes.string,
+  themeKey: PropTypes.string,
 };
 
-GenGridVocab.defaultProps = { pageSize: 10, theme: 'ag-theme-balham' };
+GenGridVocab.defaultProps = { pageSize: 10, themeKey: 'BALHAM' };
 
 export default GenGridVocab;

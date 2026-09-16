@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { genUnits, genUnit, unitConversion } from 'generic-ui-core';
 import SysUnitButton from '@ui/common/SysUnitButton';
 import { genUnitSup } from '@components/tools/utils';
@@ -10,12 +16,12 @@ vi.mock('generic-ui-core', () => ({
   genUnit: jest.fn(),
   unitConversion: jest.fn(),
   FieldTypes: {
-    F_SYSTEM_DEFINED: 'mock_F_SYSTEM_DEFINED_VALUE'
-  }
+    F_SYSTEM_DEFINED: 'mock_F_SYSTEM_DEFINED_VALUE',
+  },
 }));
 
 vi.mock('@components/tools/utils', () => ({
-  genUnitSup: jest.fn()
+  genUnitSup: jest.fn(),
 }));
 
 describe('SysUnitButton', () => {
@@ -26,11 +32,15 @@ describe('SysUnitButton', () => {
     await act(async () => {
       callback();
       // Allow React to process the event
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 0);
+      });
     });
     // Wait for any async overlay updates that might be triggered indirectly
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
     });
   };
 
@@ -40,12 +50,12 @@ describe('SysUnitButton', () => {
     genUnits.mockReturnValue([
       { key: 'mm', label: 'mm' },
       { key: 'cm', label: 'cm' },
-      { key: 'm', label: 'm' }
+      { key: 'm', label: 'm' },
     ]);
 
     genUnit.mockReturnValue({ label: 'mm', unit_type: null });
     unitConversion.mockReturnValue(10);
-    genUnitSup.mockImplementation(label => label);
+    genUnitSup.mockImplementation((label) => label);
   });
 
   afterEach(async () => {
@@ -53,7 +63,9 @@ describe('SysUnitButton', () => {
     jest.clearAllMocks();
     // Ensure all pending updates are flushed after each test
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
     });
   });
 
@@ -61,7 +73,7 @@ describe('SysUnitButton', () => {
     type: 'system-defined',
     measurable_quantity: 'distance',
     unit: 'mm',
-    values: [5]
+    values: [5],
   };
 
   describe('Rendering', () => {
@@ -75,11 +87,9 @@ describe('SysUnitButton', () => {
     });
 
     test('should apply the provided variant and size props', () => {
-      render(<SysUnitButton
-        generic={validGeneric}
-        variant="primary"
-        size="lg"
-      />);
+      render(
+        <SysUnitButton generic={validGeneric} variant="primary" size="lg" />,
+      );
 
       const button = screen.getByRole('button');
       expect(button).toHaveClass('btn-primary');
@@ -99,7 +109,10 @@ describe('SysUnitButton', () => {
 
       render(<SysUnitButton generic={validGeneric} />);
 
-      expect(screen.getByRole('button')).toHaveAttribute('title', TAs.no_unit_conversion);
+      expect(screen.getByRole('button')).toHaveAttribute(
+        'title',
+        TAs.no_unit_conversion,
+      );
     });
 
     test('should not set title attribute when unit_type is null', () => {
@@ -115,7 +128,9 @@ describe('SysUnitButton', () => {
     test('should return null when generic is null', () => {
       const { container } = render(<SysUnitButton generic={null} />);
 
-      expect(console.error).toHaveBeenCalledWith('Error: input object is undefined or null!');
+      expect(console.error).toHaveBeenCalledWith(
+        'Error: input object is undefined or null!',
+      );
       expect(container).toBeEmptyDOMElement();
     });
 
@@ -123,11 +138,14 @@ describe('SysUnitButton', () => {
       const invalidGeneric = {
         type: 'mock_F_SYSTEM_DEFINED_VALUE',
         unit: 'mm',
-        values: [5]
+        values: [5],
       };
       const { container } = render(<SysUnitButton generic={invalidGeneric} />);
 
-      expect(console.error).toHaveBeenCalledWith('Invalid generic object:', expect.any(Array));
+      expect(console.error).toHaveBeenCalledWith(
+        'Invalid generic object:',
+        expect.any(Array),
+      );
       expect(container).toBeEmptyDOMElement();
     });
 
@@ -136,7 +154,9 @@ describe('SysUnitButton', () => {
 
       const { container } = render(<SysUnitButton generic={validGeneric} />);
 
-      expect(console.error).toHaveBeenCalledWith('Error: distance is not in the list of supported units!');
+      expect(console.error).toHaveBeenCalledWith(
+        'Error: distance is not in the list of supported units!',
+      );
       expect(container).toBeEmptyDOMElement();
     });
   });
@@ -156,7 +176,7 @@ describe('SysUnitButton', () => {
         expect(mockFnCb).toHaveBeenCalledWith({
           ...validGeneric,
           unit: 'cm',
-          values: [10]
+          values: [10],
         });
       });
     });
@@ -167,7 +187,7 @@ describe('SysUnitButton', () => {
         type: 'system-defined',
         measurable_quantity: 'distance',
         unit: 'm',
-        values: [5]
+        values: [5],
       };
 
       render(<SysUnitButton generic={genericAtEnd} fnCb={mockFnCb} />);
@@ -181,7 +201,7 @@ describe('SysUnitButton', () => {
         expect(mockFnCb).toHaveBeenCalledWith({
           ...genericAtEnd,
           unit: 'mm',
-          values: [10]
+          values: [10],
         });
       });
     });
@@ -198,7 +218,10 @@ describe('SysUnitButton', () => {
         fireEvent.click(screen.getByRole('button'));
       });
 
-      expect(console.error).toHaveBeenCalledWith('Error changing unit:', expect.any(Error));
+      expect(console.error).toHaveBeenCalledWith(
+        'Error changing unit:',
+        expect.any(Error),
+      );
       expect(mockFnCb).toHaveBeenCalledWith(validGeneric);
     });
   });

@@ -18,12 +18,16 @@ import React, { useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Form } from 'react-bootstrap';
 import sortBy from 'lodash/sortBy';
-import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
 // Import refactored utilities and components
 import { preprocessJson } from '@ui/diff/jsonPreprocessor.js';
 import { buildFlatData } from '@ui/diff/diffCalculator.js';
-import { createColumnDefs, getDefaultColDef, getRowStyle } from '@ui/diff/gridConfig.js';
+import {
+  createColumnDefs,
+  getDefaultColDef,
+  getRowStyle,
+} from '@ui/diff/gridConfig.js';
 import { GRID_CONFIG } from '@ui/diff/diffConstants.js';
 
 /**
@@ -40,8 +44,9 @@ export default function JsonDiffTreeAgGrid({
   oldJson,
   newJson,
   oldVersionId,
-  newVersionId
+  newVersionId,
 }) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   // State for controlling whether to show only changes or all data
   const [showChangesOnly, setShowChangesOnly] = useState(true);
 
@@ -54,15 +59,22 @@ export default function JsonDiffTreeAgGrid({
   const { preprocessedOldJson, preprocessedNewJson } = useMemo(() => {
     // Extract layer order from newJson to maintain consistent ordering
     let newJsonLayerOrder = null;
-    if (newJson?.layers && typeof newJson.layers === 'object' && !Array.isArray(newJson.layers)) {
-      const sortedEntries = sortBy(Object.entries(newJson.layers), '[1].position');
+    if (
+      newJson?.layers &&
+      typeof newJson.layers === 'object' &&
+      !Array.isArray(newJson.layers)
+    ) {
+      const sortedEntries = sortBy(
+        Object.entries(newJson.layers),
+        '[1].position',
+      );
       newJsonLayerOrder = sortedEntries.map(([key]) => key);
     }
 
     // Preprocess both JSONs with the same layer order for consistency
     return {
       preprocessedOldJson: preprocessJson(oldJson, newJsonLayerOrder),
-      preprocessedNewJson: preprocessJson(newJson, newJsonLayerOrder)
+      preprocessedNewJson: preprocessJson(newJson, newJsonLayerOrder),
     };
   }, [oldJson, newJson]);
 
@@ -84,7 +96,7 @@ export default function JsonDiffTreeAgGrid({
    */
   const rowData = useMemo(() => {
     if (showChangesOnly) {
-      return allRowData.filter(row => row.change !== 'same');
+      return allRowData.filter((row) => row.change !== 'same');
     }
     return allRowData;
   }, [allRowData, showChangesOnly]);
@@ -117,14 +129,14 @@ export default function JsonDiffTreeAgGrid({
 
       {/* Grid Section */}
       <div
-        className={Constants.GRID_THEME.QUARTZ.VALUE}
+        className={wrapperClassName}
         style={{ height: GRID_CONFIG.height, width: '100%' }}
       >
         <AgGridReact
+          {...themeProps}
           rowData={rowData}
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
-          animateRows={GRID_CONFIG.animateRows}
           getRowStyle={getRowStyleFunc}
         />
       </div>

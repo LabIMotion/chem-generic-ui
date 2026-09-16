@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import FIcons from '@components/icons/FIcons';
 import OperatorSelector from '@ui/groups/OperatorSelector';
 import Constants from '@components/tools/Constants';
-import { fieldLabelFor, layerLabelFor, toBool, getConditionDisplay } from '@utils/pureUtils';
+import { toBool, getConditionDisplay } from '@utils/pureUtils';
+import {
+  S_USRS_SRC,
+  isSystemUserField,
+  useSystemUserConditionLabels,
+} from '@utils/userSelectUtils';
 import { useDesignerContext } from '@components/designer/DesignerContext';
+import GenPropertiesOlsSelect from '@components/fields/GenPropertiesOlsSelect';
+import SystemUserValueSelect from '@components/fields/SystemUserValueSelect';
+import GModal from '@ui/modals/GModal';
 
-const ALLOWED_FIELD_TYPES = ['checkbox', 'text', 'select'];
+// 'select' covers single system-user selects too; F_SELECT_MULTI is intentionally
+// omitted (no generic-ui-core comparator for multi-user restrictions).
+const ALLOWED_FIELD_TYPES = [
+  'checkbox',
+  'text',
+  'select',
+  FieldTypes.F_ONTOLOGY_SELECT,
+];
 
 /**
  * FieldRestrictionModal - Modal for managing field restrictions
@@ -38,6 +53,10 @@ function FieldRestrictionModal({
   const [initialOp, setInitialOp] = useState(1);
   const { klasses = [], genericType } = useDesignerContext();
   const [selectedSource, setSelectedSource] = useState('');
+  const systemUserLabels = useSystemUserConditionLabels(
+    conditions,
+    availableLayers,
+  );
 
   // Filter available layers based on grouping
   useEffect(() => {
@@ -124,18 +143,22 @@ function FieldRestrictionModal({
     }
 
     // Get the field type to determine if we need to convert the value
-    const selectedLayerObj = availableLayers.find(
+    // eslint-disable-next-line no-underscore-dangle
+    const _selectedLayerObj = availableLayers.find(
       (l) => l.key === selectedLayer,
     );
-    const selectedFieldObj = selectedLayerObj?.fields?.find(
+    const selectedFieldObj = _selectedLayerObj?.fields?.find(
       (f) => f.field === selectedField,
     );
     const isCheckbox = selectedFieldObj?.type === FieldTypes.F_CHECKBOX;
 
-    // Convert to boolean for checkbox fields using toBool utility
-    let conditionValue = fieldValue.trim();
+    // Convert to boolean for checkbox fields using toBool utility. Convert
+    // the normalized value, not the raw one (useRestrictionForm parity):
+    // fieldValue may be null after the ontology-select "clear" action and a
+    // field switch keeps it, and toBool(null) is true ('null' is not empty).
+    let conditionValue = (fieldValue || '').trim();
     if (isCheckbox) {
-      conditionValue = toBool(fieldValue);
+      conditionValue = toBool(conditionValue);
     }
 
     const newCondition = {
@@ -205,20 +228,48 @@ function FieldRestrictionModal({
     return null;
   }
 
+  // Derive selected field details for value-input rendering and add-button gating
+  // eslint-disable-next-line no-underscore-dangle
+  const _selectedLayerObj = availableLayers.find(
+    (l) => l.key === selectedLayer,
+  );
+  const _selectedFieldObj = _selectedLayerObj?.fields?.find(
+    (f) => f.field === selectedField,
+  );
+  const _isSelectField = _selectedFieldObj?.type === FieldTypes.F_SELECT;
+  const _isCheckboxField = _selectedFieldObj?.type === FieldTypes.F_CHECKBOX;
+  const _isOntologySelectField =
+    _selectedFieldObj?.type === FieldTypes.F_ONTOLOGY_SELECT;
+  const _isSystemUserSelectField =
+    _isSelectField && _selectedFieldObj?.option_layers === S_USRS_SRC;
+  const _selectFieldOptions =
+    _isSelectField && _selectedFieldObj?.option_layers
+      ? selectOptions[_selectedFieldObj.option_layers]?.options || []
+      : [];
+  // Ontology-select accepts an empty value to match "no selection",
+  // mirroring the plain select behavior.
+  const _addCondDisabled =
+    !selectedLayer ||
+    !selectedField ||
+    availableFields.length === 0 ||
+    (!_isSelectField &&
+      !_isCheckboxField &&
+      !_isOntologySelectField &&
+      !(fieldValue || '').trim());
+
   return (
-    <Modal
-      centered
+    <GModal
       backdrop="static"
       dialogClassName="gu_modal-68w"
       show={showModal}
       onHide={handleCancel}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
+      <GModal.Header>
+        <GModal.Title>
           Field Restriction Setting [ {field.label} ] in [ {layer.label} ]
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ maxHeight: '70vh', overflow: 'auto' }}>
+        </GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ maxHeight: '70vh', overflow: 'auto' }}>
         <Card className="border-0">
           <Card.Body className="p-0">
             <OperatorSelector
@@ -233,6 +284,13 @@ function FieldRestrictionModal({
                 {conditions.map((cond) => {
                   const { layerTitle, fieldTitle, valueTitle } =
                     getConditionDisplay(cond, availableLayers, klasses);
+                  const resolvedValueTitle = isSystemUserField(
+                    availableLayers,
+                    cond.layer,
+                    cond.field,
+                  )
+                    ? systemUserLabels[String(cond.value)] || valueTitle
+                    : valueTitle;
                   return (
                     <div
                       key={cond.id}
@@ -240,8 +298,8 @@ function FieldRestrictionModal({
                     >
                       <div className="flex-grow-1">
                         <small>
-                          <strong>{layerTitle}</strong> → {fieldTitle} =
-                          &quot;{valueTitle}&quot;
+                          <strong>{layerTitle}</strong> → {fieldTitle} = &quot;
+                          {resolvedValueTitle}&quot;
                           {cond.label && (
                             <span className="text-muted">
                               {' '}
@@ -269,7 +327,9 @@ function FieldRestrictionModal({
                 Add New Condition:
               </small>
               <Form.Group className="mb-2">
-                <Form.Label className="small">Select Layer (appearance order)</Form.Label>
+                <Form.Label className="small">
+                  Select Layer (appearance order)
+                </Form.Label>
                 <Form.Select
                   size="sm"
                   value={selectedLayer}
@@ -296,12 +356,13 @@ function FieldRestrictionModal({
                     >
                       {availableFields.map((field) => (
                         <option key={field.field} value={field.field}>
-                          {field.label || field.field} ({field.field}, type: {field.type})
+                          {field.label || field.field} ({field.field}, type:{' '}
+                          {field.type})
                         </option>
                       ))}
                     </Form.Select>
                     <Form.Text muted>
-                      Eligible fields (checkbox, text, select)
+                      Eligible fields (checkbox, text, select, ontology-select)
                     </Form.Text>
                   </Form.Group>
                 </div>
@@ -310,24 +371,17 @@ function FieldRestrictionModal({
                   <Form.Group>
                     <Form.Label className="small">Enter Value</Form.Label>
                     {(() => {
-                      // Get selected field details and options for select fields
-                      const selectedLayerObj = availableLayers.find(
-                        (l) => l.key === selectedLayer,
-                      );
-                      const selectedFieldObj = selectedLayerObj?.fields?.find(
-                        (f) => f.field === selectedField,
-                      );
-                      const isSelectField = selectedFieldObj?.type === 'select';
-                      const isCheckboxField =
-                        selectedFieldObj?.type === FieldTypes.F_CHECKBOX;
-                      const selectFieldOptions =
-                        isSelectField && selectedFieldObj?.option_layers
-                          ? selectOptions[selectedFieldObj.option_layers]
-                              ?.options || []
-                          : [];
+                      // Render based on field type using hoisted derived values
+                      if (_isSystemUserSelectField) {
+                        return (
+                          <SystemUserValueSelect
+                            value={fieldValue}
+                            onChange={setFieldValue}
+                          />
+                        );
+                      }
 
-                      // Render based on field type
-                      if (isSelectField) {
+                      if (_isSelectField) {
                         return (
                           <Form.Select
                             size="sm"
@@ -335,7 +389,7 @@ function FieldRestrictionModal({
                             onChange={(e) => setFieldValue(e.target.value)}
                           >
                             <option value="">Select a value...</option>
-                            {selectFieldOptions.map((option) => (
+                            {_selectFieldOptions.map((option) => (
                               <option key={option.key} value={option.key}>
                                 {option.label}
                               </option>
@@ -344,7 +398,7 @@ function FieldRestrictionModal({
                         );
                       }
 
-                      if (isCheckboxField) {
+                      if (_isCheckboxField) {
                         return (
                           <Form.Select
                             size="sm"
@@ -354,6 +408,19 @@ function FieldRestrictionModal({
                             <option value="false">Unchecked (false)</option>
                             <option value="true">Checked (true)</option>
                           </Form.Select>
+                        );
+                      }
+
+                      if (_isOntologySelectField) {
+                        return (
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <GenPropertiesOlsSelect
+                              f_obj={_selectedFieldObj}
+                              field={selectedField}
+                              value={fieldValue}
+                              onChange={(e) => setFieldValue(e.target.value)}
+                            />
+                          </div>
                         );
                       }
 
@@ -368,21 +435,16 @@ function FieldRestrictionModal({
                       );
                     })()}
                     <Form.Text muted>
-                      {(() => {
-                        const selectedLayerObj = availableLayers.find(
-                          (l) => l.key === selectedLayer,
-                        );
-                        const selectedFieldObj = selectedLayerObj?.fields?.find(
-                          (f) => f.field === selectedField,
-                        );
-                        if (selectedFieldObj?.type === 'select') {
-                          return 'Select from predefined options';
-                        }
-                        if (selectedFieldObj?.type === FieldTypes.F_CHECKBOX) {
-                          return 'Select the expected checkbox state';
-                        }
-                        return 'Enter the expected value (case-sensitive)';
-                      })()}
+                      {_isSelectField &&
+                        !_isSystemUserSelectField &&
+                        'Select from predefined options'}
+                      {_isCheckboxField && 'Select the expected checkbox state'}
+                      {_isOntologySelectField &&
+                        'Browse and select an ontology term, or leave empty to match an empty selection'}
+                      {!_isSelectField &&
+                        !_isCheckboxField &&
+                        !_isOntologySelectField &&
+                        'Enter the expected value (case-sensitive)'}
                     </Form.Text>
                   </Form.Group>
                 </div>
@@ -409,11 +471,7 @@ function FieldRestrictionModal({
                         variant="success"
                         size="sm"
                         onClick={handleAddCondition}
-                        disabled={
-                          !selectedLayer ||
-                          !selectedField ||
-                          availableFields.length === 0
-                        }
+                        disabled={_addCondDisabled}
                         style={{ flexShrink: 0 }}
                         title="Add condition"
                       >
@@ -428,7 +486,9 @@ function FieldRestrictionModal({
                 <div className="row align-items-start">
                   <div className="col-md-12">
                     <Form.Group className="border-top pt-3">
-                      <Form.Label className="small">Reference Source</Form.Label>
+                      <Form.Label className="small">
+                        Reference Source
+                      </Form.Label>
                       <div className="d-flex gap-2 align-items-start">
                         <Form.Select
                           size="sm"
@@ -463,16 +523,16 @@ function FieldRestrictionModal({
             </div>
           </Card.Body>
         </Card>
-      </Modal.Body>
-      <Modal.Footer className="justify-content-start">
-        <Button variant="secondary" onClick={handleCancel}>
-          Cancel
-        </Button>
+      </GModal.Body>
+      <GModal.Footer>
         <Button variant="success" onClick={handleSave}>
           Save
         </Button>
-      </Modal.Footer>
-    </Modal>
+        <Button variant="secondary" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </GModal.Footer>
+    </GModal>
   );
 }
 

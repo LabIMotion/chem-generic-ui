@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -27,10 +30,6 @@ const EXTERNALS = [
   'moment',
   'numeral',
   'prop-types',
-  '@fortawesome/fontawesome-svg-core',
-  '@fortawesome/free-regular-svg-icons',
-  '@fortawesome/free-solid-svg-icons',
-  '@fortawesome/react-fontawesome',
   'uuid',
   'ajv',
   'diff',
@@ -45,8 +44,8 @@ const EXTERNALS = [
 
 const ALIASES = {
   '@': resolve(__dirname, 'src'),
-  '@components': resolve(__dirname, 'src/components'),
   '@assets': resolve(__dirname, 'src/assets'),
+  '@components': resolve(__dirname, 'src/components'),
   '@schemas': resolve(__dirname, 'src/schemas'),
   '@utils': resolve(__dirname, 'src/utils'),
   '@models': resolve(__dirname, 'src/models'),
@@ -54,8 +53,28 @@ const ALIASES = {
   '@root': resolve(__dirname),
 };
 
+// Replace the runtime require('@fortawesome/fontawesome-svg-core/package.json')
+// in react-fontawesome with an inline version string so consumers don't need
+// the package.json file at runtime.
+function faVersionInlinePlugin() {
+  const { version } = require('@fortawesome/fontawesome-svg-core/package.json');
+  return {
+    name: 'fa-version-inline',
+    transform(code, id) {
+      if (!id.endsWith('.js') || !id.includes('react-fontawesome')) return null;
+      const replaced = code.replace(
+        /require\(['"]@fortawesome\/fontawesome-svg-core\/package\.json['"]\)/g,
+        `({ version: "${version}" })`,
+      );
+      if (replaced !== code) return { code: replaced, map: null };
+      return null;
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
+    faVersionInlinePlugin(),
     react(),
     cssInjectedByJsPlugin(),
   ],
@@ -96,7 +115,11 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: EXTERNALS.map((pkg) => new RegExp(`^${pkg}(\\/.*)?$`)),
+      external(id) {
+        const isExternal = EXTERNALS.some((pkg) => id === pkg || id.startsWith(`${pkg}/`));
+        const isStyle = /\.(css|scss|sass|less)$/i.test(id);
+        return isExternal && !isStyle;
+      },
       output: {
         assetFileNames: 'chem-generic-ui.[ext]',
         globals: {
@@ -106,7 +129,12 @@ export default defineConfig({
         },
       },
     },
-    sourcemap: process.env.NODE_ENV === 'production' ? true : 'inline',
+    // The published package is `files: ["dist", "README.md"]`, so anything in
+    // dist/ ships. A production sourcemap carries every src/ module's full text
+    // in sourcesContent — about two thirds of the map and most of the tarball —
+    // so it published the whole source tree as a side effect. Development
+    // builds keep inline maps.
+    sourcemap: process.env.NODE_ENV === 'production' ? false : 'inline',
     emptyOutDir: true,
   },
 

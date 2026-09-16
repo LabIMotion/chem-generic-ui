@@ -10,17 +10,17 @@ const ACCORDION_EVENT_KEY = '1';
 const ACCORDION_PREFIX = 'accordion_design_props_';
 const CUSTOM_TOGGLE_CLASS = `py-1 ${FLEX_BETWEEN_CENTER} rounded`;
 
-const CustomToggleContent = ({
+function CustomToggleContent({
   dnd,
   eventKey,
   callback,
   extClass,
   children,
   isSys,
-}) => {
+}) {
   const decoratedOnClick = useAccordionButton(
     eventKey,
-    () => callback && callback(eventKey)
+    () => callback && callback(eventKey),
   );
   return (
     <div className={`${CUSTOM_TOGGLE_CLASS} ${extClass || 'lu-bg-light'}`}>
@@ -36,7 +36,7 @@ const CustomToggleContent = ({
       {dnd}
     </div>
   );
-};
+}
 
 CustomToggleContent.propTypes = {
   dnd: PropTypes.node,
@@ -53,7 +53,7 @@ CustomToggleContent.defaultProps = {
   extClass: '',
 };
 
-const Prop = ({
+function Prop({
   dnd = undefined,
   extClass = '',
   layerKey,
@@ -61,8 +61,9 @@ const Prop = ({
   layers,
   expandAll,
   groups,
+  unmountCollapsed = false,
   children,
-}) => {
+}) {
   const [initialized, setInitialized] = useState(true);
   const isSys = layerKey.startsWith(Constants.SYS_REACTION);
   const isFirst = isFirstLayer(layers, layerKey, groups);
@@ -114,11 +115,21 @@ const Prop = ({
         >
           {propHeader}
         </CustomToggleContent>
-        <Accordion.Body className="py-0 px-3">{children}</Accordion.Body>
+        {/* Accordion.Collapse rather than Accordion.Body because Body does not
+            forward unmountOnExit. The Designer opts in so collapsed layers and
+            rows are not re-rendered on every Work Area update; element forms keep
+            their collapsed layers mounted. pt-3 separates the header from the
+            first field label; the field rows carry their own bottom margin. */}
+        <Accordion.Collapse
+          eventKey={ACCORDION_EVENT_KEY}
+          unmountOnExit={unmountCollapsed}
+        >
+          <div className="accordion-body pt-3 pb-0 px-3">{children}</div>
+        </Accordion.Collapse>
       </Accordion.Item>
     </Accordion>
   );
-};
+}
 
 Prop.propTypes = {
   dnd: PropTypes.node,
@@ -128,6 +139,7 @@ Prop.propTypes = {
   layers: PropTypes.object,
   expandAll: PropTypes.bool,
   groups: PropTypes.array,
+  unmountCollapsed: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
 
@@ -137,6 +149,7 @@ Prop.defaultProps = {
   layers: {},
   expandAll: undefined,
   groups: [],
+  unmountCollapsed: false,
 };
 
 export default Prop;

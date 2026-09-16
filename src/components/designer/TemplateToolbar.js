@@ -2,24 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
-const TemplateToolbar = ({ btnNew }) => (
-  <div style={{ margin: '10px 0px' }}>
-    <ButtonToolbar className="gap-2">
-      <ButtonGroup size="sm">
-        <Button>Template</Button>
-        <Button>Preview</Button>
-      </ButtonGroup>
+function TemplateToolbar({ btnNew }) {
+  return (
+    <div style={{ margin: '10px 0px' }}>
+      <ButtonToolbar className="gap-2">
+        <ButtonGroup size="sm">
+          <Button>Template</Button>
+          <Button>Preview</Button>
+        </ButtonGroup>
 
-      <ButtonGroup style={{ float: 'right' }} size="sm">
-        <Button>Save and Release</Button>
-        <Button>Save as draft</Button>
-      </ButtonGroup>
+        <ButtonGroup style={{ float: 'right' }} size="sm">
+          <Button>Save and Release</Button>
+          <Button>Save as draft</Button>
+        </ButtonGroup>
 
-      <Button style={{ float: 'right' }}>Import Template</Button>
-      <Button style={{ float: 'right' }}>Workflow</Button>
-    </ButtonToolbar>
-  </div>
-);
+        <Button style={{ float: 'right' }}>Import Template</Button>
+        <Button style={{ float: 'right' }}>Workflow</Button>
+        {btnNew}
+      </ButtonToolbar>
+    </div>
+  );
+}
 
 TemplateToolbar.propTypes = {
   btnNew: PropTypes.element,

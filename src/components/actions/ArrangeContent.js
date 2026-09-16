@@ -20,6 +20,7 @@ import {
   definedLayerHeader,
 } from '@components/shared/arrangeUtils';
 import { reorderPositions } from '@utils/template/sorting-handler';
+import { computeDynamicDisplayName } from '@utils/template/label-handler';
 
 const ArrangeContent = forwardRef(({ element }, ref) => {
   const layers = element?.properties?.layers || {};
@@ -201,12 +202,21 @@ const ArrangeContent = forwardRef(({ element }, ref) => {
     const isVisible = isLayerVisible(obj, isNew ? newLayers : layers);
     if (!isVisible) return null;
 
+    const displayName = computeDynamicDisplayName(
+      label,
+      obj.label_fields || [],
+      obj,
+      layers,
+      {},
+      null,
+    );
+
     const content = (
       <div
         className={`${bgColor(color)} p-3 rounded`}
         style={{ userSelect: 'none' }}
       >
-        {definedLayerHeader(style, label, key, fields, wf)}
+        {definedLayerHeader(style, displayName, key, fields, wf)}
       </div>
     );
 

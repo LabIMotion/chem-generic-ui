@@ -1,14 +1,15 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import JsonDiffCompact from '@ui/diff/JsonDiffCompact';
 import JsonDiffTreeGrid from '@ui/diff/JsonDiffTreeGrid';
 import JsonDiffTree from '@ui/diff/JsonDiffTree';
 import JsonDiffAgGrid from '@ui/diff/JsonDiffAgGrid';
 import JsonDiffTreeAgGrid from '@ui/diff/JsonDiffTreeAgGrid';
+import GModal from '@ui/modals/GModal';
 
-const CompareModal = ({ showProps, selectedRevisions }) => {
+function CompareModal({ showProps, selectedRevisions }) {
   const { show, setShow } = showProps;
   const [showOnlyChanges, setShowOnlyChanges] = useState(true);
 
@@ -43,8 +44,12 @@ const CompareModal = ({ showProps, selectedRevisions }) => {
   };
 
   // Get version IDs for comparison
-  const firstVersionId = revisionsToCompare[0]?._versionDisplay?.verBase || '(In Progress)';
-  const secondVersionId = revisionsToCompare[1]?._versionDisplay?.verBase || '(In Progress)';
+  const firstVersionId =
+    // eslint-disable-next-line no-underscore-dangle
+    revisionsToCompare[0]?._versionDisplay?.verBase || '(In Progress)';
+  const secondVersionId =
+    // eslint-disable-next-line no-underscore-dangle
+    revisionsToCompare[1]?._versionDisplay?.verBase || '(In Progress)';
 
   // Parse versions
   const firstVersion = parseVersion(firstVersionId);
@@ -53,7 +58,10 @@ const CompareModal = ({ showProps, selectedRevisions }) => {
   // Determine which should be base (older/smaller version)
   const comparison = compareVersions(firstVersion, secondVersion);
 
-  let oldJson, newJson, oldVersionId, newVersionId;
+  let oldJson;
+  let newJson;
+  let oldVersionId;
+  let newVersionId;
 
   if (comparison <= 0) {
     // First selection has smaller/equal version or is the only valid version
@@ -85,62 +93,53 @@ const CompareModal = ({ showProps, selectedRevisions }) => {
             --bs-modal-width: 90vw;
             max-width: 90vw;
           }
-          .modal-90w .modal-dialog {
-            width: 90vw;
-            max-width: 90vw;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            min-height: calc(100vh - 3.5rem);
-          }
         `}
       </style>
-      <Modal
+      <GModal
         aria-labelledby="contained-modal-title-vcenter"
         show={show}
         onHide={handleClose}
         // fullscreen
         backdrop="static"
         dialogClassName="modal-90w"
-        centered
       >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          Compare Revisions
-          {revisionsToCompare.length === 2 && (
-            <small className="text-muted ms-2">
-              (Showing differences between selected versions)
-            </small>
-          )}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body
-        style={{
-          maxHeight: '70vh',
-          overflow: 'auto',
-          padding: '1rem'
-        }}
-      >
-        {revisionsToCompare.length < 2 ? (
-          <div className="text-center p-4">
-            <p className="text-muted">
-              Please select exactly 2 revisions to compare.
-            </p>
-            <p className="text-muted">
-              Currently selected: {selectedRevisions.length} revision(s)
-            </p>
-          </div>
-        ) : (
-          <div>
-            <JsonDiffTreeAgGrid
-              oldJson={oldJson}
-              newJson={newJson}
-              oldVersionId={oldVersionId}
-              newVersionId={newVersionId}
-            />
-            {/* <JsonDiffTree oldJson={oldJson} newJson={newJson} /> */}
-            {/* <JsonDiffTreeGrid oldJson={oldJson} newJson={newJson} /> */}
-            {/* <div className="mb-3">
+        <GModal.Header>
+          <GModal.Title>
+            Compare Revisions
+            {revisionsToCompare.length === 2 && (
+              <small className="text-muted ms-2">
+                (Showing differences between selected versions)
+              </small>
+            )}
+          </GModal.Title>
+        </GModal.Header>
+        <GModal.Body
+          style={{
+            maxHeight: '70vh',
+            overflow: 'auto',
+            padding: '1rem',
+          }}
+        >
+          {revisionsToCompare.length < 2 ? (
+            <div className="text-center p-4">
+              <p className="text-muted">
+                Please select exactly 2 revisions to compare.
+              </p>
+              <p className="text-muted">
+                Currently selected: {selectedRevisions.length} revision(s)
+              </p>
+            </div>
+          ) : (
+            <div>
+              <JsonDiffTreeAgGrid
+                oldJson={oldJson}
+                newJson={newJson}
+                oldVersionId={oldVersionId}
+                newVersionId={newVersionId}
+              />
+              {/* <JsonDiffTree oldJson={oldJson} newJson={newJson} /> */}
+              {/* <JsonDiffTreeGrid oldJson={oldJson} newJson={newJson} /> */}
+              {/* <div className="mb-3">
               <Form.Check
                 type="checkbox"
                 id="showOnlyChanges"
@@ -154,18 +153,18 @@ const CompareModal = ({ showProps, selectedRevisions }) => {
               newJson={newJson}
               showOnlyChanges={showOnlyChanges}
             /> */}
-          </div>
-        )}
-      </Modal.Body>
-      <Modal.Footer className="justify-content-start">
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+            </div>
+          )}
+        </GModal.Body>
+        <GModal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </GModal.Footer>
+      </GModal>
     </>
   );
-};
+}
 
 CompareModal.propTypes = {
   showProps: PropTypes.shape({

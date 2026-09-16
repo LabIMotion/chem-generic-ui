@@ -4,12 +4,12 @@ import { genUnit, FieldTypes } from 'generic-ui-core';
 import FieldHeader from '@components/fields/FieldHeader';
 import { fieldCls, genUnitSup } from '@components/tools/utils';
 
-const GenPropertiesInputGroup = (opt) => {
+function GenPropertiesInputGroup(opt) {
   const handleSubChange = React.useCallback(
     (event, id) => {
       opt.onSubChange(event, id, opt.f_obj);
     },
-    [opt.onSubChange, opt.f_obj]
+    [opt.onSubChange, opt.f_obj],
   );
 
   const klz = fieldCls(opt.isSpCall);
@@ -58,6 +58,6 @@ const GenPropertiesInputGroup = (opt) => {
       <InputGroup className={klz[1]}>{subs}</InputGroup>
     </Form.Group>
   );
-};
+}
 
 export default GenPropertiesInputGroup;

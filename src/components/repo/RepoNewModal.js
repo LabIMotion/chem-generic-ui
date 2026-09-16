@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
 import RepoGridDs from '@components/repo/RepoGridDs';
 import RepoGridSg from '@components/repo/RepoGridSg';
 import RepoGridEl from '@components/repo/RepoGridEl';
+import GModal from '@ui/modals/GModal';
 
 const contentComponents = {
   Dataset: RepoGridDs,
@@ -18,21 +18,20 @@ function RepoNewModal({ showModal, fnClose, fnCreate, content }) {
   const title = `Generic ${content} Templates`;
 
   return (
-    <Modal
-      centered
+    <GModal
       backdrop="static"
       size="lg"
       show={showModal}
       onHide={fnClose}
       dialogClassName="gu_modal-68w"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ overflow: 'auto' }}>
+      <GModal.Header>
+        <GModal.Title>{title}</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ overflow: 'auto' }}>
         <ContentComponent fnApi={fnCreate} />
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
 }
 

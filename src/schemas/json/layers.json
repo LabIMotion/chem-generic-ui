@@ -78,11 +78,24 @@
                 "type": "object",
                 "properties": {
                   "value": {
-                    "type": [
-                      "string",
-                      "number",
-                      "boolean",
-                      "null"
+                    "anyOf": [
+                      {
+                        "type": [
+                          "string",
+                          "number",
+                          "boolean",
+                          "null"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "files": {
+                            "type": "array"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
                     ]
                   },
                   "hasOwnRow": {

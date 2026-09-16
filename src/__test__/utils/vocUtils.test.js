@@ -1,8 +1,4 @@
-import {
-  VOC_IDENT,
-  VOC_MODE,
-  vocMode,
-} from '@utils/vocUtils';
+import { VOC_IDENT, VOC_MODE, vocMode } from '@utils/vocUtils';
 
 describe('vocUtils', () => {
   describe('vocMode', () => {
@@ -25,7 +21,7 @@ describe('vocUtils', () => {
       const fieldObject = {
         name: 'test',
         value: 'some value',
-        opid: 8
+        opid: 8,
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.S.value);
     });
@@ -44,7 +40,7 @@ describe('vocUtils', () => {
     test('should return write mode when VOC_IDENT is false', () => {
       const fieldObject = {
         [VOC_IDENT]: false,
-        opid: 8
+        opid: 8,
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
     });
@@ -52,14 +48,14 @@ describe('vocUtils', () => {
     test('should return write mode when VOC_IDENT is true but opid is less than read threshold', () => {
       const fieldObject = {
         [VOC_IDENT]: true,
-        opid: 6 // Less than VOC_MODE.R.op (7)
+        opid: 6, // Less than VOC_MODE.R.op (7)
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
     });
 
     test('should return write mode when VOC_IDENT is true but opid is undefined', () => {
       const fieldObject = {
-        [VOC_IDENT]: true
+        [VOC_IDENT]: true,
         // No opid property
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
@@ -68,7 +64,7 @@ describe('vocUtils', () => {
     test('should return write mode when VOC_IDENT is true but opid is null', () => {
       const fieldObject = {
         [VOC_IDENT]: true,
-        opid: null
+        opid: null,
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
     });
@@ -76,7 +72,7 @@ describe('vocUtils', () => {
     test('should return read mode when VOC_IDENT is true and opid equals read threshold', () => {
       const fieldObject = {
         [VOC_IDENT]: true,
-        opid: VOC_MODE.R.op // Exactly 7
+        opid: VOC_MODE.R.op, // Exactly 7
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.R.value);
     });
@@ -84,7 +80,7 @@ describe('vocUtils', () => {
     test('should return read mode when VOC_IDENT is true and opid is greater than read threshold', () => {
       const fieldObject = {
         [VOC_IDENT]: true,
-        opid: 10 // Greater than VOC_MODE.R.op (7)
+        opid: 10, // Greater than VOC_MODE.R.op (7)
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.R.value);
     });
@@ -96,7 +92,7 @@ describe('vocUtils', () => {
         name: 'test field',
         value: 'some value',
         type: 'text',
-        required: true
+        required: true,
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.R.value);
     });
@@ -106,10 +102,10 @@ describe('vocUtils', () => {
         { [VOC_IDENT]: 'true', opid: 8 },
         { [VOC_IDENT]: 1, opid: 8 },
         { [VOC_IDENT]: 'yes', opid: 8 },
-        { [VOC_IDENT]: {}, opid: 8 }
+        { [VOC_IDENT]: {}, opid: 8 },
       ];
 
-      testCases.forEach(fieldObject => {
+      testCases.forEach((fieldObject) => {
         expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
       });
     });
@@ -118,19 +114,19 @@ describe('vocUtils', () => {
       // Test with opid exactly at the boundary values
       const readBoundary = {
         [VOC_IDENT]: true,
-        opid: VOC_MODE.R.op - 1 // 6
+        opid: VOC_MODE.R.op - 1, // 6
       };
       expect(vocMode(readBoundary)).toBe(VOC_MODE.W.value);
 
       const writeBoundary = {
         [VOC_IDENT]: true,
-        opid: VOC_MODE.W.op // 6
+        opid: VOC_MODE.W.op, // 6
       };
       expect(vocMode(writeBoundary)).toBe(VOC_MODE.W.value);
 
       const skipBoundary = {
         [VOC_IDENT]: true,
-        opid: VOC_MODE.S.op // 5
+        opid: VOC_MODE.S.op, // 5
       };
       expect(vocMode(skipBoundary)).toBe(VOC_MODE.W.value);
     });
@@ -138,7 +134,7 @@ describe('vocUtils', () => {
     test('should handle negative opid values', () => {
       const fieldObject = {
         [VOC_IDENT]: true,
-        opid: -1
+        opid: -1,
       };
       expect(vocMode(fieldObject)).toBe(VOC_MODE.W.value);
     });
@@ -146,19 +142,19 @@ describe('vocUtils', () => {
     test('should handle string opid values', () => {
       const fieldObjectValidString = {
         [VOC_IDENT]: true,
-        opid: '8' // String that converts to number >= 7
+        opid: '8', // String that converts to number >= 7
       };
       expect(vocMode(fieldObjectValidString)).toBe(VOC_MODE.R.value);
 
       const fieldObjectInvalidString = {
         [VOC_IDENT]: true,
-        opid: '6' // String that converts to number < 7
+        opid: '6', // String that converts to number < 7
       };
       expect(vocMode(fieldObjectInvalidString)).toBe(VOC_MODE.W.value);
 
       const fieldObjectNonNumericString = {
         [VOC_IDENT]: true,
-        opid: 'not a number'
+        opid: 'not a number',
       };
       expect(vocMode(fieldObjectNonNumericString)).toBe(VOC_MODE.W.value);
     });

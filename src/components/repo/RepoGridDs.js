@@ -4,8 +4,11 @@ import { AgGridReact } from 'ag-grid-react';
 import RepoRenderer from '@components/details/renderers/RepoRenderer';
 import Constants from '@components/tools/Constants';
 import ExternalManager from '@utils/extMgr';
+import { resolveGridTheme } from '@utils/table/grid-theme';
+import { formatUtcTimestamp } from '@utils/dateUtils';
 
 function RepoGridDs({ fnApi }) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
   const defaultColDef = useMemo(
@@ -49,16 +52,24 @@ function RepoGridDs({ fnApi }) {
       flex: 3,
     },
     { headerName: 'Version', field: 'version' },
-    { headerName: 'Released at', minWidth: 120, field: 'released_at', flex: 2 },
+    {
+      headerName: 'Released at',
+      minWidth: 120,
+      field: 'released_at',
+      flex: 2,
+      // Format at render time only: the raw ISO value stays in the row so sorting is chronological.
+      valueFormatter: (p) => formatUtcTimestamp(p.value),
+    },
     { headerName: 'Identifier', minWidth: 120, field: 'identifier' },
   ];
 
   return (
     <div
-      className={Constants.GRID_THEME.QUARTZ.VALUE}
+      className={wrapperClassName}
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
       <AgGridReact
+        {...themeProps}
         loading={loading}
         onGridReady={onGridReady}
         columnDefs={columnDefs}

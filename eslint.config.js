@@ -38,6 +38,10 @@ module.exports = [
         ...globals.browser,
         ...globals.node,
         ...globals.jest,
+        // Tests run on Vitest: describe/test/expect/etc. overlap with the jest
+        // globals above, but `vi` is Vitest-specific and otherwise reads as
+        // no-undef. Runtime provides it via vite.config.js `test.globals: true`.
+        vi: 'readonly',
       },
     },
     plugins: {
@@ -52,6 +56,12 @@ module.exports = [
     settings: {
       react: {
         version: 'detect',
+      },
+      // Tests run on Vitest (jest-compatible globals), so the `jest` package
+      // isn't installed. Pin a version so eslint-plugin-jest rules (e.g.
+      // jest/no-deprecated-functions) don't fail trying to detect it.
+      jest: {
+        version: 27,
       },
       'import/resolver': {
         alias: {
@@ -90,6 +100,22 @@ module.exports = [
       ...reactHooks.configs.recommended.rules,
       ...jest.configs.recommended.rules,
       ...jestDom.configs.recommended.rules,
+      // --- Relaxed: legacy or pure-taste rules with no bug-catching value. ---
+      // PropTypes is a legacy runtime mechanism (removed in React 19); backfilling
+      // ~400 hand-written shapes is throwaway work. Prefer TypeScript if a prop
+      // contract is ever wanted.
+      'react/prop-types': 'off',
+      'react/require-default-props': 'off',
+      'react/forbid-prop-types': 'off',
+      // Stylistic only — these flag taste, not defects.
+      'react/jsx-props-no-spreading': 'off',
+      'react/destructuring-assignment': 'off',
+      'no-nested-ternary': 'off',
+      'import/prefer-default-export': 'off',
+      'import/extensions': 'off',
+      // --- Kept ON intentionally (catch real bugs): ---
+      // react/no-unstable-nested-components, react-hooks/exhaustive-deps,
+      // no-param-reassign, no-restricted-globals, no-shadow, no-unused-vars.
     },
   },
   prettierConfig,
@@ -100,6 +126,14 @@ module.exports = [
       'coverage/**',
       'build/**',
       '*.config.js',
+      // CI tooling (e.g. .github/scripts/lint-changed-lines.js), not the React
+      // library source — the airbnb ruleset (no for-of/continue, React rules)
+      // doesn't fit a plain Node script.
+      '.github/**',
+      // Yarn Berry vendored runtime (release binary, plugins, PnP loader) —
+      // not our source; linting it produced bogus findings.
+      '.yarn/**',
+      '.pnp.*',
     ],
   },
 ];

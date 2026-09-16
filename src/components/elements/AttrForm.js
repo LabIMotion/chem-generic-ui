@@ -4,21 +4,27 @@ import KlassAttrForm from '@components/elements/KlassAttrForm';
 import SegmentAttrForm from '@components/elements/SegmentAttrForm';
 import Constants from '@components/tools/Constants';
 
-const TipActive = (type) => (
-  <Tooltip id="active_button">
-    This {type} is deactivated, press button to [activate]
-  </Tooltip>
-);
-const TipInActive = (type) => (
-  <Tooltip id="disable_button">
-    This {type} is activated, press button to [deactivate]
-  </Tooltip>
-);
-const TipDelete = (type) => (
-  <Tooltip id="delete_button">
-    Delete this {type}, after deletion, all elements are unaccessible
-  </Tooltip>
-);
+function TipActive(type) {
+  return (
+    <Tooltip id="active_button">
+      This {type} is deactivated, press button to [activate]
+    </Tooltip>
+  );
+}
+function TipInActive(type) {
+  return (
+    <Tooltip id="disable_button">
+      This {type} is activated, press button to [deactivate]
+    </Tooltip>
+  );
+}
+function TipDelete(type) {
+  return (
+    <Tooltip id="delete_button">
+      Delete this {type}, after deletion, all elements are unaccessible
+    </Tooltip>
+  );
+}
 
 const Content = React.forwardRef((props, ref) => {
   switch (props.content) {

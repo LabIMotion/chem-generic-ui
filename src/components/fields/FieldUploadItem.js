@@ -8,7 +8,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { downloadFile } from 'generic-ui-core';
 import FIcons from '@components/icons/FIcons';
 
-const FieldUploadItem = ({ opt, attachment }) => {
+function FieldUploadItem({ opt, attachment }) {
   const [secondImgSrc, setSecondImgSrc] = useState('');
   const [imgWidth, setImgWidth] = useState('50%');
 
@@ -22,18 +22,18 @@ const FieldUploadItem = ({ opt, attachment }) => {
       credentials: 'same-origin',
       method: 'GET',
     })
-      .then(response => response.blob())
-      .then(blob => {
+      .then((response) => response.blob())
+      .then((blob) => {
         if (blob?.type.startsWith('image')) {
           setSecondImgSrc(URL.createObjectURL(blob));
         }
       })
-      .catch(errorMessage => {
+      .catch((errorMessage) => {
         console.log(errorMessage);
       });
   }, [attachment.uid]);
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     let newWidth = parseFloat(e.target.value);
     if (Number.isNaN(newWidth)) {
       newWidth = 50; // default value
@@ -59,20 +59,18 @@ const FieldUploadItem = ({ opt, attachment }) => {
   );
 
   const filename = attachment.aid ? (
-    <>
-      <a
-        onClick={() =>
-          downloadFile({
-            contents: `/api/v1/attachments/${attachment.aid}`,
-            name: attachment.filename,
-          })
-        }
-        style={{ cursor: 'pointer' }}
-        title={attachment.filename}
-      >
-        {attachment.filename}
-      </a>
-    </>
+    <a
+      onClick={() =>
+        downloadFile({
+          contents: `/api/v1/attachments/${attachment.aid}`,
+          name: attachment.filename,
+        })
+      }
+      style={{ cursor: 'pointer' }}
+      title={attachment.filename}
+    >
+      {attachment.filename}
+    </a>
   ) : (
     attachment.filename
   );
@@ -87,7 +85,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
             <Form.Control
               type="text"
               value={attachment.label || ''}
-              onChange={e =>
+              onChange={(e) =>
                 opt.onChange({
                   ...opt.value,
                   action: 'l',
@@ -129,7 +127,7 @@ const FieldUploadItem = ({ opt, attachment }) => {
       </div>
     </div>
   );
-};
+}
 
 FieldUploadItem.propTypes = {
   attachment: PropTypes.shape({

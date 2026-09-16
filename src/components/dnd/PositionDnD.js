@@ -10,7 +10,6 @@ import FIcons from '@components/icons/FIcons';
 // If isButton is false, it renders a simple div with the icon.
 const PositionDnD = React.memo(
   ({ type, field: fid, rowValue: rid, isButton = false }) => {
-
     const [{ isDragging }, drag] = useDrag({
       type,
       item: { fid, rid },
@@ -63,7 +62,7 @@ const PositionDnD = React.memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 PositionDnD.propTypes = {

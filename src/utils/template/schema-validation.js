@@ -44,7 +44,7 @@ export const validateProperties = (properties) => {
 
   return {
     valid,
-    errors: valid ? [] : (validatePropBase.errors || []),
+    errors: valid ? [] : validatePropBase.errors || [],
   };
 };
 

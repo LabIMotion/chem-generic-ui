@@ -1,4 +1,4 @@
-import { notifyDummyAdd, notifyError, notifySuccess } from '@utils/template/designer-message';
+import { notifySuccess } from '@utils/template/designer-message';
 import Response from '@utils/response';
 import { validateLayerInput } from '@utils/template/standard-validation';
 
@@ -44,9 +44,9 @@ export const handleCreateLayer = (_layer) => {
         'The new layer has been added.',
         "Remember to save once you've finished editing.",
       ].join(' '),
-      `Layer [${layer.key}]`
+      `Layer [${layer.key}]`,
     ),
-    element,
-    layer.key
+    layer,
+    layer.key,
   );
 };

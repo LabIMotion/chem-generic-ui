@@ -23,8 +23,11 @@ function ElementDetailsFields() {
     return fieldRef;
   };
 
-  const rawFieldMapping = elementFieldsMapping[elementType] || elementFieldsMapping.default;
-  const fieldMapping = rawFieldMapping.map(resolveField).filter((f) => f !== undefined);
+  const rawFieldMapping =
+    elementFieldsMapping[elementType] || elementFieldsMapping.default;
+  const fieldMapping = rawFieldMapping
+    .map(resolveField)
+    .filter((f) => f !== undefined);
 
   // Get element type label
   const elementTypeLabel = elementType
@@ -79,20 +82,18 @@ function ElementDetailsFields() {
   }
 
   return (
-    <Accordion
-      defaultActiveKey="0"
-      className="mb-4"
-    >
+    <Accordion defaultActiveKey="0" className="mb-4">
       <Accordion.Item eventKey="0" style={{ border: 'none' }}>
         <Accordion.Header
           as="div"
           className={`lu-ds-element-accordion-header flex-grow-1 ${bgColor()}`}
           style={{ boxShadow: 'none' }}
         >
-          <span className="panel_generic_heading" style={{ pointerEvents: 'none' }}>
-            Source details:
-            {' '}
-            {elementTypeLabel}
+          <span
+            className="panel_generic_heading"
+            style={{ pointerEvents: 'none' }}
+          >
+            Source details: {elementTypeLabel}
           </span>
         </Accordion.Header>
         <Accordion.Body className="py-0">
@@ -117,9 +118,13 @@ function ElementDetailsFields() {
                   </div>
                 ))}
                 {/* Fill remaining columns if less than 4 fields in the last row */}
-                {row.length < 4 && Array.from({ length: 4 - row.length }).map((__, emptyIdx) => (
-                  <div className="col-md-3" key={`empty-col-${row[0].key}-pos${emptyIdx + row.length}`} />
-                ))}
+                {row.length < 4 &&
+                  Array.from({ length: 4 - row.length }).map((__, emptyIdx) => (
+                    <div
+                      className="col-md-3"
+                      key={`empty-col-${row[0].key}-pos${emptyIdx + row.length}`}
+                    />
+                  ))}
               </div>
             ))}
           </div>

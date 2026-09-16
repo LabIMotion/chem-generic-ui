@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const DatePickerComponent = ({ handleChange, val, readOnly }) => {
+function DatePickerComponent({ handleChange, val, readOnly }) {
   const selectedValue = val ? new Date(val) : null;
 
   return (
@@ -28,9 +28,9 @@ const DatePickerComponent = ({ handleChange, val, readOnly }) => {
       </div>
     </Form.Group>
   );
-};
+}
 
-const ButtonDatePicker = ({ onChange, val, readOnly }) => {
+function ButtonDatePicker({ onChange, val, readOnly }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleDateChange = (date) => {
@@ -62,6 +62,6 @@ const ButtonDatePicker = ({ onChange, val, readOnly }) => {
       </Button>
     </LTooltip>
   );
-};
+}
 
 export default ButtonDatePicker;

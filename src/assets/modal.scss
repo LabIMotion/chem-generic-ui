@@ -91,6 +91,56 @@
   font-family: inherit;
 }
 
+// Footer layout for our own modals, marked with `gu-modal` on the Modal root.
+//
+// Spacing: Bootstrap spaces footer children with `.modal-footer > * { margin }`,
+// sized by the `--bs-modal-footer-gap` custom property. A host app can zero that
+// property globally through `$modal-footer-margin-between` (the Chemotion ELN
+// does), which collapses the spacing in every modal on the page, ours included.
+// Set the gap here rather than inheriting whatever Bootstrap the host compiled.
+//
+// Alignment: we want footer buttons left-aligned, against Bootstrap's `flex-end`
+// default. Declared without `!important`, so a modal that needs another alignment
+// still overrides it with a `justify-content-*` utility (those carry `!important`).
+//
+// Padding: Bootstrap sizes it as calc(--bs-modal-padding - --bs-modal-footer-gap * .5).
+// A host that zeroes $modal-footer-margin-between with a unitless 0 (the Chemotion
+// ELN does) makes that calc subtract a <number> from a <length> — invalid at
+// computed-value time, so the declaration resolves to unset and the footer loses
+// all padding. Own it with the host's modal padding instead: with the child
+// margins zeroed below, this reproduces stock Bootstrap's visual inset exactly
+// (their 0.75 padding + 0.25 child margin == our 1 padding + 0 margin).
+.gu-modal .modal-footer {
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: var(--bs-modal-padding, 1rem);
+
+  > * {
+    margin: 0;
+  }
+}
+
+// Dialog width as a share of the viewport, for the dialogs that outgrow
+// Bootstrap's `size` steps. Set it through `dialogClassName`, never through the
+// modal's `style` prop: react-bootstrap puts `style` on the `.modal` root (the
+// full-viewport overlay), and since Bootstrap pins that overlay with
+// `position: fixed; left: 0; width: 100%` and no `right`, capping its width
+// shrinks it against the left edge — the dialog then centres inside a box that
+// is itself off-centre. `--bs-modal-width` is the property Bootstrap sizes the
+// dialog from, so it stays centred.
+//
+// Selector is deliberately over-qualified: `.modal-xl` and friends set the same
+// custom property from a single class, so an equally specific rule would be
+// decided by stylesheet order — and ours is injected at runtime by
+// vite-plugin-css-injected-by-js, which the host cannot be relied on to order.
+.gu-modal .modal-dialog.gu-modal-90 {
+  --bs-modal-width: 90%;
+}
+
+// Vertical centering is not here: `GModal` (src/ui/modals/GModal.js) passes
+// Bootstrap's own `centered` by default, so a dialog can opt out with
+// `centered={false}` instead of fighting a stylesheet rule.
+
 // Nested modal styling for ElementSelectModal
 .element-select-modal {
   // High z-index for deeply nested modals

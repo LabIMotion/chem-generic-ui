@@ -23,6 +23,11 @@ const ElementFieldTypes = [
     label: 'Text-Formula',
   },
   { value: FieldTypes.F_TABLE, name: FieldTypes.F_TABLE, label: 'Table' },
+  {
+    value: FieldTypes.F_ONTOLOGY_SELECT,
+    name: FieldTypes.F_ONTOLOGY_SELECT,
+    label: 'Ontology Select',
+  },
   { value: FieldTypes.F_UPLOAD, name: FieldTypes.F_UPLOAD, label: 'Upload' },
 ];
 

@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button, Popover, OverlayTrigger } from 'react-bootstrap';
+import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 import FIcons from '@components/icons/FIcons';
+import GModal from '@ui/modals/GModal';
 
-export const ModalOntologySelect = props => {
+export function ModalOntologySelect(props) {
   const { showProps, modalComponent } = props;
   const { show, setShow } = showProps;
 
   return (
-    <Modal centered backdrop="static" show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Select Term</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{modalComponent}</Modal.Body>
-    </Modal>
+    <GModal backdrop="static" show={show} onHide={() => setShow(false)}>
+      <GModal.Header>
+        <GModal.Title>Select Term</GModal.Title>
+      </GModal.Header>
+      <GModal.Body>{modalComponent}</GModal.Body>
+    </GModal>
   );
-};
+}
 
 ModalOntologySelect.propTypes = {
   modalComponent: PropTypes.element.isRequired,
   showProps: PropTypes.object.isRequired,
 };
 
-export const ButtonOntologySelect = props => {
+export function ButtonOntologySelect(props) {
   const { modalComponent, customClass } = props;
   const [show, setShow] = useState(false);
   const popover = (
@@ -59,4 +60,4 @@ export const ButtonOntologySelect = props => {
       />
     </>
   );
-};
+}

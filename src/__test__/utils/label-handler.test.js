@@ -78,17 +78,17 @@ describe('computeDynamicDisplayName', () => {
   ];
 
   it('should return base label when labelFields is empty', () => {
-    const result = computeDynamicDisplayName('Settings', [], { fields: layerFields });
+    const result = computeDynamicDisplayName('Settings', [], {
+      fields: layerFields,
+    });
     expect(result).toBe('Settings');
   });
 
   it('should compute display name with field values', () => {
     const labelFields = ['mode', 'atmosphere'];
-    const result = computeDynamicDisplayName(
-      'Settings',
-      labelFields,
-      { fields: layerFields },
-    );
+    const result = computeDynamicDisplayName('Settings', labelFields, {
+      fields: layerFields,
+    });
     expect(result).toBe('Settings - stirred - nitrogen');
   });
 
@@ -99,7 +99,9 @@ describe('computeDynamicDisplayName', () => {
       { field: 'temperature', type: 'text', value: '25°C' },
     ];
     const labelFields = ['mode', 'atmosphere', 'temperature'];
-    const result = computeDynamicDisplayName('Settings', labelFields, { fields });
+    const result = computeDynamicDisplayName('Settings', labelFields, {
+      fields,
+    });
     expect(result).toBe('Settings - stirred - 25°C');
   });
 
@@ -122,7 +124,9 @@ describe('computeDynamicDisplayName', () => {
       { field: 'atmosphere', type: 'select', value: '' },
     ];
     const labelFields = ['mode', 'atmosphere'];
-    const result = computeDynamicDisplayName('Settings', labelFields, { fields });
+    const result = computeDynamicDisplayName('Settings', labelFields, {
+      fields,
+    });
     expect(result).toBe('Settings');
   });
 
@@ -145,7 +149,9 @@ describe('computeDynamicDisplayName', () => {
   });
 
   it('should return empty string for empty base label', () => {
-    const result = computeDynamicDisplayName('', ['mode'], { fields: layerFields });
+    const result = computeDynamicDisplayName('', ['mode'], {
+      fields: layerFields,
+    });
     expect(result).toBe('');
   });
 });

@@ -8,11 +8,10 @@ import ButtonTooltip from '@components/fields/ButtonTooltip';
 import RevisionSelector from '@components/designer/preview/RevisionSelector';
 import { buildString } from '@utils/pureUtils';
 
-const formatDate = (date) => {
-  return moment(date, 'DD.MM.YYYY, HH:mm').format('YYYY-MM-DD HH:mm');
-};
+const formatDate = (date) =>
+  moment(date, 'DD.MM.YYYY, HH:mm').format('YYYY-MM-DD HH:mm');
 
-const VersionBlock = ({
+function VersionBlock({
   download,
   idxSelect,
   rev,
@@ -22,7 +21,7 @@ const VersionBlock = ({
   fnView,
   isSelected,
   onSelectionChange,
-}) => {
+}) {
   const {
     id,
     uuid,
@@ -46,7 +45,9 @@ const VersionBlock = ({
   let verBase = '';
   let verID = '';
   if (src === 'properties_release') {
-    at = releasedAt ? `Released at: ${formatDate(releasedAt)} (UTC)` : '(In Progress)';
+    at = releasedAt
+      ? `Released at: ${formatDate(releasedAt)} (UTC)`
+      : '(In Progress)';
     verBase = version && (releasedAt ? `v${version}` : '');
     verID = `ID: ${uuid || ''}`;
   }
@@ -96,9 +97,7 @@ const VersionBlock = ({
           onChange={handleSelectionChange}
         />
         <div className="flex-grow-1">{verID}</div>
-        <div className="fs-6 fw-bold text-primary">
-          {verBase}
-        </div>
+        <div className="fs-6 fw-bold text-primary">{verBase}</div>
         <div className="fs-6"> #{idx + 1}</div>
       </div>
       <div className="d-flex flex-nowrap gap-2">
@@ -118,7 +117,7 @@ const VersionBlock = ({
       </div>
     </div>
   );
-};
+}
 
 VersionBlock.propTypes = {
   download: PropTypes.shape({

@@ -1,7 +1,7 @@
 import React from 'react';
 import ButtonTooltip from '@components/fields/ButtonTooltip';
 
-const RepoRenderer = (params) => {
+function RepoRenderer(params) {
   const { data, fnApi, node } = params;
 
   const onCall = (e) => {
@@ -19,6 +19,6 @@ const RepoRenderer = (params) => {
       />
     </span>
   );
-};
+}
 
 export default RepoRenderer;

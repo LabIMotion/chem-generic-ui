@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
 
-const ButtonMenu = ({ children, id, fnClick, bls }) => {
+function ButtonMenu({ children, id, fnClick, bls }) {
   return (
     <Dropdown.Item
       eventKey={`${id}_menu_item`}
@@ -12,7 +12,7 @@ const ButtonMenu = ({ children, id, fnClick, bls }) => {
       <>{children}</>
     </Dropdown.Item>
   );
-};
+}
 
 ButtonMenu.propTypes = {
   children: PropTypes.node.isRequired,

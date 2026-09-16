@@ -3,7 +3,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FIcons from '@components/icons/FIcons';
 
-const ResizeIndicator = ({ position, fontSize = '10px' }) => {
+function ResizeIndicator({ position, fontSize = '10px' }) {
   const getPositionStyles = () => {
     switch (position) {
       case 'top':
@@ -49,14 +49,14 @@ const ResizeIndicator = ({ position, fontSize = '10px' }) => {
       {FIcons.faGripLinesVertical}
     </div>
   );
-};
+}
 
 ResizeIndicator.propTypes = {
   position: PropTypes.oneOf(['top', 'center', 'bottom']).isRequired,
   fontSize: PropTypes.string,
 };
 
-const ResizablePanel = ({
+function ResizablePanel({
   leftPanel,
   rightPanel,
   defaultLeftWidth = 66.67,
@@ -65,7 +65,7 @@ const ResizablePanel = ({
   className = '',
   style = {},
   minHeightForMultipleIndicators = 200,
-}) => {
+}) {
   const [leftWidth, setLeftWidth] = useState(defaultLeftWidth);
   const [isDragging, setIsDragging] = useState(false);
   const [showMultipleIndicators, setShowMultipleIndicators] = useState(false);
@@ -92,7 +92,7 @@ const ResizablePanel = ({
 
       setLeftWidth(newLeftWidth);
     },
-    [isDragging, minLeftWidth, minRightWidth]
+    [isDragging, minLeftWidth, minRightWidth],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -185,9 +185,13 @@ const ResizablePanel = ({
           }
         }}
       >
-        {showMultipleIndicators && <ResizeIndicator position="top" fontSize="10px" />}
+        {showMultipleIndicators && (
+          <ResizeIndicator position="top" fontSize="10px" />
+        )}
         <ResizeIndicator position="center" fontSize="12px" />
-        {showMultipleIndicators && <ResizeIndicator position="bottom" fontSize="10px" />}
+        {showMultipleIndicators && (
+          <ResizeIndicator position="bottom" fontSize="10px" />
+        )}
       </div>
       {/* Right Panel */}
       <div
@@ -201,7 +205,7 @@ const ResizablePanel = ({
       </div>
     </div>
   );
-};
+}
 
 ResizablePanel.propTypes = {
   leftPanel: PropTypes.node.isRequired,

@@ -2,7 +2,11 @@
  * Utilities for transforming values to user-friendly display formats
  */
 
-import { TYPE_TRANSFORMS, HEADER_COLOR_TRANSFORMS, HEADER_TEXT_STYLE_TRANSFORMS } from '@ui/diff/diffConstants.js';
+import {
+  TYPE_TRANSFORMS,
+  HEADER_COLOR_TRANSFORMS,
+  HEADER_TEXT_STYLE_TRANSFORMS,
+} from '@ui/diff/diffConstants.js';
 
 /**
  * Transformations for display
@@ -28,7 +32,10 @@ export const transformValueForDisplay = (value, key, fullKey) => {
     return value ? 'enabled' : 'disabled';
   }
 
-  if (['has_its_own_row', 'required'].includes(key) && typeof value === 'boolean') {
+  if (
+    ['has_its_own_row', 'required'].includes(key) &&
+    typeof value === 'boolean'
+  ) {
     return value ? 'yes' : 'no';
   }
 

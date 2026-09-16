@@ -10,7 +10,6 @@ import { AgGridReact } from 'ag-grid-react';
 import {
   Button,
   ButtonGroup,
-  Modal,
   ToggleButton,
   OverlayTrigger,
   Tooltip,
@@ -21,14 +20,15 @@ import LayerSelect from '@components/elements/LayerSelect';
 import FieldSelect from '@components/elements/FieldSelect';
 import GenericSubField from '@components/models/GenericSubField';
 import { AddRowBtn, DelRowBtn } from '@components/table/GridBtn';
-import Constants from '@components/tools/Constants';
 import DocuConst from '@components/tools/DocuConst';
 import FIcons from '@components/icons/FIcons';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 import {
   labRowSelection,
   labDefaultColDef,
   labAutoSizeStrategy,
 } from '@utils/table/grid-config';
+import GModal from '@ui/modals/GModal';
 
 const TP_ALLOW = [
   FieldTypes.F_CHECKBOX,
@@ -74,6 +74,7 @@ function getTitle(field, layer) {
 }
 
 function RestrictionModal(props) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   const {
     showModal,
     fnClose,
@@ -359,19 +360,21 @@ function RestrictionModal(props) {
   }, [update]);
 
   useEffect(() => {
-    if (!gridReady) return;
-    if (columnsReady) return;
+    if (!gridReady) return undefined;
+    if (columnsReady) return undefined;
 
     const columnState = gridRef.current.api.getColumnState();
     setColumnDefs(buildColumnDefs());
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (!gridRef.current?.api) return;
       gridRef.current.api.applyColumnState({
         state: columnState,
         applyOrder: true,
       });
       setColumnsReady(true);
     }, 0);
+    return () => clearTimeout(timer);
   }, [gridReady, field, layer, buildColumnDefs]);
 
   useEffect(() => {
@@ -385,15 +388,14 @@ function RestrictionModal(props) {
   }
 
   return (
-    <Modal
-      centered
+    <GModal
       backdrop="static"
       dialogClassName="gu_modal-68w"
       show={showModal}
       onHide={() => fnClose()}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
+      <GModal.Header>
+        <GModal.Title>
           {getTitle(field, layer)}
           <OverlayTrigger
             delayShow={1000}
@@ -420,9 +422,9 @@ function RestrictionModal(props) {
               {FIcons.faCircleQuestion}
             </Button>
           </OverlayTrigger>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ overflow: 'auto' }}>
+        </GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ overflow: 'auto' }}>
         <div
           style={{
             alignItems: 'center',
@@ -487,11 +489,12 @@ function RestrictionModal(props) {
         </div>
         <div style={{ width: '100%', height: '40vh' }}>
           <div
+            className={wrapperClassName}
             style={{ width: '100%', height: '100%' }}
-            className={Constants.GRID_THEME.QUARTZ.VALUE}
           >
             <AgGridReact
               ref={gridRef}
+              {...themeProps}
               defaultColDef={defaultColDef}
               rowSelection={labRowSelection}
               onGridReady={onGridReady}
@@ -506,7 +509,6 @@ function RestrictionModal(props) {
               suppressPropertyNamesCheck
               suppressCellFocus={false}
               debounceVerticalScrollbar
-              animateRows={false}
               enableCellTextSelection
               suppressColumnVirtualisation
               suppressRowVirtualisation={false}
@@ -514,8 +516,8 @@ function RestrictionModal(props) {
             />
           </div>
         </div>
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
 }
 

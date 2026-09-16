@@ -8,7 +8,7 @@ import {
   PROPS_TO_REMOVE,
   PROPS_TO_RENAME,
   LAYER_PROPS_TO_REMOVE,
-  REQUIRED_PROPS
+  REQUIRED_PROPS,
 } from '@ui/diff/diffConstants.js';
 
 /**
@@ -26,10 +26,14 @@ export const keepRequiredFieldProperties = (field) => {
 
   // Create new object with only required properties
   const filteredField = {};
-  requiredProps.forEach(prop => {
+  requiredProps.forEach((prop) => {
     if (prop in field) {
       // Special handling for ontology object - only keep 'iri' property
-      if (prop === 'ontology' && field[prop] && typeof field[prop] === 'object') {
+      if (
+        prop === 'ontology' &&
+        field[prop] &&
+        typeof field[prop] === 'object'
+      ) {
         filteredField[prop] = { iri: field[prop].iri };
       } else {
         filteredField[prop] = field[prop];
@@ -55,10 +59,10 @@ export const processTableField = (field, layerOrder = null) => {
 
   // Process sub_fields array if it exists
   if (fieldCopy.sub_fields && Array.isArray(fieldCopy.sub_fields)) {
-    fieldCopy.sub_fields = fieldCopy.sub_fields.map(subField => {
+    fieldCopy.sub_fields = fieldCopy.sub_fields.map((subField) => {
       if (subField && typeof subField === 'object') {
         // Apply property filtering to sub-field
-        let processedSubField = keepRequiredFieldProperties(subField);
+        const processedSubField = keepRequiredFieldProperties(subField);
 
         return preprocessJson(processedSubField, layerOrder);
       }
@@ -85,20 +89,24 @@ export const preprocessJson = (json, layerOrder = null) => {
   }
 
   // Sort layers by position if layers exist, or use provided layer order
-  if (json.layers && typeof json.layers === 'object' && !Array.isArray(json.layers)) {
+  if (
+    json.layers &&
+    typeof json.layers === 'object' &&
+    !Array.isArray(json.layers)
+  ) {
     if (layerOrder && layerOrder.length > 0) {
       // Use provided layer order (from newJson)
       const orderedLayers = {};
 
       // First, add layers in the provided order
-      layerOrder.forEach(layerKey => {
+      layerOrder.forEach((layerKey) => {
         if (json.layers[layerKey]) {
           orderedLayers[layerKey] = json.layers[layerKey];
         }
       });
 
       // Then add any remaining layers that weren't in the provided order
-      Object.keys(json.layers).forEach(layerKey => {
+      Object.keys(json.layers).forEach((layerKey) => {
         if (!(layerKey in orderedLayers)) {
           orderedLayers[layerKey] = json.layers[layerKey];
         }
@@ -123,10 +131,20 @@ export const preprocessJson = (json, layerOrder = null) => {
     // Determine the new key name (rename if needed)
     const newKey = PROPS_TO_RENAME[key] || key;
 
-    if (key === 'select_options' && value && typeof value === 'object' && !Array.isArray(value)) {
+    if (
+      key === 'select_options' &&
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
       // Transform select_options structure
       cleaned[newKey] = transformSelectOptions(value, layerOrder);
-    } else if (key === 'layers' && value && typeof value === 'object' && !Array.isArray(value)) {
+    } else if (
+      key === 'layers' &&
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
       // Transform layers structure
       cleaned[newKey] = transformLayers(value, layerOrder);
     } else {
@@ -148,12 +166,23 @@ const transformSelectOptions = (selectOptions, layerOrder) => {
   const transformedSelectOptions = {};
 
   for (const [optionKey, optionValue] of Object.entries(selectOptions)) {
-    if (optionValue && typeof optionValue === 'object' && optionValue.options && Array.isArray(optionValue.options)) {
+    if (
+      optionValue &&
+      typeof optionValue === 'object' &&
+      optionValue.options &&
+      Array.isArray(optionValue.options)
+    ) {
       // Extract the options array directly and recursively process it
-      transformedSelectOptions[optionKey] = preprocessJson(optionValue.options, layerOrder);
+      transformedSelectOptions[optionKey] = preprocessJson(
+        optionValue.options,
+        layerOrder,
+      );
     } else {
       // Keep as-is but recursively process if it's an object/array
-      transformedSelectOptions[optionKey] = preprocessJson(optionValue, layerOrder);
+      transformedSelectOptions[optionKey] = preprocessJson(
+        optionValue,
+        layerOrder,
+      );
     }
   }
 
@@ -170,7 +199,11 @@ const transformLayers = (layers, layerOrder) => {
   const transformedLayers = {};
 
   for (const [layerKey, layerValue] of Object.entries(layers)) {
-    if (layerValue && typeof layerValue === 'object' && !Array.isArray(layerValue)) {
+    if (
+      layerValue &&
+      typeof layerValue === 'object' &&
+      !Array.isArray(layerValue)
+    ) {
       // Remove specified properties from layer object and recursively process
       const layerCopy = { ...layerValue };
       LAYER_PROPS_TO_REMOVE.forEach((prop) => {
@@ -179,10 +212,10 @@ const transformLayers = (layers, layerOrder) => {
 
       // Process fields array if it exists
       if (layerCopy.fields && Array.isArray(layerCopy.fields)) {
-        layerCopy.fields = layerCopy.fields.map(field => {
+        layerCopy.fields = layerCopy.fields.map((field) => {
           if (field && typeof field === 'object' && field.type) {
             // Step 1: Keep only required properties based on field type
-            let processedField = keepRequiredFieldProperties(field);
+            const processedField = keepRequiredFieldProperties(field);
 
             // Step 2: Apply table-specific processing if type is 'table'
             if (['input-group', 'table'].includes(field.type)) {

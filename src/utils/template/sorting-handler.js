@@ -71,15 +71,48 @@ export const reorderPositions = (layersObj, metadata) => {
     }
   });
 
+  const nextMetadata = { ...metadata };
+  if (updatedGroups.length > 0) {
+    nextMetadata.groups = updatedGroups;
+  } else {
+    delete nextMetadata.groups;
+    delete nextMetadata.restrict;
+  }
+
   return {
     layers: updatedLayers,
-    metadata:
-      updatedGroups.length > 0 ? { ...metadata, groups: updatedGroups } : {},
+    metadata: nextMetadata,
   };
+};
+
+/**
+ * Migrates any F_INTEGER fields to F_NUMBER.
+ * Sets decimals=0, min='', max='' if not already present.
+ * Safe to call on load and on save.
+ */
+export const migrateIntegerFields = (
+  element,
+  propKey = 'properties_template',
+) => {
+  Object.keys(element[propKey].layers).forEach((key) => {
+    const fields = element[propKey].layers[key]?.fields || [];
+    fields.forEach((fd) => {
+      if (fd.type === FieldTypes.F_INTEGER) {
+        fd.type = FieldTypes.F_NUMBER;
+        fd.numeric = {
+          decimals: fd.numeric?.decimals ?? 0,
+          min: fd.numeric?.min ?? '',
+          max: fd.numeric?.max ?? '',
+        };
+      }
+    });
+  });
+  return element;
 };
 
 export const handleSaveSorting = (_element) => {
   const element = _element;
+  migrateIntegerFields(element);
   Object.keys(element.properties_template.layers).forEach((key) => {
     const layer = element.properties_template.layers[key];
     let sortedFields = layer?.fields || [];
@@ -89,7 +122,11 @@ export const handleSaveSorting = (_element) => {
       if (fd.type === FieldTypes.F_SYSTEM_DEFINED) {
         fd.option_layers = reUnit(fd.option_layers);
       }
-      fd.required = [FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(fd.type)
+      fd.required = [
+        FieldTypes.F_INTEGER,
+        FieldTypes.F_NUMBER,
+        FieldTypes.F_TEXT,
+      ].includes(fd.type)
         ? fd.required
         : false;
       fd.sub_fields = [

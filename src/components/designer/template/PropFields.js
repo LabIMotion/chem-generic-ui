@@ -16,7 +16,7 @@ import {
   handlePositionChange,
 } from '@utils/template/field-handler';
 
-const PropFields = (props) => {
+function PropFields(props) {
   const { generic, genericType, fnUpdate, layer, vocabularies, parentExpand } =
     props;
 
@@ -112,7 +112,7 @@ const PropFields = (props) => {
   ));
 
   return <>{fields}</>;
-};
+}
 
 PropFields.propTypes = {
   generic: PropTypes.object.isRequired,

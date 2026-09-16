@@ -4,7 +4,7 @@ import { Col, Form, Row } from 'react-bootstrap';
 import FIcons from '@components/icons/FIcons';
 import LFormGroup from '@components/shared/LFormGroup';
 
-const LayerForm = ({ init, layer, onChange }) => {
+function LayerForm({ init, layer, onChange }) {
   const { label: initLabel, key: initKey } = init;
   const { description, label, key } = layer;
   return (
@@ -102,7 +102,7 @@ const LayerForm = ({ init, layer, onChange }) => {
       </Col>
     </Row>
   );
-};
+}
 
 LayerForm.propTypes = {
   init: PropTypes.shape({

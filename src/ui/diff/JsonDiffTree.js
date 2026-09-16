@@ -1,19 +1,19 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 
 // Colors for diff
 const colorMap = {
-  added: "#d4edda",
-  removed: "#f8d7da",
-  updated: "#fff3cd",
-  same: "transparent"
+  added: '#d4edda',
+  removed: '#f8d7da',
+  updated: '#fff3cd',
+  same: 'transparent',
 };
 
 // Recursive tree builder
-const buildTree = (oldObj, newObj, key = "") => {
+const buildTree = (oldObj, newObj, key = '') => {
   const nodes = [];
   const allKeys = new Set([
     ...Object.keys(oldObj || {}),
-    ...Object.keys(newObj || {})
+    ...Object.keys(newObj || {}),
   ]);
 
   allKeys.forEach((k) => {
@@ -21,70 +21,67 @@ const buildTree = (oldObj, newObj, key = "") => {
     const newVal = newObj?.[k];
     const fullKey = key ? `${key}.${k}` : k;
 
-    let change = "same";
+    let change = 'same';
     if (oldVal !== newVal) {
       change =
         oldVal === undefined
-          ? "added"
+          ? 'added'
           : newVal === undefined
-          ? "removed"
-          : "updated";
+            ? 'removed'
+            : 'updated';
     }
 
     if (Array.isArray(oldVal) || Array.isArray(newVal)) {
       const length = Math.max(
         Array.isArray(oldVal) ? oldVal.length : 0,
-        Array.isArray(newVal) ? newVal.length : 0
+        Array.isArray(newVal) ? newVal.length : 0,
       );
       const children = [];
       for (let i = 0; i < length; i++) {
         const arrayKey = `${fullKey}[${i}]`;
         const oldItem = oldVal?.[i] ?? {};
         const newItem = newVal?.[i] ?? {};
-        if (
-          typeof oldItem === "object" ||
-          typeof newItem === "object"
-        ) {
+        if (typeof oldItem === 'object' || typeof newItem === 'object') {
           children.push(...buildTree(oldItem, newItem, arrayKey));
         } else {
           // Primitive array items
           children.push({
             key: arrayKey,
-            oldValue: oldItem ?? "",
-            newValue: newItem ?? "",
-            change: oldItem !== newItem ? "updated" : "same"
+            oldValue: oldItem ?? '',
+            newValue: newItem ?? '',
+            change: oldItem !== newItem ? 'updated' : 'same',
           });
         }
       }
       nodes.push({
         key: fullKey,
-        oldValue: "(array)",
-        newValue: "(array)",
+        oldValue: '(array)',
+        newValue: '(array)',
         change,
-        children
+        children,
       });
     } else if (
-      (oldVal && typeof oldVal === "object") ||
-      (newVal && typeof newVal === "object")
+      (oldVal && typeof oldVal === 'object') ||
+      (newVal && typeof newVal === 'object')
     ) {
       const children = buildTree(
-        oldVal && typeof oldVal === "object" ? oldVal : {},
-        newVal && typeof newVal === "object" ? newVal : {},
-        fullKey
+        oldVal && typeof oldVal === 'object' ? oldVal : {},
+        newVal && typeof newVal === 'object' ? newVal : {},
+        fullKey,
       );
       nodes.push({
         key: fullKey,
-        oldValue: "(object)",
-        newValue: "(object)",
+        oldValue: '(object)',
+        newValue: '(object)',
         change,
-        children
+        children,
       });
     } else {
       nodes.push({
         key: fullKey,
-        oldValue: oldVal ?? "",
-        newValue: newVal ?? "",
-        change
+        oldValue: oldVal ?? '',
+        newValue: newVal ?? '',
+        change,
       });
     }
   });
@@ -93,7 +90,7 @@ const buildTree = (oldObj, newObj, key = "") => {
 };
 
 // Recursive row
-const TreeRow = ({ node, level = 0, filterText, collapseMap, setCollapseMap }) => {
+function TreeRow({ node, level = 0, filterText, collapseMap, setCollapseMap }) {
   const collapsed = collapseMap[node.key] ?? true;
 
   const toggleCollapse = () =>
@@ -113,18 +110,24 @@ const TreeRow = ({ node, level = 0, filterText, collapseMap, setCollapseMap }) =
         <td
           style={{
             paddingLeft: level * 16,
-            fontWeight: node.children ? "bold" : "normal",
-            cursor: node.children ? "pointer" : "default",
-            backgroundColor: colorMap[node.change]
+            fontWeight: node.children ? 'bold' : 'normal',
+            cursor: node.children ? 'pointer' : 'default',
+            backgroundColor: colorMap[node.change],
           }}
           onClick={node.children ? toggleCollapse : undefined}
         >
-          {node.children && (collapsed ? "▶ " : "▼ ")}
+          {node.children && (collapsed ? '▶ ' : '▼ ')}
           {node.key}
         </td>
-        <td style={{ backgroundColor: colorMap[node.change] }}>{node.oldValue}</td>
-        <td style={{ backgroundColor: colorMap[node.change] }}>{node.newValue}</td>
-        <td style={{ backgroundColor: colorMap[node.change] }}>{node.change}</td>
+        <td style={{ backgroundColor: colorMap[node.change] }}>
+          {node.oldValue}
+        </td>
+        <td style={{ backgroundColor: colorMap[node.change] }}>
+          {node.newValue}
+        </td>
+        <td style={{ backgroundColor: colorMap[node.change] }}>
+          {node.change}
+        </td>
       </tr>
       {!collapsed &&
         node.children?.map((child, idx) => (
@@ -139,14 +142,17 @@ const TreeRow = ({ node, level = 0, filterText, collapseMap, setCollapseMap }) =
         ))}
     </>
   );
-};
+}
 
 // Main component
 export default function JsonDiffTree({ oldJson, newJson }) {
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState('');
   const [collapseMap, setCollapseMap] = useState({});
 
-  const treeData = useMemo(() => buildTree(oldJson, newJson), [oldJson, newJson]);
+  const treeData = useMemo(
+    () => buildTree(oldJson, newJson),
+    [oldJson, newJson],
+  );
 
   const setAllCollapse = (collapsed) => {
     const map = {};
@@ -163,26 +169,34 @@ export default function JsonDiffTree({ oldJson, newJson }) {
   };
 
   return (
-    <div style={{ fontFamily: "monospace" }}>
-      <div style={{ marginBottom: "10px", display: "flex", gap: "10px" }}>
+    <div style={{ fontFamily: 'monospace' }}>
+      <div style={{ marginBottom: '10px', display: 'flex', gap: '10px' }}>
         <input
           type="text"
           placeholder="Quick filter..."
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
-          style={{ flexGrow: 1, padding: "5px" }}
+          style={{ flexGrow: 1, padding: '5px' }}
         />
         <button onClick={() => setAllCollapse(false)}>Expand All</button>
         <button onClick={() => setAllCollapse(true)}>Collapse All</button>
       </div>
-      <div style={{ overflowX: "auto" }}>
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
           <thead>
             <tr>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>Key</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>Old Value</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>New Value</th>
-              <th style={{ textAlign: "left", borderBottom: "1px solid #ccc" }}>Change</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>
+                Key
+              </th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>
+                Old Value
+              </th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>
+                New Value
+              </th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc' }}>
+                Change
+              </th>
             </tr>
           </thead>
           <tbody>

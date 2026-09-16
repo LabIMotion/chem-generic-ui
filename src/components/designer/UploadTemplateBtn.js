@@ -7,7 +7,7 @@ import UploadTemplateModal from '@components/elements/UploadTemplateModal';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const UploadTemplateBtn = (props) => {
+function UploadTemplateBtn(props) {
   const { data, fnUpload, genericType, btnCls } = props;
   const [show, setShow] = useState(false);
 
@@ -33,7 +33,7 @@ const UploadTemplateBtn = (props) => {
       )}
     </>
   );
-};
+}
 
 UploadTemplateBtn.propTypes = {
   data: PropTypes.object.isRequired,

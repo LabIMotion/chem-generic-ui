@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
@@ -9,7 +7,7 @@ import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
 function AttrEditBtn(props) {
-  const { data, fnSelect, fnDelete, fnEdit, genericType } = props;
+  const { data, fnSelect, fnDelete, fnEdit, genericType, disabled } = props;
   const [show, setShow] = useState(false);
 
   const onSelect = () => {
@@ -20,7 +18,12 @@ function AttrEditBtn(props) {
   return (
     <>
       <LTooltip idf={`edit_attr.${genericType.toLowerCase()}`}>
-        <Button variant="light" size="sm" onClick={onSelect}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={onSelect}
+          disabled={disabled}
+        >
           {FIcons.faPencil}
         </Button>
       </LTooltip>
@@ -49,8 +52,9 @@ AttrEditBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
+  disabled: PropTypes.bool,
 };
 
-AttrEditBtn.defaultProps = {};
+AttrEditBtn.defaultProps = { disabled: false };
 
 export default AttrEditBtn;

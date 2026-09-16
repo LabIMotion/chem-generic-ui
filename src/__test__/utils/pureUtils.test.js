@@ -5,6 +5,7 @@ import {
   toNum,
   toNullOrInt,
   parseTextWithLinks,
+  ontologyTermKey,
 } from '@utils/pureUtils';
 
 describe('pureUtils', () => {
@@ -218,7 +219,9 @@ describe('pureUtils', () => {
     test('should handle empty or null input', () => {
       expect(parseTextWithLinks('')).toEqual([{ type: 'text', content: '' }]);
       expect(parseTextWithLinks(null)).toEqual([{ type: 'text', content: '' }]);
-      expect(parseTextWithLinks(undefined)).toEqual([{ type: 'text', content: '' }]);
+      expect(parseTextWithLinks(undefined)).toEqual([
+        { type: 'text', content: '' },
+      ]);
     });
 
     test('should handle text with no URLs', () => {
@@ -232,8 +235,12 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Visit ' },
-        { type: 'link', content: 'http://example.com', href: 'http://example.com' },
-        { type: 'text', content: ' for more info' }
+        {
+          type: 'link',
+          content: 'http://example.com',
+          href: 'http://example.com',
+        },
+        { type: 'text', content: ' for more info' },
       ]);
     });
 
@@ -242,7 +249,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Check out ' },
-        { type: 'link', content: 'https://www.example.com/page', href: 'https://www.example.com/page' },
+        {
+          type: 'link',
+          content: 'https://www.example.com/page',
+          href: 'https://www.example.com/page',
+        },
       ]);
     });
 
@@ -251,7 +262,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Go to ' },
-        { type: 'link', content: 'www.example.com', href: 'https://www.example.com' },
+        {
+          type: 'link',
+          content: 'www.example.com',
+          href: 'https://www.example.com',
+        },
       ]);
     });
 
@@ -260,7 +275,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Development server at ' },
-        { type: 'link', content: 'http://localhost:3000/app', href: 'http://localhost:3000/app' },
+        {
+          type: 'link',
+          content: 'http://localhost:3000/app',
+          href: 'http://localhost:3000/app',
+        },
       ]);
     });
 
@@ -269,19 +288,28 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Server at ' },
-        { type: 'link', content: 'https://192.168.1.1:8080/dashboard', href: 'https://192.168.1.1:8080/dashboard' },
+        {
+          type: 'link',
+          content: 'https://192.168.1.1:8080/dashboard',
+          href: 'https://192.168.1.1:8080/dashboard',
+        },
       ]);
     });
 
     test('should handle multiple URLs in one text', () => {
-      const text = 'Visit https://example.com and also check www.test.org for updates';
+      const text =
+        'Visit https://example.com and also check www.test.org for updates';
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Visit ' },
-        { type: 'link', content: 'https://example.com', href: 'https://example.com' },
+        {
+          type: 'link',
+          content: 'https://example.com',
+          href: 'https://example.com',
+        },
         { type: 'text', content: ' and also check ' },
         { type: 'link', content: 'www.test.org', href: 'https://www.test.org' },
-        { type: 'text', content: ' for updates' }
+        { type: 'text', content: ' for updates' },
       ]);
     });
 
@@ -290,7 +318,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Search at ' },
-        { type: 'link', content: 'https://example.com/search?q=test#results', href: 'https://example.com/search?q=test#results' },
+        {
+          type: 'link',
+          content: 'https://example.com/search?q=test#results',
+          href: 'https://example.com/search?q=test#results',
+        },
       ]);
     });
 
@@ -298,8 +330,12 @@ describe('pureUtils', () => {
       const text = 'https://example.com is a great site';
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
-        { type: 'link', content: 'https://example.com', href: 'https://example.com' },
-        { type: 'text', content: ' is a great site' }
+        {
+          type: 'link',
+          content: 'https://example.com',
+          href: 'https://example.com',
+        },
+        { type: 'text', content: ' is a great site' },
       ]);
     });
 
@@ -308,7 +344,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Visit our website at ' },
-        { type: 'link', content: 'https://example.com', href: 'https://example.com' },
+        {
+          type: 'link',
+          content: 'https://example.com',
+          href: 'https://example.com',
+        },
       ]);
     });
 
@@ -316,7 +356,11 @@ describe('pureUtils', () => {
       const text = 'https://example.com';
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
-        { type: 'link', content: 'https://example.com', href: 'https://example.com' },
+        {
+          type: 'link',
+          content: 'https://example.com',
+          href: 'https://example.com',
+        },
       ]);
     });
 
@@ -325,16 +369,25 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Local server: ' },
-        { type: 'link', content: 'localhost:8080/api', href: 'https://localhost:8080/api' },
+        {
+          type: 'link',
+          content: 'localhost:8080/api',
+          href: 'https://localhost:8080/api',
+        },
       ]);
     });
 
     test('should handle URLs with complex paths', () => {
-      const text = 'API endpoint: https://api.example.com/v1/users/123?include=profile';
+      const text =
+        'API endpoint: https://api.example.com/v1/users/123?include=profile';
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'API endpoint: ' },
-        { type: 'link', content: 'https://api.example.com/v1/users/123?include=profile', href: 'https://api.example.com/v1/users/123?include=profile' },
+        {
+          type: 'link',
+          content: 'https://api.example.com/v1/users/123?include=profile',
+          href: 'https://api.example.com/v1/users/123?include=profile',
+        },
       ]);
     });
 
@@ -349,7 +402,7 @@ describe('pureUtils', () => {
       expect(result).toEqual([
         { type: 'text', content: 'Visit ' },
         { type: 'link', content: 'https://例え.jp', href: 'https://例え.jp' },
-        { type: 'text', content: ' for Japanese content' }
+        { type: 'text', content: ' for Japanese content' },
       ]);
     });
 
@@ -358,7 +411,11 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Link: ' },
-        { type: 'link', content: 'HTTP://Example.COM/PATH', href: 'HTTP://Example.COM/PATH' },
+        {
+          type: 'link',
+          content: 'HTTP://Example.COM/PATH',
+          href: 'HTTP://Example.COM/PATH',
+        },
       ]);
     });
 
@@ -367,9 +424,34 @@ describe('pureUtils', () => {
       const result = parseTextWithLinks(text);
       expect(result).toEqual([
         { type: 'text', content: 'Visit ' },
-        { type: 'link', content: 'sub-domain.example-site.com', href: 'https://sub-domain.example-site.com' },
-        { type: 'text', content: ' for more' }
+        {
+          type: 'link',
+          content: 'sub-domain.example-site.com',
+          href: 'https://sub-domain.example-site.com',
+        },
+        { type: 'text', content: ' for more' },
       ]);
+    });
+  });
+
+  describe('ontologyTermKey', () => {
+    test('extracts .value from the normal {label, value} shape', () => {
+      expect(ontologyTermKey({ label: 'x', value: 'bao:BAO_1' })).toBe(
+        'bao:BAO_1',
+      );
+    });
+
+    test('does not fall back to the object when .value is an empty string', () => {
+      expect(ontologyTermKey({ label: 'x', value: '' })).toBe('');
+    });
+
+    test('passes through a bare string (legacy shape)', () => {
+      expect(ontologyTermKey('bao:BAO_1')).toBe('bao:BAO_1');
+    });
+
+    test('passes through undefined/null unchanged', () => {
+      expect(ontologyTermKey(undefined)).toBeUndefined();
+      expect(ontologyTermKey(null)).toBeNull();
     });
   });
 });

@@ -1,9 +1,10 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Card } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import sortBy from 'lodash/sortBy';
 import FIcons from '@components/icons/FIcons';
+import GModal from '@ui/modals/GModal';
 
 const block = (layer, fnAdd, isEnabled) => (
   <Card key={layer.key} className="shadow-sm" style={{ width: '100%' }}>
@@ -138,14 +139,14 @@ function LayerModal(props) {
   });
 
   return (
-    <Modal size="lg" centered show={show} onHide={fnClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>Choose Layer</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+    <GModal size="lg" show={show} onHide={fnClose}>
+      <GModal.Header>
+        <GModal.Title>Choose Layer</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ maxHeight: '70vh', overflowY: 'auto' }}>
         <div className="d-flex flex-column gap-3">{layout}</div>
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
 }
 

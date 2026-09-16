@@ -16,7 +16,7 @@ describe('ContributeTemplateButton', () => {
 
   it('renders correctly with default props', () => {
     const { getByText } = render(
-      <ContributeTemplateButton onClick={mockOnClick} />
+      <ContributeTemplateButton onClick={mockOnClick} />,
     );
 
     expect(getByText('Contribute to Template Hub')).toBeInTheDocument();
@@ -24,7 +24,7 @@ describe('ContributeTemplateButton', () => {
 
   it('calls onClick when clicked', () => {
     const { getByText } = render(
-      <ContributeTemplateButton onClick={mockOnClick} />
+      <ContributeTemplateButton onClick={mockOnClick} />,
     );
 
     const button = getByText('Contribute to Template Hub');
@@ -35,7 +35,7 @@ describe('ContributeTemplateButton', () => {
 
   it('is disabled when disabled prop is true', () => {
     const { getByText } = render(
-      <ContributeTemplateButton onClick={mockOnClick} disabled={true} />
+      <ContributeTemplateButton onClick={mockOnClick} disabled />,
     );
 
     const button = getByText('Contribute to Template Hub');
@@ -44,10 +44,10 @@ describe('ContributeTemplateButton', () => {
 
   it('is enabled when disabled prop is false', () => {
     const { getByText } = render(
-      <ContributeTemplateButton onClick={mockOnClick} disabled={false} />
+      <ContributeTemplateButton onClick={mockOnClick} disabled={false} />,
     );
 
     const button = getByText('Contribute to Template Hub');
-    expect(button).not.toBeDisabled();
+    expect(button).toBeEnabled();
   });
 });

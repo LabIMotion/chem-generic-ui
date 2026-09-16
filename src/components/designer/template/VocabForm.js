@@ -5,7 +5,7 @@ import { UnsVocBase } from '@components/elements/BaseFields';
 import FIcons from '@components/icons/FIcons';
 import TermLink from '@components/fields/TermLink';
 
-const VocabForm = ({ init }) => {
+function VocabForm({ init }) {
   const { label: initLabel, field: initField, ontology: initOntology } = init;
   const {
     description = [''],
@@ -94,7 +94,7 @@ const VocabForm = ({ init }) => {
       </Col>
     </Row>
   );
-};
+}
 
 VocabForm.propTypes = {
   init: PropTypes.shape({

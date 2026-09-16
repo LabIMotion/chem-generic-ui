@@ -1,12 +1,13 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Modal } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 import FlowView from '@components/flow/FlowView';
 import FIcons from '@components/icons/FIcons';
+import GModal from '@ui/modals/GModal';
 
-const FlowViewerModal = (props) => {
+function FlowViewerModal(props) {
   const { show, data, fnHide } = props;
   if (!show) return null;
   const {
@@ -28,12 +29,12 @@ const FlowViewerModal = (props) => {
 
   if (!hasFlow && !hasFlowObject) {
     return (
-      <Modal centered show={show} size="sm" onHide={fnHide}>
-        <Modal.Header closeButton>
-          <Modal.Title>{`${shortLabel} workflow`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>No defined workflow</Modal.Body>
-      </Modal>
+      <GModal show={show} size="sm" onHide={fnHide}>
+        <GModal.Header>
+          <GModal.Title>{`${shortLabel} workflow`}</GModal.Title>
+        </GModal.Header>
+        <GModal.Body>No defined workflow</GModal.Body>
+      </GModal>
     );
   }
 
@@ -67,7 +68,7 @@ const FlowViewerModal = (props) => {
       </div>
     </Draggable>
   );
-};
+}
 
 FlowViewerModal.propTypes = {
   show: PropTypes.bool.isRequired,

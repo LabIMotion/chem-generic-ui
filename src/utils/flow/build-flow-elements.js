@@ -31,13 +31,13 @@ export const removeGroupedLayers = (_layers, metadata) => {
 };
 
 const updateDataProperties = (els, layers, properties) =>
-  els.map(d => {
+  els.map((d) => {
     if (d.type === Constants.NODE_TYPES.DEFAULT && d.data) {
       const { lKey } = d.data;
       const layer = layers[lKey] || {};
       const matchingLayer = findKey(
         properties.layers || {},
-        o => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`))
+        (o) => o.wf && (o.key === lKey || o.key.startsWith(`${lKey}.`)),
       );
 
       const label = matchingLayer
@@ -94,7 +94,7 @@ export const decorateNodes = (_nodes, _layers = []) => {
               _node.data.layer,
               false,
               '',
-              isValidLayer(_node.data.layer) ? '' : 'invalid'
+              isValidLayer(_node.data.layer) ? '' : 'invalid',
             ),
             layer: _node.data.layer,
             lKey: _node.data.layer.key,
@@ -106,7 +106,7 @@ export const decorateNodes = (_nodes, _layers = []) => {
             color: isValidLayer(_node.data.layer) ? '#000' : 'lightcoral',
           },
         }
-      : _node
+      : _node,
   );
 };
 

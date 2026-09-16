@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useRef,
+} from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import sortBy from 'lodash/sortBy';
@@ -9,7 +14,10 @@ import DnDs from '@components/dnd/DnDs';
 import FIcons from '@components/icons/FIcons';
 import FieldConditionsDisplay from '@components/designer/template/ConditionsDisplay';
 import { LHText } from '@components/shared/LCom';
-import { defaultFieldsContent, definedFieldHeader } from '@components/shared/arrangeUtils';
+import {
+  defaultFieldsContent,
+  definedFieldHeader,
+} from '@components/shared/arrangeUtils';
 
 const FieldOrderContent = forwardRef(({ layer }, ref) => {
   // Initialize state with empty object or layers
@@ -45,7 +53,11 @@ const FieldOrderContent = forwardRef(({ layer }, ref) => {
 
     const content = (
       <div className={contentStyle}>
-        {definedFieldHeader(label, field, FieldTypes.F_DUMMY === type ? 'dummy' : type)}
+        {definedFieldHeader(
+          label,
+          field,
+          FieldTypes.F_DUMMY === type ? 'dummy' : type,
+        )}
         <FieldConditionsDisplay conditions={obj} />
       </div>
     );

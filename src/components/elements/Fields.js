@@ -1,8 +1,8 @@
-/* eslint-disable react/forbid-prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import { FieldTypes } from 'generic-ui-core';
+import { resolveDecimals } from '@utils/numberUtils';
 import OntologySelect from '@components/elements/OntologySelect';
 import { ButtonOntologySelect } from '@components/fields/ModalOntologySelect';
 import { getFieldProps, frmSelSty } from '@components/tools/utils';
@@ -58,6 +58,27 @@ export const renderDummyFieldGroup = ({ fieldObject }) =>
     </Form.Group>
   ) : null;
 
+// Text boxes commit on blur or Enter rather than per keystroke: each commit
+// replaces the working copy and re-renders the whole Work Area.
+const commitOnBlur = ({ layer, fieldObject, field, fnChange }) => ({
+  onBlur: (event) => {
+    if (event.target.value === (fieldObject[field] ?? '')) return;
+    fnChange(
+      event,
+      fieldObject[field],
+      fieldObject.field,
+      layer.key,
+      field,
+      FieldTypes.F_TEXT,
+    );
+  },
+  onKeyDown: (event) => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    event.currentTarget.blur();
+  },
+});
+
 export const renderNameField = ({
   layer,
   fieldObject,
@@ -78,16 +99,7 @@ export const renderNameField = ({
         name={`f_${field}`}
         defaultValue={fieldObject[field]}
         disabled={field === 'field'}
-        onChange={(event) =>
-          fnChange(
-            event,
-            fieldObject[field],
-            fieldObject.field,
-            layer.key,
-            field,
-            FieldTypes.F_TEXT,
-          )
-        }
+        {...commitOnBlur({ layer, fieldObject, field, fnChange })}
         className="me-0"
       />
       <ButtonOntologySelect
@@ -123,16 +135,7 @@ export const renderTextFieldGroup = ({
         name={`f_${field}`}
         defaultValue={fieldObject[field]}
         disabled={field === 'field'}
-        onChange={(event) =>
-          fnChange(
-            event,
-            fieldObject[field],
-            fieldObject.field,
-            layer.key,
-            field,
-            FieldTypes.F_TEXT,
-          )
-        }
+        {...commitOnBlur({ layer, fieldObject, field, fnChange })}
       />
     </Form.Group>
   );
@@ -156,11 +159,7 @@ export const renderCheck = ({
   );
   return (
     <Form.Group as={Col} xs={xs}>
-      {!skipLabel && (
-        <LLabel>
-          {isLabel ? label : <>&nbsp;</>}
-        </LLabel>
-      )}
+      {!skipLabel && <LLabel>{isLabel ? label : <>&nbsp;</>}</LLabel>}
       <Form.Check type="checkbox" id={`frmChk_${layer.key}_f_${field}`}>
         <Form.Check.Input
           className="mt-2"
@@ -358,4 +357,51 @@ export const renderNumberField = ({
       min={1}
     />
   </Form.Group>
+);
+
+function NumberInputField({ layer, fieldObject, field, fnChange, xs }) {
+  const committed =
+    field === 'decimals' && fieldObject.numeric != null
+      ? resolveDecimals(fieldObject.numeric.decimals)
+      : (fieldObject.numeric?.[field] ?? '');
+
+  const [localValue, setLocalValue] = useState(null);
+
+  const handleFocus = () => setLocalValue(String(committed));
+  const handleChange = (e) => setLocalValue(e.target.value);
+  const handleBlur = (e) => {
+    fnChange(
+      e,
+      fieldObject.label,
+      fieldObject.field,
+      layer.key,
+      field,
+      FieldTypes.F_TEXT,
+    );
+    setLocalValue(null);
+  };
+
+  return (
+    <Form.Group as={Col} xs={xs}>
+      <LLabel>
+        <>
+          {getFieldProps(field).label}&nbsp;
+          {getFieldProps(field).fieldTooltip}
+        </>
+      </LLabel>
+      <Form.Control
+        type="text"
+        name={`frm_${field}_${layer.key}_f_${fieldObject.field}`}
+        value={localValue !== null ? localValue : String(committed)}
+        onFocus={handleFocus}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className="text-end"
+      />
+    </Form.Group>
+  );
+}
+
+export const renderNumberInputField = (props) => (
+  <NumberInputField {...props} />
 );

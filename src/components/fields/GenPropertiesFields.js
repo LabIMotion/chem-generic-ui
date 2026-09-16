@@ -2,10 +2,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable no-eval */
-/* eslint-disable no-restricted-globals */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   Button,
   Form,
@@ -16,6 +14,7 @@ import {
 import 'react-datepicker/dist/react-datepicker.css';
 import Dropzone from 'react-dropzone';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import { downloadFile, genUnit, FieldTypes } from 'generic-ui-core';
@@ -33,8 +32,31 @@ import LTooltip from '@components/shared/LTooltip';
 import TAs from '@components/tools/TAs';
 import TextLabel from '@ui/common/TextLabel';
 import { modeClass } from '@/utils/pureUtils';
+import Api from '@utils/apiManager';
+import {
+  MIN_USER_SEARCH_LENGTH,
+  S_USRS_SEARCH_HINT,
+  S_USRS_SRC,
+  userToOption,
+  responseUserOptions,
+  selectedUserOption,
+  getCachedUserOptions,
+  mergeUserOptionsIntoCache,
+  fetchMissingUserOptions,
+} from '@utils/userSelectUtils';
+import {
+  formatNumberDisplay,
+  resolveDecimals,
+  validateNumberValue,
+} from '@utils/numberUtils';
 
-const GenPropertiesCheckbox = (opt) => {
+const toSelectOption = (op) => ({
+  value: op.key,
+  name: op.key,
+  label: op.label,
+});
+
+function GenPropertiesCheckbox(opt) {
   if (opt.isSpCall) {
     return (
       <Form.Group className="props_text gu_sp_form">
@@ -51,7 +73,7 @@ const GenPropertiesCheckbox = (opt) => {
     );
   }
   return (
-    <Form.Group>
+    <Form.Group className={fieldCls(opt.isSpCall)[0]}>
       {FieldHeader({ label: '', description: '' })}
       <Form.Check
         type="checkbox"
@@ -74,21 +96,21 @@ const GenPropertiesCheckbox = (opt) => {
       </Form.Check>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDate = (opt) => {
+function GenPropertiesDate(opt) {
   const klz = fieldCls(opt.isSpCall);
-  const klzLayer =
-    opt.isAtLayer || false
-      ? 'gu_date_picker gu_date_picker_layer'
-      : 'gu_date_picker';
+  const isAtLayer = opt.isAtLayer || false;
+  const klzLayer = isAtLayer ? 'gu_date_picker_layer' : '';
+  // at layer level the picker is not a field row, so it carries no row margin
+  const klzFrm = isAtLayer ? klz[0].replace('mb-3', '').trim() : klz[0];
   const newVal =
     opt.value &&
     new Date(moment(opt.value, 'DD/MM/YYYY HH:mm:ss').toISOString());
   // const newVal = opt.value && moment(opt.value, 'DD/MM/YYYY HH:mm:ss');
 
   return (
-    <Form.Group className={klz[0]}>
+    <Form.Group className={klzFrm}>
       {FieldHeader(opt)}
       <div className={klzLayer}>
         <ButtonDatePicker
@@ -99,9 +121,9 @@ const GenPropertiesDate = (opt) => {
       </div>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDateTimeRange = (opt) => {
+function GenPropertiesDateTimeRange(opt) {
   const klz = fieldCls(opt.isSpCall);
   return (
     <Form.Group className={`${klz[0]}`}>
@@ -109,9 +131,9 @@ const GenPropertiesDateTimeRange = (opt) => {
       <DateTimeRange key={`grid_${opt.f_obj.field}`} opt={opt} />
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesDrop = (opt) => {
+function GenPropertiesDrop(opt) {
   const className = opt.isRequired
     ? 'drop_generic_properties field_required'
     : 'drop_generic_properties';
@@ -173,7 +195,7 @@ const GenPropertiesDrop = (opt) => {
     );
 
   return (
-    <Form.Group>
+    <Form.Group className={fieldCls(opt.isSpCall)[0]}>
       {FieldHeader(opt)}
       <div style={{ paddingBottom: '0px' }}>
         <div className={className}>
@@ -198,25 +220,29 @@ const GenPropertiesDrop = (opt) => {
       </div>
     </Form.Group>
   );
-};
+}
 
-const GenDummy = () => (
-  <Form.Group className="props_text">
-    <Form.Control type="text" className="dummy" readOnly />
-  </Form.Group>
-);
+function GenDummy() {
+  return (
+    <Form.Group className={`props_text ${fieldCls()[0]}`}>
+      <Form.Control type="text" className="dummy" readOnly />
+    </Form.Group>
+  );
+}
 
-const GenDropReaction = (opt) => (
-  <DropReaction
-    field={opt.f_obj}
-    onNavi={opt.onNavi}
-    onChange={opt.onChange}
-    isEditable={opt.isEditable}
-  />
-);
+function GenDropReaction(opt) {
+  return (
+    <DropReaction
+      field={opt.f_obj}
+      onNavi={opt.onNavi}
+      onChange={opt.onChange}
+      isEditable={opt.isEditable}
+    />
+  );
+}
 
-const GenPropertiesInputGroup = (opt) => {
-  const { f_obj: fObj, isSpCall, onSubChange, readOnly } = opt;
+function GenPropertiesInputGroup(opt) {
+  const { f_obj: fObj, isPreview, isSpCall, onSubChange, readOnly } = opt;
   const handleSubChange = useCallback(
     (event, id) => {
       onSubChange(event, id, fObj);
@@ -245,7 +271,7 @@ const GenPropertiesInputGroup = (opt) => {
           <Button
             onClick={() => handleSubChange(e, e.id, fObj)}
             variant="success"
-            disabled={readOnly}
+            disabled={readOnly || isPreview}
           >
             {genUnitSup(genUnit(e.option_layers, e.value_system).label) || ''}
           </Button>
@@ -271,68 +297,179 @@ const GenPropertiesInputGroup = (opt) => {
       <InputGroup>{subs}</InputGroup>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesNumber = (opt) => {
+function GenPropertiesNumber(opt) {
   const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
+  const fObj = opt.f_obj || {};
+
+  const decimals = resolveDecimals(fObj.numeric?.decimals);
+
+  const numericHint = (() => {
+    if (!fObj.numeric) return null;
+    const parts = [];
+    parts.push(`dec: ${resolveDecimals(fObj.numeric.decimals)}`);
+    if (fObj.numeric.min !== '' && fObj.numeric.min != null)
+      parts.push(`min: ${fObj.numeric.min}`);
+    if (fObj.numeric.max !== '' && fObj.numeric.max != null)
+      parts.push(`max: ${fObj.numeric.max}`);
+    return `(${parts.join(', ')})`;
+  })();
+
+  // localValue holds the raw text while the user is typing (null = not editing)
+  const [localValue, setLocalValue] = useState(null);
+
+  const displayValue =
+    opt.value !== null && opt.value !== undefined && opt.value !== ''
+      ? formatNumberDisplay(opt.value, decimals)
+      : '';
+
+  // Validate the stored value against current constraints when not actively editing
+  const isEditing = localValue !== null;
+  const hasStoredValue =
+    opt.value !== null && opt.value !== undefined && opt.value !== '';
+  const { valid: isValueValid, errors: valueErrors } =
+    !isEditing && hasStoredValue
+      ? validateNumberValue(opt.value, {
+          decimals: fObj.numeric?.decimals,
+          min: fObj.numeric?.min,
+          max: fObj.numeric?.max,
+        })
+      : { valid: true, errors: [] };
+
+  const handleFocus = () => {
+    // Seed with the raw stored value so the edit text is parseable on blur.
+    // Avoid the formatted display string, which may include thousands
+    // separators that parseDecimal rejects.
+    setLocalValue(
+      opt.value === null || opt.value === undefined || opt.value === ''
+        ? ''
+        : String(opt.value),
+    );
+  };
+
+  const handleChange = (e) => {
+    // keep the raw text while the user is typing — no parsing or formatting yet
+    setLocalValue(e.target.value);
+  };
+
+  const handleBlur = (e) => {
+    // commit to parent with a synthetic event; parent will parse + store
+    if (opt.onChange) {
+      opt.onChange({ target: { value: e.target.value } });
+    }
+    setLocalValue(null);
+  };
+
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <Form.Control
-        type="number"
-        value={opt.value}
-        onChange={opt.onChange}
-        className={className}
+        type="text"
+        value={localValue !== null ? localValue : displayValue}
+        onFocus={handleFocus}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${className} text-end`}
+        isInvalid={!isValueValid}
         readOnly={opt.readOnly}
         required={opt.isRequired}
         placeholder={opt.placeholder}
-        min={1}
       />
+      {!isValueValid && (
+        <Form.Control.Feedback type="invalid">
+          {valueErrors[0]}
+        </Form.Control.Feedback>
+      )}
+      {numericHint && <Form.Text muted>{numericHint}</Form.Text>}
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesSelect = (opt) => {
-  const options = opt.options.map((op) => {
-    return {
-      value: op.key,
-      name: op.key,
-      label: op.label,
-    };
-  });
+function GenPropertiesSelect(opt) {
+  const isSUsers = opt.f_obj?.option_layers === S_USRS_SRC;
+  const [remoteOptions, setRemoteOptions] = useState(() =>
+    isSUsers ? getCachedUserOptions() : [],
+  );
+  const options = useMemo(
+    () => (opt.options || []).map(toSelectOption),
+    [opt.options],
+  );
+
+  // Resolve the stored value id whenever it changes (incl. mount) so a value
+  // swapped in after mount doesn't linger as "(depr.)". The fetch is a no-op
+  // when the id is already cached or known-invalid.
+  useEffect(() => {
+    if (!isSUsers) return;
+    fetchMissingUserOptions(
+      opt.value != null && opt.value !== '' ? [opt.value] : [],
+    ).then((fetched) => {
+      if (fetched.length > 0) setRemoteOptions(getCachedUserOptions());
+    });
+  }, [opt.value, isSUsers]);
   let className = modeClass(opt.readOnly, opt.isRequired);
   className = `select_generic_properties_${className}`;
-  const val = options.find((o) => o.value === opt.value) || null;
+  const sourceOptions = isSUsers ? remoteOptions : options;
+  const val = selectedUserOption(opt.value, sourceOptions);
   const klz = fieldCls(opt.isSpCall);
 
   const customStyles = {
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
     menu: (base) => ({ ...base, zIndex: 9999 }),
   };
+
+  const loadUserOptions = async (inputValue) => {
+    const search = inputValue.trim();
+    if (search.length < MIN_USER_SEARCH_LENGTH) return [];
+
+    const result = await Api.getUsers({ name: search });
+    const fetchedOptions = responseUserOptions(result)
+      .map(userToOption)
+      .filter((op) => op.value !== '');
+    mergeUserOptionsIntoCache(fetchedOptions);
+    setRemoteOptions((currentOptions) => {
+      const optionMap = new Map(
+        [...currentOptions, ...fetchedOptions].map((op) => [op.value, op]),
+      );
+      return Array.from(optionMap.values());
+    });
+    return fetchedOptions;
+  };
+
+  const selectProps = {
+    isClearable: true,
+    name: opt.field,
+    value: val,
+    onChange: opt.onChange,
+    className,
+    isDisabled: opt.readOnly,
+    menuPlacement: 'auto',
+    menuPortalTarget: document.body,
+    styles: { ...frmSelSty, ...customStyles },
+  };
+
   return (
     <Form.Group className={klz[0]}>
       {FieldHeader(opt)}
       <span className={klz[1]}>
-        <Select
-          isClearable
-          name={opt.field}
-          multi={false}
-          options={options}
-          value={val}
-          onChange={opt.onChange}
-          className={className}
-          isDisabled={opt.readOnly}
-          menuPlacement="auto"
-          menuPortalTarget={document.body}
-          styles={{ ...frmSelSty, ...customStyles }}
-        />
+        {isSUsers ? (
+          <AsyncSelect
+            {...selectProps}
+            cacheOptions
+            defaultOptions={false}
+            loadOptions={loadUserOptions}
+          />
+        ) : (
+          <Select {...selectProps} options={options} />
+        )}
       </span>
+      {isSUsers && <Form.Text muted>{S_USRS_SEARCH_HINT}</Form.Text>}
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesSystemDefined = (opt) => {
+function GenPropertiesSystemDefined(opt) {
   const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
   const hasUT = !!genUnit(opt.option_layers, opt.value_system).unit_type;
@@ -355,7 +492,7 @@ const GenPropertiesSystemDefined = (opt) => {
         />
         <Button
           size="sm"
-          disabled={opt.readOnly}
+          disabled={opt.readOnly || opt.isPreview}
           onClick={opt.onClick}
           variant="success"
           title={hasUT ? TAs.no_unit_conversion : undefined}
@@ -365,16 +502,18 @@ const GenPropertiesSystemDefined = (opt) => {
       </InputGroup>
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesTable = (opt) => (
-  <Form.Group>
-    {FieldHeader(opt)}
-    <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
-  </Form.Group>
-);
+function GenPropertiesTable(opt) {
+  return (
+    <Form.Group className={fieldCls(opt.isSpCall)[0]}>
+      {FieldHeader(opt)}
+      <TableRecord key={`grid_${opt.f_obj.field}`} opt={opt} />
+    </Form.Group>
+  );
+}
 
-const GenPropertiesText = (opt) => {
+function GenPropertiesText(opt) {
   const [id] = useState(uuid());
   const { f_obj: fObj } = opt;
   const showVal = opt.value;
@@ -383,7 +522,7 @@ const GenPropertiesText = (opt) => {
   const klz = fieldCls(opt.isSpCall);
 
   let className = modeClass(opt.readOnly, opt.isRequired);
-  let readOnly = opt.readOnly || false;
+  const readOnly = opt.readOnly || false;
   if (readOnly) {
     className = 'readonly';
   }
@@ -403,9 +542,9 @@ const GenPropertiesText = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenPropertiesTextArea = (opt) => {
+function GenPropertiesTextArea(opt) {
   const [id] = useState(uuid());
   const className = modeClass(opt.readOnly, opt.isRequired);
   const klz = fieldCls(opt.isSpCall);
@@ -424,9 +563,9 @@ const GenPropertiesTextArea = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
-const GenTextFormula = (opt) => {
+function GenTextFormula(opt) {
   const [id] = useState(uuid());
   const { layers } = opt;
   const subs = [];
@@ -472,7 +611,7 @@ const GenTextFormula = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
 const renderListGroupItem = (opt, attachment) => {
   const delBtn = (
@@ -536,11 +675,11 @@ const renderListGroupItem = (opt, attachment) => {
   );
 };
 
-const GenPropertiesUpload = (opt) => {
+function GenPropertiesUpload(opt) {
   const attachments = (opt.value && opt.value.files) || [];
   if (opt.isSearch) return <div>(This is an upload)</div>;
   return (
-    <Form.Group className="props_text">
+    <Form.Group className={`props_text ${fieldCls(opt.isSpCall)[0]}`}>
       {FieldHeader(opt)}
       {!opt.readOnly ? (
         <div style={{ paddingBottom: '0px', paddingTop: '0px' }}>
@@ -578,9 +717,9 @@ const GenPropertiesUpload = (opt) => {
       </ListGroup>
     </Form.Group>
   );
-};
+}
 
-const GenWFNext = (opt) => {
+function GenWFNext(opt) {
   const options = (opt.f_obj.wf_options || []).map((op) => {
     const label = op.label.match(/(.*)\(.*\)/);
     return {
@@ -594,7 +733,7 @@ const GenWFNext = (opt) => {
 
   const val = options.find((o) => o.value === opt.value) || null;
   return (
-    <Form.Group>
+    <Form.Group className={fieldCls(opt.isSpCall)[0]}>
       {FieldHeader(opt)}
       <Select
         menuContainerStyle={{ position: 'absolute' }}
@@ -609,7 +748,7 @@ const GenWFNext = (opt) => {
       />
     </Form.Group>
   );
-};
+}
 
 export {
   GenPropertiesCheckbox,

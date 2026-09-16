@@ -1,27 +1,25 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
+import GModal from '@ui/modals/GModal';
 
-const WorkflowModal = ({ showProps, children }) => {
+function WorkflowModal({ showProps, children }) {
   const { show, setShow } = showProps;
   if (!show) return null;
 
   return (
-    <Modal
-      centered
+    <GModal
       show={show}
       onHide={() => setShow(false)}
       fullscreen
       backdrop="static"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Design Workflow</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
-    </Modal>
+      <GModal.Header>
+        <GModal.Title>Design Workflow</GModal.Title>
+      </GModal.Header>
+      <GModal.Body>{children}</GModal.Body>
+    </GModal>
   );
-};
+}
 
 WorkflowModal.propTypes = {
   showProps: PropTypes.shape({

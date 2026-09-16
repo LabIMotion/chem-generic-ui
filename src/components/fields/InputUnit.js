@@ -21,20 +21,7 @@ const getNextUnit = (currentUnit, units) => {
   return units[nextIndex];
 };
 
-const convertUnits = (fromUnit, toUnit, value, units) => {
-  // Find the 'from' and 'to' units in the units array
-  const from = units.find((unit) => unit.key === fromUnit);
-  const to = units.find((unit) => unit.key === toUnit);
-
-  // If either unit is not found, throw an error
-  if (!from || !to) return null;
-
-  // Convert the value from the 'from' unit to the 'to' unit
-  const result = value * (from.nm / to.nm);
-  return parseFloat(result.toFixed(5));
-};
-
-const PopUnits = (si = []) => {
+function PopUnits(si = []) {
   const tbl = si.units.map((e) => (
     <div key={uuid()}>
       {genUnitSup(e.label)}
@@ -47,10 +34,10 @@ const PopUnits = (si = []) => {
       <Popover.Body>{tbl}</Popover.Body>
     </Popover>
   );
-};
+}
 
-const InputUnit = (props) => {
-  const { fObj, fnUnitChange } = props;
+function InputUnit(props) {
+  const { fObj, fnUnitChange, compact } = props;
   const { option_layers: si, value_system: valueSystem } = fObj;
   const sis = getUnitSystem();
   const fSi = sis.filter((e) => e.field === si)[0];
@@ -65,6 +52,28 @@ const InputUnit = (props) => {
     fnUnitChange({ data: nextUnit.key });
   };
 
+  const unitButton = (
+    <OverlayTrigger
+      animation
+      placement="top"
+      root
+      trigger={['hover', 'focus']}
+      overlay={PopUnits(fSi)}
+    >
+      <Button
+        onClick={onClick}
+        variant="success"
+        size="sm"
+        title="Set default unit"
+      >
+        {genUnitSup(unit.label) || ''}
+      </Button>
+    </OverlayTrigger>
+  );
+
+  // compact: just the button, sized to fit inline (e.g. inside a grid cell)
+  if (compact) return unitButton;
+
   return (
     <Form.Group as={Col}>
       <LLabel>
@@ -73,26 +82,19 @@ const InputUnit = (props) => {
           {getFieldProps('supportedUnits').fieldTooltip}
         </>
       </LLabel>
-      <div className="d-flex align-items-center">
-        <OverlayTrigger
-          animation
-          placement="top"
-          root
-          trigger={['hover', 'focus']}
-          overlay={PopUnits(fSi)}
-        >
-          <Button onClick={onClick} variant="success" size="sm">
-            {genUnitSup(unit.label) || ''}
-          </Button>
-        </OverlayTrigger>
-      </div>
+      <div className="d-flex align-items-center">{unitButton}</div>
     </Form.Group>
   );
-};
+}
 
 InputUnit.propTypes = {
   fObj: PropTypes.object.isRequired,
   fnUnitChange: PropTypes.func.isRequired,
+  compact: PropTypes.bool,
+};
+
+InputUnit.defaultProps = {
+  compact: false,
 };
 
 export default InputUnit;

@@ -1,8 +1,5 @@
 import MC from '@components/tools/MC';
-import {
-  notifyError,
-  notifySuccess,
-} from '@utils/template/designer-message';
+import { notifyError, notifySuccess } from '@utils/template/designer-message';
 
 const capFirst = (str) => {
   if (typeof str !== 'string') {
@@ -28,7 +25,7 @@ const s2c = (str) => {
   return str
     .toLowerCase()
     .replace(/([-_][a-z])/g, (group) =>
-      group.toUpperCase().replace('-', '').replace('_', '')
+      group.toUpperCase().replace('-', '').replace('_', ''),
     );
 };
 
@@ -59,9 +56,7 @@ const mc2res = (code, msg = '') => {
   return isSuccess ? notifySuccess(finalMsg) : notifyError(finalMsg);
 };
 
-const mc2text = (code, msg = '') => {
-  return `${MC[code] || ''} ${msg}`.trim();
-};
+const mc2text = (code, msg = '') => `${MC[code] || ''} ${msg}`.trim();
 
 const bgColor = (color = 'default') => {
   switch (color) {

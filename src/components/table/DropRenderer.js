@@ -5,9 +5,14 @@ import cloneDeep from 'lodash/cloneDeep';
 import { FieldTypes } from 'generic-ui-core';
 import GenericElTableDropTarget from '@components/table/GenericElTableDropTarget';
 
-const DropRenderer = (props) => {
+function DropRenderer(props) {
   const { opt, sField, onChange, node, genericType } = props;
-  if (![FieldTypes.F_DRAG_MOLECULE, FieldTypes.F_DRAG_SAMPLE].includes(sField.type)) return null;
+  if (
+    ![FieldTypes.F_DRAG_MOLECULE, FieldTypes.F_DRAG_SAMPLE].includes(
+      sField.type,
+    )
+  )
+    return null;
   const { data } = node;
   opt.dndItems = [sField.type.split('_')[1]];
   opt.sField = sField;
@@ -15,10 +20,14 @@ const DropRenderer = (props) => {
   const oopt = cloneDeep(opt);
   return (
     <div className="drop_generic_properties drop_generic_table_wrap">
-      <GenericElTableDropTarget opt={oopt} onDrop={onChange} genericType={genericType}  />
+      <GenericElTableDropTarget
+        opt={oopt}
+        onDrop={onChange}
+        genericType={genericType}
+      />
     </div>
   );
-};
+}
 
 DropRenderer.propTypes = {
   sField: PropTypes.object.isRequired,

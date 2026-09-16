@@ -5,7 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DropLinkRenderer = (props) => {
+function DropLinkRenderer(props) {
   const { sField, node, onNavi } = props;
   const dId = ((node.data[sField.id] || {}).value || {}).el_id || '';
   const dVal = ((node.data[sField.id] || {}).value || {}).el_short_label || ' ';
@@ -15,7 +15,7 @@ const DropLinkRenderer = (props) => {
       <span className="reaction-material-link">{dVal}</span>
     </a>
   );
-};
+}
 
 DropLinkRenderer.propTypes = {
   sField: PropTypes.object.isRequired,

@@ -9,7 +9,7 @@ import Constants from '@components/tools/Constants';
  * GenEditor is a combined component that includes both the LToolbar and GenInterface
  * This allows consuming applications to use a single component instead of both separately
  */
-const GenEditor = ({
+function GenEditor({
   generic,
   genericType,
   klass,
@@ -24,7 +24,7 @@ const GenEditor = ({
   isSearch,
   isSpCall,
   aiComp,
-}) => {
+}) {
   const [expandAll, setExpandAll] = useState(false);
 
   // If generic object is empty, don't render anything
@@ -59,7 +59,7 @@ const GenEditor = ({
       />
     </div>
   );
-};
+}
 
 GenEditor.propTypes = {
   // Props for both components

@@ -1,49 +1,55 @@
 const successLevel = 'success';
 const errorLevel = 'error';
 
-export const notifyError = (msg = 'Operation error.', title = 'Error') => {
-  return {
-    msg,
-    title,
-    lvl: errorLevel,
-    isSuccess: false,
-  };
-};
+export const notifyWarning = (
+  msg = 'Operation completed with warnings.',
+  title = 'Warning',
+) => ({
+  msg,
+  title,
+  lvl: 'warning',
+  isSuccess: true,
+});
+
+export const notifyError = (msg = 'Operation error.', title = 'Error') => ({
+  msg,
+  title,
+  lvl: errorLevel,
+  isSuccess: false,
+});
 
 export const notifySuccess = (
   msg = "Operation successfully. Remember to save once you've finished editing.",
-  title = 'Success'
-) => {
-  return {
-    msg,
-    title,
-    lvl: successLevel,
-    isSuccess: true,
-  };
-};
+  title = 'Success',
+) => ({
+  msg,
+  title,
+  lvl: successLevel,
+  isSuccess: true,
+});
 
 export const notifyDummyAdd = (
   isSuccess = true,
   msg = 'add dummy field successfully',
-  title = 'Add dummy field'
+  title = 'Add dummy field',
 ) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyFieldAdd = (
   isSuccess = true,
   msg = 'add new field successfully',
-  title = 'Add new field'
+  title = 'Add new field',
 ) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyFieldRemove = (
   isSuccess = true,
   msg = 'remove field successfully',
-  title = 'Remove field'
+  title = 'Remove field',
 ) => (isSuccess ? notifySuccess(msg, title) : notifyError(msg, title));
 
 export const notifyLayerUpdate = (
   info = { type: null, layerKey: null },
   msg = 'update layer successfully',
-  title = 'Update layer'
+  title = 'Update layer',
 ) => {
   const { type, layerKey } = info;
   switch (type) {

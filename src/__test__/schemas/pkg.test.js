@@ -16,11 +16,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: 'abc123',
-          current_revision: 'def456'
+          current_revision: 'def456',
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -33,11 +33,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.2.3',
           base_revision: '1a2b3c4d5e6f7890',
-          current_revision: '0987654321abcdef'
+          current_revision: '0987654321abcdef',
         },
         name: 'chem-generic-ui',
         version: '2.1.0-beta.1',
-        labimotion: '1.5.2'
+        labimotion: '1.5.2',
       };
 
       const isValid = validate(validData);
@@ -50,11 +50,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '2.0.0-alpha.1',
           base_revision: 'feature-branch-hash',
-          current_revision: 'latest-commit-hash'
+          current_revision: 'latest-commit-hash',
         },
         name: 'chem-generic-ui',
         version: '3.0.0-rc.1',
-        labimotion: '2.0.0-beta.3'
+        labimotion: '2.0.0-beta.3',
       };
 
       const isValid = validate(validData);
@@ -69,7 +69,7 @@ describe('pkg Schema', () => {
         const invalidData = {
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -84,10 +84,10 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -102,10 +102,10 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -120,10 +120,10 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
-          version: '2.1.0'
+          version: '2.1.0',
         };
 
         const isValid = validate(invalidData);
@@ -140,11 +140,11 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
           version: 123,
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -158,11 +158,11 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: null
+          labimotion: null,
         };
 
         const isValid = validate(invalidData);
@@ -176,7 +176,7 @@ describe('pkg Schema', () => {
           eln: 'invalid-eln',
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -192,11 +192,11 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'wrong-package-name',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -211,11 +211,11 @@ describe('pkg Schema', () => {
           eln: {
             version: '1.0.0',
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 123,
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -230,11 +230,11 @@ describe('pkg Schema', () => {
         const invalidData = {
           eln: {
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -248,11 +248,11 @@ describe('pkg Schema', () => {
         const invalidData = {
           eln: {
             version: '1.0.0',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -266,18 +266,20 @@ describe('pkg Schema', () => {
         const invalidData = {
           eln: {
             version: '1.0.0',
-            base_revision: 'abc123'
+            base_revision: 'abc123',
           },
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
         expect(isValid).toBe(false);
         expect(validate.errors[0].instancePath).toBe('/eln');
         expect(validate.errors[0].keyword).toBe('required');
-        expect(validate.errors[0].params.missingProperty).toBe('current_revision');
+        expect(validate.errors[0].params.missingProperty).toBe(
+          'current_revision',
+        );
       });
 
       test('should reject eln with non-string fields', () => {
@@ -285,11 +287,11 @@ describe('pkg Schema', () => {
           eln: {
             version: 123,
             base_revision: 'abc123',
-            current_revision: 'def456'
+            current_revision: 'def456',
           },
           name: 'chem-generic-ui',
           version: '2.1.0',
-          labimotion: '1.0.0'
+          labimotion: '1.0.0',
         };
 
         const isValid = validate(invalidData);
@@ -306,11 +308,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: '',
-          current_revision: ''
+          current_revision: '',
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -323,11 +325,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: longHash,
-          current_revision: longHash
+          current_revision: longHash,
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -339,11 +341,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0-beta.1+build.123',
           base_revision: 'abc123',
-          current_revision: 'def456'
+          current_revision: 'def456',
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -355,11 +357,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: null,
-          current_revision: null
+          current_revision: null,
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -371,11 +373,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: null,
-          current_revision: 'def456'
+          current_revision: 'def456',
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -387,11 +389,11 @@ describe('pkg Schema', () => {
         eln: {
           version: '1.0.0',
           base_revision: 'abc123',
-          current_revision: null
+          current_revision: null,
         },
         name: 'chem-generic-ui',
         version: '2.1.0',
-        labimotion: '1.0.0'
+        labimotion: '1.0.0',
       };
 
       const isValid = validate(validData);
@@ -403,16 +405,31 @@ describe('pkg Schema', () => {
     test('should have correct schema structure', () => {
       expect(pkgSchema.type).toBe('object');
       expect(pkgSchema.properties).toBeDefined();
-      expect(pkgSchema.required).toEqual(['eln', 'name', 'version', 'labimotion']);
+      expect(pkgSchema.required).toEqual([
+        'eln',
+        'name',
+        'version',
+        'labimotion',
+      ]);
     });
 
     test('should have correct eln object structure', () => {
       const elnSchema = pkgSchema.properties.eln;
       expect(elnSchema.type).toBe('object');
-      expect(elnSchema.required).toEqual(['version', 'base_revision', 'current_revision']);
+      expect(elnSchema.required).toEqual([
+        'version',
+        'base_revision',
+        'current_revision',
+      ]);
       expect(elnSchema.properties.version.type).toBe('string');
-      expect(elnSchema.properties.base_revision.type).toEqual(['string', 'null']);
-      expect(elnSchema.properties.current_revision.type).toEqual(['string', 'null']);
+      expect(elnSchema.properties.base_revision.type).toEqual([
+        'string',
+        'null',
+      ]);
+      expect(elnSchema.properties.current_revision.type).toEqual([
+        'string',
+        'null',
+      ]);
     });
 
     test('should have correct name constant constraint', () => {

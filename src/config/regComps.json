@@ -1,0 +1,12 @@
+{
+  "layerStack": {
+    "mode": "write",
+    "enabled": true,
+    "label": "Layer Stack"
+  },
+  "doi": {
+    "mode": "read",
+    "enabled": true,
+    "label": "DOI Info."
+  }
+}

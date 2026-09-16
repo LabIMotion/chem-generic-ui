@@ -77,7 +77,8 @@ function SimpleLayerBlock({
                 disabled={layerData.wf}
                 style={layerData.wf ? { pointerEvents: 'none' } : {}}
               >
-                <span>{FIcons.faGears}</span> {conditions.length > 0 && `(${conditions.length})`}
+                <span>{FIcons.faGears}</span>{' '}
+                {conditions.length > 0 && `(${conditions.length})`}
               </Button>
             </span>
           )}

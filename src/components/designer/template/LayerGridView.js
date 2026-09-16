@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import GenInterface from '@components/details/GenInterface';
 
-const LayerGridView = ({ _layer }) => {
+function LayerGridView({ _layer }) {
   const { generic, ext } = _layer;
   const { name, label, description } = ext;
   const [layer, setLayer] = useState(generic);
@@ -47,6 +47,6 @@ const LayerGridView = ({ _layer }) => {
       />
     </div>
   );
-};
+}
 
 export default LayerGridView;

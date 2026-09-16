@@ -82,7 +82,7 @@ describe('propBase Schema', () => {
       const isValid = validate(invalidData);
       expect(isValid).toBe(false);
       expect(validate.errors[0].message).toContain(
-        "must have property groups when property restrict is present",
+        'must have property groups when property restrict is present',
       );
     });
   });
@@ -325,12 +325,7 @@ describe('propBase Schema', () => {
 
   describe('Property Definitions', () => {
     it('should have string type properties', () => {
-      const stringProperties = [
-        'uuid',
-        'version',
-        'identifier',
-        'released_at',
-      ];
+      const stringProperties = ['uuid', 'version', 'identifier', 'released_at'];
 
       stringProperties.forEach((prop) => {
         expect(propBaseSch.properties[prop].type).toBe('string');

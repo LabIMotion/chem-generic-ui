@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-prop-types */
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
@@ -28,12 +27,15 @@ import {
 import { storeOptions, uploadFiles } from '@components/tools/utils';
 import useReducerWithCallback from '@components/tools/useReducerWithCallback';
 import splitFlowElements from '@utils/flow/split-flow-elements';
+import { reconcileMetadataOnSave } from '@utils/template/prune-references';
 import { genericVariant } from '@utils/pureUtils';
+import { parseNumberInput } from '@utils/numberUtils';
 import { addLayer, layerDropReaction } from '@components/details/handler';
 import { GenInterfaceProvider } from '@components/details/GenInterfaceContext';
 import GeneralDescriptionFields from '@components/details/GeneralDescriptionFields';
 import ElementDetailsFields from '@components/details/ElementDetailsFields';
 import ResourceContextFields from '@components/details/ResourceContextFields';
+import RegCompWrapper from '@components/regComps/RegCompWrapper';
 
 const initialState = {
   showViewLayer: false,
@@ -41,11 +43,9 @@ const initialState = {
   showAnaModal: false,
 };
 
-const reducer = (state, action) => {
-  return { ...state, ...action };
-};
+const reducer = (state, action) => ({ ...state, ...action });
 
-const GenInterface = (props) => {
+function GenInterface(props) {
   const [state, dispatch] = useReducerWithCallback(reducer, initialState);
   const {
     generic,
@@ -62,6 +62,7 @@ const GenInterface = (props) => {
     editMode,
     genericType: propGenericType,
     refSource,
+    regComp,
   } = props;
 
   if (Object.keys(generic).length === 0) return null;
@@ -130,22 +131,6 @@ const GenInterface = (props) => {
 
   const layerRemove = (elId, layer) => {
     const { layers } = generic.properties;
-
-    // remove layer(layer.key) if needed
-    const group = (metadata.groups || []).find((g) =>
-      g.layers?.includes(layer.key),
-    );
-    if (group) {
-      const grpIdx = metadata.groups.findIndex((g) => g.id === group.id);
-      const grpLayers = metadata.groups[grpIdx].layers || [];
-      const layerIdx = grpLayers.indexOf(layer.key);
-      if (layerIdx !== -1) {
-        grpLayers.splice(layerIdx, 1);
-      }
-      metadata.groups[grpIdx].layers = grpLayers;
-      generic.metadata = metadata;
-    }
-
     const sortedLayers = sortBy(layers, ['position', 'wf_position']);
     const selectedIdx = sortedLayers.findIndex((e) => e.key === layer.key);
     const selected = sortedLayers[selectedIdx];
@@ -158,6 +143,7 @@ const GenInterface = (props) => {
         return el;
       });
     generic.properties.layers = orgLayerObject(sortedLayers);
+    reconcileMetadataOnSave(generic);
     generic.changed = true;
     fnChange(generic);
   };
@@ -289,6 +275,7 @@ const GenInterface = (props) => {
       });
     const ll = orgLayerObject(sortedLayers);
     generic.properties.layers = ll;
+    reconcileMetadataOnSave(generic);
     dispatch({ showViewLayer: false, selectedLayerKey: layer.key }, () => {
       fnChange(generic);
     });
@@ -379,9 +366,24 @@ const GenInterface = (props) => {
         value = new Date(event).toLocaleString('en-GB').split(', ').join(' ');
         break;
       case FieldTypes.F_INTEGER:
-        ({ value } = event.target);
-        value = Math.trunc(value);
+      case FieldTypes.F_NUMBER: {
+        const rawValue = event.target.value;
+        const fieldObj = properties.layers[layer]?.fields?.find(
+          (f) => f.field === field,
+        );
+        // F_INTEGER safety net
+        const decimals =
+          fieldObj?.type === FieldTypes.F_INTEGER
+            ? 0
+            : fieldObj?.numeric?.decimals;
+        const constraints =
+          fieldObj?.type === FieldTypes.F_INTEGER
+            ? { min: '', max: '' }
+            : { min: fieldObj?.numeric?.min, max: fieldObj?.numeric?.max };
+        const parsed = parseNumberInput(rawValue, decimals, constraints);
+        value = parsed !== null ? parsed : '';
         break;
+      }
       default:
         ({ value } = event.target);
     }
@@ -513,7 +515,7 @@ const GenInterface = (props) => {
     aiComp,
     expandAll,
     editMode,
-    genericType: genericType,
+    genericType,
   };
 
   const layersLayout = <LayersLayout {...paramsLayersLayout} />;
@@ -530,15 +532,10 @@ const GenInterface = (props) => {
 
   return (
     <GenInterfaceProvider value={{ refSource }}>
-      <ProgressFlowWrapper
-        generic={generic}
-        refElement={refSource?.element}
-      />
+      <ProgressFlowWrapper generic={generic} refElement={refSource?.element} />
+      <RegCompWrapper regComp={regComp} generic={generic} fnChange={fnChange} />
       {genericType === Constants.GENERIC_TYPES.DATASET && (
-        <GeneralDescriptionFields
-          disabled={false}
-          readOnly={false}
-        />
+        <GeneralDescriptionFields disabled={false} readOnly={false} />
       )}
       {genericType === Constants.GENERIC_TYPES.DATASET && (
         <ElementDetailsFields />
@@ -557,7 +554,7 @@ const GenInterface = (props) => {
       {anaModal}
     </GenInterfaceProvider>
   );
-};
+}
 
 GenInterface.propTypes = {
   generic: PropTypes.object.isRequired,
@@ -574,6 +571,9 @@ GenInterface.propTypes = {
   editMode: PropTypes.bool,
   genericType: PropTypes.string, // from parent only for preview
   refSource: PropTypes.object,
+  regComp: PropTypes.shape({
+    comp: PropTypes.elementType,
+  }),
 };
 
 GenInterface.defaultProps = {
@@ -591,6 +591,7 @@ GenInterface.defaultProps = {
     currentUser: {},
     fnRef: () => {},
   },
+  regComp: null,
 };
 
 export default GenInterface;

@@ -5,7 +5,7 @@ import FIcons from '@components/icons/FIcons';
 import { fnToggle } from '@ui/common/fnToggle';
 import { FN_ID } from '@ui/common/fnConstants';
 
-const ContributeTemplateButton = ({ onClick, disabled = false, text = '' }) => {
+function ContributeTemplateButton({ onClick, disabled = false, text = '' }) {
   return (
     <Button
       onClick={onClick}
@@ -17,7 +17,7 @@ const ContributeTemplateButton = ({ onClick, disabled = false, text = '' }) => {
       {FIcons.faPaperPlane} Contribute to Template Hub {text}
     </Button>
   );
-};
+}
 
 ContributeTemplateButton.fnId = FN_ID.FN_CONTRIBUTE_TEMPLATE;
 

@@ -8,19 +8,17 @@ import { initialNodes, initialViewport } from '@utils/flow/initial-flow';
  * @param {object} flow
  * @return {object} Returns a flow object.
  */
-const splitFlowElements = flow => {
+const splitFlowElements = (flow) => {
   const deep = cloneDeep(flow || {});
   const els = deep?.elements || [];
 
   if (els.length < 1)
     return { nodes: initialNodes, edges: [], viewport: initialViewport };
 
-  const nodes = els.filter(el => !el.source);
+  const nodes = els.filter((el) => !el.source);
   const edges = els
-    .filter(el => el.source && el.source !== el.target)
-    .map(el => {
-      return { ...el, markerEnd: { type: MarkerType.ArrowClosed } };
-    });
+    .filter((el) => el.source && el.source !== el.target)
+    .map((el) => ({ ...el, markerEnd: { type: MarkerType.ArrowClosed } }));
   const viewport = {
     x: deep?.position[0],
     y: deep?.position[1],

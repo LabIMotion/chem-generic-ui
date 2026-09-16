@@ -5,6 +5,7 @@ import Constants from '@components/tools/Constants';
 import ElementSelectButton from '@components/shared/ElementSelectButton';
 import FieldHeader from '@components/fields/FieldHeader';
 import FIcons from '@components/icons/FIcons';
+import ElIcon from '@components/icons/ElIcon';
 import { fnToggle } from '@ui/common/fnToggle';
 import { FN_ID } from '@ui/common/fnConstants';
 
@@ -29,7 +30,7 @@ function ElementLink({
   return (
     <span className="d-flex align-items-center gap-3">
       <a role="link" onClick={() => onNavi(elKlass, elId)} className="lu-link">
-        <i className={iconName} />{' '}
+        <ElIcon iconName={iconName} />{' '}
         <span className="reaction-material-link">{elLabel || eName}</span>{' '}
         {FIcons.faArrowUpRightFromSquare}
       </a>
@@ -46,7 +47,7 @@ function ElementLink({
 }
 
 ElementLink.propTypes = {
-  elId: PropTypes.string,
+  elId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   elTip: PropTypes.string,
   iconName: PropTypes.string,
   elLabel: PropTypes.string,

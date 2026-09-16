@@ -9,6 +9,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
 const defaultColDef = {
   minWidth: 50,
@@ -17,7 +18,16 @@ const defaultColDef = {
   sortable: true,
 };
 
-const GenGrid = ({ columnDefs, gridData, pageSize, theme, rowSelected, filterText, onSetAutoHeight, onClearSelection }) => {
+function GenGrid({
+  columnDefs,
+  gridData,
+  themeKey,
+  rowSelected,
+  filterText,
+  onSetAutoHeight,
+  onClearSelection,
+}) {
+  const { themeProps, wrapperClassName } = resolveGridTheme(themeKey);
   const [columns] = useState(columnDefs);
   const gridRef = useRef();
   const gridStyle = useMemo(() => ({ height: '80vh', width: '100%' }), []);
@@ -106,30 +116,29 @@ const GenGrid = ({ columnDefs, gridData, pageSize, theme, rowSelected, filterTex
   }, [filterText]);
 
   return (
-    <>
-      <div id="guiDesignerGrid" style={gridStyle} className={theme}>
-        <AgGridReact
-          ref={gridRef}
-          columnDefs={columns}
-          defaultColDef={defaultColDef}
-          rowSelection={{
-            mode: 'singleRow',
-            checkboxes: false,
-            enableClickSelection: false,
-          }}
-          // paginationPageSize={pageSize}
-          rowData={rowData}
-        />
-      </div>
-    </>
+    <div id="guiDesignerGrid" style={gridStyle} className={wrapperClassName}>
+      <AgGridReact
+        ref={gridRef}
+        {...themeProps}
+        columnDefs={columns}
+        defaultColDef={defaultColDef}
+        rowSelection={{
+          mode: 'singleRow',
+          checkboxes: false,
+          enableClickSelection: false,
+        }}
+        // paginationPageSize={pageSize}
+        rowData={rowData}
+      />
+    </div>
   );
-};
+}
 
 GenGrid.propTypes = {
   columnDefs: PropTypes.array.isRequired,
   gridData: PropTypes.array.isRequired,
   pageSize: PropTypes.number,
-  theme: PropTypes.string,
+  themeKey: PropTypes.string,
   rowSelected: PropTypes.bool,
   filterText: PropTypes.string,
   onSetAutoHeight: PropTypes.func,
@@ -138,7 +147,7 @@ GenGrid.propTypes = {
 
 GenGrid.defaultProps = {
   pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE,
-  theme: Constants.GRID_THEME.BALHAM.VALUE,
+  themeKey: 'BALHAM',
   rowSelected: false,
 };
 

@@ -1,11 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button, Form } from 'react-bootstrap';
+import { FieldTypes } from 'generic-ui-core';
 import FIcons from '@components/icons/FIcons';
-import { fieldLabelFor, layerLabelFor, getConditionDisplay } from '@utils/pureUtils';
+import { getConditionDisplay } from '@utils/pureUtils';
+import {
+  S_USRS_SRC,
+  isSystemUserField,
+  useSystemUserConditionLabels,
+} from '@utils/userSelectUtils';
 import OperatorSelector from '@ui/groups/OperatorSelector';
 import Constants from '@components/tools/Constants';
 import { useDesignerContext } from '@components/designer/DesignerContext';
+import GenPropertiesOlsSelect from '@components/fields/GenPropertiesOlsSelect';
+import SystemUserValueSelect from '@components/fields/SystemUserValueSelect';
 
 /**
  * Shared component for rendering restriction form UI
@@ -32,6 +40,10 @@ function RestrictionFormCard({
   onSourceChange,
 }) {
   const { klasses = [], genericType } = useDesignerContext();
+  const systemUserLabels = useSystemUserConditionLabels(
+    conditions,
+    availableLayers,
+  );
   // Filter layers if needed
   const layersToShow = filterCurrentLayer
     ? availableLayers.filter((layer) => layer.key !== currentEntityKey)
@@ -41,8 +53,12 @@ function RestrictionFormCard({
   const selectedFieldObj = availableFields.find(
     (field) => field.field === selectedField,
   );
-  const isSelectField = selectedFieldObj?.type === 'select';
-  const isCheckboxField = selectedFieldObj?.type === 'checkbox';
+  const isSelectField = selectedFieldObj?.type === FieldTypes.F_SELECT;
+  const isCheckboxField = selectedFieldObj?.type === FieldTypes.F_CHECKBOX;
+  const isOntologySelectField =
+    selectedFieldObj?.type === FieldTypes.F_ONTOLOGY_SELECT;
+  const isSystemUserSelectField =
+    isSelectField && selectedFieldObj?.option_layers === S_USRS_SRC;
   const selectFieldOptions =
     isSelectField && selectedFieldObj?.option_layers
       ? selectOptions[selectedFieldObj.option_layers]?.options || []
@@ -50,6 +66,15 @@ function RestrictionFormCard({
 
   // Render value input based on field type
   const renderValueInput = () => {
+    if (isSystemUserSelectField) {
+      return (
+        <SystemUserValueSelect
+          value={fieldValue}
+          onChange={(id) => onValueChange({ target: { value: id } })}
+        />
+      );
+    }
+
     if (isSelectField) {
       return (
         <Form.Select
@@ -82,6 +107,19 @@ function RestrictionFormCard({
       );
     }
 
+    if (isOntologySelectField) {
+      return (
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <GenPropertiesOlsSelect
+            f_obj={selectedFieldObj}
+            field={selectedField}
+            value={fieldValue}
+            onChange={onValueChange}
+          />
+        </div>
+      );
+    }
+
     return (
       <Form.Control
         type="text"
@@ -96,8 +134,11 @@ function RestrictionFormCard({
 
   // Get helper text based on field type
   const getHelperText = () => {
+    if (isSystemUserSelectField) return '';
     if (isSelectField) return 'Select from predefined options';
     if (isCheckboxField) return 'Select the expected checkbox state';
+    if (isOntologySelectField)
+      return 'Browse and select an ontology term, or leave empty to match an empty selection';
     return 'Enter the expected value (case-sensitive)';
   };
 
@@ -119,6 +160,13 @@ function RestrictionFormCard({
             {conditions.map((cond) => {
               const { layerTitle, fieldTitle, valueTitle } =
                 getConditionDisplay(cond, availableLayers, klasses);
+              const resolvedValueTitle = isSystemUserField(
+                availableLayers,
+                cond.layer,
+                cond.field,
+              )
+                ? systemUserLabels[String(cond.value)] || valueTitle
+                : valueTitle;
               return (
                 <div
                   key={cond.id}
@@ -126,7 +174,7 @@ function RestrictionFormCard({
                 >
                   <small className="flex-grow-1">
                     <strong>{layerTitle}</strong> → {fieldTitle} = &quot;
-                    {valueTitle}&quot;
+                    {resolvedValueTitle}&quot;
                   </small>
                   <Button
                     variant="danger"
@@ -145,7 +193,9 @@ function RestrictionFormCard({
         <div className="border-top pt-3">
           <small className="text-muted d-block mb-2">Add New Condition:</small>
           <Form.Group className="mb-2">
-            <Form.Label className="small">Select Layer (appearance order)</Form.Label>
+            <Form.Label className="small">
+              Select Layer (appearance order)
+            </Form.Label>
             <Form.Select
               size="sm"
               value={selectedLayer}
@@ -173,12 +223,13 @@ function RestrictionFormCard({
                   {/* <option value="">Select a field...</option> */}
                   {availableFields.map((field) => (
                     <option key={field.field} value={field.field}>
-                      {field.label || field.field} ({field.field}, type: {field.type})
+                      {field.label || field.field} ({field.field}, type:{' '}
+                      {field.type})
                     </option>
                   ))}
                 </Form.Select>
                 <Form.Text muted>
-                  Eligible fields (checkbox, text, select)
+                  Eligible fields (checkbox, text, select, ontology-select)
                 </Form.Text>
               </Form.Group>
             </div>
@@ -191,10 +242,16 @@ function RestrictionFormCard({
                     variant="success"
                     size="sm"
                     onClick={onAddCondition}
+                    // Ontology-select accepts an empty value to match
+                    // "no selection", like the plain select.
                     disabled={
                       !selectedLayer ||
                       !selectedField ||
-                      availableFields.length === 0
+                      availableFields.length === 0 ||
+                      (!isSelectField &&
+                        !isCheckboxField &&
+                        !isOntologySelectField &&
+                        !fieldValue?.trim())
                     }
                     style={{ flexShrink: 0 }}
                     title="Add condition"

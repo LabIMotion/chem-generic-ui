@@ -30,7 +30,7 @@ function FlowImageButton() {
       imageWidth,
       imageHeight,
       0.5,
-      2
+      2,
     );
     toPng(document.querySelector('.react-flow__viewport'), {
       width: imageWidth,

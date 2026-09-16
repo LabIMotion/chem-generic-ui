@@ -28,16 +28,16 @@ const getValidLayers = (properties, metadata) => {
   return removeGroupedLayers(layers, metadata);
 };
 
-const Sidebar = ({ properties = {}, metadata = {}, nodes = [] }) => {
+function Sidebar({ properties = {}, metadata = {}, nodes = [] }) {
   if (!properties || Object.keys(properties).length < 1) {
     return null;
   }
 
   const newLayers = getValidLayers(properties, metadata);
-  const sortedLayers = sortBy(newLayers, l => l.position) || [];
-  const layersInFlow = nodes.map(n => n.data.lKey);
+  const sortedLayers = sortBy(newLayers, (l) => l.position) || [];
+  const layersInFlow = nodes.map((n) => n.data.lKey);
   const layersNotInFlow = sortedLayers.filter(
-    l => !layersInFlow.includes(l.key)
+    (l) => !layersInFlow.includes(l.key),
   );
 
   return (
@@ -53,15 +53,18 @@ const Sidebar = ({ properties = {}, metadata = {}, nodes = [] }) => {
       <DnDNodes nodes={layersNotInFlow} />
     </aside>
   );
-};
+}
 
-const FlowDesigner = ({ element, fnSave }) => {
+function FlowDesigner({ element, fnSave }) {
   const { properties, metadata } = element;
   const [flow] = useState(properties?.u?.draw || {});
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [nodes, setNodes] = useState(
-    decorateNodes(flow.nodes || [], Object.keys(getValidLayers(properties, metadata)))
+    decorateNodes(
+      flow.nodes || [],
+      Object.keys(getValidLayers(properties, metadata)),
+    ),
   );
   const [edges, setEdges] = useState(flow.edges || []);
   const [changed, setChanged] = useState(false);
@@ -80,18 +83,18 @@ const FlowDesigner = ({ element, fnSave }) => {
     }
   }, [changed, onSave]);
 
-  const onNodesChange = useCallback(changes => {
-    setNodes(nds => applyNodeChanges(changes, nds));
+  const onNodesChange = useCallback((changes) => {
+    setNodes((nds) => applyNodeChanges(changes, nds));
     setChanged(true);
   }, []);
 
-  const onEdgesChange = useCallback(changes => {
-    setEdges(eds => applyEdgeChanges(changes, eds));
+  const onEdgesChange = useCallback((changes) => {
+    setEdges((eds) => applyEdgeChanges(changes, eds));
     setChanged(true);
   }, []);
 
-  const onConnect = useCallback(params => {
-    setEdges(eds =>
+  const onConnect = useCallback((params) => {
+    setEdges((eds) =>
       addEdge(
         {
           ...params,
@@ -99,8 +102,8 @@ const FlowDesigner = ({ element, fnSave }) => {
           markerEnd: { type: MarkerType.ArrowClosed },
           label: 'next',
         },
-        eds
-      )
+        eds,
+      ),
     );
     setChanged(true);
   }, []);
@@ -115,7 +118,7 @@ const FlowDesigner = ({ element, fnSave }) => {
       };
       position = reactFlowInstance.project(position);
       const newNode = buildDefaultNode({ layer: node, position });
-      setNodes(nds => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode));
     }
   };
 
@@ -124,9 +127,10 @@ const FlowDesigner = ({ element, fnSave }) => {
     drop: (item, monitor) => {
       addNode(item, monitor);
     },
-    collect: monitor => {
-      return { isOver: monitor.isOver(), canDrop: monitor.canDrop() };
-    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
   });
 
   useEffect(() => {
@@ -135,8 +139,8 @@ const FlowDesigner = ({ element, fnSave }) => {
     setNodes(
       decorateNodes(
         initFlow.nodes || [],
-        Object.keys(getValidLayers(properties, metadata))
-      )
+        Object.keys(getValidLayers(properties, metadata)),
+      ),
     );
     setEdges(initFlow.edges || []);
   }, [properties]);
@@ -164,7 +168,7 @@ const FlowDesigner = ({ element, fnSave }) => {
       </ReactFlowProvider>
     </div>
   );
-};
+}
 
 FlowDesigner.propTypes = {
   element: PropTypes.object.isRequired,

@@ -75,7 +75,7 @@ const LayersLayout = (props) => {
     onSubChange: funcSubChange,
     selectOptions: options,
     onClick: funcClick,
-    layers: layers,
+    layers,
     isPreview,
     isSearch,
     activeWF,
@@ -120,7 +120,11 @@ const LayersLayout = (props) => {
           cond_operator: groupRestriction.op,
         };
 
-        const [showGroup] = isItemEffectivelyVisible(transformedRestriction, layers, refSource?.element);
+        const [showGroup] = isItemEffectivelyVisible(
+          transformedRestriction,
+          layers,
+          refSource?.element,
+        );
         if (!showGroup) return; // Skip this group if conditions are not met
       }
 
@@ -151,14 +155,28 @@ const LayersLayout = (props) => {
         layer.cond_fields.length === 0
       ) {
         const ig = (
-          <GenPropertiesLayer key={uk} layer={layer} grouped={false} {...layerProps} />
+          <GenPropertiesLayer
+            key={uk}
+            layer={layer}
+            grouped={false}
+            {...layerProps}
+          />
         );
         layout.push(ig);
       } else if (layer?.cond_fields?.length > 0) {
-        const [showLayer] = isItemEffectivelyVisible(layer, layers, refSource?.element);
+        const [showLayer] = isItemEffectivelyVisible(
+          layer,
+          layers,
+          refSource?.element,
+        );
         if (showLayer) {
           const igs = (
-            <GenPropertiesLayer key={uk} layer={layer} grouped={false} {...layerProps} />
+            <GenPropertiesLayer
+              key={uk}
+              layer={layer}
+              grouped={false}
+              {...layerProps}
+            />
           );
           layout.push(igs);
         }

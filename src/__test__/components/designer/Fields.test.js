@@ -48,21 +48,48 @@ describe('render text field', () => {
     const field = 'placeholder';
     const fnChange = jest.fn();
     const { getByText, getByRole } = render(
-      renderTextFieldGroup({ layer, fieldObject, field, fnChange })
+      renderTextFieldGroup({ layer, fieldObject, field, fnChange }),
     );
     const labelElement = getByText('Placeholder');
     const inputElement = getByRole('textbox');
     expect(labelElement).toBeInTheDocument();
     expect(inputElement).toHaveValue('value1');
     fireEvent.change(inputElement, { target: { value: 'new value' } });
+    expect(fnChange).not.toHaveBeenCalled();
+    fireEvent.blur(inputElement);
     expect(fnChange).toHaveBeenCalledWith(
       expect.any(Object),
       'value1',
       'placeholder',
       'layer1',
       'placeholder',
-      'text'
+      'text',
     );
+  });
+
+  it('commits on Enter', () => {
+    const layer = { key: 'layer1' };
+    const fieldObject = { type: 'text', field: 'label', label: 'Old' };
+    const fnChange = jest.fn();
+    const { getByRole } = render(
+      renderTextFieldGroup({ layer, fieldObject, field: 'label', fnChange }),
+    );
+    const inputElement = getByRole('textbox');
+    inputElement.focus();
+    fireEvent.change(inputElement, { target: { value: 'New' } });
+    fireEvent.keyDown(inputElement, { key: 'Enter' });
+    expect(fnChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not commit an unchanged value on blur', () => {
+    const layer = { key: 'layer1' };
+    const fieldObject = { type: 'text', field: 'label', label: 'Same' };
+    const fnChange = jest.fn();
+    const { getByRole } = render(
+      renderTextFieldGroup({ layer, fieldObject, field: 'label', fnChange }),
+    );
+    fireEvent.blur(getByRole('textbox'));
+    expect(fnChange).not.toHaveBeenCalled();
   });
 
   it('should not render text field', () => {
@@ -75,7 +102,7 @@ describe('render text field', () => {
     const field = 'field1';
     const fnChange = jest.fn();
     const { queryByText } = render(
-      renderTextFieldGroup({ layer, fieldObject, field, fnChange })
+      renderTextFieldGroup({ layer, fieldObject, field, fnChange }),
     );
     const labelElement = queryByText('Placeholder');
     expect(labelElement).not.toBeInTheDocument();

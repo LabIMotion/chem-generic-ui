@@ -6,7 +6,6 @@ import {
   ButtonGroup,
   Card,
   Col,
-  Dropdown,
   Form,
   InputGroup,
   OverlayTrigger,
@@ -31,6 +30,8 @@ import VocabSaveBtn from '@components/designer/template/VocabSaveBtn';
 import FieldBadge from '@components/fields/FieldBadge';
 import InputUnit from '@components/fields/InputUnit';
 import OntCmp from '@components/fields/OntCmp';
+import OntologySelect from '@components/elements/OntologySelect';
+import { ButtonOntologySelect } from '@components/fields/ModalOntologySelect';
 import {
   // renderDatetimeRange,
   renderAdjust,
@@ -39,6 +40,7 @@ import {
   renderDummyFieldGroup,
   renderNameField,
   renderNumberField,
+  renderNumberInputField,
   renderOwnRow,
   renderRequired,
   renderReadonly,
@@ -48,12 +50,12 @@ import {
 import PositionDnD from '@components/dnd/PositionDnD';
 import DnDs from '@components/dnd/DnDs';
 import FIcons from '@components/icons/FIcons';
-import ButtonDelField from '@components/fields/ButtonDelField';
-import ButtonEllipse from '@components/fields/ButtonEllipse';
+import FieldActionsBtn from '@components/designer/FieldActionsBtn';
 import LLabel from '@components/shared/LLabel';
 import Prop from '@components/designer/template/Prop';
 import { toNullOrInt } from '@utils/pureUtils';
 import Constants from '@components/tools/Constants';
+import { S_USRS_SRC, S_USRS_SRC_OPTION } from '@utils/userSelectUtils';
 
 class ElementField extends Component {
   constructor(props) {
@@ -101,6 +103,11 @@ class ElementField extends Component {
     if (fc === 'decimal') {
       env.target.value = toNullOrInt(e.target.value) || 5;
     }
+    if (fc === 'min' || fc === 'max') {
+      const raw = e.target.value;
+      const parsed = parseFloat(raw);
+      env.target.value = raw === '' || isNaN(parsed) ? '' : parsed;
+    }
     onChange(env, orig, fe, lk, fc, tp);
   }
 
@@ -114,7 +121,7 @@ class ElementField extends Component {
     const { field: fieldObject, layer } = this.props;
     this.handleChange(
       { value: _params?.data },
-      fieldObject['field'],
+      fieldObject.field,
       fieldObject.field,
       layer.key,
       'ontology', // 'field',
@@ -221,13 +228,11 @@ class ElementField extends Component {
     );
     const sameGroupLayerKeys = currentLayerGroup?.layers || null;
 
-    const unitConfig = unitsSystem.map((_c) => {
-      return {
-        value: _c.field,
-        name: _c.label,
-        label: _c.label,
-      };
-    });
+    const unitConfig = unitsSystem.map((_c) => ({
+      value: _c.field,
+      name: _c.label,
+      label: _c.label,
+    }));
     let typeOpts = FieldBase;
     if (genericType === 'Element') {
       typeOpts = ElementBase;
@@ -237,6 +242,17 @@ class ElementField extends Component {
     typeOpts.sort((a, b) => a.label.localeCompare(b.label));
     const f = fieldObject;
 
+    // Legacy backfill: pin the existing default unit as the formula base unit
+    // for templates created before `value_system_base` existed, so they get
+    // migrated when next opened in the designer.
+    if (
+      f.type === FieldTypes.F_SYSTEM_DEFINED &&
+      f.value_system &&
+      !f.value_system_base
+    ) {
+      f.value_system_base = f.value_system;
+    }
+
     // Transform to expected format
     const selectOptionsArray = Object.keys(selections || {}).map((key) => ({
       value: key,
@@ -244,11 +260,12 @@ class ElementField extends Component {
       label: key,
     }));
 
+    const sUsersOption = S_USRS_SRC_OPTION;
     const selectOptionsOpts = [
       FieldTypes.F_SELECT,
       FieldTypes.F_SELECT_MULTI,
     ].includes(f.type)
-      ? selectOptionsArray
+      ? [sUsersOption, ...selectOptionsArray]
       : unitConfig;
     const selectOptionsVal =
       selectOptionsOpts?.find((o) => o.value === f.option_layers) || null;
@@ -287,6 +304,17 @@ class ElementField extends Component {
                     layerKey,
                     'option_layers',
                     f.type,
+                  )
+                }
+                formatOptionLabel={(option) =>
+                  option.value === S_USRS_SRC ? (
+                    <span className="fst-italic">
+                      <span>(from system)</span>
+                      &nbsp;
+                      {option.label}
+                    </span>
+                  ) : (
+                    option.label
                   )
                 }
                 menuPlacement="auto"
@@ -370,6 +398,53 @@ class ElementField extends Component {
       </Row>
     ) : null;
 
+    const ontologySelectOptions = [FieldTypes.F_ONTOLOGY_SELECT].includes(
+      f.type,
+    ) ? (
+      <Row className="mb-1">
+        <Form.Group as={Col}>
+          <div className="d-flex align-items-center">
+            <Form.Control
+              type="text"
+              name={`f_ontology_term_${f.field}`}
+              value={f.ontology_term?.label || f.ontology_term || ''}
+              className="me-2"
+              readOnly
+              disabled // Add the disabled prop on an input to give it a grayed out appearance and remove pointer events.
+              placeholder="Select an ontology term"
+            />
+            <ButtonOntologySelect
+              modalComponent={
+                <OntologySelect
+                  fnSelected={(selected) => {
+                    if (selected) {
+                      this.handleChange(
+                        {
+                          target: {
+                            value: {
+                              value: selected.value,
+                              label: selected.data?.label || selected.value,
+                            },
+                          },
+                        },
+                        f.ontology_term,
+                        f.field,
+                        layerKey,
+                        'ontology_term',
+                        FieldTypes.F_TEXT,
+                      );
+                    }
+                  }}
+                  defaultValue={f.ontology_term || null}
+                />
+              }
+              customClass={f.ontology_term ? 'gu-ontology-selected' : null}
+            />
+          </div>
+        </Form.Group>
+      </Row>
+    ) : null;
+
     const fieldHeader = (
       <span className="flex-grow-1">
         <span className="fw-bold">
@@ -423,25 +498,13 @@ class ElementField extends Component {
             // disabled={f.required === true || f.required === 'true'}
             disabled={false} // for testing
           />
-          <ButtonEllipse condSet={false}>
-            <ButtonTooltip
-              idf="fld_dum_add"
-              fnClick={this.handleAddDummy}
-              element={{ layerKey, field: f.field }}
-              fa="faSquare"
-              place="top"
-              as="menu"
-            />
-            <Dropdown.Divider />
-            <ButtonDelField
-              delType={FieldTypes.DEL_FIELD}
-              delKey={f.field}
-              delRoot={layerKey}
-              generic={generic}
-              fnConfirm={onDelete}
-              as="menu"
-            />
-          </ButtonEllipse>
+          <FieldActionsBtn
+            field={f}
+            layerKey={layerKey}
+            generic={generic}
+            onDummyAdd={this.handleAddDummy}
+            onDelete={onDelete}
+          />
         </ButtonGroup>
       </div>
     );
@@ -473,6 +536,7 @@ class ElementField extends Component {
               layerKey={`${f.field}_${layerKey}`}
               toggleExpand={this.toggleExpandLayer}
               propHeader={customHeader}
+              unmountCollapsed
             >
               <Form>
                 <Row className="mb-1">
@@ -561,32 +625,84 @@ class ElementField extends Component {
                 {/* {renderDatetimeRange({ fieldObject })} */}
                 {tableOptions}
                 {textFormula}
+                {ontologySelectOptions}
                 {[FieldTypes.F_INTEGER, FieldTypes.F_TEXT].includes(f.type) && (
-                <>
-                  <Row className="mb-1">
-                    {renderTextFieldGroup({
-                      layer,
-                      fieldObject,
-                      field: 'placeholder',
-                      fnChange: this.handleChange,
-                      xs: undefined,
-                    })}
-                  </Row>
-                  <Row className="mb-1">
-                    {renderReadonly({
-                      layer,
-                      fieldObject,
-                      fnChange: this.handleChange,
-                    })}
-                    {['Element'].includes(genericType)
-                      ? renderRequired({
-                          layer,
-                          fieldObject,
-                          fnChange: this.handleChange,
-                          xs: 6,
-                        })
-                      : renderBlank()}
-                  </Row>
+                  <>
+                    <Row className="mb-1">
+                      {renderTextFieldGroup({
+                        layer,
+                        fieldObject,
+                        field: 'placeholder',
+                        fnChange: this.handleChange,
+                        xs: undefined,
+                      })}
+                    </Row>
+                    <Row className="mb-1">
+                      {renderReadonly({
+                        layer,
+                        fieldObject,
+                        fnChange: this.handleChange,
+                      })}
+                      {['Element'].includes(genericType)
+                        ? renderRequired({
+                            layer,
+                            fieldObject,
+                            fnChange: this.handleChange,
+                            xs: 6,
+                          })
+                        : renderBlank()}
+                    </Row>
+                  </>
+                )}
+                {[FieldTypes.F_NUMBER].includes(f.type) && (
+                  <>
+                    <Row className="mb-1">
+                      {renderNumberInputField({
+                        layer,
+                        fieldObject,
+                        field: 'decimals',
+                        fnChange: this.handleChange,
+                        xs: 4,
+                      })}
+                      {renderNumberInputField({
+                        layer,
+                        fieldObject,
+                        field: 'min',
+                        fnChange: this.handleChange,
+                        xs: 4,
+                      })}
+                      {renderNumberInputField({
+                        layer,
+                        fieldObject,
+                        field: 'max',
+                        fnChange: this.handleChange,
+                        xs: 4,
+                      })}
+                    </Row>
+                    <Row className="mb-1">
+                      {renderTextFieldGroup({
+                        layer,
+                        fieldObject,
+                        field: 'placeholder',
+                        fnChange: this.handleChange,
+                        xs: undefined,
+                      })}
+                    </Row>
+                    <Row className="mb-1">
+                      {renderReadonly({
+                        layer,
+                        fieldObject,
+                        fnChange: this.handleChange,
+                      })}
+                      {['Element'].includes(genericType)
+                        ? renderRequired({
+                            layer,
+                            fieldObject,
+                            fnChange: this.handleChange,
+                            xs: 6,
+                          })
+                        : renderBlank()}
+                    </Row>
                   </>
                 )}
               </Form>

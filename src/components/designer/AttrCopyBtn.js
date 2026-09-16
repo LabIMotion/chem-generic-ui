@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
@@ -9,7 +7,7 @@ import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
 function AttrCopyBtn(props) {
-  const { data, fnCopy, fnSelect, genericType } = props;
+  const { data, fnCopy, fnSelect, genericType, disabled } = props;
   const [show, setShow] = useState(false);
 
   const onSelect = () => {
@@ -20,7 +18,12 @@ function AttrCopyBtn(props) {
   return (
     <>
       <LTooltip idf={`copy.${genericType.toLowerCase()}`}>
-        <Button variant="light" size="sm" onClick={onSelect}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={onSelect}
+          disabled={disabled}
+        >
           {FIcons.faClone}
         </Button>
       </LTooltip>
@@ -45,8 +48,9 @@ AttrCopyBtn.propTypes = {
     Constants.GENERIC_TYPES.SEGMENT,
     Constants.GENERIC_TYPES.DATASET,
   ]).isRequired,
+  disabled: PropTypes.bool,
 };
 
-AttrCopyBtn.defaultProps = {};
+AttrCopyBtn.defaultProps = { disabled: false };
 
 export default AttrCopyBtn;

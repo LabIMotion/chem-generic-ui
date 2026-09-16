@@ -1,11 +1,14 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { genUnits, genUnit } from 'generic-ui-core';
 import TAs from '@components/tools/TAs';
 import { genUnitSup } from '@components/tools/utils';
-import { convertValues, validateInput, getValidationErrors } from '@utils/unitHelpers';
+import {
+  convertValues,
+  validateInput,
+  getValidationErrors,
+} from '@utils/unitHelpers';
 
 /**
  * SysUnitButton - A button component that displays a unit of measurement
@@ -17,7 +20,7 @@ import { convertValues, validateInput, getValidationErrors } from '@utils/unitHe
  * @param {function} props.fnCb - Callback function to handle button click
  * @returns {JSX.Element|null} - The rendered button or null if the generic object is invalid
  */
-const SysUnitButton = ({ generic, variant, size, fnCb }) => {
+function SysUnitButton({ generic, variant, size, fnCb }) {
   if (!generic) {
     console.error('Error: input object is undefined or null!');
     return null;
@@ -57,7 +60,11 @@ const SysUnitButton = ({ generic, variant, size, fnCb }) => {
       else uIdx = 0;
 
       const newValSystem = units.length > 0 ? units[uIdx].key : '';
-      const newValues = convertValues(measurable_quantity, newValSystem, values);
+      const newValues = convertValues(
+        measurable_quantity,
+        newValSystem,
+        values,
+      );
 
       update.unit = newValSystem;
       update.values = newValues;
@@ -79,7 +86,7 @@ const SysUnitButton = ({ generic, variant, size, fnCb }) => {
       {genUnitSup(unitInfo.label || '') || ''}
     </Button>
   );
-};
+}
 
 SysUnitButton.propTypes = {
   generic: PropTypes.shape({

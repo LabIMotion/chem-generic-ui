@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
 import {
   Button,
   ButtonToolbar,
@@ -21,7 +27,7 @@ import Template from '@components/designer/template/Template';
 import AttrUploadBtn from '@components/designer/AttrUploadBtn';
 import DocuConst from '@components/tools/DocuConst';
 import FIcons from '@components/icons/FIcons';
-import DesignerContext, { DesignerProvider } from '@components/designer/DesignerContext';
+import { DesignerProvider } from '@components/designer/DesignerContext';
 import SyncBtn from '@components/repo/SyncButton';
 
 const ContentComponents = {
@@ -30,7 +36,7 @@ const ContentComponents = {
   [Constants.GENERIC_TYPES.DATASET]: 'Generic Datasets Designer',
 };
 
-const FNLocation = (type) => {
+function FNLocation(type) {
   const text = ContentComponents[type];
   return (
     <div className="col-auto">
@@ -38,9 +44,9 @@ const FNLocation = (type) => {
       <span className="fw-bold">{text}</span>
     </div>
   );
-};
+}
 
-const Designer = (_props) => {
+function Designer(_props) {
   const {
     fnCopy,
     fnCreate,
@@ -56,8 +62,9 @@ const Designer = (_props) => {
     klasses,
     preview,
     refSource = { currentUser: {} },
+    regComp = null,
   } = _props;
-  const [theme, setTheme] = useState(Constants.GRID_THEME.QUARTZ.VALUE);
+  const [themeKey, setThemeKey] = useState('QUARTZ');
   const [data, setData] = useState(null);
   const [filterText, setFilterText] = useState('');
   const qfRef = useRef();
@@ -66,18 +73,23 @@ const Designer = (_props) => {
 
   const sortedKlasses = useMemo(
     () => sortBy(klasses || [], ['label']),
-    [klasses]
+    [klasses],
   );
 
   useEffect(() => {
-    if (gridData.length > 0 && data) {
-      const updatedData = gridData.find((e) => e.id === data.id);
-      if (
-        updatedData &&
-        updatedData.properties_template?.uuid !== data.properties_release?.uuid
-      ) {
-        setData(cloneDeep(updatedData));
-      }
+    if (!data) return;
+    const updatedData = gridData.find((e) => e.id === data.id);
+    // A delivery without the open row means the klass was deleted. No
+    // `length` guard here: an empty list (last klass deleted) must close the
+    // work area too.
+    if (!updatedData) {
+      setData(null);
+      return;
+    }
+    if (
+      updatedData.properties_template?.uuid !== data.properties_release?.uuid
+    ) {
+      setData(cloneDeep(updatedData));
     }
   }, [gridData]);
 
@@ -119,6 +131,26 @@ const Designer = (_props) => {
     }
   }, []);
 
+  // Write-back seam for the package-registered host component column. No-op for
+  // now (read/display only). A contract-complete impl would mirror RegCompHost:
+  // only act when configEntry.mode === 'write', call registryEntry.merge(
+  // row.properties_template, updated, row.metadata, encKey), apply the result
+  // only when result.notify.isSuccess, persist the modified klass via fnSubmit/
+  // fnUpdate, and return result.notify (the host comp consumes cbFn's return).
+  // useCallback keeps it stable so the memoized context value below is stable.
+  const fnSave = useCallback(() => {}, []);
+
+  // The registered host component (regComp) and its write-back seam (fnSave) are
+  // exposed through DesignerContext rather than prop-drilled into the grids: the
+  // grids read regComp to decide whether to add the column, and RegCellRenderer
+  // reads both from context. refSource is forwarded too so a host comp can read
+  // host context (e.g. refSource.currentUser) without a separate store lookup.
+  // Memoized so per-row cells don't re-render on unrelated Designer state changes.
+  const designerContextValue = useMemo(
+    () => ({ klasses: sortedKlasses, genericType, regComp, fnSave, refSource }),
+    [sortedKlasses, genericType, regComp, fnSave, refSource],
+  );
+
   const genGrid = () => {
     switch (genericType) {
       case Constants.GENERIC_TYPES.ELEMENT:
@@ -132,8 +164,8 @@ const Designer = (_props) => {
             fnShowProp={onDataSelected}
             // fnShowPropJson={() => {}}
             gridData={gridData}
-            pageSize={getPageSizeForTheme(theme)}
-            theme={theme}
+            pageSize={getPageSizeForTheme(themeKey)}
+            themeKey={themeKey}
             rowSelected={data !== null}
             filterText={filterText}
             onSetAutoHeight={onSetAutoHeight}
@@ -151,8 +183,8 @@ const Designer = (_props) => {
             fnShowProp={onDataSelected}
             // fnShowPropJson={() => {}}
             gridData={gridData}
-            pageSize={getPageSizeForTheme(theme)}
-            theme={theme}
+            pageSize={getPageSizeForTheme(themeKey)}
+            themeKey={themeKey}
             rowSelected={data !== null}
             filterText={filterText}
             onSetAutoHeight={onSetAutoHeight}
@@ -169,8 +201,8 @@ const Designer = (_props) => {
             fnShowProp={onDataSelected}
             // fnShowPropJson={() => {}}
             gridData={gridData}
-            pageSize={getPageSizeForTheme(theme)}
-            theme={theme}
+            pageSize={getPageSizeForTheme(themeKey)}
+            themeKey={themeKey}
             rowSelected={data !== null}
             filterText={filterText}
             onSetAutoHeight={onSetAutoHeight}
@@ -183,23 +215,20 @@ const Designer = (_props) => {
   };
 
   return (
-    <DesignerProvider value={{ klasses: sortedKlasses, genericType }}>
+    <DesignerProvider value={designerContextValue}>
       <Row className="mb-2 align-items-center">
         <Col xs="auto">
           <ButtonToolbar style={{ display: 'inline-block' }}>
             <SyncBtn fnRefresh={fnRefresh} genericType={genericType} />
             <GridToolbar
               btnNew={
-                <AttrNewBtn
-                  fnCreate={fnCreate}
-                  genericType={genericType}
-                />
+                <AttrNewBtn fnCreate={fnCreate} genericType={genericType} />
               }
               btnUpload={
                 <AttrUploadBtn fnUpload={fnUpload} genericType={genericType} />
               }
-              fnClickLarge={() => setTheme(Constants.GRID_THEME.QUARTZ.VALUE)}
-              fnClickSmall={() => setTheme(Constants.GRID_THEME.BALHAM.VALUE)}
+              fnClickLarge={() => setThemeKey('QUARTZ')}
+              fnClickSmall={() => setThemeKey('BALHAM')}
             >
               <Button
                 variant="outline-secondary"
@@ -264,6 +293,6 @@ const Designer = (_props) => {
       )}
     </DesignerProvider>
   );
-};
+}
 
 export default Designer;

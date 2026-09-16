@@ -5,11 +5,11 @@ import Select from 'react-select';
 import { FieldTypes } from 'generic-ui-core';
 import { frmSelSty } from '@components/tools/utils';
 
-const SelectRenderer = (props) => {
+function SelectRenderer(props) {
   const { sField, onChange, sOptions, node } = props;
   if (sField.type !== FieldTypes.F_SELECT || sOptions.length < 1) return null;
   const { data } = node;
-  const val = sOptions.find((o) => o.value === data[sField.id].value) || null;
+  const val = sOptions.find((o) => o.value === data[sField.id]?.value) || null;
   return (
     <Select
       styles={frmSelSty}
@@ -24,7 +24,7 @@ const SelectRenderer = (props) => {
       // className="status-select"
     />
   );
-};
+}
 
 SelectRenderer.propTypes = {
   sField: PropTypes.object.isRequired,

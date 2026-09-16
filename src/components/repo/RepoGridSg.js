@@ -4,6 +4,9 @@ import { AgGridReact } from 'ag-grid-react';
 import RepoRenderer from '@components/details/renderers/RepoRenderer';
 import Constants from '@components/tools/Constants';
 import ExternalManager from '@utils/extMgr';
+import { resolveGridTheme } from '@utils/table/grid-theme';
+import { formatUtcTimestamp } from '@utils/dateUtils';
+import ElIcon from '@components/icons/ElIcon';
 
 function BelongsToRenderer(params) {
   const { data } = params;
@@ -11,12 +14,13 @@ function BelongsToRenderer(params) {
     <>
       {data.element_klass?.label}
       &nbsp;
-      <i className={data.element_klass?.icon_name} aria-hidden="true" />
+      <ElIcon iconName={data.element_klass?.icon_name} />
     </>
   );
 }
 
 function RepoGridSg({ fnApi }) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
   const defaultColDef = useMemo(
@@ -66,16 +70,23 @@ function RepoGridSg({ fnApi }) {
       flex: 2,
     },
     { headerName: 'Version', field: 'version' },
-    { headerName: 'Released at', field: 'released_at', flex: 2 },
+    {
+      headerName: 'Released at',
+      field: 'released_at',
+      flex: 2,
+      // Format at render time only: the raw ISO value stays in the row so sorting is chronological.
+      valueFormatter: (p) => formatUtcTimestamp(p.value),
+    },
     { headerName: 'Identifier', field: 'identifier' },
   ];
 
   return (
     <div
-      className={Constants.GRID_THEME.QUARTZ.VALUE}
+      className={wrapperClassName}
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
       <AgGridReact
+        {...themeProps}
         loading={loading}
         onGridReady={onGridReady}
         columnDefs={columnDefs}

@@ -3,10 +3,14 @@ import { v4 as uuid } from 'uuid';
 export default class Attachment {
   constructor(args) {
     Object.assign(this, args);
-    if (!this.id) { this.id = Attachment.buildID(); }
+    if (!this.id) {
+      this.id = Attachment.buildID();
+    }
   }
 
-  static buildID() { return uuid(); }
+  static buildID() {
+    return uuid();
+  }
 
   static fromFile(file) {
     return new Attachment({
@@ -31,7 +35,7 @@ export default class Attachment {
       content_type: this.content_type,
       is_deleted: this.is_deleted,
       id: this.id,
-      is_new: this.isNew || false
+      is_new: this.isNew || false,
     });
   }
 }

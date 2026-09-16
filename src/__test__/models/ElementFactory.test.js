@@ -1,16 +1,25 @@
-
 import { createElement } from '@models/ElementFactory';
-import { showProperties } from 'generic-ui-core';
+import {
+  isFieldEffectivelyVisible,
+  isItemEffectivelyVisible,
+} from '@utils/template/visibility-handler';
 import { organizeLayersForDisplay } from '@utils/template/group-handler';
 
 // Mock generic-ui-core
 vi.mock('generic-ui-core', () => ({
   showProperties: jest.fn(),
-  resetProperties: jest.fn(p => p),
+  resetProperties: jest.fn((p) => p),
   FieldTypes: {
     F_TEXT: 'text',
-    F_INTEGER: 'integer'
-  }
+    F_INTEGER: 'integer',
+    F_NUMBER: 'number',
+  },
+}));
+
+// Mock visibility-handler (re-exports from generic-ui-core)
+vi.mock('@utils/template/visibility-handler', () => ({
+  isFieldEffectivelyVisible: jest.fn(),
+  isItemEffectivelyVisible: jest.fn(),
 }));
 
 // Mock group-handler
@@ -32,25 +41,26 @@ describe('ElementFactory isValidated', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    isFieldEffectivelyVisible.mockReturnValue([true]);
+    isItemEffectivelyVisible.mockReturnValue([true]);
   });
 
   it('should be valid if name and all visible required fields are set', () => {
     const layers = {
       layer1: {
         key: 'layer1',
-        fields: [
-          { field: 'f1', required: true, value: 'val1', type: 'text' }
-        ]
-      }
+        fields: [{ field: 'f1', required: true, value: 'val1', type: 'text' }],
+      },
     };
 
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    showProperties.mockReturnValue([true, 'Label']);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     expect(el.isValidated()).toBe(true);
@@ -60,19 +70,18 @@ describe('ElementFactory isValidated', () => {
     const layers = {
       layer1: {
         key: 'layer1',
-        fields: [
-          { field: 'f1', required: true, value: '', type: 'text' }
-        ]
-      }
+        fields: [{ field: 'f1', required: true, value: '', type: 'text' }],
+      },
     };
 
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    showProperties.mockReturnValue([true, 'Label']);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     expect(el.isValidated()).toBe(false);
@@ -82,20 +91,20 @@ describe('ElementFactory isValidated', () => {
     const layers = {
       layer1: {
         key: 'layer1',
-        fields: [
-          { field: 'f1', required: true, value: '', type: 'text' }
-        ]
-      }
+        fields: [{ field: 'f1', required: true, value: '', type: 'text' }],
+      },
     };
 
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    // Mock showProperties to return false for the field f1
-    showProperties.mockReturnValue([false, 'Label']);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
+    // Field f1 is hidden
+    isFieldEffectivelyVisible.mockReturnValue([false]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     expect(el.isValidated()).toBe(true);
@@ -112,29 +121,22 @@ describe('ElementFactory isValidated', () => {
             required: true,
             value: '',
             type: 'text',
-            cond_fields: [{ layer: 'layer1', field: 'f1', value: 'v1' }]
-          }
-        ]
-      }
+            cond_fields: [{ layer: 'layer1', field: 'f1', value: 'v1' }],
+          },
+        ],
+      },
     };
 
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
-    // showProperties called for:
-    // 1. Layer1 check
-    // 2. f1 check
-    // 3. f2 check
-    // 4. f1 recursive check for f2 (dependency)
-    showProperties
-      .mockReturnValueOnce([true]) // layer1
-      .mockReturnValueOnce([true]) // f1
-      .mockReturnValueOnce([true]) // f2
-      .mockReturnValueOnce([true]); // f1 (recursive check for f2)
+    // Both fields visible (default mock); f2 visible and empty -> invalid
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     // f2 is visible and empty
@@ -147,18 +149,19 @@ describe('ElementFactory isValidated', () => {
         key: 'layer1',
         fields: [
           { field: 'f1', required: true, value: '', type: 'other_type' }, // Should be skipped
-          { field: 'f2', required: true, value: '', type: 'text' } // Should block
-        ]
-      }
+          { field: 'f2', required: true, value: '', type: 'text' }, // Should block
+        ],
+      },
     };
 
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    showProperties.mockReturnValue([true]);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     // Valid because f1 is skipped, but wait, f2 blocks it.
@@ -173,31 +176,36 @@ describe('ElementFactory isValidated', () => {
     const layers = {
       layer1: {
         key: 'layer1',
-        fields: [{ field: 'f1', required: true, value: 'some_value', type: 'text' }]
-      }
+        fields: [
+          { field: 'f1', required: true, value: 'some_value', type: 'text' },
+        ],
+      },
     };
     const metadata = {
       groups: [{ id: 'group1', label: 'Group 1', layers: ['layer1'] }],
       restrict: {
-        group1: { cond: [{ layer: 'layer1', field: 'f1', value: 'has_value' }], op: 1 }
-      }
+        group1: {
+          cond: [{ layer: 'layer1', field: 'f1', value: 'has_value' }],
+          op: 1,
+        },
+      },
     };
 
     organizeLayersForDisplay.mockReturnValue([
       {
         type: 'group',
         id: 'group1',
-        layers: [{ data: layers.layer1 }]
-      }
+        layers: [{ data: layers.layer1 }],
+      },
     ]);
 
     // Group visibility check returns false
-    showProperties.mockReturnValueOnce([false]);
+    isItemEffectivelyVisible.mockReturnValueOnce([false]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata
+      metadata,
     });
 
     expect(el.isValidated()).toBe(true);
@@ -208,34 +216,35 @@ describe('ElementFactory isValidated', () => {
       layer1: {
         key: 'layer1',
         cond_fields: [{ layer: 'layer2', field: 'other', value: 'val' }],
-        fields: [{ field: 'f1', required: true, value: '', type: 'text' }]
+        fields: [{ field: 'f1', required: true, value: '', type: 'text' }],
       },
       layer2: {
         key: 'layer2',
-        fields: [{ field: 'other', required: true, value: 'other val', type: 'text' }]
-      }
+        fields: [
+          { field: 'other', required: true, value: 'other val', type: 'text' },
+        ],
+      },
     };
     const metadata = {
       groups: [{ id: 'group1', label: 'Group 1', layers: ['layer1'] }],
-      restrict: {}
+      restrict: {},
     };
 
     organizeLayersForDisplay.mockReturnValue([
       {
         type: 'group',
         id: 'group1',
-        layers: [{ data: layers.layer1 }]
-      }
+        layers: [{ data: layers.layer1 }],
+      },
     ]);
 
-    showProperties
-      .mockReturnValueOnce([true]) // group check (none, but default true if no restrict)
-      .mockReturnValueOnce([false]); // layer1 check
+    // layer1 is hidden
+    isItemEffectivelyVisible.mockReturnValueOnce([false]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata
+      metadata,
     });
 
     expect(el.isValidated()).toBe(true);
@@ -246,40 +255,41 @@ describe('ElementFactory isValidated', () => {
       layer1: {
         key: 'layer1',
         fields: [
-          { field: 'f1', value: 'stale_val', type: 'text', cond_fields: [{ layer: 'layer2', field: 'f2', value: 'ON' }] }
-        ]
+          {
+            field: 'f1',
+            value: 'stale_val',
+            type: 'text',
+            cond_fields: [{ layer: 'layer2', field: 'f2', value: 'ON' }],
+          },
+        ],
       },
       layer2: {
         key: 'layer2',
-        fields: [{ field: 'f2', required: true, value: '', type: 'text' }]
-      }
+        fields: [{ field: 'f2', required: true, value: '', type: 'text' }],
+      },
     };
     const metadata = {
       groups: [{ id: 'groupB', label: 'Group B', layers: ['layer2'] }],
       restrict: {
-        groupB: { cond: [{ layer: 'layer1', field: 'f1', value: 'stale_val' }], op: 1 }
-      }
+        groupB: {
+          cond: [{ layer: 'layer1', field: 'f1', value: 'stale_val' }],
+          op: 1,
+        },
+      },
     };
 
     organizeLayersForDisplay.mockReturnValue([
       { type: 'layer', key: 'layer1', data: layers.layer1 },
-      { type: 'group', id: 'groupB', layers: [{ data: layers.layer2 }] }
+      { type: 'group', id: 'groupB', layers: [{ data: layers.layer2 }] },
     ]);
 
-    // Top-down check:
-    // 1. Layer 1 check
-    // 2. f1 recursive check (triggered by groupB check below)
-    // 3. Group B check
-
-    showProperties
-      .mockReturnValueOnce([true])  // Layer 1 visible
-      .mockReturnValueOnce([false]) // f1 hidden (trigger is not ON)
-      .mockReturnValueOnce([true]);  // Group B restriction itself matches 'stale_val'
+    // Group B effectively hidden (f1 stale)
+    isItemEffectivelyVisible.mockReturnValueOnce([false]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata
+      metadata,
     });
 
     // Even though Group B restrict matches 'stale_val', f1 is hidden,
@@ -293,16 +303,17 @@ describe('ElementFactory isValidated', () => {
     const layers = {
       layer1: {
         key: 'layer1',
-        fields: [{ field: 'f1', value: '', type: 'text' }] // required is missing
-      }
+        fields: [{ field: 'f1', value: '', type: 'text' }], // required is missing
+      },
     };
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    showProperties.mockReturnValue([true]);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     expect(el.isValidated()).toBe(true);
@@ -314,19 +325,98 @@ describe('ElementFactory isValidated', () => {
         key: 'layer1',
         fields: [
           { field: 'f1', required: null, value: '', type: 'text' },
-          { field: 'f2', required: undefined, value: '', type: 'text' }
-        ]
-      }
+          { field: 'f2', required: undefined, value: '', type: 'text' },
+        ],
+      },
     };
-    organizeLayersForDisplay.mockReturnValue([{ type: 'layer', key: 'layer1', data: layers.layer1 }]);
-    showProperties.mockReturnValue([true]);
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
 
     const el = new GenElement({
       name: 'Test Element',
       properties: { layers },
-      metadata: {}
+      metadata: {},
     });
 
     expect(el.isValidated()).toBe(true);
+  });
+
+  it('F_NUMBER: valid when value is empty', () => {
+    const layers = {
+      layer1: {
+        key: 'layer1',
+        fields: [
+          {
+            field: 'f1',
+            type: 'number',
+            value: '',
+            numeric: { decimals: 0, min: 1, max: 10 },
+          },
+        ],
+      },
+    };
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
+
+    const el = new GenElement({
+      name: 'Test',
+      properties: { layers },
+      metadata: {},
+    });
+    expect(el.isValidated()).toBe(true);
+  });
+
+  it('F_NUMBER: valid when value satisfies constraints', () => {
+    const layers = {
+      layer1: {
+        key: 'layer1',
+        fields: [
+          {
+            field: 'f1',
+            type: 'number',
+            value: 5,
+            numeric: { decimals: 0, min: 1, max: 10 },
+          },
+        ],
+      },
+    };
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
+
+    const el = new GenElement({
+      name: 'Test',
+      properties: { layers },
+      metadata: {},
+    });
+    expect(el.isValidated()).toBe(true);
+  });
+
+  it('F_NUMBER: invalid when non-empty value exceeds max', () => {
+    const layers = {
+      layer1: {
+        key: 'layer1',
+        fields: [
+          {
+            field: 'f1',
+            type: 'number',
+            value: 15,
+            numeric: { decimals: 0, min: 1, max: 10 },
+          },
+        ],
+      },
+    };
+    organizeLayersForDisplay.mockReturnValue([
+      { type: 'layer', key: 'layer1', data: layers.layer1 },
+    ]);
+
+    const el = new GenElement({
+      name: 'Test',
+      properties: { layers },
+      metadata: {},
+    });
+    expect(el.isValidated()).toBe(false);
   });
 });

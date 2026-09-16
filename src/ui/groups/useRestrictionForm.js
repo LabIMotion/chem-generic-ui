@@ -3,7 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { FieldTypes } from 'generic-ui-core';
 import { toBool } from '@utils/pureUtils';
 
-const ALLOWED_FIELD_TYPES = ['checkbox', 'text', 'select'];
+// F_SELECT covers single system-user selects too; F_SELECT_MULTI is intentionally
+// omitted (no generic-ui-core comparator for multi-user restrictions).
+const ALLOWED_FIELD_TYPES = [
+  FieldTypes.F_CHECKBOX,
+  FieldTypes.F_TEXT,
+  FieldTypes.F_SELECT,
+  FieldTypes.F_ONTOLOGY_SELECT,
+];
 
 /**
  * A hook for managing restriction form state and logic
@@ -30,6 +37,9 @@ function useRestrictionForm({
     if (restriction && restriction.cond) {
       setConditions(restriction.cond);
       setSelectedOp(restriction.op ?? 1);
+    } else {
+      setConditions([]);
+      setSelectedOp(1);
     }
   }, [restriction]);
 
@@ -104,8 +114,16 @@ function useRestrictionForm({
       const layer = availableLayers.find((l) => l.key === selectedLayer);
       const field = layer?.fields?.find((f) => f.field === selectedField);
       const isCheckbox = field?.type === FieldTypes.F_CHECKBOX;
+      const isText = field?.type === FieldTypes.F_TEXT;
 
-      let conditionValue = fieldValue.trim();
+      // Ontology-select accepts an empty value to match "no selection",
+      // mirroring the plain select behavior. Text still requires
+      // a non-empty value.
+      if (isText && !(fieldValue || '').trim()) {
+        return;
+      }
+
+      let conditionValue = (fieldValue || '').trim();
       if (isCheckbox) {
         conditionValue = toBool(conditionValue);
       }

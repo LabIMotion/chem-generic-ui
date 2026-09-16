@@ -1,9 +1,7 @@
 import Constants from '@components/tools/Constants';
 
-const getPageSizeForTheme = themeName => {
-  const theme = Object.values(Constants.GRID_THEME).find(
-    obj => obj.VALUE === themeName
-  );
+const getPageSizeForTheme = (themeKey) => {
+  const theme = Constants.GRID_THEME[themeKey];
   return theme?.PAGE_SIZE || 6;
 };
 

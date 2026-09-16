@@ -7,7 +7,7 @@ import LTooltip from '@components/shared/LTooltip';
 import WorkflowModal from '@components/elements/WorkflowModal';
 import FlowView from '@components/flow/FlowView';
 
-const FlowViewerBtn = ({ generic }) => {
+function FlowViewerBtn({ generic }) {
   const [show, setShow] = useState(false);
   const properties = generic.properties || {};
   const propertiesRelease = generic.properties_release || {};
@@ -41,7 +41,7 @@ const FlowViewerBtn = ({ generic }) => {
       </WorkflowModal>
     </>
   );
-};
+}
 
 FlowViewerBtn.propTypes = {
   generic: PropTypes.object.isRequired,

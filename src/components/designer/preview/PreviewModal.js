@@ -1,8 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
 import Preview from '@components/designer/preview/Preview';
+import GModal from '@ui/modals/GModal';
 
 export default class PreviewModal extends React.Component {
   constructor(props) {
@@ -31,9 +31,9 @@ export default class PreviewModal extends React.Component {
 
   fetchRevisions() {
     const { fetcher, fetcherFn, element } = this.props;
-    fetcher[fetcherFn](element.id).then(result => {
-      (result.revisions || []).map(r =>
-        Object.assign(r, { released_at: r.created_at })
+    fetcher[fetcherFn](element.id).then((result) => {
+      (result.revisions || []).map((r) =>
+        Object.assign(r, { released_at: r.created_at }),
       );
       this.setState({ revisions: result.revisions });
     });
@@ -56,17 +56,16 @@ export default class PreviewModal extends React.Component {
     const { revisions } = this.state;
     if (revisions.length < 1) return null;
     return (
-      <Modal
-        centered
+      <GModal
         backdrop="static"
         dialogClassName="importChemDrawModal"
         show={showModal}
         onHide={() => this.handleClose()}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>History</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: 'auto' }}>
+        <GModal.Header>
+          <GModal.Title>History</GModal.Title>
+        </GModal.Header>
+        <GModal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
             <Preview
               revisions={revisions}
@@ -75,8 +74,8 @@ export default class PreviewModal extends React.Component {
               src="properties"
             />
           </div>
-        </Modal.Body>
-      </Modal>
+        </GModal.Body>
+      </GModal>
     );
   }
 }

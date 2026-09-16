@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import ButtonTooltip from '@components/fields/ButtonTooltip';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Constants from '@components/tools/Constants';
+import { isWellplateSegment } from '@utils/wellplate';
+import { formatUtcTimestamp } from '@utils/dateUtils';
+import GModal from '@ui/modals/GModal';
 
-const InfoRenderer = ({ data, node, genericType }) => {
+function InfoRenderer({ data, genericType }) {
   const [show, setShow] = useState(false);
+
+  // The locked "Wellplates" segment exposes only its active/inactive toggle.
+  const locked = isWellplateSegment(data, genericType);
 
   const onShow = () => {
     setShow(true);
@@ -20,60 +26,59 @@ const InfoRenderer = ({ data, node, genericType }) => {
       return {
         label: 'Term ID:',
         value: data?.ols_term_id || 'N/A',
-        column: 'left'
-      };
-    } else {
-      return {
-        label: 'Description:',
-        value: data?.desc || 'N/A',
-        column: 'left'
+        column: 'left',
       };
     }
+    return {
+      label: 'Description:',
+      value: data?.desc || 'N/A',
+      column: 'left',
+    };
   };
 
   const defaultFields = [
     {
       label: `${genericType}:`,
       value: data?.label || 'N/A',
-      column: 'left'
+      column: 'left',
     },
     getCustomField(),
     {
       label: 'Version:',
       value: data?.version || 'N/A',
-      column: 'left'
+      column: 'left',
     },
     {
       label: 'UUID:',
       value: data?.uuid || 'N/A',
       column: 'left',
-      isCode: true
+      isCode: true,
     },
     {
       label: 'Released At:',
-      value: data?.released_at || 'N/A',
-      column: 'right'
+      value: formatUtcTimestamp(data?.released_at, 'N/A'),
+      column: 'right',
     },
     {
       label: 'Updated At:',
-      value: data?.updated_at || 'N/A',
-      column: 'right'
+      value: formatUtcTimestamp(data?.updated_at, 'N/A'),
+      column: 'right',
     },
     {
       label: 'Sync Time:',
-      value: data?.sync_time || 'N/A',
-      column: 'right'
+      value: formatUtcTimestamp(data?.sync_time, 'N/A'),
+      column: 'right',
     },
     {
       label: 'Identifier:',
       value: data?.identifier || 'N/A',
       column: 'right',
-      isCode: true
-    }
+      isCode: true,
+    },
   ];
 
-  const leftFields = defaultFields.filter(field => field.column === 'left');
-  const rightFields = defaultFields.filter(field => field.column === 'right');
+  const leftFields = defaultFields.filter((field) => field.column === 'left');
+  const rightFields = defaultFields.filter((field) => field.column === 'right');
 
   const renderField = (field, index) => (
     <div key={index} className="mb-3">
@@ -99,43 +104,39 @@ const InfoRenderer = ({ data, node, genericType }) => {
           bs="light"
           txt={data?.version || ''}
           forceClose={show}
+          disabled={locked}
         />
       </span>
-      <Modal
+      <GModal
         show={show}
         backdrop="static"
         keyboard={false}
-        centered
         size="xl"
         onHide={handleClose}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>{`${genericType} Information`}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-4">
+        <GModal.Header>
+          <GModal.Title>{`${genericType} Information`}</GModal.Title>
+        </GModal.Header>
+        <GModal.Body className="p-4">
           {data ? (
             <div className="row">
-              <div className="col-md-6">
-                {leftFields.map(renderField)}
-              </div>
-              <div className="col-md-6">
-                {rightFields.map(renderField)}
-              </div>
+              <div className="col-md-6">{leftFields.map(renderField)}</div>
+              <div className="col-md-6">{rightFields.map(renderField)}</div>
             </div>
           ) : (
             <div className="text-center text-muted">
               <p>No detailed information available.</p>
             </div>
           )}
-        </Modal.Body>
-        <Modal.Footer className="justify-content-start">
+        </GModal.Body>
+        <GModal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-        </Modal.Footer>
-      </Modal>
+        </GModal.Footer>
+      </GModal>
     </>
   );
-};
+}
 
 export default InfoRenderer;

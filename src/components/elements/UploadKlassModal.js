@@ -1,44 +1,43 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { Modal } from 'react-bootstrap';
 import Constants from '@components/tools/Constants';
 import { handleKlassUploading } from '@utils/template/action-handler';
+import GModal from '@ui/modals/GModal';
 
-const UploadKlassModal = props => {
+function UploadKlassModal(props) {
   const { genericType, fnUpload, showProps } = props;
   const { show, setShow } = showProps;
 
-  const handleReaderLoaded = e => {
+  const handleReaderLoaded = (e) => {
     const verify = handleKlassUploading(e, genericType);
     fnUpload(verify);
     setShow(false);
   };
 
-  const handleUploadTemplate = file => {
+  const handleUploadTemplate = (file) => {
     const reader = new FileReader();
     reader.onload = handleReaderLoaded;
     reader.readAsText(file[0]);
   };
 
   return (
-    <Modal size="lg" centered show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>{`Import ${genericType} and its template`}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{ overflow: 'auto' }}>
+    <GModal size="lg" show={show} onHide={() => setShow(false)}>
+      <GModal.Header>
+        <GModal.Title>{`Import ${genericType} and its template`}</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ overflow: 'auto' }}>
         <Dropzone
-          onDrop={attach => handleUploadTemplate(attach)}
+          onDrop={(attach) => handleUploadTemplate(attach)}
           className="lu-drop-zone"
           style={{ height: 50 }}
         >
           <div style={{ paddingTop: 12 }}>Drop File, or Click to Select.</div>
         </Dropzone>
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
-};
+}
 
 UploadKlassModal.propTypes = {
   genericType: PropTypes.oneOf([

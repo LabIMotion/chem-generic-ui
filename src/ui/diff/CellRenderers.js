@@ -11,7 +11,7 @@ import { transformValueForDisplay } from '@ui/diff/valueTransforms.js';
  * @param {string} props.newStr - New string value
  * @returns {JSX.Element} Inline diff component
  */
-export const InlineDiff = ({ oldStr = '', newStr = '' }) => {
+export function InlineDiff({ oldStr = '', newStr = '' }) {
   const changes = diffChars(oldStr, newStr);
   return (
     <span>
@@ -31,7 +31,7 @@ export const InlineDiff = ({ oldStr = '', newStr = '' }) => {
       })}
     </span>
   );
-};
+}
 
 /**
  * Transform key for display (e.g., convert array indices to 1-based with parent context)
@@ -55,7 +55,7 @@ const transformKeyForDisplay = (key, parentKey) => {
  * @param {Object} params - AG Grid cell renderer params
  * @returns {JSX.Element} Key cell renderer
  */
-export const KeyCellRenderer = (params) => {
+export function KeyCellRenderer(params) {
   const { data } = params;
   const indent = data.level * GRID_CONFIG.indentSize;
 
@@ -78,26 +78,31 @@ export const KeyCellRenderer = (params) => {
       <span>{displayKey}</span>
     </div>
   );
-};
+}
 
 /**
  * Custom cell renderer for old values with diff highlighting
  * @param {Object} params - AG Grid cell renderer params
  * @returns {JSX.Element} Old value cell renderer
  */
-export const OldValueCellRenderer = (params) => {
+export function OldValueCellRenderer(params) {
   const { data } = params;
   const { rawOldValue, rawNewValue, change } = data;
 
   // Show inline diff for primitive value changes (string, number, boolean)
   if (
     change === 'modified' &&
-    (typeof rawOldValue === 'string' || typeof rawOldValue === 'number' || typeof rawOldValue === 'boolean') &&
-    (typeof rawNewValue === 'string' || typeof rawNewValue === 'number' || typeof rawNewValue === 'boolean')
+    (typeof rawOldValue === 'string' ||
+      typeof rawOldValue === 'number' ||
+      typeof rawOldValue === 'boolean') &&
+    (typeof rawNewValue === 'string' ||
+      typeof rawNewValue === 'number' ||
+      typeof rawNewValue === 'boolean')
   ) {
     // Convert to string for diff display with transformations
-    const oldStr = String(transformValueForDisplay(rawOldValue, data.key, data.fullKey));
-    const newStr = String(transformValueForDisplay(rawNewValue, data.key, data.fullKey));
+    const oldStr = String(
+      transformValueForDisplay(rawOldValue, data.key, data.fullKey),
+    );
     return <InlineDiff oldStr={oldStr} newStr="" />;
   }
 
@@ -107,37 +112,44 @@ export const OldValueCellRenderer = (params) => {
   // Show background color for removed values
   if (change === 'removed') {
     return (
-      <span style={{
-        backgroundColor: DIFF_COLORS.removed,
-        padding: '2px 4px',
-        borderRadius: '3px'
-      }}>
+      <span
+        style={{
+          backgroundColor: DIFF_COLORS.removed,
+          padding: '2px 4px',
+          borderRadius: '3px',
+        }}
+      >
         {displayValue}
       </span>
     );
   }
 
   return <span>{displayValue}</span>;
-};
+}
 
 /**
  * Custom cell renderer for new values with diff highlighting
  * @param {Object} params - AG Grid cell renderer params
  * @returns {JSX.Element} New value cell renderer
  */
-export const NewValueCellRenderer = (params) => {
+export function NewValueCellRenderer(params) {
   const { data } = params;
   const { rawOldValue, rawNewValue, change } = data;
 
   // Show inline diff for primitive value changes (string, number, boolean)
   if (
     change === 'modified' &&
-    (typeof rawOldValue === 'string' || typeof rawOldValue === 'number' || typeof rawOldValue === 'boolean') &&
-    (typeof rawNewValue === 'string' || typeof rawNewValue === 'number' || typeof rawNewValue === 'boolean')
+    (typeof rawOldValue === 'string' ||
+      typeof rawOldValue === 'number' ||
+      typeof rawOldValue === 'boolean') &&
+    (typeof rawNewValue === 'string' ||
+      typeof rawNewValue === 'number' ||
+      typeof rawNewValue === 'boolean')
   ) {
     // Convert to string for diff display with transformations
-    const oldStr = String(transformValueForDisplay(rawOldValue, data.key, data.fullKey));
-    const newStr = String(transformValueForDisplay(rawNewValue, data.key, data.fullKey));
+    const newStr = String(
+      transformValueForDisplay(rawNewValue, data.key, data.fullKey),
+    );
     return <InlineDiff oldStr="" newStr={newStr} />;
   }
 
@@ -147,15 +159,17 @@ export const NewValueCellRenderer = (params) => {
   // Show background color for added values
   if (change === 'added') {
     return (
-      <span style={{
-        backgroundColor: DIFF_COLORS.added,
-        padding: '2px 4px',
-        borderRadius: '3px'
-      }}>
+      <span
+        style={{
+          backgroundColor: DIFF_COLORS.added,
+          padding: '2px 4px',
+          borderRadius: '3px',
+        }}
+      >
         {displayValue}
       </span>
     );
   }
 
   return <span>{displayValue}</span>;
-};
+}

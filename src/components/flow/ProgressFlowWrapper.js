@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useGenUIContext } from '@components/details/GenUIContext';
 import ProgressOverview from '@components/flow/ProgressOverview';
+import { removeReactionLayers } from '@utils/flow/build-flow-elements';
 
-const ProgressFlowWrapper = ({ generic, refElement }) => {
+function ProgressFlowWrapper({ generic, refElement }) {
   const { showOverview, isProviderPresent } = useGenUIContext();
 
   const handleNodeJump = (key, isGroup) => {
@@ -37,10 +38,12 @@ const ProgressFlowWrapper = ({ generic, refElement }) => {
       } else {
         // Layer not found, might be inside a collapsed group
         const groups = generic.metadata?.groups || [];
-        const parentGroup = groups.find(g => (g.layers || []).includes(key));
+        const parentGroup = groups.find((g) => (g.layers || []).includes(key));
 
         if (parentGroup) {
-          const groupHeader = document.querySelector(`#group-anchor-${parentGroup.id} .card-header`);
+          const groupHeader = document.querySelector(
+            `#group-anchor-${parentGroup.id} .card-header`,
+          );
           if (groupHeader) {
             // Trigger click to expand
             groupHeader.click();
@@ -58,24 +61,22 @@ const ProgressFlowWrapper = ({ generic, refElement }) => {
     }
   };
 
-  const hasLayers = Object.keys(generic.properties?.layers || {}).length > 0;
+  const hasLayers =
+    Object.keys(removeReactionLayers(generic.properties?.layers)).length > 0;
 
   if (!hasLayers) return null;
+  if (!isProviderPresent || !showOverview) return null;
 
   return (
-    <>
-      {isProviderPresent && showOverview && (
-        <div className="mb-4">
-          <ProgressOverview
-            generic={generic}
-            onNodeJump={handleNodeJump}
-            refElement={refElement}
-          />
-        </div>
-      )}
-    </>
+    <div className="mb-4">
+      <ProgressOverview
+        generic={generic}
+        onNodeJump={handleNodeJump}
+        refElement={refElement}
+      />
+    </div>
   );
-};
+}
 
 ProgressFlowWrapper.propTypes = {
   generic: PropTypes.object.isRequired,

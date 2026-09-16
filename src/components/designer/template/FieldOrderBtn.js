@@ -10,12 +10,12 @@ import FIcons from '@components/icons/FIcons';
 import Response from '@utils/response';
 import { notifySuccess } from '@utils/template/designer-message';
 
-const FieldOrderBtn = ({
+function FieldOrderBtn({
   layer = {},
   generic = {},
   genericType,
   fnSave = () => {},
-}) => {
+}) {
   const [show, setShow] = useState(false);
   const arrangeContentRef = useRef(null);
 
@@ -46,7 +46,7 @@ const FieldOrderBtn = ({
       </ArrangeModal>
     </>
   );
-};
+}
 
 FieldOrderBtn.propTypes = {
   layer: PropTypes.object,

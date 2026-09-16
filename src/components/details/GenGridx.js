@@ -6,6 +6,7 @@ import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 import toPairs from 'lodash/toPairs';
 import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
 const defaultColDef = {
   editable: false,
@@ -37,7 +38,7 @@ class GenGridx extends Component {
         const changes = differenceWith(
           toPairs(gridData),
           toPairs(prevProps.gridData),
-          isEqual
+          isEqual,
         );
         if (changes.length > 0 || updated) {
           this.gridApi.setGridOption('rowData', gridData);
@@ -54,17 +55,21 @@ class GenGridx extends Component {
   onGridReady = (params) => {
     const { gridData } = this.props;
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
     this.gridApi.setGridOption('rowData', gridData);
   };
 
   render() {
-    const { pageSize, theme } = this.props;
+    const { pageSize, themeKey } = this.props;
     const { columnDefs } = this.state;
+    const { themeProps, wrapperClassName } = resolveGridTheme(themeKey);
     return (
       <div style={{ height: '33vh', width: '100%' }}>
-        <div style={{ height: '100%', width: '100%' }} className={theme}>
+        <div
+          className={wrapperClassName}
+          style={{ height: '100%', width: '100%' }}
+        >
           <AgGridReact
+            {...themeProps}
             columnDefs={columnDefs}
             defaultColDef={defaultColDef}
             rowSelection={{
@@ -88,12 +93,12 @@ GenGridx.propTypes = {
   columnDefs: PropTypes.array.isRequired,
   gridData: PropTypes.array.isRequired,
   pageSize: PropTypes.number,
-  theme: PropTypes.string,
+  themeKey: PropTypes.string,
 };
 
 GenGridx.defaultProps = {
   pageSize: Constants.GRID_THEME.BALHAM.PAGE_SIZE,
-  theme: Constants.GRID_THEME.BALHAM.VALUE,
+  themeKey: 'BALHAM',
 };
 
 export default GenGridx;

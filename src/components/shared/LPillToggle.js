@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import '@assets/pill-toggle.scss';
 
-const LPillToggle = ({ leftText, rightText, isRight, onChange, disabled }) => {
+function LPillToggle({ leftText, rightText, isRight, onChange, disabled }) {
   return (
     <button
       type="button"
@@ -22,7 +22,7 @@ const LPillToggle = ({ leftText, rightText, isRight, onChange, disabled }) => {
       </div>
     </button>
   );
-};
+}
 
 LPillToggle.propTypes = {
   leftText: PropTypes.string.isRequired,

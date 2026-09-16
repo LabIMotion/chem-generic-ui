@@ -7,13 +7,11 @@ import { sysHeaderInfo, extHeaderInfo } from '@components/shared/arrangeUtils';
 export default function DragLayer({ scrollableContainerRef }) {
   const scrollTimeoutRef = useRef(null);
 
-  const { item, isDragging, currentOffset } = useDragLayer(
-    (monitor) => ({
-      item: monitor.getItem(),
-      isDragging: monitor.isDragging(),
-      currentOffset: monitor.getClientOffset(),
-    }),
-  );
+  const { item, isDragging, currentOffset } = useDragLayer((monitor) => ({
+    item: monitor.getItem(),
+    isDragging: monitor.isDragging(),
+    currentOffset: monitor.getClientOffset(),
+  }));
 
   // Auto-scroll functionality for drag and drop
   useEffect(() => {
@@ -71,7 +69,10 @@ export default function DragLayer({ scrollableContainerRef }) {
           container.scrollTop = Math.max(0, container.scrollTop - scrollSpeed);
         } else if (direction === 'down') {
           const maxScroll = container.scrollHeight - container.clientHeight;
-          container.scrollTop = Math.min(maxScroll, container.scrollTop + scrollSpeed);
+          container.scrollTop = Math.min(
+            maxScroll,
+            container.scrollTop + scrollSpeed,
+          );
         }
 
         // Continue scrolling if still near edge
@@ -116,7 +117,9 @@ export default function DragLayer({ scrollableContainerRef }) {
       const splitKey = key ? key.split('.') : [];
       const repetitionInfo = extHeaderInfo(splitKey);
 
-      return repetitionInfo ? `${content} - ${repetitionInfo.props.children}` : content;
+      return repetitionInfo
+        ? `${content} - ${repetitionInfo.props.children}`
+        : content;
     }
 
     // Fallback to basic label
@@ -145,7 +148,8 @@ export default function DragLayer({ scrollableContainerRef }) {
           border: '2px solid #007bff',
           padding: '12px 16px',
           borderRadius: '8px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.15), 0 4px 16px rgba(0,123,255,0.2)',
+          boxShadow:
+            '0 8px 32px rgba(0,0,0,0.15), 0 4px 16px rgba(0,123,255,0.2)',
           fontWeight: 500,
           color: '#333333',
           whiteSpace: 'nowrap',

@@ -25,9 +25,10 @@ function GroupButton({ generic = {}, genericType, fnSave = () => {} }) {
       updates.properties_template = updatedMetadata.klass;
     }
 
-    // If there are no groups, clear data
+    // If there are no groups, clear data but preserve registries
     if (groups.length === 0) {
-      updates.metadata = {};
+      const registries = generic?.metadata?.registries;
+      updates.metadata = registries ? { registries } : {};
       updates.changed = true;
       fnSave(new Response(notifySuccess(), updates));
       return;
@@ -43,8 +44,9 @@ function GroupButton({ generic = {}, genericType, fnSave = () => {} }) {
       }
     });
 
-    // Save changes
+    // Save changes (preserve non-group/restrict metadata fields like registries)
     updates.metadata = {
+      ...generic.metadata,
       groups,
       restrict: cleanedRestrictions,
     };

@@ -7,7 +7,7 @@ import GenericSubField from '@components/models/GenericSubField';
 import { AddRowBtn, DelRowBtn } from '@components/table/GridBtn';
 import LayerSelect from '@components/elements/LayerSelect';
 import FieldSelect from '@components/elements/FieldSelect';
-import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
 export default class TextFormula extends React.Component {
   constructor(props) {
@@ -28,9 +28,9 @@ export default class TextFormula extends React.Component {
     const sub = field.text_sub_fields || [];
     if (allLayers !== prevProps.allLayers && this.gridApi) {
       const columnDefs = this.gridApi.getColumnDefs();
-      columnDefs.find(c => c.field === 'layer').cellRendererParams.allLayers =
+      columnDefs.find((c) => c.field === 'layer').cellRendererParams.allLayers =
         allLayers;
-      columnDefs.find(c => c.field === 'field').cellRendererParams.allLayers =
+      columnDefs.find((c) => c.field === 'field').cellRendererParams.allLayers =
         allLayers;
       this.gridApi.setGridOption('columnDefs', columnDefs);
       this.gridApi.setGridOption('rowData', sub);
@@ -40,9 +40,9 @@ export default class TextFormula extends React.Component {
 
   // Helper method to safely get and save column state
   saveColumnState() {
-    if (this.gridColumnApi && typeof this.gridColumnApi.getColumnState === 'function') {
+    if (this.gridApi && typeof this.gridApi.getColumnState === 'function') {
       try {
-        this.savedColumnState = this.gridColumnApi.getColumnState();
+        this.savedColumnState = this.gridApi.getColumnState();
         return true;
       } catch (error) {
         console.warn('Failed to save column state:', error);
@@ -53,9 +53,9 @@ export default class TextFormula extends React.Component {
 
   // Helper method to safely restore column state
   restoreColumnState() {
-    if (this.gridColumnApi && this.savedColumnState) {
+    if (this.gridApi && this.savedColumnState) {
       try {
-        this.gridColumnApi.applyColumnState({ state: this.savedColumnState });
+        this.gridApi.applyColumnState({ state: this.savedColumnState });
         return true;
       } catch (error) {
         console.warn('Failed to restore column state:', error);
@@ -67,7 +67,6 @@ export default class TextFormula extends React.Component {
   onGridReady(e) {
     const { allLayers } = this.props;
     this.gridApi = e.api;
-    this.gridColumnApi = e.columnApi;
     const columnDefs = [
       {
         rowDrag: true,
@@ -148,14 +147,15 @@ export default class TextFormula extends React.Component {
     this.saveColumnState();
     const { allLayers } = this.props;
     const lys = allLayers.filter(
-      e => (e.fields || []).filter(f => f.type === FieldTypes.F_TEXT).length > 0
+      (e) =>
+        (e.fields || []).filter((f) => f.type === FieldTypes.F_TEXT).length > 0,
     );
     const ly = (lys.length > 0 && lys[0].key) || '';
     const fd =
       ly === ''
         ? ''
-        : ((allLayers.find(e => e.key === ly) || {}).fields || []).filter(
-            e => e.type === FieldTypes.F_TEXT
+        : ((allLayers.find((e) => e.key === ly) || {}).fields || []).filter(
+            (e) => e.type === FieldTypes.F_TEXT,
           )[0].field;
     const newSub = new GenericSubField({
       layer: ly,
@@ -177,14 +177,14 @@ export default class TextFormula extends React.Component {
     const { allLayers } = this.props;
     const ly = data.layer;
     const fdf =
-      ((allLayers.find(l => l.key === ly) || {}).fields || []).filter(
-        l => l.type === FieldTypes.F_TEXT
+      ((allLayers.find((l) => l.key === ly) || {}).fields || []).filter(
+        (l) => l.type === FieldTypes.F_TEXT,
       ) || [];
     const fd = (fdf.length > 0 && fdf[0].field) || '';
     data.field = fd;
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     field.text_sub_fields = rows;
@@ -207,7 +207,7 @@ export default class TextFormula extends React.Component {
   refresh() {
     const { updSub, layerKey, field } = this.props;
     const rows = [];
-    this.gridApi.forEachNode(nd => {
+    this.gridApi.forEachNode((nd) => {
       rows.push(nd.data);
     });
     field.text_sub_fields = rows;
@@ -230,14 +230,15 @@ export default class TextFormula extends React.Component {
   render() {
     const { field } = this.props;
     const sub = field.text_sub_fields || [];
+    const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
     return (
       <div>
         <div
+          className={wrapperClassName}
           style={{ width: '100%', height: '100%' }}
-          className={Constants.GRID_THEME.QUARTZ.VALUE}
         >
           <AgGridReact
-            enableColResize
+            {...themeProps}
             defaultColDef={{ suppressMovable: true }}
             rowSelection={{
               mode: 'singleRow',

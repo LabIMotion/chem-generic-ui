@@ -126,14 +126,24 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     expect(screen.getByText('Link Element')).toBeInTheDocument();
+  });
+
+  // The `gu-modal` marker carries our footer spacing and left alignment, so both
+  // survive a host app that reconfigures Bootstrap's modal variables globally.
+  it('marks the modal root with gu-modal and leaves the footer unstyled', () => {
+    render(<ElementSelectModal show onHide={jest.fn()} onSelect={jest.fn()} />);
+
+    const modalRoot = document.querySelector('.modal');
+    expect(modalRoot).toHaveClass('gu-modal');
+
+    const footer = modalRoot.querySelector('.modal-footer');
+    expect(footer).toBeInTheDocument();
+    // Alignment comes from `.gu-modal .modal-footer`, not a per-modal utility.
+    expect(footer).not.toHaveClass('justify-content-start');
   });
 
   it('does not render when show is false', () => {
@@ -145,7 +155,7 @@ describe('ElementSelectModal', () => {
         show={false}
         onHide={mockOnHide}
         onSelect={mockOnSelect}
-      />
+      />,
     );
 
     expect(container.querySelector('.modal')).not.toBeInTheDocument();
@@ -156,11 +166,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     await waitFor(() => {
@@ -173,11 +179,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     // Elements are fetched when modal opens
@@ -191,11 +193,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     await waitFor(() => {
@@ -207,7 +205,9 @@ describe('ElementSelectModal', () => {
     fireEvent.change(elementSelect, { target: { value: 'sample' } });
 
     // Get all inputs with the placeholder and pick the second one (short label)
-    const inputs = screen.getAllByPlaceholderText('(case-insensitive like search)');
+    const inputs = screen.getAllByPlaceholderText(
+      '(case-insensitive like search)',
+    );
     fireEvent.change(inputs[1], { target: { value: 'CHI' } });
 
     const searchButton = screen.getByText('Search');
@@ -223,11 +223,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     await waitFor(() => {
@@ -235,7 +231,9 @@ describe('ElementSelectModal', () => {
     });
 
     // Get all inputs with the placeholder and pick the second one (short label)
-    const inputs = screen.getAllByPlaceholderText('(case-insensitive like search)');
+    const inputs = screen.getAllByPlaceholderText(
+      '(case-insensitive like search)',
+    );
     fireEvent.change(inputs[1], { target: { value: 'CHI' } });
 
     const resetButton = screen.getByText('Reset');
@@ -249,11 +247,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     // First, select an element type from dropdown
@@ -265,7 +259,9 @@ describe('ElementSelectModal', () => {
     fireEvent.change(elementSelect, { target: { value: 'sample' } });
 
     // Get the name input (first one)
-    const inputs = screen.getAllByPlaceholderText('(case-insensitive like search)');
+    const inputs = screen.getAllByPlaceholderText(
+      '(case-insensitive like search)',
+    );
     fireEvent.change(inputs[0], { target: { value: 'Cata' } });
 
     const searchButton = screen.getByText('Search');
@@ -290,11 +286,7 @@ describe('ElementSelectModal', () => {
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     const closeButton = screen.getByText('Close');
@@ -311,14 +303,12 @@ describe('ElementSelectModal', () => {
 
     const mockOnHide = jest.fn();
     const mockOnSelect = jest.fn();
-    const consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     await waitFor(() => {
@@ -330,18 +320,17 @@ describe('ElementSelectModal', () => {
 
   it('displays loading state while fetching', () => {
     VerManager.listELKlass.mockImplementation(
-      () => new Promise((resolve) => setTimeout(resolve, 1000))
+      () =>
+        new Promise((resolve) => {
+          setTimeout(resolve, 1000);
+        }),
     );
 
     const mockOnHide = jest.fn();
     const mockOnSelect = jest.fn();
 
     render(
-      <ElementSelectModal
-        show={true}
-        onHide={mockOnHide}
-        onSelect={mockOnSelect}
-      />
+      <ElementSelectModal show onHide={mockOnHide} onSelect={mockOnSelect} />,
     );
 
     // The grid should be rendered with loading prop

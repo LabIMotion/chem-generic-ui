@@ -22,11 +22,15 @@ describe('ButtonDelField', () => {
     await act(async () => {
       callback();
       // Allow React to process the event
-      await new Promise(resolve => setTimeout(resolve, 0));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 0);
+      });
     });
     // Wait for any async overlay updates (popper positioning, etc.)
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
     });
   };
 
@@ -37,14 +41,16 @@ describe('ButtonDelField', () => {
   afterEach(async () => {
     // Ensure all pending updates are flushed after each test
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => {
+        setTimeout(resolve, 50);
+      });
     });
   });
 
   describe('Rendering', () => {
     test('should not render the button if delType is not allowed', () => {
       const { queryByTestId } = render(
-        <ButtonDelField {...props} delType="DEL_NOT_ALLOWED" />
+        <ButtonDelField {...props} delType="DEL_NOT_ALLOWED" />,
       );
       const button = queryByTestId('confirm-btn');
       expect(button).not.toBeInTheDocument();

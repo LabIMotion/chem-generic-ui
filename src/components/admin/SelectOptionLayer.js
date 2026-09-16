@@ -54,18 +54,16 @@ function SelectOptionLayer(props) {
         </Card.Header>
         <Card.Body>
           {Object.keys(generic.properties_template?.select_options || {}).map(
-            (root) => {
-              return (
-                <Selection
-                  key={root}
-                  generic={generic}
-                  root={root}
-                  fnAdd={onAdd}
-                  fnChange={fnChange}
-                  fnInputChg={onOptionInputChange}
-                />
-              );
-            },
+            (root) => (
+              <Selection
+                key={root}
+                generic={generic}
+                root={root}
+                fnAdd={onAdd}
+                fnChange={fnChange}
+                fnInputChg={onOptionInputChange}
+              />
+            ),
           )}
         </Card.Body>
       </Card>

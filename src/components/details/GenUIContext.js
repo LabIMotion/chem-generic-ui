@@ -3,28 +3,36 @@ import PropTypes from 'prop-types';
 
 const GenUIContext = createContext();
 
-export const GenUIProvider = ({ children, initialShowOverview = true }) => {
+export function GenUIProvider({
+  children,
+  initialShowOverview = true,
+  initialShowConsumer = false,
+}) {
   const [showOverview, setShowOverview] = useState(initialShowOverview);
+  const [showConsumer, setShowConsumer] = useState(initialShowConsumer);
 
   const toggleOverview = () => setShowOverview((prev) => !prev);
+  const toggleConsumer = () => setShowConsumer((prev) => !prev);
 
   const value = {
     showOverview,
     setShowOverview,
     toggleOverview,
+    showConsumer,
+    setShowConsumer,
+    toggleConsumer,
     isProviderPresent: true,
   };
 
   return (
-    <GenUIContext.Provider value={value}>
-      {children}
-    </GenUIContext.Provider>
+    <GenUIContext.Provider value={value}>{children}</GenUIContext.Provider>
   );
-};
+}
 
 GenUIProvider.propTypes = {
   children: PropTypes.node.isRequired,
   initialShowOverview: PropTypes.bool,
+  initialShowConsumer: PropTypes.bool,
 };
 
 export const useGenUIContext = () => {
@@ -33,8 +41,15 @@ export const useGenUIContext = () => {
   if (!context) {
     return {
       showOverview: false,
-      setShowOverview: () => console.warn('useGenUIContext must be used within a GenUIProvider'),
-      toggleOverview: () => console.warn('useGenUIContext must be used within a GenUIProvider'),
+      setShowOverview: () =>
+        console.warn('useGenUIContext must be used within a GenUIProvider'),
+      toggleOverview: () =>
+        console.warn('useGenUIContext must be used within a GenUIProvider'),
+      showConsumer: false,
+      setShowConsumer: () =>
+        console.warn('useGenUIContext must be used within a GenUIProvider'),
+      toggleConsumer: () =>
+        console.warn('useGenUIContext must be used within a GenUIProvider'),
       isProviderPresent: false,
     };
   }

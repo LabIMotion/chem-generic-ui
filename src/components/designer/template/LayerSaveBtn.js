@@ -1,4 +1,3 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useEffect, useReducer } from 'react';
 import { Button } from 'react-bootstrap';
 import cloneDeep from 'lodash/cloneDeep';
@@ -17,7 +16,7 @@ const extractOptionsFromTable = (_layer, _data) => {
   const layer = cloneDeep(_layer);
   const data = cloneDeep(_data);
   const selectFields = layer.fields.filter(
-    (field) => field.type === FieldTypes.F_TABLE
+    (field) => field.type === FieldTypes.F_TABLE,
   );
   selectFields.forEach((selectField) => {
     // TODO: Implement the logic to extract options from table fields
@@ -25,7 +24,9 @@ const extractOptionsFromTable = (_layer, _data) => {
     // If the type is "select", then a property "option_layers" may exist, which is a string, and we use it to search the data?.properties_template?.select_options to get the options
     (selectField.sub_fields || []).forEach((subField) => {
       if (
-        [FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(subField.type) &&
+        [FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(
+          subField.type,
+        ) &&
         subField.option_layers
       ) {
         const optionLayerKey = subField.option_layers;
@@ -33,7 +34,6 @@ const extractOptionsFromTable = (_layer, _data) => {
           // Add the entire matching object to the result
           options.select_options[optionLayerKey] =
             data.properties_template.select_options[optionLayerKey];
-          options.select_options[optionLayerKey].desc = optionLayerKey;
         }
       }
     });
@@ -51,7 +51,7 @@ const extractOptions = (_layer, _data) => {
   const data = cloneDeep(_data);
   // Extract the "select" type fields
   const selectFields = layer.fields.filter((field) =>
-    [FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(field.type)
+    [FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(field.type),
   );
   // For each select field, use the option_layers to find the matching options
   selectFields.forEach((selectField) => {
@@ -61,7 +61,6 @@ const extractOptions = (_layer, _data) => {
       // Add the entire matching object to the result
       options.select_options[optionLayerKey] =
         data.properties_template.select_options[optionLayerKey];
-      options.select_options[optionLayerKey].desc = optionLayerKey;
     }
   });
   // Check if any options, otherwise return null
@@ -92,7 +91,7 @@ const reducer = (state, action) => {
   }
 };
 
-const LayerSaveBtn = (props) => {
+function LayerSaveBtn(props) {
   const { layer: initialLayer, data: initialData } = props;
 
   // 1. State declarations
@@ -200,6 +199,6 @@ const LayerSaveBtn = (props) => {
       </LayerSaveModal>
     </>
   );
-};
+}
 
 export default LayerSaveBtn;

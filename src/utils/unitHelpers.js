@@ -21,10 +21,9 @@ export const getValidationErrors = () => validate.errors;
 /**
  * Converts values from one unit system to another
  */
-export const convertValues = (measurableQuantity, newUnit, values) => {
-  return (values || []).map((v) =>
+export const convertValues = (measurableQuantity, newUnit, values) =>
+  (values || []).map((v) =>
     v === '' || v === undefined
       ? ''
-      : unitConversion(measurableQuantity, newUnit, v)
+      : unitConversion(measurableQuantity, newUnit, v),
   );
-};

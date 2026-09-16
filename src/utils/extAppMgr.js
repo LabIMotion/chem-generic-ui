@@ -4,8 +4,7 @@ class ExtAppManager {
   // a private static method
   static #exec = ApiExecutor.exec;
 
-  static userProfile = () =>
-    ExtAppManager.#exec('profiles.json');
+  static userProfile = () => ExtAppManager.#exec('profiles.json');
 }
 
 export default ExtAppManager;

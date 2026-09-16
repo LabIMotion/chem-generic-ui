@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert, Button } from 'react-bootstrap';
 import FIcons from '@components/icons/FIcons';
 
-const NotificationMessage = ({ notify, onClose }) => {
+function NotificationMessage({ notify, onClose }) {
   if (notify === null) return null;
 
   return (
@@ -25,7 +25,7 @@ const NotificationMessage = ({ notify, onClose }) => {
       </Button>
     </Alert>
   );
-};
+}
 
 NotificationMessage.propTypes = {
   notify: PropTypes.shape({

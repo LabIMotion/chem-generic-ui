@@ -111,4 +111,3 @@ export const computeDynamicDisplayName = (
 
   return `${baseLabel} - ${fieldParts.join(' - ')}`;
 };
-

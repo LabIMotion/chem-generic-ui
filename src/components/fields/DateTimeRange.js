@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment-precise-range-plugin';
 import { genUnit, genUnits, unitConversion, FieldTypes } from 'generic-ui-core';
 import GenericSubField from '@components/models/GenericSubField';
+import FieldLabel from '@components/fields/FieldLabel';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 import { editable } from '@/utils/pureUtils';
@@ -18,6 +19,7 @@ const DateTimeRangeFields = [
   'duration',
 ];
 const MomentUnit = {
+  y: 'years',
   d: 'days',
   h: 'hours',
   min: 'minutes',
@@ -25,19 +27,25 @@ const MomentUnit = {
 };
 
 const DurationLabel = {
+  y: 'year(s)',
   d: 'day(s)',
   h: 'hour(s)',
   min: 'min(s)',
   s: 'sec(s)',
 };
 
-const DateTimeRange = props => {
+const durationUnitsDesc = () =>
+  genUnits('duration')
+    .filter((u) => MomentUnit[u.key])
+    .sort((a, b) => a.nm - b.nm);
+
+function DateTimeRange(props) {
   const { layer, opt, onInputChange, editMode } = props;
   const timePlaceholder = 'DD/MM/YYYY hh:mm:ss';
 
   let subFields = opt.f_obj.sub_fields || [];
   if (subFields.length < 1) {
-    subFields = DateTimeRangeFields.map(e => {
+    subFields = DateTimeRangeFields.map((e) => {
       if (e === 'duration') {
         return new GenericSubField({
           type: FieldTypes.F_TEXT,
@@ -47,12 +55,16 @@ const DateTimeRange = props => {
           value_system: 'd',
         });
       }
-      return new GenericSubField({ type: FieldTypes.F_TEXT, value: '', col_name: e });
+      return new GenericSubField({
+        type: FieldTypes.F_TEXT,
+        value: '',
+        col_name: e,
+      });
     });
   }
-  const timeStart = subFields.find(f => f.col_name === 'timeStart') || '';
-  const timeStop = subFields.find(f => f.col_name === 'timeStop') || '';
-  const duration = subFields.find(f => f.col_name === 'duration') || '';
+  const timeStart = subFields.find((f) => f.col_name === 'timeStart') || '';
+  const timeStop = subFields.find((f) => f.col_name === 'timeStop') || '';
+  const duration = subFields.find((f) => f.col_name === 'duration') || '';
 
   const durationDiff = (startAt, stopAt, precise = false) => {
     if (startAt && stopAt) {
@@ -68,33 +80,24 @@ const DateTimeRange = props => {
   };
 
   const highestUnitFromDuration = (d, threshold = 1.0) => {
-    if (d.asDays() >= threshold) {
-      return 'd';
-    }
-    if (d.asHours() >= threshold) {
-      return 'h';
-    }
-    if (d.asMinutes() >= threshold) {
-      return 'min';
-    }
-    if (d.asSeconds() >= threshold) {
-      return 's';
-    }
-    return 'h';
+    const unit = durationUnitsDesc().find(
+      (u) => d.as(MomentUnit[u.key]) >= threshold,
+    );
+    return unit ? unit.key : 'h';
   };
 
-  const dataChange = params => {
+  const dataChange = (params) => {
     const { field, event } = params;
     if (event === 'setCurrent') {
       const currentTime = new Date()
         .toLocaleString('en-GB')
         .split(', ')
         .join(' ');
-      subFields.find(f => f.col_name === field).value = currentTime;
+      subFields.find((f) => f.col_name === field).value = currentTime;
     } else if (event === 'changeUnit') {
-      const sub = subFields.find(f => f.col_name === field);
+      const sub = subFields.find((f) => f.col_name === field);
       const units = genUnits('duration');
-      let uIdx = units.findIndex(u => u.key === sub.value_system);
+      let uIdx = units.findIndex((u) => u.key === sub.value_system);
       if (uIdx < units.length - 1) uIdx += 1;
       else uIdx = 0;
       sub.value_system = units.length > 0 ? units[uIdx].key : '';
@@ -103,13 +106,13 @@ const DateTimeRange = props => {
       const calDiff = durationDiff(timeStart.value, timeStop.value);
       if (calDiff) {
         const highestUnit = highestUnitFromDuration(calDiff);
-        const sub = subFields.find(f => f.col_name === field);
+        const sub = subFields.find((f) => f.col_name === field);
         sub.value_system = highestUnit;
         sub.value = round(calDiff.as(MomentUnit[highestUnit]), 1);
       }
     } else {
       const { value } = event.target;
-      subFields.find(f => f.col_name === field).value = value;
+      subFields.find((f) => f.col_name === field).value = value;
     }
     onInputChange({
       field: opt.f_obj.field,
@@ -119,14 +122,19 @@ const DateTimeRange = props => {
     });
   };
 
+  const durationLabel = (key) => {
+    const unit = genUnit('duration', key);
+    return DurationLabel[unit.key] || unit.label || '';
+  };
+
   const calc = durationDiff(timeStart.value, timeStop.value, true);
   const canEdit = editable(editMode, !(timeStart.readonly ?? false));
 
   return (
-    <Row>
+    <Row className="mb-3">
       <Col sm={12} md={3} lg={3}>
         <Form.Group>
-          <Form.Label>Start</Form.Label>
+          <FieldLabel label="Start" />
           <InputGroup>
             <Form.Control
               type="text"
@@ -150,7 +158,7 @@ const DateTimeRange = props => {
       </Col>
       <Col sm={12} md={3} lg={3}>
         <Form.Group>
-          <Form.Label>Stop</Form.Label>
+          <FieldLabel label="Stop" />
           <InputGroup>
             <Form.Control
               type="text"
@@ -174,7 +182,7 @@ const DateTimeRange = props => {
       </Col>
       <Col sm={12} md={3} lg={3}>
         <Form.Group>
-          <Form.Label>Duration</Form.Label>
+          <FieldLabel label="Duration" />
           <InputGroup>
             <Form.Control
               type="text"
@@ -211,7 +219,7 @@ const DateTimeRange = props => {
       </Col>
       <Col sm={12} md={3} lg={3}>
         <Form.Group>
-          <Form.Label>&nbsp;</Form.Label>
+          <FieldLabel label={' '} />
           <InputGroup>
             <Form.Control
               type="text"
@@ -227,15 +235,14 @@ const DateTimeRange = props => {
               }
               disabled={!canEdit}
             >
-              {DurationLabel[genUnit('duration', duration.value_system).key] ||
-                ''}
+              {durationLabel(duration.value_system)}
             </Button>
           </InputGroup>
         </Form.Group>
       </Col>
     </Row>
   );
-};
+}
 
 DateTimeRange.propTypes = {
   opt: PropTypes.object.isRequired,

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -46,7 +45,7 @@ export default class Preview extends Component {
     const { compareUUID, revisions } = this.state;
     const { src } = this.props;
     let selected = (revisions || []).find(
-      (r) => buildString([r.uuid, r.id]) === compareUUID
+      (r) => buildString([r.uuid, r.id]) === compareUUID,
     );
     if (selected && selected[src]) {
       selected = el;
@@ -98,7 +97,7 @@ export default class Preview extends Component {
     exportData.metadata = revision.metadata || {};
 
     const href = `data:text/json;charset=utf-8,${encodeURIComponent(
-      JSON.stringify(exportData)
+      JSON.stringify(exportData),
     )}`;
     downloadFile({
       contents: href,
@@ -114,7 +113,7 @@ export default class Preview extends Component {
     const options = [];
     const selected =
       (revisions || []).find(
-        (r) => buildString([r.uuid, r.id]) === compareUUID
+        (r) => buildString([r.uuid, r.id]) === compareUUID,
       ) || {};
     const selectOptions =
       (selected && selected[src] && selected[src].select_options) || {};

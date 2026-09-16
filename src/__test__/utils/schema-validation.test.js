@@ -1,4 +1,7 @@
-import { validateProperties, formatValidationErrors } from '@utils/template/schema-validation';
+import {
+  validateProperties,
+  formatValidationErrors,
+} from '@utils/template/schema-validation';
 
 describe('Schema Validation', () => {
   const validPkgData = {
@@ -76,7 +79,13 @@ describe('Schema Validation', () => {
     });
 
     it('should validate properties with valid klass enum values', () => {
-      const validKlasses = ['Element', 'Segment', 'Dataset', 'ElementKlass', 'SegmentKlass'];
+      const validKlasses = [
+        'Element',
+        'Segment',
+        'Dataset',
+        'ElementKlass',
+        'SegmentKlass',
+      ];
 
       validKlasses.forEach((klass) => {
         const properties = createValidProperties({ klass });
@@ -89,7 +98,7 @@ describe('Schema Validation', () => {
     it('should validate properties with select_options', () => {
       const properties = createValidProperties({
         select_options: {
-          'option1': {
+          option1: {
             options: [
               { key: 'opt1', label: 'Option 1' },
               { key: 'opt2', label: 'Option 2' },
@@ -112,6 +121,68 @@ describe('Schema Validation', () => {
 
       expect(result.valid).toBe(true);
     });
+
+    const withField = (field) =>
+      createValidProperties({
+        layers: {
+          layer1: {
+            key: 'layer1',
+            cols: 1,
+            color: 'default',
+            position: 1,
+            fields: [field],
+          },
+        },
+      });
+
+    it('should validate an upload field with empty object value (template default)', () => {
+      const properties = withField({
+        type: 'upload',
+        field: 'attachment',
+        value: {},
+      });
+
+      const result = validateProperties(properties);
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('should validate an upload field with a files array value', () => {
+      const properties = withField({
+        type: 'upload',
+        field: 'attachment',
+        value: { files: [{ uid: 'x', filename: 'a.png' }] },
+      });
+
+      const result = validateProperties(properties);
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('should still validate a primitive field value', () => {
+      const properties = withField({
+        type: 'text',
+        field: 'note',
+        value: 'abc',
+      });
+
+      const result = validateProperties(properties);
+
+      expect(result.valid).toBe(true);
+    });
+
+    it('should fail validation for an object value with unexpected keys', () => {
+      const properties = withField({
+        type: 'upload',
+        field: 'attachment',
+        value: { foo: 1 },
+      });
+
+      const result = validateProperties(properties);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
   });
 
   describe('formatValidationErrors', () => {
@@ -128,11 +199,13 @@ describe('Schema Validation', () => {
     });
 
     it('should format missing property error', () => {
-      const errors = [{
-        instancePath: '',
-        message: 'must have required property \'uuid\'',
-        params: { missingProperty: 'uuid' },
-      }];
+      const errors = [
+        {
+          instancePath: '',
+          message: "must have required property 'uuid'",
+          params: { missingProperty: 'uuid' },
+        },
+      ];
 
       const formatted = formatValidationErrors(errors);
 
@@ -140,11 +213,13 @@ describe('Schema Validation', () => {
     });
 
     it('should format type error', () => {
-      const errors = [{
-        instancePath: '/uuid',
-        message: 'must be string',
-        params: {},
-      }];
+      const errors = [
+        {
+          instancePath: '/uuid',
+          message: 'must be string',
+          params: {},
+        },
+      ];
 
       const formatted = formatValidationErrors(errors);
 
@@ -155,7 +230,7 @@ describe('Schema Validation', () => {
       const errors = [
         {
           instancePath: '',
-          message: 'must have required property \'uuid\'',
+          message: "must have required property 'uuid'",
           params: { missingProperty: 'uuid' },
         },
         {

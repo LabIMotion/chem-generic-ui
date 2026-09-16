@@ -3,13 +3,13 @@
     {
       "key": "type",
       "label": "Type",
-      "hover_text": "Information on where your analyze comes from",
+      "hover_text": "Information on where your analyte comes from",
       "source": "element"
     },
     {
       "key": "id",
       "label": "Id",
-      "hover_text": "ID of the source of your analyze",
+      "hover_text": "ID of the source of your analyte",
       "source": "element"
     },
     {

@@ -9,7 +9,7 @@ export const addLayer = (_generic, _source, _key) => {
   const { metadata = {} } = generic;
   const { layers } = generic.properties;
   const sortedLayers = sortBy(layers, ['position', 'wf_position']);
-  const srcIdx = sortedLayers.findIndex(e => e.key === source.key);
+  const srcIdx = sortedLayers.findIndex((e) => e.key === source.key);
   if (srcIdx !== -1) {
     const layer = new Layer({ sys: key });
     layer.addField({

@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GridSelect from '@components/elements/GridSelect';
 
-const LayerSelect = (props) => {
+function LayerSelect(props) {
   const { allLayers, selLayer, node } = props;
-  const all = allLayers.map(e => ({ key: e.key, val: e.key, lab: e.key }));
+  const all = allLayers.map((e) => ({ key: e.key, val: e.key, lab: e.key }));
   const dVal = node.data.layer;
   return <GridSelect all={all} onChange={selLayer} node={node} dVal={dVal} />;
-};
+}
 
 LayerSelect.propTypes = {
   allLayers: PropTypes.arrayOf(PropTypes.object).isRequired,

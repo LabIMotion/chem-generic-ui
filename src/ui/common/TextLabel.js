@@ -5,10 +5,10 @@ import FIcons from '@components/icons/FIcons';
 import FieldHeader from '@components/fields/FieldHeader';
 import { parseTextWithLinks } from '@utils/pureUtils';
 
-const TextLabel = ({ opt, value }) => {
+function TextLabel({ opt, value }) {
   const parts = parseTextWithLinks(value);
   return (
-    <Form.Group className="props_text">
+    <Form.Group className="props_text mb-3">
       {FieldHeader(opt)}
       <div>
         {parts.map((part, i) =>
@@ -29,7 +29,7 @@ const TextLabel = ({ opt, value }) => {
       </div>
     </Form.Group>
   );
-};
+}
 
 TextLabel.propTypes = {
   opt: PropTypes.object,

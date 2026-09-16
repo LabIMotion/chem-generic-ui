@@ -7,7 +7,14 @@ import {
   notifyDummyAdd,
   notifyError,
   notifySuccess,
+  notifyWarning,
 } from '@utils/template/designer-message';
+import {
+  validateNumberValue,
+  isMinMaxValid,
+  parseDecimal,
+  parseNumberInput,
+} from '@utils/numberUtils';
 import {
   validateElementKlassInput,
   validateSegmentKlassInput,
@@ -27,6 +34,8 @@ import {
   removeRestrictionsReferencingOptionValue,
   removeRestrictionsReferencingLayer,
   removeLayerFromGroups,
+  removeLayerFromRegistrySlots,
+  removeFieldValuesReferencingDeletedOption,
 } from '@utils/template/prune-references';
 import { updateLabelFieldsOnRemoval } from '@utils/template/label-handler';
 import {
@@ -34,6 +43,7 @@ import {
   formatValidationErrors,
 } from '@utils/template/schema-validation';
 import { reorderPositions } from '@utils/template/sorting-handler';
+import { ontologyTermKey } from '@utils/pureUtils';
 import Response from '@utils/response';
 
 /**
@@ -239,6 +249,9 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
 
     // Remove restrictions that reference this specific option value
     removeRestrictionsReferencingOptionValue(element, delRoot, delKey);
+
+    // Remove stored field values that reference the deleted option
+    removeFieldValuesReferencingDeletedOption(element, delRoot, delKey);
   }
   if (delStr === FieldTypes.DEL_LAYER) {
     const verify = validateLayerDeletion(element, delKey);
@@ -254,6 +267,9 @@ export const handleDelete = (delStr, delKey, delRoot, _element) => {
 
     // Step 2: Remove the layer from groups
     removeLayerFromGroups(element, delKey);
+
+    // Step 3: Drop extras for this layer from every registry slot
+    removeLayerFromRegistrySlots(element?.metadata, delKey);
   }
   if (delStr === FieldTypes.DEL_FIELD) {
     const layer = element.properties_template.layers[delRoot];
@@ -405,16 +421,44 @@ export const handleFieldInputChange = (
       if (value) fieldObj[`${fieldCheck}`] = value;
       else delete fieldObj[`${fieldCheck}`];
       break;
-    case 'option_layers':
+    case 'ontology_term': {
+      const prevKey = ontologyTermKey(fieldObj.ontology_term);
+      const newKey = ontologyTermKey(value);
+      fieldObj.ontology_term = value;
+      // Scope changed: the pre-filled value belongs to the old ontology tree.
+      if (prevKey !== newKey) delete fieldObj.value;
+      break;
+    }
+    case 'option_layers': {
+      const prevOptionLayers = fieldObj[`${fieldCheck}`];
+      // When source changes for select fields, clear the previously selected value
+      if (
+        [FieldTypes.F_SELECT, FieldTypes.F_SELECT_MULTI].includes(type) &&
+        prevOptionLayers !== value
+      ) {
+        if (type === FieldTypes.F_SELECT_MULTI) {
+          fieldObj.sub_fields = []; // multi-select uses sub_fields and sub_values
+          fieldObj.sub_values = [];
+        } else {
+          delete fieldObj.value;
+        }
+      }
       fieldObj[`${fieldCheck}`] = value;
       if (type === FieldTypes.F_SYSTEM_DEFINED) {
         const defaultSI = reUnit(value);
         fieldObj[`${fieldCheck}`] = defaultSI;
         const defaultUnit = genUnits(defaultSI)[0]?.key;
         fieldObj.value_system = defaultUnit;
+        // pin the designer default as the formula base unit
+        fieldObj.value_system_base = defaultUnit;
+        // quantity changed -> the stored default value is meaningless under the
+        // new unit; clear it (mirrors the F_SELECT branch above)
+        if (prevOptionLayers !== defaultSI) delete fieldObj.value;
       }
       break;
+    }
     case 'type': {
+      const prevType = fieldObj[`${fieldCheck}`];
       // change selected type
       fieldObj[`${fieldCheck}`] = value;
       // give default unit if select system-defined
@@ -422,11 +466,69 @@ export const handleFieldInputChange = (
         const defaultSI = reUnit('');
         fieldObj.option_layers = defaultSI;
         fieldObj.value_system = genUnits(defaultSI)[0]?.key;
+        // pin the designer default as the formula base unit
+        fieldObj.value_system_base = fieldObj.value_system;
       } else {
         fieldObj.option_layers = undefined;
         fieldObj.value_system = undefined;
+        fieldObj.value_system_base = undefined;
         fieldObj.sub_fields = undefined;
+        fieldObj.sub_values = undefined;
       }
+      // Clean up type-specific props when switching away from a type
+      let valueCleared = false;
+      if (
+        [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(prevType) &&
+        ![FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(value)
+      ) {
+        delete fieldObj.numeric;
+        if (
+          fieldObj.value !== undefined &&
+          fieldObj.value !== null &&
+          fieldObj.value !== ''
+        ) {
+          delete fieldObj.value;
+          valueCleared = true;
+        }
+      }
+      if (
+        prevType === FieldTypes.F_FORMULA_FIELD &&
+        value !== FieldTypes.F_FORMULA_FIELD
+      ) {
+        delete fieldObj.formula;
+        delete fieldObj.decimal;
+      }
+      if (
+        [FieldTypes.F_TEXT, FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(
+          prevType,
+        ) &&
+        ![
+          FieldTypes.F_TEXT,
+          FieldTypes.F_NUMBER,
+          FieldTypes.F_INTEGER,
+        ].includes(value)
+      ) {
+        delete fieldObj.placeholder;
+        delete fieldObj.required;
+        delete fieldObj.readonly;
+      }
+      // Snapshot before cleanup
+      const labelFieldsBefore = (layer?.label_fields || []).length;
+      const countRestrictionEntries = (el) => {
+        let count = 0;
+        Object.values(el?.metadata?.restrict || {}).forEach((r) => {
+          count += (r.cond || []).length;
+        });
+        Object.values(el?.properties_template?.layers || {}).forEach((l) => {
+          count += (l.cond_fields || []).length;
+          (l.fields || []).forEach((f) => {
+            count += (f.cond_fields || []).length;
+          });
+        });
+        return count;
+      };
+      const restrictionCountBefore = countRestrictionEntries(element);
+
       // Clean up when field type changes (type change may invalidate conditions)
       if (layer?.label_fields?.length > 0) {
         layer.label_fields = updateLabelFieldsOnRemoval(
@@ -435,11 +537,240 @@ export const handleFieldInputChange = (
         );
       }
       removeRestrictionsReferencingFields(element, [[layerKey, field]]);
+
+      const displayNameCleared =
+        (layer?.label_fields || []).length < labelFieldsBefore;
+      const restrictionsCleared =
+        countRestrictionEntries(element) < restrictionCountBefore;
+
+      const idx = findIndex(fields, (o) => o.field === field);
+      fields.splice(idx, 1, fieldObj);
+      element.properties_template.layers[layerKey].fields = fields;
+
+      const cleared = [
+        valueCleared && 'default value',
+        displayNameCleared && 'display name reference',
+        restrictionsCleared && 'restrictions',
+      ].filter(Boolean);
+
+      if (cleared.length > 0) {
+        const fieldLabel = fieldObj.label || field;
+        const itemList =
+          cleared.length === 1
+            ? cleared[0]
+            : `${cleared.slice(0, -1).join(', ')} and ${cleared[cleared.length - 1]}`;
+        return new Response(
+          notifyWarning(
+            `Field "${fieldLabel}" type changed: ${itemList} were cleared.`,
+            'Warning',
+          ),
+          element,
+        );
+      }
+      // Initialize numeric config when switching TO number type
+      if (
+        [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(value) &&
+        !fieldObj.numeric
+      ) {
+        fieldObj.numeric = { decimals: 0, min: '', max: '' };
+      }
       break;
     }
     case 'value_system':
-      if (value) fieldObj[`${fieldCheck}`] = value;
+      if (value) {
+        fieldObj[`${fieldCheck}`] = value;
+        // designer cycling the unit re-pins the formula base unit
+        fieldObj.value_system_base = value;
+      }
       break;
+    case 'decimals':
+    case 'min':
+    case 'max': {
+      if (!fieldObj.numeric)
+        fieldObj.numeric = { decimals: 0, min: '', max: '' };
+      const carryMsgs = [];
+      if (fieldCheck === 'decimals') {
+        // Validate: must be a non-negative integer; empty = reset to default 0 silently
+        const rawStr = String(value ?? '');
+        if (rawStr === '') {
+          fieldObj.numeric.decimals = 0;
+        } else if (!/^\d+$/.test(rawStr)) {
+          const parsed = parseInt(rawStr, 10);
+          fieldObj.numeric.decimals = isNaN(parsed) || parsed < 0 ? 0 : parsed;
+          const idx2 = findIndex(fields, (o) => o.field === field);
+          fields.splice(idx2, 1, fieldObj);
+          element.properties_template.layers[layerKey].fields = fields;
+          return new Response(
+            notifyWarning(
+              `Invalid decimals for "${fieldObj.label || field}" — must be a non-negative integer. Reset to ${fieldObj.numeric.decimals}.`,
+              'Warning',
+            ),
+            element,
+          );
+        } else {
+          fieldObj.numeric.decimals = parseInt(rawStr, 10);
+        }
+        // Re-round existing min/max to the new precision
+        if (
+          [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(fieldObj.type)
+        ) {
+          const newDec = fieldObj.numeric.decimals;
+          const rounded = [];
+          ['min', 'max'].forEach((k) => {
+            const v = fieldObj.numeric[k];
+            if (v === '' || v == null) return;
+            const r = parseNumberInput(v, newDec);
+            if (r !== null && String(r) !== String(v)) {
+              fieldObj.numeric[k] = r;
+              rounded.push(`${k} → ${r}`);
+            }
+          });
+          const parts = [];
+          if (rounded.length) {
+            // If rounding produced a min>max conflict, clear max so the field stays usable
+            if (!isMinMaxValid(fieldObj.numeric.min, fieldObj.numeric.max)) {
+              fieldObj.numeric.max = '';
+            }
+            parts.push(
+              `Constraints updated for "${fieldObj.label || field}" to match decimals precision (${newDec}): ${rounded.join(', ')}.`,
+            );
+          }
+          // Re-apply the default value through parseNumberInput so it rounds
+          // (and clamps) to the new precision/constraints. Only clear when the
+          // value cannot be parsed at all.
+          if (
+            fieldObj.value !== undefined &&
+            fieldObj.value !== null &&
+            fieldObj.value !== ''
+          ) {
+            const parsed = parseNumberInput(
+              fieldObj.value,
+              fieldObj.numeric.decimals,
+              {
+                min: fieldObj.numeric.min,
+                max: fieldObj.numeric.max,
+              },
+            );
+            if (parsed === null) {
+              fieldObj.value = '';
+              parts.push(
+                `Default value cleared for "${fieldObj.label || field}" — it could not be parsed.`,
+              );
+            } else if (String(parsed) !== String(fieldObj.value)) {
+              fieldObj.value = parsed;
+              parts.push(
+                `Default value rounded to ${parsed} for "${fieldObj.label || field}" to match decimals precision (${fieldObj.numeric.decimals}).`,
+              );
+            }
+          }
+          if (parts.length) {
+            const idx2 = findIndex(fields, (o) => o.field === field);
+            fields.splice(idx2, 1, fieldObj);
+            element.properties_template.layers[layerKey].fields = fields;
+            return new Response(
+              notifyWarning(parts.join(' '), 'Warning'),
+              element,
+            );
+          }
+        }
+      } else {
+        // Reject non-numeric input: reset to empty and warn
+        if (
+          [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(fieldObj.type) &&
+          value !== '' &&
+          value !== null &&
+          value !== undefined &&
+          parseDecimal(value) === null
+        ) {
+          fieldObj.numeric[fieldCheck] = '';
+          const idx2 = findIndex(fields, (o) => o.field === field);
+          fields.splice(idx2, 1, fieldObj);
+          element.properties_template.layers[layerKey].fields = fields;
+          return new Response(
+            notifyWarning(
+              `${fieldCheck === 'min' ? 'Min' : 'Max'} must be numeric for "${fieldObj.label || field}" — reset to empty.`,
+              'Warning',
+            ),
+            element,
+          );
+        }
+        fieldObj.numeric[fieldCheck] = value;
+        // Normalize min/max to the current decimals precision (if decimals is set).
+        // Accumulate the warning instead of returning so the subsequent default-
+        // value check can still run against the rounded constraints.
+        if (
+          [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(fieldObj.type) &&
+          value !== '' &&
+          value !== null &&
+          value !== undefined
+        ) {
+          const currentDecimals = fieldObj.numeric.decimals;
+          const rounded = parseNumberInput(value, currentDecimals);
+          if (rounded !== null && String(rounded) !== String(value)) {
+            fieldObj.numeric[fieldCheck] = rounded;
+            carryMsgs.push(
+              `${fieldCheck === 'min' ? 'Min' : 'Max'} rounded to ${rounded} for "${fieldObj.label || field}" to match decimals precision (${currentDecimals}).`,
+            );
+          }
+        }
+        // Guard: min must not exceed max (and vice versa)
+        if (
+          [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(fieldObj.type)
+        ) {
+          const { min: curMin, max: curMax } = fieldObj.numeric;
+          if (!isMinMaxValid(curMin, curMax)) {
+            fieldObj.numeric[fieldCheck] = '';
+            const idx2 = findIndex(fields, (o) => o.field === field);
+            fields.splice(idx2, 1, fieldObj);
+            element.properties_template.layers[layerKey].fields = fields;
+            return new Response(
+              notifyWarning(
+                `Invalid constraint for "${fieldObj.label || field}" — min cannot be greater than max.`,
+                'Warning',
+              ),
+              element,
+            );
+          }
+        }
+      }
+      // If there's a preview/default value set, check it against the updated constraints
+      if (
+        [FieldTypes.F_NUMBER, FieldTypes.F_INTEGER].includes(fieldObj.type) &&
+        fieldObj.value !== undefined &&
+        fieldObj.value !== null &&
+        fieldObj.value !== ''
+      ) {
+        const newConstraints = {
+          decimals: fieldObj.numeric.decimals,
+          min: fieldObj.numeric.min,
+          max: fieldObj.numeric.max,
+        };
+        const { valid } = validateNumberValue(fieldObj.value, newConstraints);
+        if (!valid) {
+          fieldObj.value = '';
+          const idx2 = findIndex(fields, (o) => o.field === field);
+          fields.splice(idx2, 1, fieldObj);
+          element.properties_template.layers[layerKey].fields = fields;
+          const parts = carryMsgs.concat([
+            `Default value cleared for "${fieldObj.label || field}" — it falls outside the updated constraints.`,
+          ]);
+          return new Response(
+            notifyWarning(parts.join(' '), 'Warning'),
+            element,
+          );
+        }
+      }
+      if (carryMsgs.length > 0) {
+        const idx2 = findIndex(fields, (o) => o.field === field);
+        fields.splice(idx2, 1, fieldObj);
+        element.properties_template.layers[layerKey].fields = fields;
+        return new Response(
+          notifyWarning(carryMsgs.join(' '), 'Warning'),
+          element,
+        );
+      }
+      break;
+    }
     default:
       fieldObj[`${fieldCheck}`] = value;
       break;
@@ -472,6 +803,14 @@ export const handleTemplateUploading = (_event, _genericType) => {
         properties,
       );
     }
+
+    // Handle unsupported field types before validation
+    Object.keys(properties.layers || {}).forEach((key) => {
+      properties.layers[key] = updateUnsupports(
+        properties.layers[key],
+        _genericType,
+      );
+    });
 
     // Validate properties against schema
     const validation = validateProperties(properties);
@@ -532,6 +871,17 @@ export const handleKlassUploading = (_event, _genericType) => {
       Constants.GENERIC_TYPES.SEGMENT === requestKlass
         ? validateSegmentKlassInput(inputs)
         : validateElementKlassInput(inputs);
+
+    if (verify.isSuccess) {
+      // Handle unsupported field types
+      Object.keys(data?.properties_template?.layers || {}).forEach((key) => {
+        data.properties_template.layers[key] = updateUnsupports(
+          data.properties_template.layers[key],
+          _genericType,
+        );
+      });
+    }
+
     // console.log('verify=', verify, ', requestKlass=', requestKlass);
     return new Response(verify, data);
   } catch (err) {

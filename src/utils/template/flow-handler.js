@@ -105,9 +105,11 @@ export const calculateGroupCompletion = (
 ) => {
   if (groupLayers.length === 0) return 0;
 
-  const totalCompletion = groupLayers.reduce((acc, layer) => {
-    return acc + calculateLayerCompletion(layer, allLayers, refElement);
-  }, 0);
+  const totalCompletion = groupLayers.reduce(
+    (acc, layer) =>
+      acc + calculateLayerCompletion(layer, allLayers, refElement),
+    0,
+  );
 
   return Math.round(totalCompletion / groupLayers.length);
 };

@@ -22,10 +22,10 @@ export const verifyConditionLayer = (_element, _layerKey) => {
     return responseCondition(
       notifyError(
         'Layer Restriction cannot be set on the workflow layer.',
-        `Layer [${_layerKey}]`
+        `Layer [${_layerKey}]`,
       ),
       element,
-      { fieldObj: null, layerKey }
+      { fieldObj: null, layerKey },
     );
   }
   return responseCondition(notifySuccess(), element, {
@@ -41,10 +41,10 @@ export const handleCondition = (_element, _layerKey, _field) => {
     return responseCondition(
       notifyError(
         'Layer Restriction cannot be set on the workflow layer.',
-        `Layer [${_layerKey}]`
+        `Layer [${_layerKey}]`,
       ),
       element,
-      { fieldObj: field, layerKey }
+      { fieldObj: field, layerKey },
     );
   }
   return responseCondition(notifySuccess(), element, {
@@ -57,15 +57,15 @@ export const handleFieldSubChange = (
   _element,
   _layerKey,
   _field,
-  _cb = () => {}
+  _cb = () => {},
 ) => {
   const [element, layerKey, field, cb] = [_element, _layerKey, _field, _cb];
   const layer = element?.properties_template?.layers[layerKey];
   const { fields } = layer;
   if (layer != null) {
-    const fieldObj = (fields || []).find(o => o.field === field.field);
+    const fieldObj = (fields || []).find((o) => o.field === field.field);
     if (fieldObj && Object.keys(fieldObj || {}).length > 0) {
-      const idx = (fields || []).findIndex(o => o.field === field.field);
+      const idx = (fields || []).findIndex((o) => o.field === field.field);
       fields.splice(idx, 1, field);
       element.properties_template.layers[layerKey].fields = fields;
     }

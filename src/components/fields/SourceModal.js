@@ -1,8 +1,8 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
 import LoadingSpinner from '@components/icons/LoadingSpinner';
+import GModal from '@ui/modals/GModal';
 
 function SourceModal({
   show,
@@ -20,17 +20,11 @@ function SourceModal({
   };
 
   return (
-    <Modal
-      centered
-      show={show}
-      onHide={handleClose}
-      backdrop="static"
-      size="xl"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>Sources Overview</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="d-flex flex-column" style={{ height: '70vh' }}>
+    <GModal show={show} onHide={handleClose} backdrop="static" size="xl">
+      <GModal.Header>
+        <GModal.Title>Sources Overview</GModal.Title>
+      </GModal.Header>
+      <GModal.Body className="d-flex flex-column" style={{ height: '70vh' }}>
         {loading ? (
           <div className="d-flex justify-content-center align-items-center flex-grow-1">
             <LoadingSpinner />
@@ -106,8 +100,8 @@ function SourceModal({
             </div>
           </div>
         )}
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
 }
 

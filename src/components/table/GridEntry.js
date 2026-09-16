@@ -1,17 +1,29 @@
-/* eslint-disable react/forbid-prop-types */
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { FieldTypes } from 'generic-ui-core';
+import NumberEditor from '@components/table/NumberEditor';
 
 const setCell = (columnDef, rowValue) => {
-  const { type, field, onCellChange, cellRenderer, cellParams } = columnDef;
+  const { type, field, editable, onCellChange, cellRenderer, cellParams } =
+    columnDef;
   switch (type) {
     case FieldTypes.F_TEXT:
       return (
         <Form.Control
           type="text"
           value={rowValue[field] || ''}
-          onChange={e => onCellChange({ e, columnDef, rowValue })}
+          onChange={(e) => onCellChange({ e, columnDef, rowValue })}
+        />
+      );
+    case FieldTypes.F_NUMBER:
+      if (editable === false) {
+        return cellRenderer({ ...cellParams, node: { data: rowValue } });
+      }
+      return (
+        <NumberEditor
+          columnDef={columnDef}
+          rowValue={rowValue}
+          onCellChange={onCellChange}
         />
       );
     case FieldTypes.F_SYSTEM_DEFINED:
@@ -19,13 +31,15 @@ const setCell = (columnDef, rowValue) => {
         <InputGroup>
           <Form.Control
             type="number"
-            value={rowValue[field].value || ''}
+            value={rowValue[field]?.value || ''}
             onChange={(e) => onCellChange({ e, columnDef, rowValue })}
           />
           {cellRenderer({ ...cellParams, node: { data: rowValue } })}
         </InputGroup>
       );
+    case FieldTypes.F_FORMULA_FIELD:
     case FieldTypes.F_SELECT:
+    case FieldTypes.F_SELECT_MULTI:
     case FieldTypes.F_DRAG_MOLECULE:
     case FieldTypes.F_DRAG_SAMPLE:
     case 'dnd':
@@ -35,7 +49,7 @@ const setCell = (columnDef, rowValue) => {
   }
 };
 
-const ColumnHeader = _columnDefs => {
+function ColumnHeader(_columnDefs) {
   const columnDefs = _columnDefs;
   const ch = [];
   const h = (col, idx) => {
@@ -61,9 +75,9 @@ const ColumnHeader = _columnDefs => {
       <div>{ch}</div>
     </div>
   );
-};
+}
 
-const ColumnRow = (_columnDefs, _rowValue) => {
+function ColumnRow(_columnDefs, _rowValue) {
   const columnDefs = _columnDefs;
   const rowValue = _rowValue;
   const ch = [];
@@ -74,7 +88,7 @@ const ColumnRow = (_columnDefs, _rowValue) => {
       Object.assign(colCss, { width, minWidth: width });
     }
     const rowKlz =
-      type === FieldTypes.F_SELECT
+      type === FieldTypes.F_SELECT || type === FieldTypes.F_SELECT_MULTI
         ? 'generic_grid_row generic_grid_row_left'
         : 'generic_grid_row';
     return (
@@ -95,9 +109,9 @@ const ColumnRow = (_columnDefs, _rowValue) => {
       <div>{ch}</div>
     </div>
   );
-};
+}
 
-const NoRow = (rows) => {
+function NoRow(rows) {
   const values = rows;
   if (values && values.length > 0) return null;
   return (
@@ -109,6 +123,6 @@ const NoRow = (rows) => {
       </div>
     </div>
   );
-};
+}
 
 export { ColumnHeader, ColumnRow, NoRow };

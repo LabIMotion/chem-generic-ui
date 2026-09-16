@@ -7,23 +7,25 @@ import { FieldTypes } from 'generic-ui-core';
 import GenericSubField from '@components/models/GenericSubField';
 import { AddRowBtn, DelRowBtn } from '@components/table/GridBtn';
 import DefinedRenderer from '@components/elements/DefinedRenderer';
-import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
-const TypeSelect = ({ selType, node }) => (
-  <Form.Group size="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
-    <Form.Control
-      as="select"
-      placeholder="select the type"
-      onChange={(e) => selType(e, node)}
-      defaultValue={node.data.type}
-    >
-      <option value="label">label</option>
-      <option value="number">number</option>
-      <option value="text">text</option>
-      <option value="system-defined">System-Defined</option>
-    </Form.Control>
-  </Form.Group>
-);
+function TypeSelect({ selType, node }) {
+  return (
+    <Form.Group size="sm" style={{ marginRight: '-10px', marginLeft: '-10px' }}>
+      <Form.Control
+        as="select"
+        placeholder="select the type"
+        onChange={(e) => selType(e, node)}
+        defaultValue={node.data.type}
+      >
+        <option value="label">label</option>
+        <option value="number">number</option>
+        <option value="text">text</option>
+        <option value="system-defined">System-Defined</option>
+      </Form.Control>
+    </Form.Group>
+  );
+}
 
 TypeSelect.propTypes = {
   selType: PropTypes.func.isRequired,
@@ -46,6 +48,7 @@ export default class GroupFields extends React.Component {
     this.addRow = this.addRow.bind(this);
     this.selType = this.selType.bind(this);
     this.selDefined = this.selDefined.bind(this);
+    this.selUnit = this.selUnit.bind(this);
     this.refresh = this.refresh.bind(this);
     this.onCellValueChanged = this.onCellValueChanged.bind(this);
     this.columnDefs = [
@@ -78,6 +81,7 @@ export default class GroupFields extends React.Component {
         cellRendererParams: {
           unitConfig: this.state.unitConfig,
           selDefined: this.selDefined,
+          selUnit: this.selUnit,
         },
         onCellValueChanged: this.onCellValueChanged,
       },
@@ -117,9 +121,9 @@ export default class GroupFields extends React.Component {
 
   // Helper method to safely get and save column state
   saveColumnState() {
-    if (this.gridColumnApi && typeof this.gridColumnApi.getColumnState === 'function') {
+    if (this.gridApi && typeof this.gridApi.getColumnState === 'function') {
       try {
-        this.savedColumnState = this.gridColumnApi.getColumnState();
+        this.savedColumnState = this.gridApi.getColumnState();
         return true;
       } catch (error) {
         console.warn('Failed to save column state:', error);
@@ -130,9 +134,9 @@ export default class GroupFields extends React.Component {
 
   // Helper method to safely restore column state
   restoreColumnState() {
-    if (this.gridColumnApi && this.savedColumnState) {
+    if (this.gridApi && this.savedColumnState) {
       try {
-        this.gridColumnApi.applyColumnState({ state: this.savedColumnState });
+        this.gridApi.applyColumnState({ state: this.savedColumnState });
         return true;
       } catch (error) {
         console.warn('Failed to restore column state:', error);
@@ -143,7 +147,6 @@ export default class GroupFields extends React.Component {
 
   onGridReady(e) {
     this.gridApi = e.api;
-    this.gridColumnApi = e.columnApi;
     this.autoSizeAll();
   }
 
@@ -221,6 +224,18 @@ export default class GroupFields extends React.Component {
     this.refresh();
   }
 
+  // Designer pins the sub-field's default unit (the formula base unit),
+  // mirroring the table-column editor (FieldTable.selUnit). Stores it on the
+  // row's `value_system`; updSub persists it up the field-change chain.
+  selUnit(unitKey, node) {
+    const { data } = node;
+    if (data.type !== FieldTypes.F_SYSTEM_DEFINED) return;
+    if (!unitKey || unitKey === data.value_system) return;
+    data.value_system = unitKey;
+    this.saveColumnState();
+    this.refresh();
+  }
+
   refresh() {
     const { updSub, layerKey, field } = this.props;
     const rows = [];
@@ -238,14 +253,15 @@ export default class GroupFields extends React.Component {
   render() {
     const { field } = this.props;
     const sub = field.sub_fields || [];
+    const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
     return (
       <div>
         <div
-          className={Constants.GRID_THEME.QUARTZ.VALUE}
+          className={wrapperClassName}
           style={{ width: '100%', height: '100%' }}
         >
           <AgGridReact
-            enableColResize
+            {...themeProps}
             columnDefs={this.columnDefs}
             rowSelection={{
               mode: 'singleRow',

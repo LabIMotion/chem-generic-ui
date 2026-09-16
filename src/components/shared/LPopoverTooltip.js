@@ -9,7 +9,7 @@ import {
 import FIcons from '@components/icons/FIcons';
 
 // @TODO: Refactor this component to make the Popover position right
-const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
+function LPopoverTooltip({ msg, fnClick, fnParams }) {
   const [showPopover, setShowPopover] = useState(false); // State to control popover visibility
   const buttonRef = useRef(null); // Ref for the button
   const containerRef = useRef(null); // Ref for the container
@@ -40,11 +40,12 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
   };
 
   // Cleanup the event listener on component unmount
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       document.removeEventListener('click', handleOutsideClick, false);
-    };
-  }, [handleOutsideClick]);
+    },
+    [handleOutsideClick],
+  );
 
   const tooltip = <Tooltip id="tooltip">Tooltip text here</Tooltip>;
 
@@ -110,6 +111,6 @@ const LPopoverTooltip = ({ msg, fnClick, fnParams }) => {
       </Overlay>
     </div>
   );
-};
+}
 
 export default LPopoverTooltip;

@@ -1,12 +1,12 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-bootstrap';
 import Constants from '@components/tools/Constants';
 import PreviewFunctional from '@components/designer/preview/PreviewFunctional';
 import LoadingSpinner from '@components/icons/LoadingSpinner';
+import GModal from '@ui/modals/GModal';
 
-const VersionModal = ({ show, fnClose, fnRetrieve, element, genericType }) => {
+function VersionModal({ show, fnClose, fnRetrieve, element, genericType }) {
   const [loading, setLoading] = useState(false);
 
   if (
@@ -27,17 +27,11 @@ const VersionModal = ({ show, fnClose, fnRetrieve, element, genericType }) => {
   };
 
   return (
-    <Modal
-      centered
-      show={show}
-      onHide={handleClose}
-      fullscreen
-      backdrop="static"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>Previous Versions</Modal.Title>
-      </Modal.Header>
-      <Modal.Body
+    <GModal show={show} onHide={handleClose} fullscreen backdrop="static">
+      <GModal.Header>
+        <GModal.Title>Previous Versions</GModal.Title>
+      </GModal.Header>
+      <GModal.Body
         className="d-flex flex-column"
         style={{ height: 'calc(100vh - 56px)' }}
       >
@@ -55,10 +49,10 @@ const VersionModal = ({ show, fnClose, fnRetrieve, element, genericType }) => {
             />
           </div>
         )}
-      </Modal.Body>
-    </Modal>
+      </GModal.Body>
+    </GModal>
   );
-};
+}
 
 VersionModal.propTypes = {
   show: PropTypes.bool.isRequired,

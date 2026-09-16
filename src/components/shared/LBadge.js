@@ -3,67 +3,58 @@ import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 
 /**
- * A wrapper component for react-bootstrap Badge with solid and outline variants.
- * Provides consistent styling and spacing for badge elements throughout the application.
+ * Wrapper for react-bootstrap Badge with solid and outline variants.
+ *
+ * Supported outline colors: 'default', 'primary', 'warning', 'x'.
+ * Solid colors: any valid react-bootstrap bg value ('primary', 'dark', 'warning', etc.).
  *
  * @component
  * @example
- * // Solid badge
  * <LBadge variant="solid" color="primary" text="Active" />
- *
- * @example
- * // Outline badge with children
- *
- * <LBadge variant="outline" color="warning">
- *   <Icon /> Custom Content
- * </LBadge>
+ * <LBadge variant="outline" color="warning">Custom</LBadge>
+ * <LBadge variant="solid" color="dark" text="no margin" noMargin />
  */
-function LBadge({ variant, color, text, children, className }) {
+function LBadge({
+  variant = 'solid',
+  color,
+  text = '',
+  children = null,
+  className = '',
+  noMargin = false,
+}) {
   const content = children || text;
-
-  // Early return for empty content
   if (!content && content !== 0) return null;
 
-  // Build className
-  const classes = ['ms-1'];
+  const classes = [];
+  if (!noMargin) classes.push('ms-1');
   if (className) classes.push(className);
   if (variant === 'outline') classes.push(`lbg-outline-${color}`);
-  const computedClassName = classes.join(' ');
+  const computedClassName = classes.join(' ') || undefined;
 
-  // Solid variant uses react-bootstrap's bg prop
-  if (variant === 'solid') {
-    return (
-      <Badge pill className={computedClassName} bg={color}>
-        {content}
-      </Badge>
-    );
-  }
-
-  // Outline variant uses custom CSS classes
   return (
-    <Badge pill className={computedClassName}>
+    <Badge
+      pill
+      className={computedClassName}
+      bg={variant === 'solid' ? color : undefined}
+    >
       {content}
     </Badge>
   );
 }
 
 LBadge.propTypes = {
-  /** Badge style: 'solid' for filled background, 'outline' for bordered style */
+  /** 'solid' for filled background, 'outline' for bordered style */
   variant: PropTypes.oneOf(['solid', 'outline']),
+  /** Color key. Outline: 'default'|'primary'|'warning'|'x'. Solid: any RB bg value. */
   color: PropTypes.string.isRequired,
-  /** Text content for the badge (alternative to children) */
+  /** Text content (alternative to children) */
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /** React children (takes precedence over text prop) */
+  /** React children (takes precedence over text) */
   children: PropTypes.node,
-  /** Additional CSS classes to apply */
+  /** Additional CSS classes */
   className: PropTypes.string,
-};
-
-LBadge.defaultProps = {
-  variant: 'solid',
-  text: '',
-  children: null,
-  className: '',
+  /** Skip default ms-1 left margin */
+  noMargin: PropTypes.bool,
 };
 
 export default LBadge;

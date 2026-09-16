@@ -11,7 +11,7 @@ import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 import TAs from '@components/tools/TAs';
 
-const ConditionLayerBtn = (props) => {
+function ConditionLayerBtn(props) {
   const { element, fnUpdate, layer, sortedLayers, as } = props;
   const [show, setShow] = useState(false);
 
@@ -77,7 +77,7 @@ const ConditionLayerBtn = (props) => {
       />
     </>
   );
-};
+}
 
 ConditionLayerBtn.propTypes = {
   element: PropTypes.object.isRequired,

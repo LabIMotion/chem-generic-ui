@@ -11,7 +11,7 @@ import { flowInputNode, flowOutputNode } from '@utils/flow/initial-flow';
  */
 const arrangedFlowElements = (nodes, properties) => {
   const defaultNodes = nodes.filter(
-    n => n.type === Constants.NODE_TYPES.DEFAULT
+    (n) => n.type === Constants.NODE_TYPES.DEFAULT,
   );
   if (defaultNodes.length < 1) return { nodes: [], edges: [] };
 
@@ -22,12 +22,12 @@ const arrangedFlowElements = (nodes, properties) => {
     sortBy(layersProperties, ['position', 'wf_position']) || [];
 
   // loop through the sortedLayers, for each layer, check if the layer's is associated with a node.data.lKey of defaultNodes
-  sortedLayers.forEach(layer => {
-    let associatedNode = defaultNodes.find(n => layer.key === n.data.lKey);
+  sortedLayers.forEach((layer) => {
+    let associatedNode = defaultNodes.find((n) => layer.key === n.data.lKey);
     let label = createLayerNodeIcon(layer, true);
     if (!associatedNode) {
-      associatedNode = defaultNodes.find(n =>
-        layer.key.startsWith(`${n.data.lKey}.`)
+      associatedNode = defaultNodes.find((n) =>
+        layer.key.startsWith(`${n.data.lKey}.`),
       );
       if (!associatedNode) return;
       label = createLayerNodeIcon(layer, true, 'add');

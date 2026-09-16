@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, InputGroup, Modal, Button } from 'react-bootstrap';
+import { Form, InputGroup, Button } from 'react-bootstrap';
+import GModal from '@ui/modals/GModal';
 
 export default class SelectAttrNewModal extends Component {
   constructor(props) {
@@ -16,17 +17,16 @@ export default class SelectAttrNewModal extends Component {
   render() {
     const { showModal, fnClose } = this.props;
     return (
-      <Modal
-        centered
+      <GModal
         backdrop="static"
         show={showModal}
         onHide={() => fnClose()}
         size="lg"
       >
-        <Modal.Header closeButton>
-          <Modal.Title>New Select List</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: 'auto' }}>
+        <GModal.Header>
+          <GModal.Title>New Select List</GModal.Title>
+        </GModal.Header>
+        <GModal.Body style={{ overflow: 'auto' }}>
           <div className="col-md-12">
             <Form className="row mb-3 input-form">
               <Form.Group controlId="formControlSelectKey">
@@ -56,8 +56,8 @@ export default class SelectAttrNewModal extends Component {
               </Button>
             </Form.Group>
           </div>
-        </Modal.Body>
-      </Modal>
+        </GModal.Body>
+      </GModal>
     );
   }
 }

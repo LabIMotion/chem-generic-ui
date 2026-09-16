@@ -7,7 +7,7 @@ import DroppablePanel from '@components/dnd/DroppablePanel';
 import Constants from '@components/tools/Constants';
 import FIcons from '@components/icons/FIcons';
 
-const DropReaction = props => {
+function DropReaction(props) {
   const { field: fObj, onNavi, onChange, isEditable } = props;
   const { value = {} } = fObj;
   const {
@@ -37,7 +37,7 @@ const DropReaction = props => {
     </>
   );
 
-  const onDrop = item => {
+  const onDrop = (item) => {
     const { source, target } = item;
     const { element } = source;
     target.value = {
@@ -100,16 +100,18 @@ const DropReaction = props => {
   };
 
   return isEditable ? (
-      <DroppablePanel
-        type={["reaction"]} // rename the drop target as 'reaction' to differentiate the 'element' drop zones
-        field={fObj}
-        rowValue={{ key: fObj.type }}
-        fnCb={onDrop}
-      >
-        {showReaction()}
-      </DroppablePanel>
-    ) : showReaction()
-};
+    <DroppablePanel
+      type={['reaction']} // rename the drop target as 'reaction' to differentiate the 'element' drop zones
+      field={fObj}
+      rowValue={{ key: fObj.type }}
+      fnCb={onDrop}
+    >
+      {showReaction()}
+    </DroppablePanel>
+  ) : (
+    showReaction()
+  );
+}
 
 DropReaction.propTypes = {
   field: PropTypes.object.isRequired,

@@ -5,18 +5,14 @@ const VOC_MODE = {
   W: { value: 'write', op: 6 },
 };
 
-const isNotObject = (value) => {
-  return typeof value !== 'object' || value === null || Array.isArray(value);
-};
+const isNotObject = (value) =>
+  typeof value !== 'object' || value === null || Array.isArray(value);
 
-const isEmptyObject = (input) => {
-  return (
-    typeof input === 'object' &&
-    input !== null &&
-    !Array.isArray(input) &&
-    Object.keys(input).length === 0
-  );
-};
+const isEmptyObject = (input) =>
+  typeof input === 'object' &&
+  input !== null &&
+  !Array.isArray(input) &&
+  Object.keys(input).length === 0;
 
 const vocMode = (fieldObject) => {
   if (isNotObject(fieldObject)) return VOC_MODE.S.value;

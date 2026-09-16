@@ -1,7 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Modal, Button, ButtonGroup } from 'react-bootstrap';
+import { Form, Button, ButtonGroup } from 'react-bootstrap';
 import { Content } from '@components/elements/AttrForm';
 import Constants from '@components/tools/Constants';
 import Response from '@utils/response';
@@ -9,8 +9,9 @@ import {
   validateElementKlassInput,
   validateSegmentKlassInput,
 } from '@utils/template/input-validation';
+import GModal from '@ui/modals/GModal';
 
-const AttrModal = (props) => {
+function AttrModal(props) {
   const { actions, data, editable, genericType, showProps } = props;
   const { show, setShow } = showProps;
   const formRef = useRef();
@@ -185,48 +186,45 @@ const AttrModal = (props) => {
   };
 
   return (
-    <>
-      <Modal
-        centered
-        size="lg"
-        backdrop="static"
-        show={show}
-        onHide={() => setShow(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{addTitles()}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: 'auto' }}>
-          <div className="col-md-12">
-            <Content
-              ref={formRef}
-              content={genericType}
-              element={data}
-              editable={editable}
-            />
-            <Form className="row mb-3">
-              <Form.Group>
-                {addActions()}
-                <ButtonGroup>
-                  <Button variant="primary" onClick={() => setShow(false)}>
-                    Close
-                  </Button>
-                </ButtonGroup>
-              </Form.Group>
-            </Form>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </>
+    <GModal
+      size="lg"
+      backdrop="static"
+      show={show}
+      onHide={() => setShow(false)}
+    >
+      <GModal.Header>
+        <GModal.Title>{addTitles()}</GModal.Title>
+      </GModal.Header>
+      <GModal.Body style={{ overflow: 'auto' }}>
+        <div className="col-md-12">
+          <Content
+            ref={formRef}
+            content={genericType}
+            element={data}
+            editable={editable}
+          />
+          <Form className="row mb-3">
+            <Form.Group>
+              {addActions()}
+              <ButtonGroup>
+                <Button variant="primary" onClick={() => setShow(false)}>
+                  Close
+                </Button>
+              </ButtonGroup>
+            </Form.Group>
+          </Form>
+        </div>
+      </GModal.Body>
+    </GModal>
   );
-};
+}
 
 AttrModal.propTypes = {
   actions: PropTypes.arrayOf(
     PropTypes.shape({
       action: PropTypes.oneOf(['c', 'cc', 'u', 'd']),
       fnAction: PropTypes.func,
-    })
+    }),
   ).isRequired,
   data: PropTypes.object, // required for update action
   editable: PropTypes.bool,

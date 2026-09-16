@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from 'react';
@@ -107,7 +106,13 @@ export default class GenPropertiesLayer extends Component {
     const { refSource } = this.context;
 
     (fields || []).forEach((f, idx) => {
-      const [showProp, showLabel] = isFieldEffectivelyVisible(f, layer, layers, new Set(), refSource?.element);
+      const [showProp, showLabel] = isFieldEffectivelyVisible(
+        f,
+        layer,
+        layers,
+        new Set(),
+        refSource?.element,
+      );
       if (showProp) {
         let fieldWidth;
 
@@ -179,7 +184,7 @@ export default class GenPropertiesLayer extends Component {
               classStr={classStr || ''}
               f_obj={f}
               label={showLabel || f.label}
-              value={f.value || ''}
+              value={f.value ?? ''}
               description={f.description || ''}
               type={f.type || FieldTypes.F_TEXT}
               field={f.field || 'field'}

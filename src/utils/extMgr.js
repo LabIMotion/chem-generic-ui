@@ -10,13 +10,14 @@ const API_DISP = {
 class ExternalManager {
   // a private static method
   static #exec = ApiExecutor.exec;
+
   static #execRaw = ApiExecutor.execRaw;
 
   static deleteVersion = (data) =>
     ExternalManager.#exec(
       `${API_DISP[Constants.GENERIC_TYPES.ELEMENT]}/delete_revision`,
       'POST',
-      data
+      data,
     );
 
   static getVersions = (disp, params) =>
@@ -24,7 +25,7 @@ class ExternalManager {
       `${API_DISP[Constants.GENERIC_TYPES.ELEMENT]}/${disp}_revisions.json`,
       'GET',
       null,
-      params
+      params,
     );
 
   static saveTemplate = (disp, data = {}) =>
@@ -38,7 +39,7 @@ class ExternalManager {
       `${API_DISP[Constants.GENERIC_TYPES.ELEMENT]}/export.json`,
       'GET',
       null,
-      params
+      params,
     );
 }
 

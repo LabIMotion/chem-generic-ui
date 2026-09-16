@@ -3,7 +3,7 @@ import si from '@components/addon/metadata.json';
 
 function DatasetMetadata(dcs, idDt) {
   const metadata = {};
-  const dc = dcs?.filter(e => idDt === e.id);
+  const dc = dcs?.filter((e) => idDt === e.id);
 
   if (dc?.length === 0 || !dc[0].dataset) {
     return metadata;
@@ -16,9 +16,9 @@ function DatasetMetadata(dcs, idDt) {
     return metadata;
   }
 
-  siCheck.forEach(sio => {
+  siCheck.forEach((sio) => {
     const fio = properties.layers[sio.layer]?.fields.find(
-      field => field.field === sio.field
+      (field) => field.field === sio.field,
     );
     if (fio) {
       switch (fio.type) {
@@ -30,6 +30,7 @@ function DatasetMetadata(dcs, idDt) {
         }
         case FieldTypes.F_TEXT:
         case FieldTypes.F_INTEGER:
+        case FieldTypes.F_NUMBER:
         case FieldTypes.F_SELECT:
           metadata[sio.var] = fio.value;
           break;

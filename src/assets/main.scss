@@ -95,6 +95,10 @@
   @include lbg-outline($color-halloween);
 }
 
+.lbg-outline-x {
+  @include lbg-outline($color-bs-info);
+}
+
 .icon_generic_nav {
   font-family: FontAwesome, Helvetica, Arial, sans-serif !important;
 }
@@ -270,10 +274,10 @@
   }
 }
 
+// Vertical placement comes from `.gu-modal .modal-dialog` (modal.scss); this
+// class only widens the dialog.
 .generic_criteria_modal {
-  display: block;
   padding-left: 0px;
-  top: 45% !important;
   width: 75vw !important;
 }
 

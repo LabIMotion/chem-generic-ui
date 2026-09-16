@@ -24,9 +24,9 @@ describe('selectOptions Schema', () => {
         category1: {
           options: [
             { key: 'key1', label: 'Label 1' },
-            { key: 'key2', label: 'Label 2' }
-          ]
-        }
+            { key: 'key2', label: 'Label 2' },
+          ],
+        },
       };
 
       const isValid = validate(validData);
@@ -40,16 +40,29 @@ describe('selectOptions Schema', () => {
           options: [
             { key: 'red', label: 'Red' },
             { key: 'blue', label: 'Blue' },
-            { key: 'green', label: 'Green' }
-          ]
+            { key: 'green', label: 'Green' },
+          ],
         },
         sizes: {
           options: [
             { key: 'small', label: 'Small' },
             { key: 'medium', label: 'Medium' },
-            { key: 'large', label: 'Large' }
-          ]
-        }
+            { key: 'large', label: 'Large' },
+          ],
+        },
+      };
+
+      const isValid = validate(validData);
+      expect(isValid).toBe(true);
+      expect(validate.errors).toBeNull();
+    });
+
+    test('should validate a legacy category carrying a desc string', () => {
+      const validData = {
+        category1: {
+          options: [{ key: 'key1', label: 'Label 1' }],
+          desc: 'category1',
+        },
       };
 
       const isValid = validate(validData);
@@ -60,8 +73,8 @@ describe('selectOptions Schema', () => {
     test('should validate select option with empty options array', () => {
       const validData = {
         emptyCategory: {
-          options: []
-        }
+          options: [],
+        },
       };
 
       const isValid = validate(validData);
@@ -104,7 +117,7 @@ describe('selectOptions Schema', () => {
     describe('Invalid field types', () => {
       test('should reject non-object category', () => {
         const invalidData = {
-          category1: 'not an object'
+          category1: 'not an object',
         };
 
         const isValid = validate(invalidData);
@@ -116,8 +129,8 @@ describe('selectOptions Schema', () => {
       test('should reject non-array options', () => {
         const invalidData = {
           category1: {
-            options: 'not an array'
-          }
+            options: 'not an array',
+          },
         };
 
         const isValid = validate(invalidData);
@@ -129,31 +142,31 @@ describe('selectOptions Schema', () => {
       test('should reject non-string key', () => {
         const invalidData = {
           category1: {
-            options: [
-              { key: 123, label: 'Valid Label' }
-            ]
-          }
+            options: [{ key: 123, label: 'Valid Label' }],
+          },
         };
 
         const isValid = validate(invalidData);
         expect(isValid).toBe(false);
         expect(validate.errors[0].keyword).toBe('type');
-        expect(validate.errors[0].instancePath).toBe('/category1/options/0/key');
+        expect(validate.errors[0].instancePath).toBe(
+          '/category1/options/0/key',
+        );
       });
 
       test('should reject non-string label', () => {
         const invalidData = {
           category1: {
-            options: [
-              { key: 'valid-key', label: 123 }
-            ]
-          }
+            options: [{ key: 'valid-key', label: 123 }],
+          },
         };
 
         const isValid = validate(invalidData);
         expect(isValid).toBe(false);
         expect(validate.errors[0].keyword).toBe('type');
-        expect(validate.errors[0].instancePath).toBe('/category1/options/0/label');
+        expect(validate.errors[0].instancePath).toBe(
+          '/category1/options/0/label',
+        );
       });
     });
 
@@ -161,18 +174,18 @@ describe('selectOptions Schema', () => {
       test('should reject additional properties in category', () => {
         const invalidData = {
           category1: {
-            options: [
-              { key: 'key1', label: 'Label 1' }
-            ],
-            extraProperty: 'not allowed'
-          }
+            options: [{ key: 'key1', label: 'Label 1' }],
+            extraProperty: 'not allowed',
+          },
         };
 
         const isValid = validate(invalidData);
         expect(isValid).toBe(false);
         expect(validate.errors[0].keyword).toBe('additionalProperties');
         expect(validate.errors[0].instancePath).toBe('/category1');
-        expect(validate.errors[0].params.additionalProperty).toBe('extraProperty');
+        expect(validate.errors[0].params.additionalProperty).toBe(
+          'extraProperty',
+        );
       });
 
       test('should reject additional properties in option item', () => {
@@ -182,17 +195,19 @@ describe('selectOptions Schema', () => {
               {
                 key: 'key1',
                 label: 'Label 1',
-                extraProperty: 'not allowed'
-              }
-            ]
-          }
+                extraProperty: 'not allowed',
+              },
+            ],
+          },
         };
 
         const isValid = validate(invalidData);
         expect(isValid).toBe(false);
         expect(validate.errors[0].keyword).toBe('additionalProperties');
         expect(validate.errors[0].instancePath).toBe('/category1/options/0');
-        expect(validate.errors[0].params.additionalProperty).toBe('extraProperty');
+        expect(validate.errors[0].params.additionalProperty).toBe(
+          'extraProperty',
+        );
       });
     });
   });
@@ -212,7 +227,8 @@ describe('selectOptions Schema', () => {
     });
 
     test('should have correct options array structure', () => {
-      const optionsSchema = selOptsSch.patternProperties['^.*$'].properties.options;
+      const optionsSchema =
+        selOptsSch.patternProperties['^.*$'].properties.options;
       expect(optionsSchema.type).toBe('array');
       expect(optionsSchema.items).toBeDefined();
 

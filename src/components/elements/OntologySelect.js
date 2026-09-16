@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AsyncSelect from 'react-select/async';
 import { buildTSS } from 'generic-ui-core';
 
-const constructOption = data => {
+const constructOption = (data) => {
   if (data) {
     const desc = data.description?.join('') || '';
     return {
@@ -32,21 +32,21 @@ const constructOption = data => {
   return data;
 };
 
-const constructOptions = data => {
+const constructOptions = (data) => {
   if (!data) {
     return [];
   }
-  return data.map(d => {
+  return data.map((d) => {
     const option = Object.assign(constructOption(d), { data: d });
     return option;
   });
 };
 
-const OntologySelect = props => {
+function OntologySelect(props) {
   const { fnSelected, defaultValue } = props;
   const [, setData] = useState(null);
 
-  const fetchData = async inputValue => {
+  const fetchData = async (inputValue) => {
     try {
       if (!inputValue.trim() || inputValue.length < 2) {
         return [];
@@ -76,30 +76,26 @@ const OntologySelect = props => {
       valueKey="value"
       labelKey="label"
       loadOptions={(inputValue, callback) => {
-        fetchData(inputValue).then(options => callback(options));
+        fetchData(inputValue).then((options) => callback(options));
       }}
-      onChange={selected => {
+      onChange={(selected) => {
         fnSelected(selected);
       }}
       styles={{
-        container: baseStyles => {
-          return {
-            ...baseStyles,
-            width: '100%',
-          };
-        },
-        control: base => {
-          return {
-            ...base,
-            height: '36px',
-            minHeight: '36px',
-            minWidth: '200px',
-            border: '1px solid #ccc',
-          };
-        },
+        container: (baseStyles) => ({
+          ...baseStyles,
+          width: '100%',
+        }),
+        control: (base) => ({
+          ...base,
+          height: '36px',
+          minHeight: '36px',
+          minWidth: '200px',
+          border: '1px solid #ccc',
+        }),
       }}
     />
   );
-};
+}
 
 export default OntologySelect;

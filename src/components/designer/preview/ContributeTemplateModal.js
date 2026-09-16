@@ -1,16 +1,25 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { userData } from '@components/tools/utils';
 import Api from '@utils/api';
+import GModal from '@ui/modals/GModal';
 
-const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess }) => {
+function ContributeTemplateModal({
+  showProps,
+  data,
+  currentUser,
+  onSubmitSuccess,
+}) {
   const { show, setShow } = showProps;
   const formRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState({ type: '', content: '' });
-  const [emailValidation, setEmailValidation] = useState({ isValid: true, message: '' });
+  const [emailValidation, setEmailValidation] = useState({
+    isValid: true,
+    message: '',
+  });
 
   const handleClose = () => {
     setShow(false);
@@ -31,7 +40,7 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
     } else if (!validateEmail(email)) {
       setEmailValidation({
         isValid: false,
-        message: 'Please enter a valid email address (e.g., user@example.com)'
+        message: 'Please enter a valid email address (e.g., user@example.com)',
       });
     } else {
       setEmailValidation({ isValid: true, message: '' });
@@ -44,7 +53,8 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
       if (email !== '' && !validateEmail(email)) {
         setEmailValidation({
           isValid: false,
-          message: 'Please enter a valid email address (e.g., user@example.com)'
+          message:
+            'Please enter a valid email address (e.g., user@example.com)',
         });
       }
     }
@@ -55,13 +65,17 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
     if (!form) return false;
 
     const nameInput = form.querySelector('[name="contributorName"]');
-    const contributorEmailInput = form.querySelector('[name="contributorEmail"]');
+    const contributorEmailInput = form.querySelector(
+      '[name="contributorEmail"]',
+    );
     const emailInput = form.querySelector('[name="contactEmail"]');
     const applicationInput = form.querySelector('[name="application"]');
     const messageInput = form.querySelector('[name="message"]');
 
     const name = nameInput ? nameInput.value.trim() : '';
-    const contributorEmail = contributorEmailInput ? contributorEmailInput.value.trim() : '';
+    const contributorEmail = contributorEmailInput
+      ? contributorEmailInput.value.trim()
+      : '';
     const email = emailInput ? emailInput.value.trim() : '';
     const application = applicationInput ? applicationInput.value.trim() : '';
     const message = messageInput ? messageInput.value.trim() : '';
@@ -114,7 +128,7 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
       const response = await Api.execApiData(
         submissionData,
         'labimotion_hub/submit',
-        'POST'
+        'POST',
       );
 
       if (response.mc === 'se00') {
@@ -125,7 +139,8 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
       } else {
         setSubmitMessage({
           type: 'success',
-          content: 'Template contribution submitted successfully! Thank you for your contribution.',
+          content:
+            'Template contribution submitted successfully! Thank you for your contribution.',
         });
 
         // Clear form after successful submission
@@ -150,19 +165,18 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
   if (!show) return null;
 
   return (
-    <Modal
+    <GModal
       show={show}
       onHide={handleClose}
       backdrop="static"
       keyboard={false}
-      centered
       size="lg"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Contribute this template to Template Hub</Modal.Title>
-      </Modal.Header>
+      <GModal.Header>
+        <GModal.Title>Contribute this template to Template Hub</GModal.Title>
+      </GModal.Header>
 
-      <Modal.Body>
+      <GModal.Body>
         {submitMessage.content && (
           <Alert variant={submitMessage.type} className="mb-3">
             {submitMessage.content}
@@ -251,10 +265,14 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
             Version: {data?.version || 'N/A'}
           </div>
         </Form>
-      </Modal.Body>
+      </GModal.Body>
 
-      <Modal.Footer className="justify-content-start">
-        <Button variant="secondary" onClick={handleClose} disabled={isSubmitting}>
+      <GModal.Footer>
+        <Button
+          variant="secondary"
+          onClick={handleClose}
+          disabled={isSubmitting}
+        >
           Cancel
         </Button>
         <Button
@@ -264,10 +282,10 @@ const ContributeTemplateModal = ({ showProps, data, currentUser, onSubmitSuccess
         >
           {isSubmitting ? 'Submitting...' : 'Submit to Template Hub'}
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </GModal.Footer>
+    </GModal>
   );
-};
+}
 
 ContributeTemplateModal.propTypes = {
   showProps: PropTypes.shape({

@@ -77,7 +77,8 @@ function SimpleGroupPanel({
               onClick={handleRestrictionClick}
               title="Manage restrictions"
             >
-              <span>{FIcons.faGears}</span> {conditions.length > 0 && `(${conditions.length})`}
+              <span>{FIcons.faGears}</span>{' '}
+              {conditions.length > 0 && `(${conditions.length})`}
             </Button>
           )}
           {onRemove && (

@@ -4,9 +4,54 @@ import { AgGridReact } from 'ag-grid-react';
 import LTooltip from '@components/shared/LTooltip';
 import LayerManager from '@utils/desMgr';
 import ButtonConfirm from '@components/fields/ButtonConfirm';
-import Constants from '@components/tools/Constants';
+import { resolveGridTheme } from '@utils/table/grid-theme';
 
-const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
+function ActionCellRenderer(params) {
+  const { onLayerSelect, onLayerView, onLayerDelete } = params;
+  return (
+    <>
+      <LTooltip idf="lyr_add2tpl">
+        <Button size="sm" onClick={() => onLayerSelect(params)}>
+          Add
+        </Button>
+      </LTooltip>
+      <LTooltip idf="lyr_view">
+        <Button
+          className="gu-ml-1"
+          size="sm"
+          onClick={() => onLayerView(params)}
+        >
+          View
+        </Button>
+      </LTooltip>
+      <ButtonConfirm
+        cls="gu-ml-1"
+        msg="Delete this Standard Layer permanently?"
+        fnClick={onLayerDelete}
+        fnParams={params}
+      />
+    </>
+  );
+}
+
+const renderDescriptionCell = (params) =>
+  params.value ? (
+    <pre
+      style={{
+        margin: 0,
+        fontFamily: 'inherit',
+        backgroundColor: 'unset',
+        border: 'unset',
+      }}
+    >
+      {params.value}
+    </pre>
+  ) : (
+    ''
+  );
+
+function LayersGrid({ onLayerSelect, onLayerDelete, onLayerView }) {
+  const { themeProps, wrapperClassName } = resolveGridTheme('QUARTZ');
   const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
@@ -22,30 +67,8 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
   const columnDefs = [
     {
       headerName: 'Action',
-      cellRenderer: (params) => (
-        <>
-          <LTooltip idf="lyr_add2tpl">
-            <Button size="sm" onClick={() => onLayerSelect(params)}>
-              Add
-            </Button>
-          </LTooltip>
-          <LTooltip idf="lyr_view">
-            <Button
-              className="gu-ml-1"
-              size="sm"
-              onClick={() => onLayerView(params)}
-            >
-              View
-            </Button>
-          </LTooltip>
-          <ButtonConfirm
-            cls="gu-ml-1"
-            msg="Delete this Standard Layer permanently?"
-            fnClick={onLayerDelete}
-            fnParams={params}
-          />
-        </>
-      ),
+      cellRenderer: ActionCellRenderer,
+      cellRendererParams: { onLayerSelect, onLayerView, onLayerDelete },
       sortable: false,
       filter: false,
       width: 160,
@@ -77,22 +100,7 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
       sortable: true,
       filter: false,
       cellStyle: { whiteSpace: 'pre-wrap', lineHeight: '20px' },
-      cellRenderer: (params) => {
-        return params.value ? (
-          <pre
-            style={{
-              margin: 0,
-              fontFamily: 'inherit',
-              backgroundColor: 'unset',
-              border: 'unset',
-            }}
-          >
-            {params.value}
-          </pre>
-        ) : (
-          ''
-        );
-      },
+      cellRenderer: renderDescriptionCell,
       autoHeight: true,
       flex: 1,
     },
@@ -100,12 +108,17 @@ const LayersGrid = ({ onLayerSelect, onLayerDelete, onLayerView }) => {
 
   return (
     <div
-      className={Constants.GRID_THEME.QUARTZ.VALUE}
+      className={wrapperClassName}
       style={{ height: '600px', width: '100%', overflow: 'auto' }}
     >
-      <AgGridReact columnDefs={columnDefs} rowData={rowData} suppressAutoSize />
+      <AgGridReact
+        {...themeProps}
+        columnDefs={columnDefs}
+        rowData={rowData}
+        suppressAutoSize
+      />
     </div>
   );
-};
+}
 
 export default LayersGrid;

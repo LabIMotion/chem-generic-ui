@@ -32,7 +32,9 @@ describe('ElementSelectButton', () => {
 
   it('renders with custom label', () => {
     const mockOnSelect = jest.fn();
-    render(<ElementSelectButton onSelect={mockOnSelect} label="Choose Element" />);
+    render(
+      <ElementSelectButton onSelect={mockOnSelect} label="Choose Element" />,
+    );
 
     expect(screen.getByText('Choose Element')).toBeInTheDocument();
   });
@@ -75,7 +77,7 @@ describe('ElementSelectButton', () => {
         onSelect={mockOnSelect}
         variant="secondary"
         size="sm"
-      />
+      />,
     );
 
     const button = screen.getByText('Link Element');
@@ -94,10 +96,7 @@ describe('ElementSelectButton', () => {
   it('applies custom className', () => {
     const mockOnSelect = jest.fn();
     render(
-      <ElementSelectButton
-        onSelect={mockOnSelect}
-        className="custom-class"
-      />
+      <ElementSelectButton onSelect={mockOnSelect} className="custom-class" />,
     );
 
     const button = screen.getByText('Link Element');

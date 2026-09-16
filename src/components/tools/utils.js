@@ -8,7 +8,9 @@ import Constants from '@components/tools/Constants';
 import FieldTooltip from '@components/fields/FieldTooltip';
 import DocuConst from '@components/tools/DocuConst';
 
-const KlzIcon = (klz, klzSty) => <span className={klz} style={klzSty} />;
+function KlzIcon(klz, klzSty) {
+  return <span className={klz} style={klzSty} />;
+}
 
 // move from GenericElCommon.js > UploadInputChange
 const uploadFiles = (properties, event, field, layer) => {
@@ -121,8 +123,11 @@ const storeFlow = (props) => {
   return els;
 };
 
+// Bootstrap 5 dropped the default `.form-group` bottom margin, so a field row has no
+// gap of its own. Add the standard `mb-3` utility to keep the distance between a field
+// and the next row's label clearly larger than the label-to-field distance (`mb-1`).
 const fieldCls = (isSpCall = false) => {
-  const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none';
+  const clsFrm = isSpCall ? 'gu_sp_form' : 'gu_sp_form_none mb-3';
   const clsCol = isSpCall ? 'gu_sp_column' : 'gu_sp_column_none';
   return [clsFrm, clsCol];
 };
@@ -173,6 +178,18 @@ const propDefault = {
   decimal: {
     label: 'Decimal',
     doc: [docFields, '/types', '/formula-field', '#decimal'].join(''),
+  },
+  decimals: {
+    label: 'Max Decimal Places',
+    doc: [docFields, '/types', '/number', '#decimals'].join(''),
+  },
+  min: {
+    label: 'Min Value',
+    doc: [docFields, '/types', '/number', '#min'].join(''),
+  },
+  max: {
+    label: 'Max Value',
+    doc: [docFields, '/types', '/number', '#max'].join(''),
   },
   formula: {
     label: 'Formula',
@@ -319,7 +336,9 @@ const srcElements = [
   Constants.PERMIT_TARGET.SAMPLE,
   Constants.PERMIT_TARGET.MOLECULE,
 ];
-const exceptElements = srcElements.concat([Constants.PERMIT_TARGET.GRID]);
+const exceptElements = srcElements.concat([
+  Constants.PERMIT_TARGET.GENERIC_GRID,
+]);
 
 // source could be one of sample, molecule, element
 // when element, return all permit targets except sample and molecule and grid
@@ -332,13 +351,13 @@ const searchTargets = (source) => {
 
 const userData = (user) => {
   const userObj = user || {};
-  const id = userObj.id;
+  const { id } = userObj;
   if (!id) return { id: '', name: '', email: '' };
 
   const name = `${userObj?.first_name} ${userObj?.last_name}` || '';
   const email = userObj?.email || '';
   return { id, name, email };
-}
+};
 
 const defaultVSystem = (si) => {
   const sis = getUnitSystem();
@@ -350,9 +369,8 @@ const defaultVSystem = (si) => {
 
 // true → {}, { a: 1 }, any plain object
 // false → "hello", "", "2", 2, 3.14, null, []
-const isObject = (value) => {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-};
+const isObject = (value) =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
 
 export {
   defaultVSystem,

@@ -6,7 +6,7 @@ import DocuConst from '@components/tools/DocuConst';
 import FIcons from '@components/icons/FIcons';
 import LTooltip from '@components/shared/LTooltip';
 
-const TemplateBar = (props) => {
+function TemplateBar(props) {
   const { notify, active, fnSwitch } = props;
   const [show, setShow] = useState(false);
 
@@ -60,7 +60,11 @@ const TemplateBar = (props) => {
       {show && notify !== null && (
         <span
           className={`alert ${
-            notify.isSuccess ? 'alert-success' : 'alert-danger'
+            notify.lvl === 'warning'
+              ? 'alert-warning'
+              : notify.isSuccess
+                ? 'alert-success'
+                : 'alert-danger'
           } mb-0 ml-2`}
         >
           <span>
@@ -74,7 +78,7 @@ const TemplateBar = (props) => {
       )}
     </span>
   );
-};
+}
 
 TemplateBar.propTypes = {
   notify: PropTypes.object,

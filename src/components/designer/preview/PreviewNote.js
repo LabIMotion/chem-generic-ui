@@ -6,7 +6,7 @@ import FIcons from '@components/icons/FIcons';
  * PreviewNote Component
  * An alert that informs users about template default values.
  */
-const PreviewNote = () => {
+function PreviewNote() {
   const [open, setOpen] = useState(true);
 
   const toggle = () => {
@@ -37,18 +37,20 @@ const PreviewNote = () => {
           <span style={{ fontSize: '0.875rem' }}>
             Data entered here will be used as the default value of the template.
           </span>
-          <span
+          <Button
+            variant="link"
+            size="sm"
             onClick={() => setOpen(false)}
-            style={{ cursor: 'pointer', opacity: 0.6 }}
-            className="ms-2 opacity-50"
+            className="ms-2 p-0 border-0 text-danger text-decoration-none opacity-50"
             title="Close"
+            aria-label="Close"
           >
             {FIcons.faTimes}
-          </span>
+          </Button>
         </Alert>
       )}
     </div>
   );
-};
+}
 
 export default PreviewNote;

@@ -18,8 +18,8 @@ class VerManager {
   static klassRevisions = (params = {}) =>
     VerManager.#exec(API_EL, 'klass_revisions.json', 'GET', params);
 
-  static revisions = ({ type, id } = {}) =>
-    VerManager.#exec(API_EL, `${type}_revisions.json`, 'GET', { id });
+  static revisions = ({ type, id, limit } = {}) =>
+    VerManager.#exec(API_EL, `${type}_revisions.json`, 'GET', { id, limit });
 
   static deleteKlassRevision = (data) =>
     VerManager.#exec(API_EL, 'delete_klass_revision', 'POST', data);
@@ -52,23 +52,26 @@ class VerManager {
     VerManager.#exec(API_EL, 'search_basic_by_like', 'GET', params);
 
   static dispatchListELby = (params = {}) => {
-    const { name, short_label, selected_klass, limit } = params;
+    const { name, short_label: sLabel, selected_klass: sKlass, limit } = params;
 
-    if (selected_klass.klass.is_generic) {
+    if (!sKlass?.klass) {
+      throw new Error('dispatchListELby: selected_klass.klass is required');
+    }
+
+    if (sKlass.klass.is_generic) {
       return VerManager.listELby({
         name,
-        short_label,
-        klass_id: selected_klass.klass.id,
-        limit,
-      });
-    } else {
-      return VerManager.listBasicELby({
-        name,
-        short_label,
-        klass_name: selected_klass.klass.name,
+        short_label: sLabel,
+        klass_id: sKlass.klass.id,
         limit,
       });
     }
+    return VerManager.listBasicELby({
+      name,
+      short_label: sLabel,
+      klass_name: sKlass.klass.name,
+      limit,
+    });
   };
 }
 

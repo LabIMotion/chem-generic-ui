@@ -4,6 +4,21 @@ import PropTypes from 'prop-types';
 import { FieldTypes } from 'generic-ui-core';
 import LBadge from '@components/shared/LBadge';
 import findTypeLabel from '@components/tools/field-utils';
+import { S_USRS_SRC_OPTION } from '@utils/userSelectUtils';
+
+const isSelectType = (type) =>
+  type === FieldTypes.F_SELECT || type === FieldTypes.F_SELECT_MULTI;
+
+const sourceLabel = (optionLayer) =>
+  optionLayer === S_USRS_SRC_OPTION.value
+    ? S_USRS_SRC_OPTION.label
+    : optionLayer;
+
+const typeText = (type, optionLayer) => {
+  const typeLabel = findTypeLabel(type);
+  if (!isSelectType(type) || !optionLayer) return typeLabel;
+  return `${typeLabel}: ${sourceLabel(optionLayer)}`;
+};
 
 /**
  * Displays field property badges with appropriate styling.
@@ -20,10 +35,7 @@ function FieldBadge({ fieldObj, prop }) {
       color: 'dark',
     },
     type: {
-      text:
-        fieldObj.type === FieldTypes.F_SELECT
-          ? `${findTypeLabel(fieldObj.type)}: ${fieldObj?.option_layers}`
-          : findTypeLabel(fieldObj.type),
+      text: typeText(fieldObj.type, fieldObj?.option_layers),
       variant: 'outline',
       color: 'x',
     },

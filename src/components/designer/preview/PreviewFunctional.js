@@ -1,8 +1,8 @@
-/* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import cloneDeep from 'lodash/cloneDeep';
@@ -23,7 +23,8 @@ import VerManager from '@utils/verMgr';
 
 // Configuration constants
 const PREVIEW_CONFIG = {
-  MAX_REVISIONS_DISPLAY: 10,
+  INITIAL_REVISIONS_DISPLAY: 10,
+  REVISIONS_PAGE_SIZE: 10,
   DEFAULT_COMPARE_UUID: 'none',
   LAYOUT: {
     REVISION_LIST_COLS: 4,
@@ -50,12 +51,12 @@ const API_ACTIONS = {
 };
 
 // Parameter builders for different API endpoints
-const buildApiParams = (src, data, type) => {
+const buildApiParams = (src, data, type, limit) => {
   switch (src) {
     case PREVIEW_CONFIG.SOURCES.PROPERTIES:
-      return { id: data.id, type: type.toLowerCase() };
+      return { id: data.id, type: type.toLowerCase(), limit };
     case PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE:
-      return { id: data.id, klass: `${type}Klass` };
+      return { id: data.id, klass: `${type}Klass`, limit };
     default:
       return {};
   }
@@ -116,14 +117,14 @@ const getInitialCompareUUID = (src, data) => {
   return PREVIEW_CONFIG.DEFAULT_COMPARE_UUID;
 };
 
-const PreviewFunctional = ({
+function PreviewFunctional({
   genericType,
   data = {},
   refSource = { currentUser: {} },
   fnRetrieve = () => {},
   src = PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE,
   canDL = false,
-}) => {
+}) {
   const [revisions, setRevisions] = useState([]);
   const [selectedRevisions, setSelectedRevisions] = useState([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
@@ -132,24 +133,36 @@ const PreviewFunctional = ({
     getInitialCompareUUID(src, data),
   );
   const [fullScreen, setFullScreen] = useState(false);
+  const [displayLimit, setDisplayLimit] = useState(
+    PREVIEW_CONFIG.INITIAL_REVISIONS_DISPLAY,
+  );
+  const [hasMore, setHasMore] = useState(true);
 
-  const fetchRevisions = () => {
-    if (data?.id) {
-      VerManager[API_ACTIONS[src].fetch](
-        buildApiParams(src, data, genericType),
-      ).then((response) => {
-        if (response.notify.isSuccess) {
-          setRevisions(
-            prepareRevisions(
-              src,
-              response.element?.data?.revisions || [],
-              data,
-            ),
-          );
-        }
-      });
-    }
-  };
+  const fetchRevisions = useCallback(
+    (limit = displayLimit) => {
+      if (data?.id) {
+        // Probe with limit+1 to detect whether more rows exist without an extra round-trip.
+        VerManager[API_ACTIONS[src].fetch](
+          buildApiParams(src, data, genericType, limit + 1),
+        ).then((response) => {
+          if (response.notify.isSuccess) {
+            const rawList = response.element?.data?.revisions || [];
+            const more = rawList.length > limit;
+            const visible = more ? rawList.slice(0, limit) : rawList;
+            setRevisions(prepareRevisions(src, visible, data));
+            setHasMore(more);
+          }
+        });
+      }
+    },
+    [src, data, genericType, displayLimit],
+  );
+
+  const loadMore = useCallback(() => {
+    const nextLimit = displayLimit + PREVIEW_CONFIG.REVISIONS_PAGE_SIZE;
+    setDisplayLimit(nextLimit);
+    fetchRevisions(nextLimit);
+  }, [displayLimit, fetchRevisions]);
 
   const delRevision = useCallback(
     (params) => {
@@ -161,7 +174,7 @@ const PreviewFunctional = ({
         }
       });
     },
-    [src, data],
+    [src, data, genericType, fetchRevisions],
   );
 
   useEffect(() => {
@@ -191,12 +204,16 @@ const PreviewFunctional = ({
   const retrieveRevision = useCallback(
     (params) => {
       const deep = cloneDeep(revisions.find((r) => r.id === params.id));
+      // Preserve registries across revision restore — authorization stays with the document
+      const keepRegistries = data?.metadata?.registries;
+      const nextMetadata = { ...(deep.metadata || {}) };
+      if (keepRegistries) nextMetadata.registries = keepRegistries;
       if (src === PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE) {
         data.properties_template = deep[src];
-        data.metadata = deep.metadata;
+        data.metadata = nextMetadata;
         fnRetrieve(responseExt(notifySuccess(), data, { active: 'w' }));
       } else {
-        fnRetrieve({ metadata: deep.metadata, [src]: deep[src] }, () => {});
+        fnRetrieve({ metadata: nextMetadata, [src]: deep[src] }, () => {});
       }
     },
     [fnRetrieve, revisions, src, data],
@@ -247,14 +264,13 @@ const PreviewFunctional = ({
             ];
           }
           return prev;
-        } else {
-          // Remove revision
-          return prev.filter((r) => {
-            const currentId = buildString([r.uuid, r.id]);
-            const revisionId = buildString([revision.uuid, revision.id]);
-            return currentId !== revisionId;
-          });
         }
+        // Remove revision
+        return prev.filter((r) => {
+          const currentId = buildString([r.uuid, r.id]);
+          const revisionId = buildString([revision.uuid, revision.id]);
+          return currentId !== revisionId;
+        });
       });
     },
     [src],
@@ -265,13 +281,12 @@ const PreviewFunctional = ({
   }, []);
 
   const isRevisionSelected = useCallback(
-    (revision) => {
-      return selectedRevisions.some((r) => {
+    (revision) =>
+      selectedRevisions.some((r) => {
         const selectedId = buildString([r.uuid, r.id]);
         const revisionId = buildString([revision.uuid, revision.id]);
         return selectedId === revisionId;
-      });
-    },
+      }),
     [selectedRevisions],
   );
 
@@ -287,7 +302,7 @@ const PreviewFunctional = ({
     // Refresh revisions from DB to get updated data (including submitted flag)
     // The compareUUID will ensure the same revision remains selected
     fetchRevisions();
-  }, []);
+  }, [fetchRevisions]);
 
   // Early return if no revisions
   if (revisions.length < 1) return null;
@@ -344,10 +359,11 @@ const PreviewFunctional = ({
       {!fullScreen && (
         <Col md={PREVIEW_CONFIG.LAYOUT.REVISION_LIST_COLS}>
           <div className="d-flex align-items-center justify-content-between mb-2">
-            <b>
-              Only show the latest {PREVIEW_CONFIG.MAX_REVISIONS_DISPLAY}{' '}
-              revisions.
-            </b>
+            <b>{`Showing latest ${
+              src === PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE
+                ? Math.max(revisions.length - 1, 0)
+                : revisions.length
+            } revisions.`}</b>
             <CompareButton
               onClick={handleCompareClick}
               disabled={selectedRevisions.length !== 2}
@@ -369,6 +385,15 @@ const PreviewFunctional = ({
               onSelectionChange={handleSelectionChange}
             />
           ))}
+          {hasMore && (
+            <Button
+              variant="outline-secondary"
+              onClick={loadMore}
+              className="d-flex w-100 p-2 m-1 justify-content-center"
+            >
+              Show more
+            </Button>
+          )}
         </Col>
       )}
       <Col
@@ -388,7 +413,9 @@ const PreviewFunctional = ({
               )}
               {!selected.version && <span />}
             </div>
-            {src === PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE && <PreviewNote />}
+            {src === PREVIEW_CONFIG.SOURCES.PROPERTIES_RELEASE && (
+              <PreviewNote />
+            )}
           </div>
           <div className="d-flex align-items-center">
             <ContributeTemplateButton
@@ -433,7 +460,7 @@ const PreviewFunctional = ({
       />
     </Row>
   );
-};
+}
 
 PreviewFunctional.propTypes = {
   genericType: PropTypes.oneOf([
